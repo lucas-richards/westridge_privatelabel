@@ -8,8 +8,8 @@ a detailed list of the functionality of your application, told through a user's 
   - As a user, I want the ability to sign in. 
   - As a user, I want the ability to change my password. 
   - As a user, I want the ability to sign out. 
-  - As a user, I want the ability to create my own recipes. 
-  - As a user, I want the ability to update my recipes. 
+  - As a user, I want the ability to create my own blogs. 
+  - As a user, I want the ability to update my blogs. 
   - As a user, I want the ability to view all of my recipes in a list. 
   - As a user, I want the ability to read more details of individual recipes. 
   - As a user, I want the ability to delete my recipes. 
