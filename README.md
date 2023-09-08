@@ -1,7 +1,17 @@
 ## Blog App for westridge Laboratories
 
 ## Overview
-a brief description of your application
+This application was created for small businesses for following purposes:
+  - Company's Blog
+  - File Management System
+  - Messaging
+  - Tasks
+  - Organization
+
+## Getting started
+
+run python3 manage.py runserver 
+
 ## User Stories
 a detailed list of the functionality of your application, told through a user's perspective
   - As a user, I want the ability to sign up.
@@ -10,17 +20,20 @@ a detailed list of the functionality of your application, told through a user's 
   - As a user, I want the ability to sign out. 
   - As a user, I want the ability to create my own blogs. 
   - As a user, I want the ability to update my blogs. 
-  - As a user, I want the ability to view all of my recipes in a list. 
-  - As a user, I want the ability to read more details of individual recipes. 
-  - As a user, I want the ability to delete my recipes. 
-  - As a user, I want the ability to view recipes others have created. 
-  - As a user, I want the ability to favorite recipes that other people have created. 
-  - As a user, I want the ability to read all of the recipes I have favorited. 
-  - As a user, I want the ability to remove recipes from my favorites. 
+  - As a user, I want the ability to view all of my posts. 
+  - As a user, I want the ability to read more details of others posts. 
+  - As a user, I want the ability to delete my posts. 
+  - As a user, I want the ability to view posts others have created. 
+  - As a user, I want the ability to favorite posts that other people have created. 
+  - As a user, I want the ability to read all of the posts I have favorited. 
+  - As a user, I want the ability to remove posts from my favorites. 
+
 ## Wireframes / Screenshots
 diagrams that display what your application will look like, and images from the completed app.
-![alt text](media/wireframes.png)
+![alt text](media/aboutpage.png)
+![alt text](media/login.png)
+![alt text](media/register.png)
 ## Entity Relationship Diagrams
 diagrams that describe the relationships between your resources
-![alt text](media/ERD.png)
+Coming soon...
 
