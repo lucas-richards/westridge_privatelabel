@@ -1,4 +1,4 @@
-## Blog App for westridge Laboratories
+# Blog App for westridge Laboratories
 
 ## Overview
 This application was created for small businesses for following purposes:
@@ -13,7 +13,7 @@ This application was created for small businesses for following purposes:
 run python3 manage.py runserver 
 
 ## User Stories
-a detailed list of the functionality of your application, told through a user's perspective
+A detailed list of the functionality of your application, told through a user's perspective
   - As a user, I want the ability to sign up.
   - As a user, I want the ability to sign in. 
   - As a user, I want the ability to change my password. 
@@ -29,11 +29,11 @@ a detailed list of the functionality of your application, told through a user's 
   - As a user, I want the ability to remove posts from my favorites. 
 
 ## Wireframes / Screenshots
-diagrams that display what your application will look like, and images from the completed app.
+Diagrams that display what your application will look like, and images from the completed app.
 ![alt text](media/aboutpage.png)
 ![alt text](media/login.png)
 ![alt text](media/register.png)
 ## Entity Relationship Diagrams
-diagrams that describe the relationships between your resources
-Coming soon...
+Diagrams that describe the relationships between your resources
+coming soon...
 
