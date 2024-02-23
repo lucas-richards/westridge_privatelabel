@@ -24,7 +24,7 @@ class UserCertificationStatus(models.Model):
     due_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.certification.name} - {self.completion_status}"
+        return f"{self.certification.name}"
 
     def save(self, *args, **kwargs):
         # Check if a similar entry already exists for the same user and certification

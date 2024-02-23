@@ -1,0 +1,42 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="content-section">
+    <h2>Welcome to the Training Page</h2>
+    <p >This is where you can find all the training materials you need to get started with Westridge Labs</p>
+    <p >Please feel free to reach out to us if you have any questions or need further assistance</p>
+</div>
+{% if user.is_authenticated %}
+<h2>Your Certificates:</h2>
+  <ul>
+    {% for certificate in certificates %}
+      <li>{{ certificate.certification }}</li>
+      <!-- Add more fields as needed -->
+    {% endfor %}
+  </ul>
+<!-- see all my certificates -->
+{% for form in forms %}
+<div class="content-section">
+    <form action="{% url 'training-home' %}" method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group justify-content-between">
+            <legend class="border-bottom mb-4">Certificate Name</legend>
+            {{ form|crispy }}
+            <div class="form-group align-content-end">
+                <button class="btn btn-outline-info" type="submit">Update</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endfor %}
+
+
+{% else %}
+<a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+<a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+{% endif %}
+    
+
+
+{% endblock content %}
