@@ -8,28 +8,30 @@
     <p >Please feel free to reach out to us if you have any questions or need further assistance</p>
 </div>
 {% if user.is_authenticated %}
-<h2>Your Certificates:</h2>
-  <ul>
-    {% for certificate in certificates %}
-      <li>{{ certificate.certification }}</li>
-      <!-- Add more fields as needed -->
-    {% endfor %}
-  </ul>
-<!-- see all my certificates -->
-{% for form in forms %}
-<div class="content-section">
+<h2>Your Trainings:</h2>
+
+{% for certificate, form in formswithcert %}
     <form action="{% url 'training-home' %}" method="POST">
         {% csrf_token %}
-        <fieldset class="form-group justify-content-between">
-            <legend class="border-bottom mb-4">Certificate Name</legend>
+        <fieldset class="form-group d-flex justify-content-between align-items-end " >
+            <!-- show due date days count -->
+            <legend class="border-bottom mb-4" style="font-size: 22px;">{{ certificate.certification.name }}
+                
+                    {% if certificate.is_past_due %}
+                        <small class="text-danger"> (Expired)</small>
+                    {% else %}
+                        <small class="text-success">  ({{ certificate.due_date|timeuntil }})</small>
+                    {% endif %}
+                
+            </legend>
             {{ form|crispy }}
             <div class="form-group align-content-end">
                 <button class="btn btn-outline-info" type="submit">Update</button>
             </div>
         </fieldset>
     </form>
-</div>
 {% endfor %}
+
 
 
 {% else %}

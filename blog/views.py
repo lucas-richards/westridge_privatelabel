@@ -20,9 +20,18 @@ class PostListView(ListView):
     model = Post
     template_name = 'blog/home.html' # <app>/<model>_<viewtype>.html  Ex: blog/post_list.html
     context_object_name = 'posts'
+    # add sidepabel to the context
     ordering = ['-date_posted']
     paginate_by = 10
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sidepanel'] = {
+            'title': 'Birthdays',
+            'text': 'Today'
+        }
+        return context
+    
 class UserPostListView(ListView):
     model = Post
     template_name = 'blog/user_posts.html' # <app>/<model>_<viewtype>.html  Ex: blog/post_list.html

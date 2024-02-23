@@ -3,18 +3,19 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
-from .models import UserCertificationStatus
+from .models import CertificationStatus
 from .forms import StatusUpdateForm
 
 @login_required
 def home(request):
     profiles = Profile.objects.all()
-    certificates = UserCertificationStatus.objects.filter(user_id=request.user.id)
-    
+    profile_instance = Profile.objects.get(user=request.user)
+    certification_statuses = CertificationStatus.objects.filter(profile=profile_instance)
+    print('these are certificates status',certification_statuses)
     if request.method == 'POST':
         certificate_id = request.POST.get('certification')
         try:
-            certificate_instance = UserCertificationStatus.objects.get(certification=certificate_id, user=request.user.id)
+            certificate_instance = CertificationStatus.objects.get(pk=certificate_id)
             
             # Create a form instance with the posted data
             form = StatusUpdateForm(request.POST, instance=certificate_instance)
@@ -26,19 +27,27 @@ def home(request):
             else:
                 messages.error(request, 'Form is not valid. Please check the entered data.')
 
-        except UserCertificationStatus.DoesNotExist:
+        except CertificationStatus.DoesNotExist:
             messages.error(request, f'Certificate with ID {certificate_id} does not exist.')
 
         return redirect('training-home')
 
     # Create forms for each certificate using the StatusUpdateForm
-    forms = [StatusUpdateForm(instance=certificate) for certificate in certificates]
+    forms = [StatusUpdateForm(instance=certificate) for certificate in certification_statuses]
     print(forms)
+    formswithcert = zip(certification_statuses, forms)
+    sidepanel = {
+        'title': 'Training',
+        'text': 'Completed all trainings'
+    }
+
 
     context = {
         'title': 'Home',
-        'certificates': certificates,
+        'sidepanel': sidepanel,
+        'certificates': certification_statuses,
         'forms': forms,
-        'profiles': profiles
+        'profiles': profiles,
+        'formswithcert': formswithcert
     }
     return render(request, 'training/home.html', context)
