@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
+from django.utils import timezone
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
@@ -11,6 +12,7 @@ class Department(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    birthdate = models.DateField(null=True, blank=True)
     image = models.ImageField(default='default.webp', upload_to='profile_pics')
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     certifications = models.ManyToManyField('training.Certification', related_name='profiles', through='training.CertificationStatus')
@@ -33,16 +35,9 @@ class Profile(models.Model):
     def get_certifications(self):
         return self.certifications.all()
     
-    # write a function that counts all the user's certifications completed and the total number of certifications
-    def get_certifications_completed(self):
-        return self.certificationstatus_set.filter(status='Completed').count()
-    
-    def get_certifications_total(self):
-        return self.certifications.count()
-    
     # wtire a function that returns the percentage of certifications completed
     def get_certifications_percentage(self):
-        return round(self.get_certifications_completed() / self.get_certifications_total() * 100)
+        return round(self.certificationstatus_set.filter(status='Completed').count() / self.certifications.count() * 100)
     
     # write a function that returns all the user's certifications and their status
     def get_certification_status(self):
@@ -51,3 +46,7 @@ class Profile(models.Model):
     # write a function that tells you if the user has all the certifications in status 'completed'
     def has_all_certifications_completed(self):
         return self.certificationstatus_set.filter(status='Completed').count() == self.certifications.count()
+    
+    # function that returns true if user birthday is today or timeuntil if is not today
+    def birthday_today(self):
+        return self.birthdate == timezone.now().date()

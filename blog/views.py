@@ -23,14 +23,6 @@ class PostListView(ListView):
     # add sidepabel to the context
     ordering = ['-date_posted']
     paginate_by = 10
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['sidepanel'] = {
-            'title': 'Birthdays',
-            'text': 'Today'
-        }
-        return context
     
 class UserPostListView(ListView):
     model = Post

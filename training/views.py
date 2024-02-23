@@ -11,7 +11,6 @@ def home(request):
     profiles = Profile.objects.all()
     profile_instance = Profile.objects.get(user=request.user)
     certification_statuses = CertificationStatus.objects.filter(profile=profile_instance)
-    print('these are certificates status',certification_statuses)
     if request.method == 'POST':
         certificate_id = request.POST.get('certification')
         try:
@@ -34,11 +33,12 @@ def home(request):
 
     # Create forms for each certificate using the StatusUpdateForm
     forms = [StatusUpdateForm(instance=certificate) for certificate in certification_statuses]
-    print(forms)
     formswithcert = zip(certification_statuses, forms)
+    
     sidepanel = {
         'title': 'Training',
-        'text': 'Completed all trainings'
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
     }
 
 

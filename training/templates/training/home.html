@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class="content-section">
+<div class="content-section ">
     <h2>Welcome to the Training Page</h2>
     <p >This is where you can find all the training materials you need to get started with Westridge Labs</p>
     <p >Please feel free to reach out to us if you have any questions or need further assistance</p>
@@ -11,6 +11,7 @@
 <h2>Your Trainings:</h2>
 
 {% for certificate, form in formswithcert %}
+<div class="content-section {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
     <form action="{% url 'training-home' %}" method="POST">
         {% csrf_token %}
         <fieldset class="form-group d-flex justify-content-between align-items-end " >
@@ -30,6 +31,7 @@
             </div>
         </fieldset>
     </form>
+</div>
 {% endfor %}
 
 
