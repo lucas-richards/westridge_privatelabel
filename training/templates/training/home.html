@@ -1,14 +1,9 @@
-{% extends "blog/base.html" %}
+{% extends "training/base_sidepanel.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class="content-section ">
-    <h2>Welcome to the Training Page</h2>
-    <p >This is where you can find all the training materials you need to get started with Westridge Labs</p>
-    <p >Please feel free to reach out to us if you have any questions or need further assistance</p>
-</div>
 {% if user.is_authenticated %}
-<h2>Your Trainings:</h2>
+<h2>Your Trainings</h2>
 
 {% for certificate, form in formswithcert %}
 <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
@@ -20,6 +15,8 @@
             {% else %}
                 <small class="text-success">  ({{ certificate.due_date|timeuntil }})</small>
             {% endif %}
+        {% else %}
+            <small>  (Completed)</small>
         {% endif %}
         </button>
     </div>

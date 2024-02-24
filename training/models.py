@@ -36,15 +36,24 @@ class CertificationStatus(models.Model):
     
     # Detect when it is saved and send an email notification
     def save(self, *args, **kwargs):
-        is_new = not self.pk  # Check if it's a new instance or an update
+        # Check if it's a new instance or an update
+        is_new = not self.pk
+        
+        # Check if 'scheduled_date' is in the update_fields
         scheduled_date_updated = 'scheduled_date' in kwargs.get('update_fields', [])
+        
+        # Print some debug information
+        print('self', self)
+        
+        # Call the parent save method
         super().save(*args, **kwargs)
 
+        # Check conditions for sending schedule notification
         if is_new or scheduled_date_updated:
             # If it's a new instance or the scheduled_date is updated
             self.send_schedule_notification()
             print('Schedule notification sent')
-        else :
+        else:
             print('Schedule notification not sent')
     
     # Send email notification when a certification is scheduled

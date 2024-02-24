@@ -11,9 +11,7 @@ def home(request):
     profiles = Profile.objects.all()
     profile_instance = Profile.objects.get(user=request.user)
     certification_statuses = CertificationStatus.objects.filter(profile=profile_instance)
-    print('certifications_statuses',certification_statuses)
     if request.method == 'POST':
-        print(request.POST)
         certificate_id = request.POST.get('id')
         try:
             certificate_instance = CertificationStatus.objects.get(pk=certificate_id)
@@ -23,6 +21,10 @@ def home(request):
             
             if form.is_valid():
                 # Update certificate instance with form data
+                # check which fields have been updated
+                updated_fields = form.changed_data
+                # pass the updated fields to the save method
+                print('updated_fields', updated_fields)
                 form.save()
                 messages.success(request, f'{certificate_instance} certificate has been updated!')
             else:
@@ -42,8 +44,7 @@ def home(request):
         'text1': 'Completed all trainings',
         'text2': 'Almost there',
     }
-
-
+    
     context = {
         'title': 'Home',
         'sidepanel': sidepanel,

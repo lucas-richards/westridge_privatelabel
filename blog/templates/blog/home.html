@@ -1,6 +1,6 @@
-{% extends "blog/base.html" %}
+{% extends "blog/base_sidepanel.html" %}
 {% block content %}
-    
+<h2>Company Posts</h2>
     {% for post in posts %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">

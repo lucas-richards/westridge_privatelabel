@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}
+{% extends "blog/base_sidepanel.html" %}
 {% block content %}
 <!--get username from url view.kwarts.username-->
     <h1 class="mb-3">Posts by {{ view.kwarts.username }} ({{ page_obj.paginator.count }})</h1>

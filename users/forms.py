@@ -18,6 +18,8 @@ class UserUpdateForm(forms.ModelForm):
         fields = ['username','email']
 
 class ProfileUpdateForm(forms.ModelForm):
+    birthday = forms.DateField(widget=forms.SelectDateWidget(years=range(1900,1999)))
+
     class Meta:
         model = Profile
-        fields = ['image','department']
+        fields = ['birthday','image','department']

@@ -30,7 +30,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="{% url 'blog-about' %}">Blog</a>
+            <a class="nav-item nav-link" href="{% url 'blog-home' %}">Blog</a>
             <a class="nav-item nav-link" href="{% url 'training-home' %}">Training</a>
             <a class="nav-item nav-link" href="{% url 'admin:index' %}">Admin</a>
             </div>
@@ -48,62 +48,8 @@
         </div>
       </nav>
     </header>
-    <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-8">
-          {% if messages %}
-            {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-              {{ message }}
-            </div>
-            {% endfor %}
-          {% endif %}
-          {% block content %}{% endblock %}
-        </div>
-          <div class="col-md-4">
-              
-              <div class="card card-body">
-                  <!-- Your content goes here -->
-                  <div class="d-flex justify-content-between">
-                    <h3>{{ sidepanel.title|default:'Birthdays' }}</h3>
-                    {% if sidepanel.title %}
-                    {% else %}
-                    <a type="button" class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
-                    {% endif %}
-
-                  </div>
-                <p class='text-muted'>{{ sidepanel.text1|default:'Today' }}</p>
-                  <div class="d-flex  ">
-                  {% for prof in profiles %}
-                    {% if prof.has_all_certifications_completed %}
-                      <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic">
-                    {% endif %}
-                    {% endfor %}
-                  </div>
-                  <hr/>
-                  <p class='text-muted'>{{ sidepanel.text2|default:'Coming soon' }}</p>
-                  <div class="d-flex flex-column justify-content-center align-content-center ">
-                    {% for prof in profiles %}
-                      {% if prof.has_all_certifications_completed %}
-                      {% else %}
-                        <div class="d-flex ">
-                          <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic">
-                          <!-- status bar -->
-                          <div class="progress w-100 ">
-                            <div class="progress-bar" role="progressbar" style="width: {{ prof.get_certifications_percentage }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ prof.get_certifications_percentage }}%</div>
-                          </div>
-                        </div>
-                      {% endif %}
-                    {% endfor %}
-                  </div>
-                
-              </div>
-
-                  
-          </div>
-        
-      </div>
-    </main>
+    {% block maincontent %}{% endblock %}
+    
     
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

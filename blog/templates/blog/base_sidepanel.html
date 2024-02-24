@@ -1,0 +1,56 @@
+{% extends "blog/base.html" %}
+{% block maincontent %}
+<main role="main" class="container">
+    <div class="row">
+      <div class="col-md-9">
+        {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+      </div>
+      <div class="col-md-3">
+            
+        <div class="card card-body">
+            
+              <div class="d-flex justify-content-between">
+                <h3>Birthdays</h3>
+                <a class="nav-item nav-link" href="{% url 'post-create' %}">Post</a>
+              </div>
+              <p class='text-muted'>Today</p>
+              <div class=" ">
+                {% for u in users %}
+                  {% now "n/j" as today %}
+                  {% if u.profile.birthday|date:"n/j" == today %}
+                    <p class="m-1" style="font-size: x-small;">{{ u.username }} 🎉</p>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <hr/>
+              <p class='text-muted'>Coming soon</p>
+                {% for u in users %}
+                  {% now "n/j" as today %}
+                  {% if u.profile.birthday|date:"n/j" != today %}
+                    <div class="row">
+                        <div class="col-md-7" style="font-size: xx-small;">
+                          <p class="m-1">{{ u.username }}</p>
+                        </div>
+                        <div class="col-md-5 " style="font-size: xx-small;">
+                          <p class="m-1">{{ u.profile.birthday|date:"n/j" }}</p>
+                        </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              
+    
+        </div>
+    
+            
+    </div>
+      
+    </div>
+  </main>
+{% endblock maincontent %}

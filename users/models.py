@@ -12,7 +12,7 @@ class Department(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    birthdate = models.DateField(null=True, blank=True)
+    birthday = models.DateField(null=True, blank=True)
     image = models.ImageField(default='default.webp', upload_to='profile_pics')
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     certifications = models.ManyToManyField('training.Certification', related_name='profiles', through='training.CertificationStatus')
@@ -49,4 +49,4 @@ class Profile(models.Model):
     
     # function that returns true if user birthday is today or timeuntil if is not today
     def birthday_today(self):
-        return self.birthdate == timezone.now().date()
+        return self.birthday == timezone.now().date()
