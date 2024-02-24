@@ -13,8 +13,11 @@ This application was created for small businesses for following purposes:
   - Organization
 
 ## Getting started
-
-run python3 manage.py runserver 
+##### Recommended to use python virtual environment
+###### install requirements
+run `pip install -r requirements.txt`
+###### run server
+run `python3 manage.py runserver`
 
 ## User Stories
 A detailed list of the functionality of your application, told through a user's perspective
