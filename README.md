@@ -1,7 +1,7 @@
 # Blog App for westridge Laboratories
 
 ## Overview
-This application was created for small businesses for following purposes:
+This application was created for a small businesses and includes:
   - Training Tracker
   - Reminder
   - Birthday Tracker
