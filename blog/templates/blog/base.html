@@ -30,8 +30,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="{% url 'blog-home' %}">Blog</a>
-            <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+            <a class="nav-item nav-link" href="{% url 'blog-about' %}">Blog</a>
             <a class="nav-item nav-link" href="{% url 'training-home' %}">Training</a>
             <a class="nav-item nav-link" href="{% url 'admin:index' %}">Admin</a>
             </div>
@@ -65,7 +64,14 @@
               
               <div class="card card-body">
                   <!-- Your content goes here -->
-                  <h3>{{ sidepanel.title|default:'Birthdays' }}</h3>
+                  <div class="d-flex justify-content-between">
+                    <h3>{{ sidepanel.title|default:'Birthdays' }}</h3>
+                    {% if sidepanel.title %}
+                    {% else %}
+                    <a type="button" class="nav-item nav-link" href="{% url 'post-create' %}">New Post</a>
+                    {% endif %}
+
+                  </div>
                 <p class='text-muted'>{{ sidepanel.text1|default:'Today' }}</p>
                   <div class="d-flex  ">
                   {% for prof in profiles %}

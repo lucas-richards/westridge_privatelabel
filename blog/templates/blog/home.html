@@ -1,6 +1,6 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    <a type="button" class="btn btn-outline-dark btn-sm mb-2" href="{% url 'post-create' %}">New Post</a>
+    
     {% for post in posts %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
