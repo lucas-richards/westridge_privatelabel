@@ -2,7 +2,11 @@
 
 ## Overview
 This application was created for small businesses for following purposes:
+  - Training Tracker
+  - Reminder
+  - Birthday Tracker
   - Company's Blog
+  Coming up soon
   - File Management System
   - Messaging
   - Tasks
@@ -30,12 +34,12 @@ A detailed list of the functionality of your application, told through a user's 
 
 ## Wireframes / Screenshots
 Diagrams that display what your application will look like, and images from the completed app.
-![alt text](media/aboutpage.png)
+![alt text](media/training_app.png)
+![alt text](media/blog_app.png)
 ![alt text](media/login.png)
 ![alt text](media/register.png)
 ## Entity Relationship Diagrams
 Diagrams that describe the relationships between your resources.
-coming soon...
+![alt text](media/ERD.png)
 
-Need to fix env
 
