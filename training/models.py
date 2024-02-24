@@ -14,6 +14,7 @@ import os
 class Certification(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    departments = models.ManyToManyField('users.Department')
 
     def __str__(self):
         return f"{self.name}"
@@ -23,8 +24,9 @@ class CertificationStatus(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=[('Not Started', 'Not Started'), ('In Progress', 'In Progress'), ('Completed', 'Completed')])
-    scheduled_date = models.DateField(null=True, blank=True)
-    due_date = models.DateField(null=True, blank=True)
+    scheduled_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
+    due_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
+    
 
     def __str__(self):
         return f"{self.profile.user.username} - {self.certification.name}"

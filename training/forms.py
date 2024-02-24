@@ -12,12 +12,11 @@ from .models import CertificationStatus, Certification
 #         fields = ['username','email','password1','password2']
 
 class StatusUpdateForm(forms.ModelForm):
-    certification = forms.ModelChoiceField(queryset=Certification.objects.all(), widget=forms.HiddenInput())
     scheduled_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     due_date = forms.DateField(widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
     class Meta:
         model = CertificationStatus
-        fields = ['certification','status', 'scheduled_date', 'due_date']
+        fields = ['status', 'scheduled_date', 'due_date']
 
 

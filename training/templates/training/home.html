@@ -17,14 +17,15 @@
         <fieldset class="form-group d-flex justify-content-between align-items-end " >
             <!-- show due date days count -->
             <legend class="border-bottom mb-4" style="font-size: 22px;">{{ certificate.certification.name }}
-                
+                {% if certificate.status != 'Completed' %}
                     {% if certificate.is_past_due %}
                         <small class="text-danger"> (Expired)</small>
                     {% else %}
                         <small class="text-success">  ({{ certificate.due_date|timeuntil }})</small>
                     {% endif %}
-                
+                {% endif %}
             </legend>
+            <input type="hidden" name="id" value="{{ certificate.id }}">
             {{ form|crispy }}
             <div class="form-group align-content-end">
                 <button class="btn btn-outline-info" type="submit">Update</button>

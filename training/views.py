@@ -11,8 +11,10 @@ def home(request):
     profiles = Profile.objects.all()
     profile_instance = Profile.objects.get(user=request.user)
     certification_statuses = CertificationStatus.objects.filter(profile=profile_instance)
+    print('certifications_statuses',certification_statuses)
     if request.method == 'POST':
-        certificate_id = request.POST.get('certification')
+        print(request.POST)
+        certificate_id = request.POST.get('id')
         try:
             certificate_instance = CertificationStatus.objects.get(pk=certificate_id)
             
@@ -51,3 +53,4 @@ def home(request):
         'formswithcert': formswithcert
     }
     return render(request, 'training/home.html', context)
+
