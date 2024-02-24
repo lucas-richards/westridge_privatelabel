@@ -4,6 +4,7 @@ from operator import attrgetter
 # make users available to all templates
 
 def all_users(request):
-    users = User.objects.all()
+    # filter user with birthday
+    users = User.objects.exclude(profile__birthday__isnull=True)
     sorted_users = sorted(users, key=attrgetter('profile.birthday'))
     return {'users': sorted_users}

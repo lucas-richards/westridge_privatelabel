@@ -4,6 +4,10 @@
 
 {% if user.is_authenticated %}
 <h2>Your Trainings</h2>
+<!-- if there are no certificates yet -->
+{% if formswithcert|length == 0 %}
+    <p class="m-3">No trainings yet</p>
+{% endif %}
 
 {% for certificate, form in formswithcert %}
 <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">

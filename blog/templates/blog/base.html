@@ -24,7 +24,11 @@
     <header class="site-header">
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
-        <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Westridge Labs</a>
+          <!-- add user picture if logged in -->
+          {% if user.is_authenticated %}
+            <img src="{{ user.profile.image.url }}" class="rounded-circle" style="width: 40px; height: 40px;">
+          {% endif %}
+        <a class="navbar-brand mr-4 ml-2" href="{% url 'blog-home' %}">Westridge Labs</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
