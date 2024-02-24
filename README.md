@@ -6,7 +6,7 @@ This application was created for small businesses for following purposes:
   - Reminder
   - Birthday Tracker
   - Company's Blog
-  Coming up soon
+  ##### Coming up soon
   - File Management System
   - Messaging
   - Tasks
