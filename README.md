@@ -45,4 +45,8 @@ Diagrams that display what your application will look like, and images from the 
 Diagrams that describe the relationships between your resources.
 ![alt text](media/ERD.png)
 
+### If using pip to install a module
+
+run `pip freeze > requirements.txt` to generate a new requirements file
+
 
