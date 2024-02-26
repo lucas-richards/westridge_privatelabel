@@ -1,0 +1,49 @@
+{% extends "tasks/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<h2>Your Tasks</h2>
+<!-- if there are no tasks yet -->
+    {% if formswithtasks %}
+    
+
+        {% for task, form in formswithtasks %}
+        <div id="accordion" class="mb-3 {% if task.status == 'Completed' %}bg-success-light{% endif %}">
+            
+                <article class="media content-section">
+                    <div class="media-body">
+                        <div class="article-metadata">
+                            <a class="mr-2" href="#">{{ task.author }}</a>
+                            <small class="text-muted">{{ task.created_date|date:"F d, Y" }}</small>
+                        </div>
+                        <h2><a class="article-title" href="#">{{ task.title }}</a></h2>
+                        <p class="article-content">{{ task.description }}</p>
+                    </div>
+                    <div class="m-1">
+                        <form action="{% url 'tasks-home' %}" method="POST">
+                            {% csrf_token %}
+                                <div style="font-size: small;">
+                                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                                    {{ form|crispy }}
+                                    <div class="form-group">
+                                        <button id="submit_id_status" class="btn btn-outline-info" type="submit">Update</button>
+                                    </div>
+                                </div>
+                        </form>
+                    </div>
+                </article>
+            
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <p class="m-3">No tasks yet</p>
+    {% endif %}
+
+{% endif %}
+
+    
+
+
+{% endblock content %}
