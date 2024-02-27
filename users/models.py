@@ -50,3 +50,12 @@ class Profile(models.Model):
     # function that returns true if user birthday is today or timeuntil if is not today
     def birthday_today(self):
         return self.birthday == timezone.now().date()
+    
+    # get user tasks
+    @property
+    def get_tasks_assigned(self):
+        return self.tasks_asignee.all()
+    
+    @property
+    def get_tasks_created(self):
+        return self.tasks_created.all()

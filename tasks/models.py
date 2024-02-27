@@ -22,6 +22,11 @@ class Task(models.Model):
     def is_past_due(self):
         return date.today() > self.due_date
     
+    #  count how many tasks a user has
+    @property
+    def count_tasks(self):
+        return Task.objects.filter(assignee=self.assignee).count()
+    
     # when a task is created, it will send an email to both the author and the asignee with the due date
     def save(self, *args, **kwargs):
         is_new = not self.pk
