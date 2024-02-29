@@ -1,0 +1,50 @@
+{% extends "training/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<h2>Dashboard</h2>
+    
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Username</th>
+                {% for certificate in certificates %}
+                <th>{{ certificate }}</th>
+                {% endfor %}
+            
+            </tr>
+        </thead>
+        <tbody>
+            {% for profile in profiles %}
+                <tr>
+                    <td>{{ profile.user.username }}</td>
+                    <td>{{ profile.certifications.through.due_date }}</td>
+                    {% for certification in certificates %}
+                        <td>
+                            {% if certification in profile.certifications.all %}
+                             
+                            True
+                            {% else %}
+                            False
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+
+
+
+       
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}

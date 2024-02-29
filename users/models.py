@@ -38,11 +38,12 @@ class Profile(models.Model):
     # wtire a function that returns the percentage of certifications completed
     def get_certifications_percentage(self):
         return round(self.certificationstatus_set.filter(status='Completed').count() / self.certifications.count() * 100)
+
+    # function that returns all certification status
+    def get_certification_status(self, certification):
+        return self.certificationstatus_set.filter(certification=certification).first()
     
-    # write a function that returns all the user's certifications and their status
-    def get_certification_status(self):
-        return self.certificationstatus_set.all()
-    
+
     # write a function that tells you if the user has all the certifications in status 'completed'
     def has_all_certifications_completed(self):
         return self.certificationstatus_set.filter(status='Completed').count() == self.certifications.count()
@@ -52,10 +53,9 @@ class Profile(models.Model):
         return self.birthday == timezone.now().date()
     
     # get user tasks
-    @property
+  
     def get_tasks_assigned(self):
         return self.tasks_asignee.all()
-    
-    @property
+   
     def get_tasks_created(self):
         return self.tasks_created.all()

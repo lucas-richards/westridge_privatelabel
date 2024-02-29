@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
-from .models import CertificationStatus
+from .models import CertificationStatus, Certification
 from .forms import StatusUpdateForm
 
 @login_required
@@ -55,3 +55,23 @@ def home(request):
     }
     return render(request, 'training/home.html', context)
 
+def dashboard(request):
+    profiles = Profile.objects.all()
+    certificates = Certification.objects.all()
+    profwithcert = zip(profiles, certificates)
+
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+
+    context = {
+        'title': 'Dashboard',
+        'sidepanel': sidepanel,
+        'profiles': profiles,
+        'certificates': certificates,
+        'profwithcert': profwithcert
+    }
+
+    return render(request, 'training/dashboard.html', context)
