@@ -41,6 +41,7 @@ Diagrams that display what your application will look like, and images from the 
 ![alt text](media/blog_app.png)
 ![alt text](media/login.png)
 ![alt text](media/register.png)
+![alt text](media/dashboard.png)
 ## Entity Relationship Diagrams 
 Diagrams that describe the relationships between your resources.
 New entity coming up 
