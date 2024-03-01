@@ -71,6 +71,7 @@ def dashboard(request):
             status = status_obj.status if status_obj else '-'
             row['certifications_status'].append(status)
         data.append(row)
+    print('data', data)
 
     context = {'data': data}
 

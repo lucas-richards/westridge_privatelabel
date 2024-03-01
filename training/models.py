@@ -23,7 +23,7 @@ class Certification(models.Model):
 class CertificationStatus(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=[('Not Started', 'Not Started'), ('In Progress', 'In Progress'), ('Completed', 'Completed')])
+    status = models.CharField(max_length=50, choices=[('Not Started', 'Not Started'), ('In Progress', 'In Progress'), ('Completed', 'Completed')], default='Not Started')
     scheduled_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
     due_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
     
