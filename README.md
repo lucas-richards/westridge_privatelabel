@@ -38,10 +38,10 @@ A detailed list of the functionality of your application, told through a user's 
 ## Wireframes / Screenshots
 Diagrams that display what your application will look like, and images from the completed app.
 ![alt text](media/training_app.png)
+![alt text](media/dashboard.png)
 ![alt text](media/blog_app.png)
 ![alt text](media/login.png)
 ![alt text](media/register.png)
-![alt text](media/dashboard.png)
 ## Entity Relationship Diagrams 
 Diagrams that describe the relationships between your resources.
 New entity coming up 
