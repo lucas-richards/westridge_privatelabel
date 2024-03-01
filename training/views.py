@@ -68,8 +68,8 @@ def dashboard(request):
         }
         for certification in certificates:
             status_obj = CertificationStatus.objects.filter(profile=profile, certification=certification).first()
-            status = status_obj.status if status_obj else '-'
-            row['certifications_status'].append(status)
+            cert = status_obj if status_obj else '-'
+            row['certifications_status'].append(cert)
         data.append(row)
     print('data', data)
 
