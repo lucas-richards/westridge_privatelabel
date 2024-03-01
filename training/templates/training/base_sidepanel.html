@@ -17,7 +17,9 @@
         <div class="card card-body">
               <div class="d-flex justify-content-between">
                 <h3>{{ sidepanel.title }}</h3>
+                <small><a class="nav-item" style="font-size: xx-small;" href="{% url 'training-dashboard' %}">(Dashboard)</a></small>
               </div>
+              
               <p class='text-muted'>{{ sidepanel.text1 }}</p>
               <div class="d-flex  ">
                 {% for prof in profiles %}

@@ -58,7 +58,21 @@ def home(request):
 def dashboard(request):
     profiles = Profile.objects.all()
     certificates = Certification.objects.all()
-    profwithcert = zip(profiles, certificates)
+    
+    # Prepare data to be sent to the template
+    data = []
+    for profile in profiles:
+        row = {
+            'username': profile.user.username,
+            'certifications_status': []
+        }
+        for certification in certificates:
+            status_obj = CertificationStatus.objects.filter(profile=profile, certification=certification).first()
+            status = status_obj.status if status_obj else '-'
+            row['certifications_status'].append(status)
+        data.append(row)
+
+    context = {'data': data}
 
     sidepanel = {
         'title': 'Training',
@@ -71,7 +85,7 @@ def dashboard(request):
         'sidepanel': sidepanel,
         'profiles': profiles,
         'certificates': certificates,
-        'profwithcert': profwithcert
+        'data': data
     }
 
     return render(request, 'training/dashboard.html', context)
