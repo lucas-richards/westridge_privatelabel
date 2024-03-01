@@ -1,0 +1,16 @@
+{% extends "training/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<h2>{{ certification.certification }} - {{ certification.profile }}</h2>
+
+    
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}

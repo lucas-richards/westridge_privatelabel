@@ -90,3 +90,15 @@ def dashboard(request):
     }
 
     return render(request, 'training/dashboard.html', context)
+
+
+def certification_detail(request, certification_id):
+    profiles = Profile.objects.all()
+    certification = CertificationStatus.objects.get(pk=certification_id)
+    
+    context = {
+        'title': certification.certification,
+        'certification': certification,
+        'profiles': profiles
+    }
+    return render(request, 'training/certification_status_detail.html', context)
