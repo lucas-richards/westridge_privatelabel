@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th>Username</th>
+                <th>Progress</th>
                 {% for certificate in certificates %}
                         <th>{{ certificate }}</th>
                 {% endfor %}
@@ -20,6 +21,7 @@
             {% for row in data %}
                 <tr>
                     <td>{{ row.username }}</td>
+                    <td>{{ row.percentage }}%</td>
                     {% for cert in row.certifications_status %}
                         <td>
                             {% if cert.id %}

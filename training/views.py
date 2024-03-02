@@ -64,6 +64,7 @@ def dashboard(request):
     for profile in profiles:
         row = {
             'username': profile.user.username,
+            'percentage':profile.get_certifications_percentage(),
             'certifications_status': []
         }
         for certification in certificates:
@@ -95,10 +96,20 @@ def dashboard(request):
 def certification_detail(request, certification_id):
     profiles = Profile.objects.all()
     certification = CertificationStatus.objects.get(pk=certification_id)
+    form = StatusUpdateForm(instance=certification)
+    if request.method == 'POST':
+        form = StatusUpdateForm(request.POST, instance=certification)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{certification.certification} certificate has been updated!')
+            return redirect('training-certification-detail', certification_id=certification_id)
+        else:
+            messages.error(request, 'Form is not valid. Please check the entered data.')
     
     context = {
         'title': certification.certification,
         'certification': certification,
-        'profiles': profiles
+        'profiles': profiles,
+        'form': form
     }
     return render(request, 'training/certification_status_detail.html', context)
