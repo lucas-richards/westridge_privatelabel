@@ -3,6 +3,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+<!-- ceritification detail -->
 <h2>{{ certification.certification }} - {{ certification.profile }}</h2>
 <!-- show form -->
 <form method="post" class="form" action="{% url 'training-certification-detail' certification.id %}">
