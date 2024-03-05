@@ -105,11 +105,17 @@ def certification_detail(request, certification_id):
             return redirect('training-certification-detail', certification_id=certification_id)
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
-    
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+
     context = {
         'title': certification.certification,
         'certification': certification,
         'profiles': profiles,
-        'form': form
+        'form': form,
+        'sidepanel': sidepanel
     }
     return render(request, 'training/certification_status_detail.html', context)

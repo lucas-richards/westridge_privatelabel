@@ -34,8 +34,8 @@ def home(request):
     
     sidepanel = {
         'title': 'Tasks',
-        'text1': 'Completed all tasks',
-        'text2': 'Almost there',
+        'text1': '',
+        'text2': 'Due dates',
     }
     
     context = {

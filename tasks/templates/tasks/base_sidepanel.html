@@ -20,31 +20,27 @@
               </div>
               <p class='text-muted'>{{ sidepanel.text1 }}</p>
               <div class="d-flex  ">
-                {% for prof in profiles %}
-                  {% if prof.has_all_certifications_completed %}
-                    <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic">
-                  {% endif %}
-                {% endfor %}
+                <div style="width: 100px;">
+                  <canvas id="myChart"></canvas>
+                </div>
               </div>
               <hr/>
               <p class='text-muted'>{{ sidepanel.text2 }}</p>
               <div class="d-flex flex-column justify-content-center align-content-center ">
-                {% for prof in profiles %}
-                  {% if prof.has_all_certifications_completed %}
+                
+                <ul class="list-group">
+                  {% for task in tasks %}
+                  {% if task.status == 'Completed' %}
                   {% else %}
-                  <div class="row">
-                    <div class="col-md-2">
-                      <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic">
-                    </div>
-                    <div class="col-md-10">
-                      <!-- status bar -->
-                      <div class="progress w-100 ">
-                        <div class="progress-bar" role="progressbar" style="width: {{ prof.get_certifications_percentage }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ prof.get_certifications_percentage }}%</div>
-                      </div>
-                    </div>
-                  </div>
-                {% endif %}
-              {% endfor %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ task.title }}
+                    <span class="badge badge-primary badge-pill">{{ task.due_date|timesince }}</span>
+                  </li>
+                  {% endif %}
+                  {% endfor %}
+                </ul>
+               
+                  
             </div>
     
         </div>
@@ -54,4 +50,43 @@
       
     </div>
   </main>
+
+<!-- dynamic charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+      type: 'pie',  // Change the chart type to 'pie'
+      data: {
+          labels: ['Not Started', 'In Progress', 'Completed'],
+          datasets: [{
+              label: '# of Votes',
+              data: [12, 19, 3],
+              borderWidth: 1,
+              backgroundColor: ['green', 'red', 'yellow'] // Set the colors here
+          }]
+      },
+      options: {
+          plugins: {
+              legend: {
+                  display: false,  // Hide legend
+              },
+              tooltip: {
+                  enabled: true,  // Enable tooltips
+              }
+          },
+          scales: {
+              x: {
+                  display: false  // Hide x-axis
+              },
+              y: {
+                  display: false  // Hide y-axis
+              }
+          }
+      }
+  });
+</script>
 {% endblock maincontent %}
+
