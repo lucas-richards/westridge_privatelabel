@@ -3,7 +3,18 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<h2>Your Tasks</h2>
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="{% url 'tasks-home' %}">My Tasks</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Assigned</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'tasks-create' %}">New Task</a>
+    </li>
+</ul>
+
     
 
 <!-- if there are no tasks yet -->
@@ -11,29 +22,62 @@
     
 
         {% for task, form in formswithtasks %}
-        <div id="accordion" class="mb-3 {% if task.status == 'Completed' %}bg-success-light{% endif %}">
-            
-                <article class="media content-section">
+        <div id="accordion" class="mb-3 ">
+                <article class=" media content-section {% if task.status == 'Completed' %}bg-success-light{% endif %}">
+                    {% if task.status == 'Completed' %}
                     <div class="media-body">
-                        <div class="article-metadata">
-                            <a class="mr-2" href="#">{{ task.author }}</a>
-                            <small class="text-muted">{{ task.created_date|date:"F d, Y" }}</small>
-                        </div>
-                        <h2><a class="article-title" href="#">{{ task.title }}</a></h2>
-                        <p class="article-content">{{ task.description }}</p>
-                    </div>
-                    <div class="m-1">
-                        <form action="{% url 'tasks-home' %}" method="POST">
-                            {% csrf_token %}
-                                <div style="font-size: small;">
+                        <div class="d-flex justify-content-between align-items-center ">
+                            <div>
+                                <a class="mr-2" href="#">{{ task.author }}</a>
+                                <small class="text-muted">{{ task.title }}</small>
+                            </div>
+                                <form id="form_update" action="{% url 'tasks-home' %}" method="POST">
+                                    {% csrf_token %}  
                                     <input type="hidden" name="task_id" value="{{ task.id }}">
-                                    {{ form|crispy }}
-                                    <div class="form-group">
-                                        <button id="submit_id_status" class="btn btn-outline-info" type="submit">Update</button>
-                                    </div>
-                                </div>
-                        </form>
+                                    <select id="id_status" style="font-size: x-small;padding: 0px;height: 20px;" name="status" class="form-control" onchange="this.form.submit()">
+                                        <option value="Not Started" {% if task.status == 'Not Started' %} selected {% endif %}>Not Started</option>
+                                        <option value="In Progress" {% if task.status == 'In Progress' %} selected {% endif %}>In Progress</option>
+                                        <option value="Completed" {% if task.status == 'Completed' %} selected {% endif %}>Completed</option>
+                                    </select>
+                                </form>
+                        </div>
                     </div>
+                    {% else %}
+                        <div class="media-body">
+                            <div class="article-metadata d-flex justify-content-between">
+                                <div>
+                                    <a class="mr-2" href="#">{{ task.author }}</a>
+                                    <small class="text-muted">{{ task.created_date|date:"F d, Y" }}</small>
+
+                                </div>
+                                {% if task.is_past_due %}
+                                    <small class="text-danger">Overdue</small>
+                                {% else %}
+                                    <small class="text-muted">Due {{ task.due_date|date:"F d" }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4><a class="article-title" href="{% url 'tasks-update' task.id %}">{{ task.title }}</a></h4>
+                                    <p class="article-content">{{ task.description }}</p>
+                                </div>
+                                <div  class="m-1">
+                                    <form id="form_update_{{task.id}}" action="{% url 'tasks-home' %}" method="POST">
+                                        {% csrf_token %}
+                                            <div >
+                                                <input type="hidden" name="task_id" value="{{ task.id }}">
+                                                <select id="id_status" style="font-size: x-small;padding: 0px;height: 20px;" name="status" class="form-control" onchange="this.form.submit()">
+                                                    <option value="Not Started" {% if task.status == 'Not Started' %} selected {% endif %}>Not Started</option>
+                                                    <option value="In Progress" {% if task.status == 'In Progress' %} selected {% endif %}>In Progress</option>
+                                                    <option value="Completed" {% if task.status == 'Completed' %} selected {% endif %}>Completed</option>
+                                                </select>
+                                            </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
                 </article>
             
         </div>
@@ -44,6 +88,20 @@
     {% endif %}
 
 {% endif %}
+
+<!-- submit form by selecting a status -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get the select input element
+        var selectInput = document.getElementById("id_status");
+
+        // Add change event listener to the select input
+        selectInput.addEventListener("change", function () {
+            // Trigger form submission when the select input changes
+            document.getElementById("form_update").submit();
+        });
+    });
+</script>
 
 
 

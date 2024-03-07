@@ -14,6 +14,7 @@ This application was created for a small businesses and includes:
 
 ## Getting started
 ##### Recommended to use python virtual environment
+run `pipenv shell`
 ###### install requirements
 run `pip install -r requirements.txt`
 ###### run server
