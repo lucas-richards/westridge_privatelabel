@@ -1,15 +1,15 @@
 # Blog App for westridge Laboratories
 
 ## Overview
-This application was created for a small businesses and includes:
+This application was created for a small business. Includes:
   - Training Tracker
+  - Tasks
   - Reminder
   - Birthday Tracker
   - Company's Blog
   ##### Coming up soon
   - File Management System
   - Messaging
-  - Tasks
   - Organization
 
 ## Getting started
@@ -39,6 +39,7 @@ A detailed list of the functionality of your application, told through a user's 
 ## Wireframes / Screenshots
 Diagrams that display what your application will look like, and images from the completed app.
 ![alt text](media/training_app.png)
+![alt text](media/tasks.png)
 ![alt text](media/dashboard.png)
 ![alt text](media/blog_app.png)
 ![alt text](media/login.png)
