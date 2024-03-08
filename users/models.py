@@ -9,12 +9,22 @@ class Department(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+# role model
+class Role(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.name}"
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birthday = models.DateField(null=True, blank=True)
     image = models.ImageField(default='default.webp', upload_to='profile_pics')
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    # each profile can have multiple roles
+    roles = models.ManyToManyField(Role, related_name='profiles', blank=True)
     certifications = models.ManyToManyField('training.Certification', related_name='profiles', through='training.CertificationStatus')
 
     def __str__(self):
@@ -37,7 +47,8 @@ class Profile(models.Model):
     
     # wtire a function that returns the percentage of certifications completed
     def get_certifications_percentage(self):
-        return round(self.certificationstatus_set.filter(status='Completed').count() / self.certifications.count() * 100)
+        percentage = round(self.certificationstatus_set.filter(status='Completed').count() / (self.certifications.count() or 1) * 100)
+        return percentage if percentage != 0 else 0
 
     # function that returns all certification status
     def get_certification_status(self, certification):
@@ -59,3 +70,11 @@ class Profile(models.Model):
    
     def get_tasks_created(self):
         return self.tasks_created.all()
+    
+    #  get user roles
+    def get_roles(self):
+        return self.roles.all()
+    
+    # must have certification is a function that receives a certification and returns true if the user has the role required for that certification
+    def must_have_certification(self, certification):
+        return certification.roles.filter(profiles=self).exists()

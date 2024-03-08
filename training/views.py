@@ -64,12 +64,21 @@ def dashboard(request):
     for profile in profiles:
         row = {
             'username': profile.user.username,
-            'percentage':profile.get_certifications_percentage(),
+            'roles': profile.get_roles(),
+            'percentage': profile.get_certifications_percentage(),
             'certifications_status': []
         }
         for certification in certificates:
             status_obj = CertificationStatus.objects.filter(profile=profile, certification=certification).first()
-            cert = status_obj if status_obj else '-'
+            
+            if status_obj:
+                cert = status_obj
+            
+            elif profile.must_have_certification(certification):
+                cert = '+'
+            else:
+                cert = '-'
+
             row['certifications_status'].append(cert)
         data.append(row)
     print('data', data)

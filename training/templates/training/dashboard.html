@@ -10,9 +10,10 @@
         <thead>
             <tr>
                 <th>Username</th>
+                <th>Roles</th>
                 <th>Progress</th>
                 {% for certificate in certificates %}
-                        <th>{{ certificate }}</th>
+                        <th class="text-center">{{ certificate }}</th>
                 {% endfor %}
             
             </tr>
@@ -20,10 +21,21 @@
         <tbody>
             {% for row in data %}
                 <tr>
-                    <td>{{ row.username }}</td>
-                    <td>{{ row.percentage }}%</td>
+                    <td style="max-width: 40px;">{{ row.username }}</td>
+                    <td style="width: 60px;">
+                        {% for role in row.roles %}
+                            <span class="badge bg-secondary text-white">{{ role }}</span>
+                        {% endfor %}
+
+                    </td>
+                    <td style="max-width: 40px;">{{ row.percentage }}%</td>
                     {% for cert in row.certifications_status %}
                         <td>
+                            {% if cert == '+' %}
+                            <div class="d-flex justify-content-center align-items-center">
+                                <a href="#">add</a>
+                            </div>
+                            {%endif%}
                             {% if cert.id %}
                                 <a href="{% url 'training-certification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-{% if cert.status == 'Completed' %}success{% elif cert.status == 'In Progress' %}warning{% else %}danger{% endif %}">
                                 <!-- add an icon -->
