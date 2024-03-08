@@ -30,6 +30,9 @@ class Task(models.Model):
     # when a task is created, it will send an email to both the author and the asignee with the due date
     def save(self, *args, **kwargs):
         is_new = not self.pk
+        # make status default not started
+        if is_new:
+            self.status = 'Not Started'
         super().save(*args, **kwargs)
         if is_new:
             email_user = os.environ.get('EMAIL_USER')

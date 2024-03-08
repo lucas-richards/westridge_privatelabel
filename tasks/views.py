@@ -7,11 +7,11 @@ from .forms import TaskCreateForm, TaskUpdateFormAssignee, TaskUpdateFormAuthor
 @login_required
 def home(request):
     # count of all in progress tasks
-    in_progress = Task.objects.filter(status='In Progress').count()
+    in_progress = Task.objects.filter(assignee=request.user, status='In Progress').count()
     # count of all completed tasks
-    completed = Task.objects.filter(status='Completed').count()
+    completed = Task.objects.filter(assignee=request.user, status='Completed').count()
     # count of all not started tasks
-    not_started = Task.objects.filter(status='Not Started').count()
+    not_started = Task.objects.filter(assignee=request.user, status='Not Started').count()
     # get all tasks assigned to the user and order by due date but leave the completed tasks at the bottom
     tasks = Task.objects.filter(assignee=request.user).order_by('due_date')
     # move all completed tasks to the bottom
@@ -23,6 +23,7 @@ def home(request):
     print('tasks', tasks)
     if request.method == 'POST':
         task_id = request.POST.get('task_id')
+        print('task_id', task_id)
         try:
             task_instance = Task.objects.get(pk=task_id)
             
@@ -46,9 +47,9 @@ def home(request):
     formswithtasks = zip(tasks, forms)
     
     sidepanel = {
-        'title': 'Tasks',
+        'title': 'My Tasks',
         'text1': '',
-        'text2': 'Due dates',
+        'text2': 'To do list',
     }
     
     context = {
@@ -59,9 +60,43 @@ def home(request):
         'completed': completed,
         'not_started': not_started,
         'forms': forms,
-        'formswithtasks': formswithtasks
+        'formswithtasks': formswithtasks,
+        'percentage': round(completed/(in_progress+completed+not_started)*100)
     }
     return render(request, 'tasks/home.html', context)
+
+# assigned tasks
+@login_required
+def assigned(request):
+    # count of all in progress tasks
+    in_progress = Task.objects.filter(author=request.user,status='In Progress').count()
+    # count of all completed tasks
+    completed = Task.objects.filter(author=request.user,status='Completed').count()
+    # count of all not started tasks
+    not_started = Task.objects.filter(author=request.user,status='Not Started').count()
+    # get all tasks assigned to the user and order by due date but leave the completed tasks at the bottom
+    tasks = Task.objects.filter(author=request.user).order_by('due_date')
+    # move all completed tasks to the bottom
+    tasks = list(tasks)
+    completed_tasks = [task for task in tasks if task.status == 'Completed']
+    in_progress_tasks = [task for task in tasks if task.status == 'In Progress']
+    not_started_tasks = [task for task in tasks if task.status == 'Not Started']
+    tasks = in_progress_tasks + not_started_tasks + completed_tasks
+    sidepanel = {
+        'title': 'Assigned Tasks',
+        'text1': '',
+        'text2': 'To do list',
+    }
+    context = {
+        'title': 'Assigned',
+        'sidepanel': sidepanel,
+        'tasks': tasks,
+        'in_progress': in_progress,
+        'completed': completed,
+        'not_started': not_started,
+        'percentage': round(completed/(in_progress+completed+not_started)*100),
+    }
+    return render(request, 'tasks/assigned.html', context)
 
 # create task
 @login_required

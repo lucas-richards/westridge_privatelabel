@@ -1,0 +1,54 @@
+{% extends "tasks/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="{% url 'tasks-home' %}">My Tasks</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="{% url 'tasks-assigned' %}">Assigned</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'tasks-create' %}">New Task</a>
+    </li>
+</ul>
+
+    
+
+<!-- if there are no tasks yet -->
+    {% if tasks %}
+        {% for task in tasks %}
+        <div id="accordion" class="mb-3 ">
+                <article class=" media content-section {% if task.status == 'Completed' %}bg-success-light{% endif %}">
+                    
+                    <div class="media-body">
+                        <div class="d-flex justify-content-between align-items-center ">
+                            <div>
+                                <a class="mr-2" href="#">{{ task.assignee }}</a>
+                                <small class="text-muted">{{ task.title }}</small>
+                                <small class="text-muted">| due {{ task.due_date|date:'n/j' }}</small>
+                            </div>
+                            <!-- update task -->
+                            <a class="btn btn-outline-secondary btn-sm" href="{% url 'tasks-update' task.id %}">Update</a>
+                                
+                        </div>
+                    </div>
+                    
+                </article>
+            
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <p class="m-3">No tasks yet</p>
+    {% endif %}
+
+{% endif %}
+
+
+
+{% endblock content %}
+
+  

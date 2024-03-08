@@ -8,7 +8,7 @@
       <a class="nav-link active" aria-current="page" href="{% url 'tasks-home' %}">My Tasks</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Assigned</a>
+      <a class="nav-link" href="{% url 'tasks-assigned' %}">Assigned</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'tasks-create' %}">New Task</a>
@@ -88,20 +88,6 @@
     {% endif %}
 
 {% endif %}
-
-<!-- submit form by selecting a status -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Get the select input element
-        var selectInput = document.getElementById("id_status");
-
-        // Add change event listener to the select input
-        selectInput.addEventListener("change", function () {
-            // Trigger form submission when the select input changes
-            document.getElementById("form_update").submit();
-        });
-    });
-</script>
 
 
 

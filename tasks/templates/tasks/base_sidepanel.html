@@ -23,7 +23,16 @@
                 <div style="width: 100px;">
                   {% if sidepanel.text2 == '' %}
                   {% else %}
-                  <canvas id="myChart"></canvas>
+                  <div class="d-flex justify-content-between align-items-center">
+                      <canvas class="p-3" id="myChart"></canvas>
+                    
+                      <div class="border border-dark rounded p-1">
+                        {{ percentage }}%
+                      </div>
+                    
+                  </div>
+                  
+
                   {% endif %}
                 </div>
               </div>
