@@ -152,7 +152,7 @@ def delete(request, pk):
     if request.method == 'POST':
         task.delete()
         messages.success(request, f'Task has been deleted!')
-        return redirect('tasks-home')
+        return redirect('tasks-assigned')
     sidepanel = {
         'title': 'Delete Task',
         'text1': '',
@@ -163,6 +163,6 @@ def delete(request, pk):
         'sidepanel': sidepanel,
         'task': task
     }
-    return render(request, 'tasks/delete.html', context)
+    return redirect('tasks-assigned')
 
 
