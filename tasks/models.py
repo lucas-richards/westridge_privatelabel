@@ -9,7 +9,7 @@ import os
 
 class Task(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks_created')
-    assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks_asignee')
+    assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks_asignee')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     status = models.CharField(max_length=50, choices=[('Not Started', 'Not Started'), ('In Progress', 'In Progress'), ('Completed', 'Completed')])
@@ -25,7 +25,7 @@ class Task(models.Model):
     #  count how many tasks a user has
     @property
     def count_tasks(self):
-        return Task.objects.filter(assignee=self.assignee).count()
+        return Task.objects.filter(assigned_to=self.assigned_to).count()
     
     # when a task is created, it will send an email to both the author and the asignee with the due date
     def save(self, *args, **kwargs):
@@ -38,13 +38,13 @@ class Task(models.Model):
             email_user = os.environ.get('EMAIL_USER')
             email_password = os.environ.get('EMAIL_PASS')
             author_email = self.author.email
-            assignee_email = self.assignee.email
+            assigned_to_email = self.assigned_to.email
 
             subject = ' New task created'
-            message = f' A new task has been created for {self.assignee.username} by {self.author.username}. The task is titled {self.title} and is due on {self.due_date}.'
+            message = f' A new task has been created for {self.assigned_to.username} by {self.author.username}. The task is titled {self.title} and is due on {self.due_date}.'
 
             try:
-                send_mail(subject, message, email_user, [author_email, assignee_email], auth_user=email_user, auth_password=email_password)
-                logging.info(f'Successfully sent schedule update email to {author_email, assignee_email}')
+                send_mail(subject, message, email_user, [author_email, assigned_to_email], auth_user=email_user, auth_password=email_password)
+                logging.info(f'Successfully sent schedule update email to {author_email, assigned_to_email}')
             except Exception as e:
-                logging.error(f'Error sending schedule update email to {author_email, assignee_email}: {str(e)}')
+                logging.error(f'Error sending schedule update email to {author_email, assigned_to_email}: {str(e)}')

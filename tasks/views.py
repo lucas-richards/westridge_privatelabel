@@ -2,18 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Task
-from .forms import TaskCreateForm, TaskUpdateFormAssignee, TaskUpdateFormAuthor
+from .forms import TaskCreateForm, TaskUpdateFormAssigned_to, TaskUpdateFormAuthor
 
 @login_required
 def home(request):
     # count of all in progress tasks
-    in_progress = Task.objects.filter(assignee=request.user, status='In Progress').count()
+    in_progress = Task.objects.filter(assigned_to=request.user, status='In Progress').count()
     # count of all completed tasks
-    completed = Task.objects.filter(assignee=request.user, status='Completed').count()
+    completed = Task.objects.filter(assigned_to=request.user, status='Completed').count()
     # count of all not started tasks
-    not_started = Task.objects.filter(assignee=request.user, status='Not Started').count()
+    not_started = Task.objects.filter(assigned_to=request.user, status='Not Started').count()
     # get all tasks assigned to the user and order by due date but leave the completed tasks at the bottom
-    tasks = Task.objects.filter(assignee=request.user).order_by('due_date')
+    tasks = Task.objects.filter(assigned_to=request.user).order_by('due_date')
     # move all completed tasks to the bottom
     tasks = list(tasks)
     completed_tasks = [task for task in tasks if task.status == 'Completed']
@@ -28,7 +28,7 @@ def home(request):
             task_instance = Task.objects.get(pk=task_id)
             
             # Create a form instance with the posted data
-            form = TaskUpdateFormAssignee(request.POST, instance=task_instance)
+            form = TaskUpdateFormAssigned_to(request.POST, instance=task_instance)
             
             if form.is_valid():
                 
@@ -43,7 +43,7 @@ def home(request):
         return redirect('tasks-home')
 
     # Create forms for each task using the StatusUpdateForm
-    forms = [TaskUpdateFormAssignee(instance=task) for task in tasks]
+    forms = [TaskUpdateFormAssigned_to(instance=task) for task in tasks]
     formswithtasks = zip(tasks, forms)
     
     sidepanel = {
@@ -112,7 +112,7 @@ def create(request):
         form = TaskCreateForm()
     sidepanel = {
         'title': 'Create Task',
-        'text1': 'Select an assignee for the task. Write a title and description. Click on the due date to select a date.',
+        'text1': 'Select an assigned_to for the task. Write a title and description. Click on the due date to select a date.',
         'text2': '',
     }
     context = {

@@ -8,10 +8,10 @@ class TaskCreateForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['assignee', 'title', 'description', 'due_date']
+        fields = ['assigned_to', 'title', 'description', 'due_date']
 
 # updating task form
-class TaskUpdateFormAssignee(forms.ModelForm):
+class TaskUpdateFormAssigned_to(forms.ModelForm):
 
     class Meta:
         model = Task
