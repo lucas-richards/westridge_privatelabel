@@ -49,7 +49,7 @@ Diagrams that describe the relationships between your resources.
 New entity coming up 
 ![alt text](media/ERD.png)
 
-### If using pip to install a module
+### If use pip to install a module, recreate the requirements.txt file
 
 run `pip freeze > requirements.txt` to generate a new requirements file
 
