@@ -46,7 +46,6 @@ Diagrams that display what your application will look like, and images from the 
 ![alt text](media/register.png)
 ## Entity Relationship Diagrams 
 Diagrams that describe the relationships between your resources.
-New entity coming up 
 ![alt text](media/ERD.png)
 
 ### If use pip to install a module, recreate the requirements.txt file
