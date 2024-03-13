@@ -52,6 +52,8 @@ def home(request):
         'text2': 'To do list',
     }
     
+    percentage = round(completed/(in_progress+completed+not_started)*100) if (in_progress+completed+not_started) != 0 else 0
+    
     context = {
         'title': 'Home',
         'sidepanel': sidepanel,
@@ -61,7 +63,7 @@ def home(request):
         'not_started': not_started,
         'forms': forms,
         'formswithtasks': formswithtasks,
-        'percentage': round(completed/(in_progress+completed+not_started)*100)
+        'percentage': percentage
     }
     return render(request, 'tasks/home.html', context)
 
@@ -87,6 +89,7 @@ def assigned(request):
         'text1': '',
         'text2': 'To do list',
     }
+    percentage = round(completed/(in_progress+completed+not_started)*100) if (in_progress+completed+not_started) != 0 else 0
     context = {
         'title': 'Assigned',
         'sidepanel': sidepanel,
@@ -94,7 +97,7 @@ def assigned(request):
         'in_progress': in_progress,
         'completed': completed,
         'not_started': not_started,
-        'percentage': round(completed/(in_progress+completed+not_started)*100),
+        'percentage': percentage,
     }
     return render(request, 'tasks/assigned.html', context)
 
