@@ -27,7 +27,7 @@
         <div class="container">
           <!-- add user picture if logged in -->
           {% if user.is_authenticated %}
-            <img src="{{ user.profile.image.url }}" class="rounded-circle" style="width: 40px; height: 40px;">
+            <img src="{% if user.profile.image.url %}{{user.profile.image.url}}{% else %}https://img.freepik.com/free-vector/illustration-user-avatar-icon_53876-5907.jpg?w=826&t=st=1710448511~exp=1710449111~hmac=95e4a40e71079a0b1b0c400b1b043efe3e2427d3ec7a347ebdc55f1a56b57366{% endif %}" class="rounded-circle" style="width: 40px; height: 40px;">
           {% endif %}
         <a class="navbar-brand mr-4 ml-2" href="{% url 'blog-home' %}">Westridge Labs</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
