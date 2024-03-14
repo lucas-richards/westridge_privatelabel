@@ -54,6 +54,8 @@ run `pip freeze > requirements.txt` to generate a new requirements file
 
 ## Deployment
 
+follow https://docs.render.com/deploy-django#manual-deployment
+
 `python -m pip install gunicorn.`
 
 run command for deployment
