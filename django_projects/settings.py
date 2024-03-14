@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from dotenv import load_dotenv
+import dj_database_url
 from pathlib import Path
 import os
 
@@ -91,19 +92,26 @@ WSGI_APPLICATION = 'django_projects.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# db_from_env = dj_database_url.config(default='postgres://house_o132_user:9QufcJHwj4oEveIOJGy1cEzFheAjVWWP@dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com/house_o132')
+
+# DATABASES = {
+#     'default': db_from_env
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'house_o132',
-        'USER': 'house_o132_user',
-        'PASSWORD': '9QufcJHwj4oEveIOJGy1cEzFheAjVWWP',
-        'HOST': 'dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com',
-        'PORT': '',
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'house_o132',
+    #     'USER': 'house_o132_user',
+    #     'PASSWORD': '9QufcJHwj4oEveIOJGy1cEzFheAjVWWP',
+    #     'HOST': 'dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com',
+    #     'PORT': '',
     # }
+   
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 
