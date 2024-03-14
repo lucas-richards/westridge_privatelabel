@@ -21,6 +21,7 @@ class Role(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birthday = models.DateField(null=True, blank=True)
+    # use this image url as a default https://img.freepik.com/free-vector/man-profile-account-picture_24908-81754.jpg?w=826&t=st=1710450387~exp=1710450987~hmac=5371500fb04f8770784bc3b434179fc06ff8ae0bd7d4fe480f3358bdb53f62bf
     image = models.ImageField(default='default.webp', upload_to='profile_pics')
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     # each profile can have multiple roles

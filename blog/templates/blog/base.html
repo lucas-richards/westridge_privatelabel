@@ -26,19 +26,33 @@
       <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
         <div class="container">
           <!-- add user picture if logged in -->
-          {% if user.is_authenticated %}
-            <img src="{{user.profile.image.url}}" class="rounded-circle" style="width: 40px; height: 40px;">
-          {% endif %}
+            {% if user.is_authenticated %}
+          
+                <img id="profImage" src="{{user.profile.image.url}}" onerror="handleImageError()" class="rounded-circle" style="width: 40px; height: 40px;">
+              
+            {% endif %}
         <a class="navbar-brand mr-4 ml-2" href="{% url 'blog-home' %}">Westridge Labs</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="{% url 'blog-home' %}">Blog</a>
+              
             <a class="nav-item nav-link" href="{% url 'training-home' %}">Training</a>
             <a class="nav-item nav-link" href="{% url 'tasks-home' %}">Tasks</a>
             <a class="nav-item nav-link" href="{% url 'admin:index' %}">Admin</a>
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Forms
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Purchase Request</a>
+                <a class="dropdown-item" href="#">Graphic Request</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Customer Complaint</a>
+                <a class="dropdown-item" href="#">Return</a>
+              </div>
+            </div>
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
