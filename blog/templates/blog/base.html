@@ -28,7 +28,7 @@
           <!-- add user picture if logged in -->
             {% if user.is_authenticated %}
           
-                <img id="profImage" src="{{user.profile.image.url}}" onerror="handleImageError()" class="rounded-circle" style="width: 40px; height: 40px;">
+                <img id="profImage" src="{{user.profile.image.url}}" class="rounded-circle border" style="width: 40px; height: 40px;">
               
             {% endif %}
         <a class="navbar-brand mr-4 ml-2" href="{% url 'blog-home' %}">Westridge Labs</a>
