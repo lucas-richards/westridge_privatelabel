@@ -59,6 +59,8 @@ run `pip freeze > requirements.txt` to generate a new requirements file
 run command for deployment
 `gunicorn mysite.wsgi`
 
+allow new host on settings.py
+
 ## Static files
 
 `pip install whitenoise`

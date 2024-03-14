@@ -1,0 +1,22 @@
+databases:
+  - name: house_o132
+    plan: free
+    databaseName: house_o132
+    user: house_o132_user
+
+services:
+  - type: web
+    plan: free
+    name: westridgeapp
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "python -m gunicorn django_projects.asgi:application -k uvicorn.workers.UvicornWorker"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: mysitedb
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
