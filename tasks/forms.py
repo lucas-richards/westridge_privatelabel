@@ -22,4 +22,4 @@ class TaskUpdateFormAuthor(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['title', 'description', 'status', 'due_date']
+        fields = ['title', 'description', 'status','priority', 'due_date']

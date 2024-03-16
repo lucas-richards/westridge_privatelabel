@@ -27,7 +27,8 @@
                     {% if task.status == 'Completed' %}
                     <div class="media-body">
                         <div class="d-flex justify-content-between align-items-center ">
-                            <div>
+                            <div class="d-flex align-items-center">
+                                <small style="font-size: x-small;" class="mr-2 pb-0 pt-0 btn btn-sm btn-outline-{% if task.priority == 'Low' %}success{% elif task.priority == 'Medium' %}warning{%else%}danger{%endif%}">{{ task.priority }}</small>
                                 <a class="mr-2" href="#">{{ task.author }}</a>
                                 <small class="text-muted">{{ task.title }}</small>
                             </div>
@@ -45,7 +46,8 @@
                     {% else %}
                         <div class="media-body">
                             <div class="article-metadata d-flex justify-content-between">
-                                <div>
+                                <div class="d-flex align-items-center">
+                                    <small style="font-size: x-small;" class="mr-2 pb-0 pt-0 btn btn-sm btn-outline-{% if task.priority == 'Low' %}success{% elif task.priority == 'Medium' %}warning{%else%}danger{%endif%}">{{ task.priority }}</small>
                                     <a class="mr-2" href="#">{{ task.author }}</a>
                                     <small class="text-muted">{{ task.created_date|date:"F d, Y" }}</small>
 

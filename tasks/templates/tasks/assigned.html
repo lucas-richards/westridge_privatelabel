@@ -26,6 +26,7 @@
                     <div class="media-body">
                         <div class="d-flex justify-content-between align-items-center ">
                             <div>
+                                <small style="font-size: x-small;" class="mr-2 pb-0 pt-0 btn btn-sm btn-outline-{% if task.priority == 'Low' %}success{% elif task.priority == 'Medium' %}warning{%else%}danger{%endif%}">{{ task.priority }}</small>
                                 <a class="mr-2" href="#">{{ task.assigned_to }}</a>
                                 <small class="text-muted">{{ task.title }}</small>
                                 <small class="text-muted">| due {{ task.due_date|date:'n/j' }}</small>

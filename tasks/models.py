@@ -12,7 +12,8 @@ class Task(models.Model):
     assigned_to = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks_asignee')
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    status = models.CharField(max_length=50, choices=[('Not Started', 'Not Started'), ('In Progress', 'In Progress'), ('Completed', 'Completed')])
+    status = models.CharField(max_length=50, choices=[('Not Started', 'Not Started'), ('In Progress', 'In Progress'), ('Completed', 'Completed')], default='Not Started')
+    priority = models.CharField(max_length=50, choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')], default='Low')
     due_date = models.DateField(blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
 
