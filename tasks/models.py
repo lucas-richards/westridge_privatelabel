@@ -40,7 +40,7 @@ class Task(models.Model):
             author_email = self.author.email
             assigned_to_email = self.assigned_to.email
 
-            subject = ' New task created'
+            subject = f' New task created for {self.assigned_to.username}'
             message = f' A new task has been created for {self.assigned_to.username} by {self.author.username}. The task is titled {self.title} and is due on {self.due_date}.'
 
             try:
