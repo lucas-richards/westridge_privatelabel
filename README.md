@@ -4,7 +4,7 @@
 This application was created for a small business. Includes:
   - Training Tracker
   - Tasks
-  - Reminder
+  - Reminders
   - Birthday Tracker
   - Company's Blog
   ##### Coming up soon
