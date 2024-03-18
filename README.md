@@ -7,10 +7,9 @@ This application was created for a small business. Includes:
   - Reminders
   - Birthday Tracker
   - Company's Blog
-  ##### Coming up soon
+  ##### Coming up
   - File Management System
   - Messaging
-  - Organization
 
 ## Getting started
 ##### Recommended to use python virtual environment
