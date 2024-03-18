@@ -1,4 +1,4 @@
-# Blog App for westridge Laboratories
+# Westridge Laboratories App
 
 ## Overview
 This application was created for a small business. Includes:
