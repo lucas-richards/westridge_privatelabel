@@ -33,7 +33,7 @@ A detailed list of the functionality of your application, told through a user's 
   - As a user, I want the ability to view posts others have created. 
   - As a user, I want the ability to favorite posts that other people have created. 
   - As a user, I want the ability to read all of the posts I have favorited. 
-  - As a user, I want the ability to remove posts from my favorites. 
+  - As a user, I want the ability to remove posts from my favorites.
 
 ## Wireframes / Screenshots
 Diagrams that display what your application will look like, and images from the completed app.
