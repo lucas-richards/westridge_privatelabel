@@ -19,7 +19,6 @@
         <thead>
             <tr>
                 <th class="sticky-column">Username</th>
-                <th>Roles</th>
                 <th>Progress</th>
                 {% for certificate in certificates %}
                         <th class="text-center">{{ certificate }}</th>
@@ -30,12 +29,13 @@
         <tbody>
             {% for row in data %}
                 <tr>
-                    <td class="sticky-column" style="max-width: 60px;">{{ row.username }}</td>
-                    <td style="width: 60px;">
-                        {% for role in row.roles %}
-                            <span class="badge bg-secondary text-white">{{ role }}</span>
-                        {% endfor %}
-
+                    <td class="sticky-column" style="width: 60px;">
+                        {{ row.username }}
+                        <div class="d-flex flex-wrap">
+                            {% for role in row.roles %}
+                                <span style="width: 20px;font-size: 5px;" class="badge bg-secondary text-white">{{ role }}</span>
+                            {% endfor %}
+                        </div>
                     </td>
                     <td style="max-width: 40px;">{{ row.percentage }}%</td>
                     {% for cert in row.certifications_status %}
