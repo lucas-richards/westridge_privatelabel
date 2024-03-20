@@ -2,14 +2,23 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<style>
+    .sticky-column {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: white;
+}
+</style>
+
 {% if user.is_authenticated %}
 <h2>Dashboard</h2>
     
 
-    <table class="table table-hover" style="font-size: x-small;">
+    <table class="table table-hover table-responsive" style="font-size: x-small;">
         <thead>
             <tr>
-                <th>Username</th>
+                <th class="sticky-column">Username</th>
                 <th>Roles</th>
                 <th>Progress</th>
                 {% for certificate in certificates %}
@@ -21,7 +30,7 @@
         <tbody>
             {% for row in data %}
                 <tr>
-                    <td style="max-width: 40px;">{{ row.username }}</td>
+                    <td class="sticky-column" style="max-width: 60px;">{{ row.username }}</td>
                     <td style="width: 60px;">
                         {% for role in row.roles %}
                             <span class="badge bg-secondary text-white">{{ role }}</span>
