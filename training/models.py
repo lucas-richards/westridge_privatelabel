@@ -14,7 +14,10 @@ import os
 class Certification(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    # departments = models.ManyToManyField('users.Department')
+    # expiration time in months
+    exp_months = models.IntegerField(null=True, blank=True)
+    # schedule date for the certification
+    scheduled_date = models.DateField(null=True, blank=True)
     # each certification corresponds to one role
     roles = models.ManyToManyField('users.Role', related_name='certifications', blank=True)
 
@@ -26,46 +29,21 @@ class CertificationStatus(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=[('Not Started', 'Not Started'), ('In Progress', 'In Progress'), ('Completed', 'Completed')])
-    scheduled_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
-    due_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
+    completed_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
     
 
     def __str__(self):
         return f"{self.profile.user.username} - {self.certification.name}"
-    
-    def is_past_due(self):
-        return date.today() > self.due_date
-    
-    # Detect when it is saved and send an email notification
-    def save(self, *args, **kwargs):
-        # Check if it's a new instance or an update
-        is_new = not self.pk
-        
-        # Check if 'scheduled_date' is in the update_fields
-        scheduled_date_updated = 'scheduled_date' in kwargs.get('update_fields', [])
-        
-        # Print some debug information
-        print('self', self)
-        
-        # Call the parent save method
-        super().save(*args, **kwargs)
 
-        # Check conditions for sending schedule notification
-        if is_new or scheduled_date_updated:
-            # If it's a new instance or the scheduled_date is updated
-            self.send_schedule_notification()
-            print('Schedule notification sent')
-        else:
-            print('Schedule notification not sent')
     
-    # Send email notification when a certification is scheduled
+    # Send email notification when a certification is completed
     def send_schedule_notification(self):
         email_user = os.environ.get('EMAIL_USER')
         email_password = os.environ.get('EMAIL_PASS')
         user_email = self.profile.user.email
 
         subject = 'Schedule Updated: Certificate Notification'
-        message = f'Your certificate {self.certification.name} is scheduled for {self.scheduled_date}.'
+        message = f'Your certificate {self.certification.name} is scheduled for {self.completed_date}.'
 
         try:
             send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)
@@ -81,7 +59,7 @@ class Command(BaseCommand):
         logging.basicConfig(filename='email_reminder_log.txt', level=logging.INFO)
 
         tomorrow = timezone.now() + timezone.timedelta(days=1)
-        certificates = CertificationStatus.objects.filter(scheduled_date=tomorrow)
+        certificates = CertificationStatus.objects.filter(completed_date=tomorrow)
 
         email_user = os.environ.get('EMAIL_USER')
         email_password = os.environ.get('EMAIL_PASS')
