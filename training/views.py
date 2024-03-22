@@ -1,10 +1,12 @@
-from django.shortcuts import render
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
-from .models import CertificationStatus, Certification
-from .forms import StatusUpdateForm, UploadFileForm
+from .forms import StatusUpdateForm, UploadFileForm, CertificationUpdateForm
+from .models import CertificationStatus, Profile, Certification
+from django.contrib.auth.models import User
+import pandas as pd
 
 @login_required
 def home(request):
@@ -52,7 +54,6 @@ def home(request):
         'forms': forms,
         'profiles': profiles,
         'formswithcert': formswithcert,
-        'upload_form': UploadFileForm()
     }
     return render(request, 'training/home.html', context)
 
@@ -97,13 +98,13 @@ def dashboard(request):
         'sidepanel': sidepanel,
         'profiles': profiles,
         'certificates': certificates,
-        'data': data
+        'data': data,
+        'upload_form': UploadFileForm()
     }
 
     return render(request, 'training/dashboard.html', context)
 
-
-def certification_detail(request, certification_id):
+def statusCertification_detail(request, certification_id):
     profiles = Profile.objects.all()
     certification = CertificationStatus.objects.get(pk=certification_id)
     form = StatusUpdateForm(instance=certification)
@@ -112,7 +113,7 @@ def certification_detail(request, certification_id):
         if form.is_valid():
             form.save()
             messages.success(request, f'{certification.certification} certificate has been updated!')
-            return redirect('training-certification-detail', certification_id=certification_id)
+            return redirect('training-statusCertification-detail', certification_id=certification_id)
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
     sidepanel = {
@@ -130,19 +131,39 @@ def certification_detail(request, certification_id):
     }
     return render(request, 'training/certification_status_detail.html', context)
 
+def certification_detail(request, certification_id):
+    profiles = Profile.objects.all()
+    certification = Certification.objects.get(pk=certification_id)
+    form = CertificationUpdateForm(instance=certification)
+    if request.method == 'POST':
+        form = CertificationUpdateForm(request.POST, instance=certification)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{certification.name} certificate has been updated!')
+            return redirect('training-certification-detail', certification_id=certification_id)
+        else:
+            messages.error(request, 'Form is not valid. Please check the entered data.')
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
 
-from django.shortcuts import render, get_object_or_404
-from .forms import UploadFileForm
-from .models import CertificationStatus, Profile, Certification
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.contrib.auth.models import User
-import pandas as pd
+    context = {
+        'title': certification.name,
+        'certification': certification,
+        'profiles': profiles,
+        'form': form,
+        'sidepanel': sidepanel
+    }
+    return render(request, 'training/certification_detail.html', context)
 
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
+            
+            # Rest of your code here
             excel_file = request.FILES['file']
             df = pd.read_excel(excel_file, sheet_name='FILL HERE_Performed Date')
             
@@ -198,3 +219,11 @@ def upload_file(request):
                 # return render dashoboard.html with successful message
             messages.success(request, f'File has been uploaded successfully!')
             return redirect('training-dashboard')
+        else:
+            messages.error(request, 'Form is not valid. Please check your input.')
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload_file.html', {'form': form})
+
+
+

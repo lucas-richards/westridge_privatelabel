@@ -13,6 +13,26 @@
 
 {% if user.is_authenticated %}
 <h2>Dashboard</h2>
+<div class="m-3">
+    <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ upload_form|crispy }}
+        <button class="btn btn-sm btn-primary" type="submit">Update</button>
+        <div id="loading-indicator" style="display: none;">
+            <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+            <div class="spinner-grow" role="status">
+                <span class="sr-only">Loading...</span>
+                <small>This may take up to five minutes</small>
+            </div>
+            
+        </div>
+    </form>
+</div>
+
+    <!-- Loading indicator -->
+    
+
+    
     
 
     <table class="table table-hover table-responsive" style="font-size: x-small;">
@@ -22,7 +42,9 @@
                 <th>Progress</th>
                 {% for certificate in certificates %}
                         <th class="text-center">
+                            <a href="{% url 'training-certification-detail' certificate.id %}">
                             {{ certificate }}
+                            </a>
                         </th>
                 {% endfor %}
             
@@ -48,7 +70,7 @@
                             </div>
                             {%endif%}
                             {% if cert.id %}
-                                <a href="{% url 'training-certification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-{% if cert.status == 'Completed' %}success{% elif cert.status == 'In Progress' %}warning{% else %}danger{% endif %}">
+                                <a href="{% url 'training-statusCertification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-{% if cert.status == 'Completed' %}success{% elif cert.status == 'In Progress' %}warning{% else %}danger{% endif %}">
                                 
                                 {% if cert.status == 'Completed' %}
                                 {{now}}
@@ -62,7 +84,7 @@
                                     <p>{{cert.completed_date|date:'n/j/Y'}}</p>
                                     {% endif %}
                                 {% else %}
-                                    <div data-toggle="tooltip" data-placement="right" title="Scheduled: {{ cert.certification.scheudle_date|date:'n/j' }}">
+                                    <div data-toggle="tooltip" data-placement="right" title="Scheduled: {{ cert.certification.scheduled_date|date:'n/j' }}">
                                         {{ cert.status }}
                                     </div>
                                 {% endif %}
@@ -76,14 +98,13 @@
         </tbody>
     </table>
 
+    <!-- JavaScript to show loading indicator when form is submitted -->
+    <script>
+        document.getElementById("upload-form").addEventListener("submit", function() {
+            document.getElementById("loading-indicator").style.display = "block";
+        });
+    </script>
     
-    
-
-
-
-       
-    
-
 
 {% endif %}
     

@@ -57,6 +57,15 @@ def seed_users_roles():
         ('Rafael Rojas', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD']),
         ('Thy Chan', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'MCH', 'FOL', 'TUB', 'LNE']),
         ('Yesenia Merin', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Maria Garcia', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Nancy Teran', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Mayra Jimenez', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Dayrin Miranda', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Gabriela Rodriguez', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Haidee Esparza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Carmen Rojo', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+
+
     ]
 
     # Loop through the data and create users with roles
