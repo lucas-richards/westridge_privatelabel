@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
 from .models import CertificationStatus, Certification
-from .forms import StatusUpdateForm
+from .forms import StatusUpdateForm, UploadFileForm
 
 @login_required
 def home(request):
@@ -51,13 +51,14 @@ def home(request):
         'certificates': certification_statuses,
         'forms': forms,
         'profiles': profiles,
-        'formswithcert': formswithcert
+        'formswithcert': formswithcert,
+        'upload_form': UploadFileForm()
     }
     return render(request, 'training/home.html', context)
 
 def dashboard(request):
     profiles = Profile.objects.all()
-    certificates = Certification.objects.all()
+    certificates = Certification.objects.all().order_by('name')
     
     # Prepare data to be sent to the template
     data = []
@@ -128,3 +129,72 @@ def certification_detail(request, certification_id):
         'sidepanel': sidepanel
     }
     return render(request, 'training/certification_status_detail.html', context)
+
+
+from django.shortcuts import render, get_object_or_404
+from .forms import UploadFileForm
+from .models import CertificationStatus, Profile, Certification
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.contrib.auth.models import User
+import pandas as pd
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            excel_file = request.FILES['file']
+            df = pd.read_excel(excel_file, sheet_name='FILL HERE_Performed Date')
+            
+            # save the values of the first five character of each header in a list
+            certificates = df.columns[1:]
+            
+            #  save the values of the header in a list
+            
+            for index, row in df.iterrows():
+                # Rest of your code here
+                employee_username = row['Employee']  # Assuming 'Employee' is the column name in Excel
+                
+                print('Analyzing user:', employee_username)
+                # Iterate through each certificate and its completion date
+                for certificate in certificates:
+                    certificate_name = certificate[0:5]  # Get the first 5 characters of the certificate name
+                    completion_date = row[certificate]
+                    # if completion_date is "R" make it empty and the status "Not Started"
+                    if completion_date == "R":
+                        completion_date = None
+                        status = "Not Started"
+                    else:
+                        status = "Completed"
+                    if pd.notna(completion_date) or completion_date == None:  # Check if completion_date is not NaN
+                        try:
+                            # Retrieve the profile object using the username
+                            user = User.objects.get(username=employee_username)
+                            profile = Profile.objects.get(user=user)
+                            certification = Certification.objects.get(name=certificate_name)
+                        except User.DoesNotExist:
+                            print(f"User does not exist for {employee_username}")
+                            continue  # Skip the iteration if the user doesn't exist
+                        except (Profile.DoesNotExist, Certification.DoesNotExist):
+                            print(f"Profile or Certification does not exist for {employee_username} or {certificate_name}")
+                            continue  # Skip the iteration if the profile or certification doesn't exist
+
+                        # Create CertificationStatus object
+                        certification_status, created = CertificationStatus.objects.get_or_create(
+                            profile=profile,
+                            certification=certification,
+                            defaults={
+                                'status': status,
+                                'completed_date': completion_date
+                            }
+                        )
+
+                        if not created:
+                            certification_status.status = status
+                            certification_status.completed_date = completion_date
+                            certification_status.save()
+                        print(f'CertificationStatus object created for {profile} and {certification}')
+
+                # return render dashoboard.html with successful message
+            messages.success(request, f'File has been uploaded successfully!')
+            return redirect('training-dashboard')

@@ -45,6 +45,13 @@
         <p class="m-3">No trainings yet</p>
     {% endif %}
 
+    <h2>Upload Excel File</h2>
+    <form method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ upload_form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+
 
 {% endif %}
     

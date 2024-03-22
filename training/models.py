@@ -34,6 +34,18 @@ class CertificationStatus(models.Model):
 
     def __str__(self):
         return f"{self.profile.user.username} - {self.certification.name}"
+    
+    #  date that the certification expires based on the cert exp_months and conpleted_date
+    def expiration_date(self):
+        if self.completed_date:
+            # Assuming exp_months is a field in the Certification model
+            if self.certification.exp_months:
+                expiration_months = self.certification.exp_months
+                return self.completed_date + timezone.timedelta(days=30 * expiration_months)
+            else:
+                return None
+        else:
+            return None
 
     
     # Send email notification when a certification is completed

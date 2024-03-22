@@ -7,7 +7,7 @@
   position: sticky;
   left: 0;
   z-index: 1;
-  background-color: white;
+  background-color: rgb(249,249,249);
 }
 </style>
 
@@ -21,7 +21,9 @@
                 <th class="sticky-column">Username</th>
                 <th>Progress</th>
                 {% for certificate in certificates %}
-                        <th class="text-center">{{ certificate }}</th>
+                        <th class="text-center">
+                            {{ certificate }}
+                        </th>
                 {% endfor %}
             
             </tr>
@@ -42,18 +44,25 @@
                         <td>
                             {% if cert == '+' %}
                             <div class="d-flex justify-content-center align-items-center">
-                                <a class="text-danger">missing</a>
+                                <a class="text-secondary">missing</a>
                             </div>
                             {%endif%}
                             {% if cert.id %}
                                 <a href="{% url 'training-certification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-{% if cert.status == 'Completed' %}success{% elif cert.status == 'In Progress' %}warning{% else %}danger{% endif %}">
-                                <!-- add an icon -->
+                                
                                 {% if cert.status == 'Completed' %}
-                                    <svg data-toggle="tooltip" data-placement="right" title="Complete" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
-                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
-                                    </svg>
+                                {{now}}
+                                    {% if cert.expiration_date %}
+                                        <p class="text-warning">{{ cert.expiration_date|timeuntil }}</p>
+                                        
+                                        {% if cert.expiration_date|timeuntil == '0 minutes' %}
+                                            <p class="text-danger">Expired</p>
+                                        {% endif %}
+                                    {% else %}
+                                    <p>{{cert.completed_date|date:'n/j/Y'}}</p>
+                                    {% endif %}
                                 {% else %}
-                                    <div data-toggle="tooltip" data-placement="right" title="Due: {{ cert.due_date|date:'n/j' }}">
+                                    <div data-toggle="tooltip" data-placement="right" title="Scheduled: {{ cert.certification.scheudle_date|date:'n/j' }}">
                                         {{ cert.status }}
                                     </div>
                                 {% endif %}
@@ -66,6 +75,8 @@
             
         </tbody>
     </table>
+
+    
     
 
 

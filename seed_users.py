@@ -65,7 +65,7 @@ def seed_users_roles():
         roles = Role.objects.filter(name__in=roles_names)
         profile, created = Profile.objects.get_or_create(user=user)
         profile.roles.add(*roles)
-        print(f'User {username} created with roles {roles_names}')
+        print(f'User {username} created or updated with roles {roles_names}')
 
 # Call the function to seed the database with users and their roles
 if __name__ == '__main__':

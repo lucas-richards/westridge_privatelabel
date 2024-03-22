@@ -139,7 +139,7 @@ certificates_data = [
 def seed_certificates_roles():
     for certificate_data in certificates_data:
         # Create the certification
-        certification = Certification.objects.create(
+        certification, created = Certification.objects.get_or_create(
             name=certificate_data["name"],
             description=certificate_data["description"]
         )
@@ -148,6 +148,8 @@ def seed_certificates_roles():
         for role_name in certificate_data["roles"]:
             role, created = Role.objects.get_or_create(name=role_name)
             role.certifications.add(certification)
+
+        print(f"Seeded {certification}")
 
 # Call the function to seed the database with certificates and roles
 if __name__ == '__main__':
