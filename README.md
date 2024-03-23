@@ -80,5 +80,12 @@ and
     `STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'`
 
 
+# RESTfull API Django Framework
 
+root urls: path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+settings: REST_FRAMEWORK
+settings: installed apps  'rest_framework',
+urls 
+views
+serializer
 

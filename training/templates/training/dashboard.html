@@ -56,15 +56,12 @@
                                     {% if cert.expiration_date %}
                                         <p class="text-warning">{{ cert.expiration_date|timeuntil }}</p>
                                         
-                                        {% if cert.expiration_date|timeuntil == '0 minutes' %}
-                                            <p class="text-danger">Expired</p>
-                                        {% endif %}
                                     {% else %}
                                     <p>{{cert.completed_date|date:'n/j/Y'}}</p>
                                     {% endif %}
                                 {% else %}
-                                    <div data-toggle="tooltip" data-placement="right" title="Scheduled: {{ cert.certification.scheduled_date|date:'n/j' }}">
-                                        {{ cert.status }}
+                                    <div data-toggle="tooltip" data-placement="right" title="{% if cert.certification.scheduled_date %}Scheduled: {{ cert.certification.scheduled_date|date:'n/j' }}{% else %}Not Scheduled{% endif %}">
+                                        <p class="text-{% if cert.status == 'Scheduled' %}success{% else %}danger{%endif%}">{{ cert.status }}</p>
                                     </div>
                                 {% endif %}
                                 </a>
@@ -76,6 +73,7 @@
             
         </tbody>
     </table>
+
 
     <div class="m-3">
         <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">

@@ -19,30 +19,13 @@ from django.urls import path, include
 from users import views as user_views
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.models import User
 
-from rest_framework import routers, serializers, viewsets
-
-# Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-# Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('register/', user_views.register, name='register'),
     path('profile/', user_views.profile, name='profile'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
@@ -62,7 +45,7 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('training/', include('training.urls')),
     path('tasks/', include('tasks.urls')),
-    path('api/users', user_views.UserList.as_view(), name='user-list'),
+    # path('api/users', user_views.UserList.as_view(), name='user-list'),
     
 ]
 

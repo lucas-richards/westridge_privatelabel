@@ -1,0 +1,46 @@
+{% extends "training/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="{% url 'tasks-assigned' %}">All Trainings</a>
+    </li>
+</ul>
+    
+    {% if certificates %}
+
+
+        {% for certificate in certificates %}
+        <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
+            <div class="card-header d-flex justify-content-between" id="headingOne">
+                <h5>{{ certificate.name }}:{{ certificate.description }}</h5>
+                <a href="{% url 'training-schedule' certificate.id %}" >Schedule</a>
+            </div>
+            <div class="card-body">
+                <ul>
+                    {% for prof in certificate.get_incomplete_certification_statuses %}
+                    <li> {{prof.profile.user.username}}:{{ prof.status }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    <!-- if there are no certificates yet -->
+    {% else %}
+        <p class="m-3">No trainings yet</p>
+    {% endif %}
+
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}

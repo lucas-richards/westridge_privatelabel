@@ -27,16 +27,7 @@
                   <small><a class="nav-item" style="font-size: small;" href="{% url 'training-dashboard' %}">(Dashboard)</a></small>
                 </div>
                 
-                <p class='text-muted'>{{ sidepanel.text1 }}</p>
-                <div class="d-flex flex-wrap">
-                  
-                  {% for prof in profiles %}
-                      {% if prof.has_all_certifications_completed %}
-                          <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic">
-                         
-                      {% endif %}
-                  {% endfor %}
-              </div>
+                
                 <hr/>
                 <p class='text-muted'>{{ sidepanel.text2 }}</p>
                 <div class="d-flex flex-column justify-content-center align-content-center ">

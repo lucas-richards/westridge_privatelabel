@@ -3,7 +3,7 @@ from .models import CertificationStatus, Certification
 
 
 class StatusUpdateForm(forms.ModelForm):
-    completed_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    completed_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
 
     class Meta:
         model = CertificationStatus
@@ -19,5 +19,13 @@ class CertificationUpdateForm(forms.ModelForm):
     class Meta:
         model = Certification
         fields = ['name', 'description', 'exp_months', 'scheduled_date', 'roles']
+
+#  schedule certification form
+class ScheduleCertificationForm(forms.ModelForm):
+    scheduled_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+    class Meta:
+        model = Certification
+        fields = ['scheduled_date']
 
 
