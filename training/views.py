@@ -7,6 +7,14 @@ from .forms import StatusUpdateForm, UploadFileForm, CertificationUpdateForm
 from .models import CertificationStatus, Profile, Certification
 from django.contrib.auth.models import User
 import pandas as pd
+from django.http import HttpResponse
+from django.core import serializers
+# API imports
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from .serializers import CertificationStatusSerializer, CertificationSerializer
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+
 
 @login_required
 def home(request):
@@ -225,5 +233,142 @@ def upload_file(request):
         form = UploadFileForm()
     return render(request, 'upload_file.html', {'form': form})
 
+# API routes
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
 
+class Certifications(APIView):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+
+    def get_queryset(self):
+        return Certification.objects.all().order_by('name')
+
+    def get(self, request):
+        certificates = self.get_queryset()
+        serializer = CertificationSerializer(certificates, many=True)
+        return Response(serializer.data)
+
+class StatusCertifications(APIView):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+
+    def get_queryset(self):
+        return CertificationStatus.objects.all()
+
+    def get(self, request):
+        certificates = self.get_queryset()
+        serializer = CertificationStatusSerializer(certificates, many=True)
+        return Response(serializer.data)
+
+# @api_view(['GET'])
+# @permission_classes([DjangoModelPermissionsOrAnonReadOnly])
+# def api_dashboard(request):
+#     if request.method == 'GET':
+#         certificates = Certification.objects.all().order_by('name')
+#         serializer = CertificationSerializer(certificates, many=True)
+#         return Response(serializer.data)
+
+# def api_dashboard(request):
+#     profiles = Profile.objects.all()
+#     certificates = Certification.objects.all().order_by('name')
+    
+#     # Prepare data to be sent to the template
+#     data = []
+#     for profile in profiles:
+#         row = {
+#             'username': profile.user.username,
+#             'roles': profile.get_roles(),
+#             'percentage': profile.get_certifications_percentage(),
+#             'certifications_status': []
+#         }
+#         for certification in certificates:
+#             status_obj = CertificationStatus.objects.filter(profile=profile, certification=certification).first()
+            
+#             if status_obj:
+#                 cert = status_obj
+            
+#             elif profile.must_have_certification(certification):
+#                 cert = '+'
+#             else:
+#                 cert = '-'
+
+#             row['certifications_status'].append(cert)
+#         data.append(row)
+#     print('data', data)
+
+#     # Serialize the data
+#     serialized_data = serializers.serialize('json', data)
+
+#     return HttpResponse(serialized_data, content_type='application/json')
+
+def api_certification_detail(request, certification_id):
+    certification = Certification.objects.get(pk=certification_id)
+    serialized_data = serializers.serialize('json', certification)
+    return HttpResponse(serialized_data, content_type='application/json')
+
+def api_statusCertification_detail(request, certification_id):
+    certification = CertificationStatus.objects.get(pk=certification_id)
+    serialized_data = serializers.serialize('json', certification)
+    return HttpResponse(serialized_data, content_type='application/json')
+
+def api_upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            
+            # Rest of your code here
+            excel_file = request.FILES['file']
+            df = pd.read_excel(excel_file, sheet_name='FILL HERE_Performed Date')
+            
+            # save the values of the first five character of each header in a list
+            certificates = df.columns[1:]
+            
+            #  save the values of the header in a list
+            
+            for index, row in df.iterrows():
+                # Rest of your code here
+                employee_username = row['Employee']  # Assuming 'Employee' is the column name in Excel
+                
+                print('Analyzing user:', employee_username)
+                # Iterate through each certificate and its completion date
+                for certificate in certificates:
+                    certificate_name = certificate[0:5]  # Get the first 5 characters of the certificate name
+                    completion_date = row[certificate]
+                    # if completion_date is "R" make it empty and the status "Not Started"
+                    if completion_date == "R":
+                        completion_date = None
+                        status = "Not Started"
+                    else:
+                        status = "Completed"
+                    if pd.notna(completion_date) or completion_date == None:  # Check if completion_date is not NaN
+                        try:
+                            # Retrieve the profile object using the username
+                            user = User.objects.get(username=employee_username)
+                            profile = Profile.objects.get(user=user)
+                            certification = Certification.objects.get(name=certificate_name)
+                        except User.DoesNotExist:
+                            print(f"User does not exist for {employee_username}")
+                            continue  # Skip the iteration if the user doesn't exist
+                        except (Profile.DoesNotExist, Certification.DoesNotExist):
+                            print(f"Profile or Certification does not exist for {employee_username} or {certificate_name}")
+                            continue  # Skip the iteration if the profile or certification doesn't exist
+
+                        # Create CertificationStatus object
+                        certification_status, created = CertificationStatus.objects.get_or_create(
+                            profile=profile,
+                            certification=certification,
+                            defaults={
+                                'status': status,
+                                'completed_date': completion_date
+                            }
+                        )
+
+                        if not created:
+                            certification_status.status = status
+                            certification_status.completed_date = completion_date
+                            certification_status.save()
+                        print(f'CertificationStatus object created for {profile} and {certification}')
+
+                # return render dashoboard.html
+            return HttpResponse('File has been uploaded successfully!')

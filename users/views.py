@@ -2,7 +2,27 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+# API imports
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from .models import Profile
+from .serializers import ProfileSerializer
 
+#  API
+class UserList(APIView):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+
+    def get_queryset(self):
+        return Profile.objects.all()
+
+    def get(self, request):
+        certificates = self.get_queryset()
+        serializer = ProfileSerializer(certificates, many=True)
+        return Response(serializer.data)
+
+
+# Django templates
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
