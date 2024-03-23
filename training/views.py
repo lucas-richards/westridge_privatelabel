@@ -18,7 +18,6 @@ from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
 @login_required
 def home(request):
-    profiles = Profile.objects.all()
     profile_instance = Profile.objects.get(user=request.user)
     certification_statuses = CertificationStatus.objects.filter(profile=profile_instance)
     if request.method == 'POST':
@@ -60,7 +59,6 @@ def home(request):
         'sidepanel': sidepanel,
         'certificates': certification_statuses,
         'forms': forms,
-        'profiles': profiles,
         'formswithcert': formswithcert,
     }
     return render(request, 'training/home.html', context)

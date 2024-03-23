@@ -50,7 +50,7 @@ class PostCreateView( LoginRequiredMixin,CreateView):
 class PostUpdateView( LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
     fields = ['title','content']
-    success_url = 'blog/home.html'
+    success_url = '/'
 
     def form_valid(self, form):
         form.instance.author = self.request.user
