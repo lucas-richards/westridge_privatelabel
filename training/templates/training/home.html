@@ -20,15 +20,7 @@
         <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
             <div class="card-header" id="headingOne">
                 <button  class="btn" data-toggle="collapse" data-target="#collapse{{ certificate.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ certificate.certification.name }}
-                {% if certificate.status != 'Completed' %}
-                    {% if certificate.is_past_due %}
-                        <small class="text-danger"> (Expired)</small>
-                    {% else %}
-                        <small class="text-success">  ({{ certificate.due_date|timeuntil }})</small>
-                    {% endif %}
-                {% else %}
-                    <small>  (Completed)</small>
-                {% endif %}
+                    <span class="badge badge-secondary">{{ certificate.status }}</span>
                 </button>
             </div>
             <div id="collapse{{ certificate.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">

@@ -19,15 +19,21 @@
         {% for certificate in certificates %}
         <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
             <div class="card-header d-flex justify-content-between" id="headingOne">
-                <h5>{{ certificate.name }}:{{ certificate.description }}</h5>
+                <a class="text-dark" href="{% url 'training-certification-detail' certificate.id %}" >
+                    <h5>{{ certificate.name }}:{{ certificate.description }}</h5>
+                </a>
                 <a href="{% url 'training-schedule' certificate.id %}" >Schedule</a>
             </div>
             <div class="card-body">
+                {% if certificate.get_incomplete_certification_statuses %}
                 <ul>
                     {% for prof in certificate.get_incomplete_certification_statuses %}
                     <li> {{prof.profile.user.username}}:{{ prof.status }}</li>
                     {% endfor %}
                 </ul>
+                {% else %}
+                <p>Everyone up to date</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
