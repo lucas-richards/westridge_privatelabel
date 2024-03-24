@@ -14,7 +14,7 @@ class UploadFileForm(forms.Form):
 
 #  certification update form
 class CertificationUpdateForm(forms.ModelForm):
-    scheduled_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    scheduled_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
 
     class Meta:
         model = Certification
