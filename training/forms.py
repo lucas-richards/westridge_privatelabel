@@ -22,7 +22,7 @@ class CertificationUpdateForm(forms.ModelForm):
 
 #  schedule certification form
 class ScheduleCertificationForm(forms.ModelForm):
-    scheduled_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    scheduled_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
 
     class Meta:
         model = Certification

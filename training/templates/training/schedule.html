@@ -2,27 +2,51 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<!-- back to all trainings -->
+<a href="{% url 'training-all_trainings' %}">All trainings</a>
+
 {% if user.is_authenticated %}
 
 <h2>Schedule {{certification}}</h2>
+<div class="mb-2 card">
+  <div class="card-body">
+    <form method="post" action="{% url 'training-schedule' certification.id %}">
+      {% csrf_token %}
+      {{ form|crispy }}
+    <button id="schedule" type="submit" class="btn btn-primary">Submit</button>
+    <div id="loading-indicator-schedule" style="display: none;">
+      <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+      <div class="spinner-grow" role="status">
+          <span class="sr-only">Sending emails...</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-<form method="post" action="{% url 'training-schedule' certification.id %}">
-    {% csrf_token %}
-    {{ form|crispy }}
-<button type="submit" class="btn btn-primary">Submit</button>
+<div class="card">
+  <div class="card-header d-flex justify-content-between">
+    <h5 class="mt-2 ">Update status and send a reminder to:</h5>  
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+      Send
+    </button>
     
-<h5 class="mt-2">Send a reminder to:</h5>  
-<ul>
-    <ul>
-        {% for prof in certification.get_incomplete_certification_statuses %}
-        <li> {{prof.profile.user.username}}</li>
-        {% endfor %}
-    </ul>
-</ul>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Send
-</button>
+  </div>
+  
+  <div class="card-body">
+    <ul >
+      <ul>
+          {% for prof in certification.get_incomplete_certification_statuses %}
+          <li> {{prof.profile.user.username}}</li>
+          {% endfor %}
+      </ul>
+  </ul>
+  
+</div>
+
+</div>  
+
+
+
   
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -46,7 +70,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <a id="send-email" href="{% url 'training-send_reminder_email' certification.id %}" type="button" class="btn btn-primary">Send</a>
-          <div id="loading-indicator" style="display: none;">
+          <div id="loading-indicator-send-email" style="display: none;">
             <!-- Your loading indicator here (e.g., spinner or progress bar) -->
             <div class="spinner-grow" role="status">
                 <span class="sr-only">Sending emails...</span>
@@ -59,8 +83,15 @@
     
 <!-- JavaScript to show loading indicator when form is submitted -->
 <script>
-  document.getElementById("send-email").addEventListener("submit", function() {
-      document.getElementById("loading-indicator").style.display = "block";
+  document.getElementById("send-email").addEventListener("click", function() {
+      document.getElementById("loading-indicator-send-email").style.display = "block";
+      document.getElementById("send-email").style.display = "none";
+  });
+</script>
+<script>
+  document.getElementById("schedule").addEventListener("click", function() {
+      document.getElementById("loading-indicator-schedule").style.display = "block";
+      document.getElementById("schedule").style.display = "none";
   });
 </script>
 

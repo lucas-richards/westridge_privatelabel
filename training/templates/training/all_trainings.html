@@ -20,15 +20,29 @@
         <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
             <div class="card-header d-flex justify-content-between" id="headingOne">
                 <a class="text-dark" href="{% url 'training-certification-detail' certificate.id %}" >
-                    <h5>{{ certificate.name }}:{{ certificate.description }}</h5>
+                    <h5>
+                        {{ certificate.name }}:{{ certificate.description }}
+                        
+                    </h5>
                 </a>
+                {% now "Y-m-d" as current_datetime %}
+                {% if certificate.scheduled_date and current_datetime <= certificate.scheduled_date|date:"Y-m-d"  %}
+                <a class="text-success" href="{% url 'training-schedule' certificate.id %}" >Scheduled: {{certificate.scheduled_date}}</a>
+                {% else%}
                 <a href="{% url 'training-schedule' certificate.id %}" >Schedule</a>
+                {% endif %}
+
+                
             </div>
             <div class="card-body">
+                
+                
                 {% if certificate.get_incomplete_certification_statuses %}
                 <ul>
                     {% for prof in certificate.get_incomplete_certification_statuses %}
-                    <li> {{prof.profile.user.username}}:{{ prof.status }}</li>
+                    <li> {{prof.profile.user.username}}:
+                        <a href="{% url 'training-statusCertification-detail' prof.id %}" class="text-{% if prof.status == 'Completed' %}success{% elif prof.status == 'Scheduled' %}warning{% else %}danger{% endif %}"> {{ prof.status }} </a>
+                    </li>
                     {% endfor %}
                 </ul>
                 {% else %}

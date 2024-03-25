@@ -17,7 +17,7 @@ class Certification(models.Model):
     # expiration time in months
     exp_months = models.IntegerField(null=True, blank=True)
     # schedule date for the certification
-    scheduled_date = models.DateField(null=True, blank=True)
+    scheduled_date = models.DateTimeField(null=True, blank=True)
     # each certification corresponds to one role
     roles = models.ManyToManyField('users.Role', related_name='certifications', blank=True)
 
@@ -26,14 +26,14 @@ class Certification(models.Model):
     
     # profiles with this cert and their status
     def get_incomplete_certification_statuses(self):
-        return CertificationStatus.objects.filter(certification=self, status__in=['To be Scheduled', 'Expired', 'About To Expired'])
+        return CertificationStatus.objects.filter(certification=self, status__in=['To be Scheduled', 'Scheduled', 'Expired', 'About To Expired'])
 
 
 class CertificationStatus(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=[('To be Scheduled', 'To be Scheduled'),('Scheduled', 'Scheduled'), ('Expired', 'Expired'), ('About To Expired', 'About To Expired'), ('Completed', 'Completed')], default='To be Scheduled')
-    completed_date = models.DateField(null=True, blank=True, default=timezone.now() + timezone.timedelta(days=15) )
+    completed_date = models.DateField(null=True, blank=True)
     
 
     def __str__(self):
@@ -60,36 +60,10 @@ class CertificationStatus(models.Model):
         user_email = self.profile.user.email
 
         subject = f'Schedule Updated: {self.certification.name} was scheduled'
-        message = f'You have received this email because you certificate {self.certification.name} status is {self.status}. You can attend to the new training on {self.certification.scheduled_date}.'
+        message = f'Your certificate {self.certification.name} status is {self.status}. New training scheduled on {timezone.localtime(self.certification.scheduled_date)}.'
 
         try:
             send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)
             logging.info(f'Successfully sent schedule update email to {user_email}')
         except Exception as e:
             logging.error(f'Error sending schedule update email to {user_email}: {str(e)}')
-    
-class Command(BaseCommand):
-    help = 'Send reminder emails for certificates scheduled for tomorrow'
-
-    def handle(self, *args, **options):
-        # Set up logging
-        logging.basicConfig(filename='email_reminder_log.txt', level=logging.INFO)
-
-        tomorrow = timezone.now() + timezone.timedelta(days=1)
-        certificates = CertificationStatus.objects.filter(completed_date=tomorrow)
-
-        email_user = os.environ.get('EMAIL_USER')
-        email_password = os.environ.get('EMAIL_PASS')
-
-        for certification_status in certificates:
-            user_email = certification_status.profile.user.email
-            subject = 'Reminder: Certificate Scheduled for Tomorrow'
-            message = f'Your certificate {certification_status.certification.name} is scheduled for tomorrow.'
-
-            try:
-                send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)
-                # Log successful email sending
-                logging.info(f'Successfully sent reminder email to {user_email}')
-            except Exception as e:
-                # Log any errors that occur during email sending
-                logging.error(f'Error sending email to {user_email}: {str(e)}')
