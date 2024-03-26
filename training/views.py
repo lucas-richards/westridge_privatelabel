@@ -184,7 +184,6 @@ def send_reminder_email(request, certification_id):
     certStatuses = certification.get_incomplete_certification_statuses()
     for certStatus in certStatuses:
         certStatus.send_schedule_notification()
-        certStatus.status = 'Scheduled'
         certStatus.save()
     messages.success(request, f'Reminder emails have been sent for {certification.name} certificate!')
 
@@ -274,9 +273,7 @@ def upload_file(request):
                     # if completion_date is "R" make it empty and the status "To be Scheduled"
                     if completion_date == "R":
                         completion_date = None
-                        status = "To be Scheduled"
-                    else:
-                        status = "Completed"
+                    
                     if pd.notna(completion_date) or completion_date == None:  # Check if completion_date is not NaN
                         try:
                             # Retrieve the profile object using the username
@@ -295,13 +292,11 @@ def upload_file(request):
                             profile=profile,
                             certification=certification,
                             defaults={
-                                'status': status,
                                 'completed_date': completion_date
                             }
                         )
 
                         if not created:
-                            certification_status.status = status
                             certification_status.completed_date = completion_date
                             certification_status.save()
                         print(f'CertificationStatus object created for {profile} and {certification}')

@@ -47,9 +47,19 @@ class Profile(models.Model):
         return self.certifications.all()
     
     # wtire a function that returns the percentage of certifications completed
+    
     def get_certifications_percentage(self):
-        percentage = round(self.certificationstatus_set.filter(status='Completed').count() / (self.certifications.count() or 1) * 100)
-        return percentage if percentage != 0 else 0
+        # today = timezone.now().date()
+        # completed_certifications = 0
+        # # for certification in self.certifications.all():
+        # #     certification_status = self.certificationstatus_set.filter(certification=certification).first()
+        # #     certExp = certification_status.expiration_date()
+        # #     if certification_status and certExp >= today:
+        # #         completed_certifications += 1
+        # # total_certifications = self.certifications.count()
+        # # percentage = round(completed_certifications / (total_certifications or 1) * 100)
+        # return percentage if percentage != 0 else 0
+        return 0
 
     # function that returns all certification status
     def get_certification_status(self, certification):
@@ -58,7 +68,14 @@ class Profile(models.Model):
 
     # write a function that tells you if the user has all the certifications in status 'completed'
     def has_all_certifications_completed(self):
-        return self.certificationstatus_set.filter(status='Completed').count() == self.certifications.count()
+        # today = timezone.now().date()
+        # for certification in self.certifications.all():
+        #     certification_status = self.certificationstatus_set.filter(certification=certification).first()
+        #     if certification_status is None:
+        #         return False
+        #     if certification.exp_months and certification_status.completed_date + timezone.timedelta(days=certification.exp_months * 30) < today:
+        #         return False
+        return True
     
     # function that returns true if user birthday is today or timeuntil if is not today
     def birthday_today(self):

@@ -7,7 +7,7 @@ class StatusUpdateForm(forms.ModelForm):
 
     class Meta:
         model = CertificationStatus
-        fields = ['status', 'completed_date']
+        fields = ['completed_date']
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()

@@ -24,15 +24,18 @@ class Certification(models.Model):
     def __str__(self):
         return f"{self.name}"
     
-    # profiles with this cert and their status
-    def get_incomplete_certification_statuses(self):
-        return CertificationStatus.objects.filter(certification=self, status__in=['To be Scheduled', 'Scheduled', 'Expired', 'About To Expired'])
+    # profiles with this cert 
+    def get_incomplete_certification_profiles(self):
+        today = timezone.now().date()
+        return Profile.objects.filter(certificationstatus__certification=self, 
+                                      certificationstatus__completed_date__isnull=True) \
+                              .exclude(certificationstatus__completed_date__gt=today) \
+                              .exclude(certificationstatus__expiration_date__gt=today)
 
 
 class CertificationStatus(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=[('To be Scheduled', 'To be Scheduled'),('Scheduled', 'Scheduled'), ('Expired', 'Expired'), ('About To Expired', 'About To Expired'), ('Completed', 'Completed')], default='To be Scheduled')
     completed_date = models.DateField(null=True, blank=True)
     
 
@@ -60,7 +63,7 @@ class CertificationStatus(models.Model):
         user_email = self.profile.user.email
 
         subject = f'Schedule Updated: {self.certification.name} was scheduled'
-        message = f'Your certificate {self.certification.name} status is {self.status}. New training scheduled on {timezone.localtime(self.certification.scheduled_date)}.'
+        message = f'Your certificate {self.certification.name} is due. New training scheduled on {timezone.localtime(self.certification.scheduled_date)}.'
 
         try:
             send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)

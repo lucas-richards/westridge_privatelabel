@@ -17,7 +17,7 @@
 
 
         {% for certificate in certificates %}
-        <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
+        <div id="accordion" class="mb-3 card {% if certificate.expiration_date > now %}bg-success-light{% endif %}">
             <div class="card-header d-flex justify-content-between" id="headingOne">
                 <a class="text-dark" href="{% url 'training-certification-detail' certificate.id %}" >
                     <h5>

@@ -17,10 +17,17 @@
 
 
         {% for certificate, form in formswithcert %}
-        <div id="accordion" class="mb-3 card {% if certificate.status == 'Completed' %}bg-success-light{% endif %}">
+        <div id="accordion" class="mb-3 card">
             <div class="card-header" id="headingOne">
                 <button  class="btn" data-toggle="collapse" data-target="#collapse{{ certificate.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ certificate.certification.name }}
-                    <span class="badge badge-secondary">{{ certificate.status }}</span>
+                    <span class="badge badge-secondary">
+                        {% now "Y-m-d" as current_datetime %}
+                        {% if certificate.scheduled_date and current_datetime <= certificate.scheduled_date|date:"Y-m-d"  %}
+                        {{ certificate.scheduled_date|date:"Y-m-d" }}
+                        {% else %}
+                        {{ certificate.expiration_date|date:"Y-m-d" }}
+                        {% endif %}
+                    </span>
                 </button>
             </div>
             <div id="collapse{{ certificate.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">

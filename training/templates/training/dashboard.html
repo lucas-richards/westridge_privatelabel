@@ -49,21 +49,20 @@
                             </div>
                             {%endif%}
                             {% if cert.id %}
-                                <a href="{% url 'training-statusCertification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-{% if cert.status == 'Completed' or cert.status == 'Scheduled' %}success{% elif cert.status == 'About To Expired' %}warning{% else %}danger{% endif %}">
+                                <a href="{% url 'training-statusCertification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-dark">
                                 
-                                {% if cert.status == 'Completed' %}
-                                
+                                    {% now "Y-m-d" as current_datetime %}
+                                    {% if cert.completed_date|date:"Y-m-d" and current_datetime <= cert.completed_date|date:"Y-m-d"  %}
+                                    {{cert.completed_date|date:'n/j/Y'}}
+                                    {% endif %}
                                     {% if cert.expiration_date %}
                                         <p class="text-warning">{{ cert.expiration_date|timeuntil }}</p>
                                         
                                     {% else %}
-                                        <p>{{cert.completed_date|date:'n/j/Y'}}</p>
-                                    {% endif %}
-                                {% else %}
                                     <div data-toggle="tooltip" data-placement="right" title="{% if cert.certification.scheduled_date %}Scheduled: {{ cert.certification.scheduled_date|date:'n/j' }}{% else %}Not Scheduled{% endif %}">
-                                        <p>{{ cert.status }}</p>
+                                        <p>{{ cert.completed_date|date:'n/j/Y' }}</p>
                                     </div>
-                                {% endif %}
+                                    {% endif %}
                                 </a>
                             {% endif %}
                         </td>
