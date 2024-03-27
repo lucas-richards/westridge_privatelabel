@@ -9,15 +9,15 @@ from django.contrib.auth.models import User
 import pandas as pd
 from django.core.cache import cache
 # API imports
-# from django.http import HttpResponse
-# from django.core import serializers
-# from rest_framework.decorators import api_view, permission_classes
-# from rest_framework.response import Response
-# from .serializers import CertificationStatusSerializer, CertificationSerializer
-# from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from django.http import HttpResponse
+from django.core import serializers
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from .serializers import CertificationStatusSerializer, CertificationSerializer
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 
 @login_required
 def home(request):
@@ -314,25 +314,25 @@ def upload_file(request):
 
 
 
-# class Certifications(APIView):
-#     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+class Certifications(APIView):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
-#     def get_queryset(self):
-#         return Certification.objects.all().order_by('name')
+    def get_queryset(self):
+        return Certification.objects.all().order_by('name')
 
-#     def get(self, request):
-#         certificates = self.get_queryset()
-#         serializer = CertificationSerializer(certificates, many=True)
-#         return Response(serializer.data)
+    def get(self, request):
+        certificates = self.get_queryset()
+        serializer = CertificationSerializer(certificates, many=True)
+        return Response(serializer.data)
 
-# class StatusCertifications(APIView):
-#     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+class StatusCertifications(APIView):
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
-#     def get_queryset(self):
-#         return CertificationStatus.objects.all()
+    def get_queryset(self):
+        return CertificationStatus.objects.all()
 
-#     def get(self, request):
-#         certificates = self.get_queryset()
-#         serializer = CertificationStatusSerializer(certificates, many=True)
-#         return Response(serializer.data)
+    def get(self, request):
+        certificates = self.get_queryset()
+        serializer = CertificationStatusSerializer(certificates, many=True)
+        return Response(serializer.data)
 
