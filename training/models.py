@@ -26,14 +26,13 @@ class Certification(models.Model):
     
     # profiles with this cert 
     def get_incomplete_certification_profiles(self):
+        profiles = []
         for profile in Profile.objects.all():
-            profiles = []
-            for profile in Profile.objects.all():
-                status_obj = CertificationStatus.objects.filter(profile=profile, certification=self).first()
-                if status_obj:
-                    if status_obj.status() == 'Expired' or status_obj.status() == 'About to expire' or profile.must_have_certification(self):
-                        profiles.append(profile)
-            
+            status_obj = CertificationStatus.objects.filter(profile=profile, certification=self).first()
+            status = status_obj.status() if status_obj else ''
+            if status == 'Expired' or status == 'About to expire' or profile.must_have_certification(self):
+                profiles.append(profile)
+            print(profile, status)
         return profiles
 
 

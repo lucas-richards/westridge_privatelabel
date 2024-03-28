@@ -40,17 +40,7 @@
             <div class="card-body">
                 
                 
-                {% if certificate.get_incomplete_certification_profiles %}
-                <ul>
-                    {% for prof in certificate.get_incomplete_certification_profiles %}
-                    <li> 
-                        {{prof.profile.user.username}}
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>Everyone up to date</p>
-                {% endif %}
+                
             </div>
         </div>
         {% endfor %}

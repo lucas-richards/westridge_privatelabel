@@ -33,13 +33,17 @@
   </div>
   
   <div class="card-body">
-    <ul >
-      <ul>
-          {% for prof in certification.get_incomplete_certification_statuses %}
-          <li> {{prof.profile.user.username}}</li>
-          {% endfor %}
-      </ul>
-  </ul>
+    {% if certification.get_incomplete_certification_profiles %}
+              <ul>
+                  {% for prof in certification.get_incomplete_certification_profiles %}
+                  <li> 
+                      {{prof.user.username}}
+                  </li>
+                  {% endfor %}
+              </ul>
+              {% else %}
+              <p>Everyone up to date</p>
+              {% endif %}
   
 </div>
 
@@ -60,11 +64,17 @@
         </div>
         <div class="modal-body">
           Are you sure you want to send an email reminder to:
-            <ul>
-                {% for prof in certification.get_incomplete_certification_statuses %}
-                <li> {{prof.profile.user.username}}</li>
-                {% endfor %}
-            </ul>
+              {% if certification.get_incomplete_certification_profiles %}
+              <ul>
+                  {% for prof in certification.get_incomplete_certification_profiles %}
+                  <li> 
+                      {{prof.user.username}}
+                  </li>
+                  {% endfor %}
+              </ul>
+              {% else %}
+              <p>Everyone up to date</p>
+              {% endif %}
         </div>
         
         <div class="modal-footer">
