@@ -7,7 +7,7 @@ This application was created for a small business. Includes:
   - Reminders
   - Birthday Tracker
   - Company's Blog
-  ##### Coming up
+  ##### Coming up...
   - File Management System
   - Messaging
 
