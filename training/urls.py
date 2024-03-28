@@ -12,7 +12,7 @@ urlpatterns = [
     path('upload/', views.upload_file, name='training-upload_file'),
     path('send_reminder_email/<int:certification_id>/', views.send_reminder_email, name='training-send_reminder_email'),
     # api urls
-    path('api/dashboard', views.api_dashboard, name='training-api-dashboard'),
+    # path('api/dashboard', views.api_dashboard, name='training-api-dashboard'),
     path('api/certifications', Certifications.as_view(), name='certifications'),
     path('api/statusCertifications', StatusCertifications.as_view(), name='statusCertifications'),
     
