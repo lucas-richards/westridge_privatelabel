@@ -9,7 +9,10 @@
       <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link active" href="{% url 'tasks-assigned' %}">All Trainings</a>
+      <a class="nav-link active" href="{% url 'training-all_trainings' %}">All Trainings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'training-history' %}">History</a>
     </li>
 </ul>
     
@@ -37,11 +40,11 @@
             <div class="card-body">
                 
                 
-                {% if certificate.get_incomplete_certification_statuses %}
+                {% if certificate.get_incomplete_certification_profiles %}
                 <ul>
-                    {% for prof in certificate.get_incomplete_certification_statuses %}
-                    <li> {{prof.profile.user.username}}:
-                        <a href="{% url 'training-statusCertification-detail' prof.id %}" class="text-{% if prof.status == 'Completed' %}success{% elif prof.status == 'Scheduled' %}warning{% else %}danger{% endif %}"> {{ prof.status }} </a>
+                    {% for prof in certificate.get_incomplete_certification_profiles %}
+                    <li> 
+                        {{prof.profile.user.username}}
                     </li>
                     {% endfor %}
                 </ul>

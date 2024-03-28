@@ -26,17 +26,27 @@ class Certification(models.Model):
     
     # profiles with this cert 
     def get_incomplete_certification_profiles(self):
-        today = timezone.now().date()
-        return Profile.objects.filter(certificationstatus__certification=self, 
-                                      certificationstatus__completed_date__isnull=True) \
-                              .exclude(certificationstatus__completed_date__gt=today) \
-                              .exclude(certificationstatus__expiration_date__gt=today)
+        for profile in Profile.objects.all():
+            profiles = []
+            for profile in Profile.objects.all():
+                status_obj = CertificationStatus.objects.filter(profile=profile, certification=self).first()
+                if status_obj:
+                    if status_obj.status() == 'Expired' or status_obj.status() == 'About to expire' or profile.must_have_certification(self):
+                        profiles.append(profile)
+            
+        return profiles
+
 
 
 class CertificationStatus(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
     completed_date = models.DateField(null=True, blank=True)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-completed_date']
     
 
     def __str__(self):
@@ -54,6 +64,22 @@ class CertificationStatus(models.Model):
                 return None
         else:
             return None
+        
+    #  create a function that gives a satus of the certification: expired, about to expire, of ok
+    def status(self):
+        today = timezone.now().date()
+        if self.completed_date:
+            if self.expiration_date():
+                if self.expiration_date() < today:
+                    return 'Expired'
+                elif self.expiration_date() < today + timezone.timedelta(days=90):
+                    return 'About to expire'
+                else:
+                    return 'Ok'
+            else:
+                return 'Ok'
+        else:
+            return 'Incomplete'
 
     
     # Send email notification when a certification is completed
@@ -70,3 +96,5 @@ class CertificationStatus(models.Model):
             logging.info(f'Successfully sent schedule update email to {user_email}')
         except Exception as e:
             logging.error(f'Error sending schedule update email to {user_email}: {str(e)}')
+
+    

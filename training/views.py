@@ -7,11 +7,8 @@ from .forms import StatusUpdateForm, UploadFileForm, CertificationUpdateForm, Sc
 from .models import CertificationStatus, Certification
 from django.contrib.auth.models import User
 import pandas as pd
-from django.core.cache import cache
+import datetime
 # API imports
-from django.http import HttpResponse
-from django.core import serializers
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from .serializers import CertificationStatusSerializer, CertificationSerializer
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
@@ -84,7 +81,23 @@ def all_trainings(request):
     }
     return render(request, 'training/all_trainings.html', context)
 
-def prepare_data():
+def history(request):
+    certStatus = CertificationStatus.objects.all()
+
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+    context = {
+        'title': 'History',
+        'certStatus': certStatus,
+        'sidepanel': sidepanel,
+    }
+    return render(request, 'training/history.html', context)
+
+
+def get_prepared_data():
     # Fetch profiles and certificates
     profiles = Profile.objects.all()
     certificates = Certification.objects.all().order_by('name')
@@ -110,22 +123,15 @@ def prepare_data():
 
             row['certifications_status'].append(cert)
         data.append(row)
-    
-    return profiles, certificates, data
 
-def get_prepared_data():
-    # Retrieve prepared data from cache
-    prepared_data = cache.get('prepared_data')
-    if prepared_data is None:
-        # If data is not in cache, prepare it and save to cache
-        profiles, certificates, data = prepare_data()
-        prepared_data = {
+        prepare_data = {
             'profiles': profiles,
             'certificates': certificates,
             'data': data
         }
-        cache.set('prepared_data', prepared_data, timeout=None)  # Set cache indefinitely or with appropriate timeout
-    return prepared_data
+    
+    return prepare_data
+
 
 def dashboard(request):
     # Your view function
@@ -135,15 +141,8 @@ def dashboard(request):
     data = prepared_data['data']
     context = {'data': data}
 
-    sidepanel = {
-        'title': 'Training',
-        'text1': 'Completed all trainings',
-        'text2': 'Almost there',
-    }
-
     context = {
         'title': 'Dashboard',
-        'sidepanel': sidepanel,
         'profiles': profiles,
         'certificates': certificates,
         'data': data,
@@ -270,37 +269,32 @@ def upload_file(request):
                 for certificate in certificates:
                     certificate_name = certificate[0:5]  # Get the first 5 characters of the certificate name
                     completion_date = row[certificate]
-                    # if completion_date is "R" make it empty and the status "To be Scheduled"
-                    if completion_date == "R":
-                        completion_date = None
                     
-                    if pd.notna(completion_date) or completion_date == None:  # Check if completion_date is not NaN
+                    if pd.notna(completion_date) and completion_date != 'R':
                         try:
                             # Retrieve the profile object using the username
                             user = User.objects.get(username=employee_username)
                             profile = Profile.objects.get(user=user)
                             certification = Certification.objects.get(name=certificate_name)
+
+                            # Create CertificationStatus object
+                            if not CertificationStatus.objects.filter(profile=profile, certification=certification, completed_date=completion_date).exists():
+                                CertificationStatus.objects.create(
+                                    profile=profile,
+                                    certification=certification,
+                                    completed_date=completion_date
+                                )
+
+                                print(f'CertificationStatus object created for {profile} and {certification}')
+
                         except User.DoesNotExist:
                             print(f"User does not exist for {employee_username}")
                             continue  # Skip the iteration if the user doesn't exist
                         except (Profile.DoesNotExist, Certification.DoesNotExist):
                             print(f"Profile or Certification does not exist for {employee_username} or {certificate_name}")
                             continue  # Skip the iteration if the profile or certification doesn't exist
-
-                        # Create CertificationStatus object
-                        certification_status, created = CertificationStatus.objects.get_or_create(
-                            profile=profile,
-                            certification=certification,
-                            defaults={
-                                'completed_date': completion_date
-                            }
-                        )
-
-                        if not created:
-                            certification_status.completed_date = completion_date
-                            certification_status.save()
-                        print(f'CertificationStatus object created for {profile} and {certification}')
-
+                    
+                        
                 # return render dashoboard.html with successful message
             messages.success(request, f'File has been uploaded successfully!')
             return redirect('training-dashboard')
@@ -314,7 +308,7 @@ def upload_file(request):
 
 
 
-class Certifications(APIView):
+class Certifications(APIView): 
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
     def get_queryset(self):

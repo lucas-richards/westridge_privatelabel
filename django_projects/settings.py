@@ -47,7 +47,7 @@ CORS_ALLOWED_ORIGINS = [
 # Application definition
 
 INSTALLED_APPS = [
-    # 'rest_framework',
+    'rest_framework',
     'tasks.apps.TasksConfig',
     'training.apps.TrainingConfig',
     'users.apps.UsersConfig',

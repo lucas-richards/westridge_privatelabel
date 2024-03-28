@@ -1,0 +1,54 @@
+{% extends "training/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'training-all_trainings' %}">All Trainings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'training-history' %}">History</a>
+      </li>
+</ul>
+    
+    {% if certStatus %}
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Username</th>   
+                    <th>Training</th>
+                    <th>Completion Date</th>
+                    <th>Created Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in certStatus %}
+                    <tr>
+                        <td>{{ status.profile.user.username }}</td>
+                        <td>{{ status.certification.name }}</td>
+                        <td>{{ status.completed_date }}</td>
+                        <td>{{ status.created_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    <!-- if there are no certificates yet -->
+    {% else %}
+        <p class="m-3">No trainings yet</p>
+    {% endif %}
+
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}

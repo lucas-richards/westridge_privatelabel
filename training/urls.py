@@ -5,6 +5,7 @@ from .views import Certifications, StatusCertifications
 urlpatterns = [
     path('', views.home, name='training-home'),
     path('all_trainings/', views.all_trainings, name='training-all_trainings'),
+    path('history/', views.history, name='training-history'),
     path('dashboard/', views.dashboard, name='training-dashboard'),
     path('schedule/<int:certification_id>/', views.schedule, name='training-schedule'),
     path('certification/<int:certification_id>/', views.certification_detail, name='training-certification-detail'),

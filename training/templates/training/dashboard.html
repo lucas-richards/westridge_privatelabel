@@ -9,6 +9,7 @@
   z-index: 1;
   background-color: rgb(249,249,249);
 }
+    
 </style>
 
 {% if user.is_authenticated %}
@@ -20,7 +21,7 @@
                 <th class="sticky-column">Username</th>
                 <th>Progress</th>
                 {% for certificate in certificates %}
-                        <th class="text-center">
+                        <th class="text-center sticky-column">
                             <a href="{% url 'training-certification-detail' certificate.id %}">
                             {{ certificate }}
                             </a>
@@ -47,22 +48,22 @@
                             <div class="d-flex justify-content-center align-items-center">
                                 <a class="text-secondary">missing</a>
                             </div>
-                            {%endif%}
-                            {% if cert.id %}
-                                <a href="{% url 'training-statusCertification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-dark">
-                                
-                                    {% now "Y-m-d" as current_datetime %}
-                                    {% if cert.completed_date|date:"Y-m-d" and current_datetime <= cert.completed_date|date:"Y-m-d"  %}
-                                    {{cert.completed_date|date:'n/j/Y'}}
-                                    {% endif %}
-                                    {% if cert.expiration_date %}
-                                        <p class="text-warning">{{ cert.expiration_date|timeuntil }}</p>
-                                        
-                                    {% else %}
-                                    <div data-toggle="tooltip" data-placement="right" title="{% if cert.certification.scheduled_date %}Scheduled: {{ cert.certification.scheduled_date|date:'n/j' }}{% else %}Not Scheduled{% endif %}">
-                                        <p>{{ cert.completed_date|date:'n/j/Y' }}</p>
-                                    </div>
-                                    {% endif %}
+                            {% elif cert.id %}
+                            <a href="{% url 'training-statusCertification-detail' cert.id %}" class="d-flex justify-content-center align-items-center text-dark">
+                                {% if cert.status == 'Expired' %}
+                                <div data-toggle="tooltip" data-placement="right" title="{% if cert.expiration_date %}Expired: {{ cert.expiration_date|date:'n/j/Y'}}{% endif %}">
+                                    <p class="text-danger">{{ cert.status }}</p>
+                                </div>
+                                {% elif cert.status == 'About to expire' %}
+                                <div data-toggle="tooltip" data-placement="right" title="{% if cert.expiration_date %}Expires in {{ cert.expiration_date|timeuntil }}{% endif %}">
+                                    <p class="text-warning">{{ cert.status }}</p>
+                                </div>
+                                {% elif cert.status == 'Ok' %}
+                                    <p class="text-success">{{ cert.completed_date|date:'n/j/Y' }}</p>
+                                {% elif cert.status == 'Incomplete' %}
+                                    <p class="text-secondary">Incomplete</p>
+                                {% else %}
+                                {% endif %}
                                 </a>
                             {% endif %}
                         </td>
@@ -78,21 +79,23 @@
         <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {{ upload_form|crispy }}
-            <button class="btn btn-sm btn-primary" type="submit">Update</button>
-            <div id="loading-indicator" style="display: none;">
-                <!-- Your loading indicator here (e.g., spinner or progress bar) -->
-                <div class="spinner-grow" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-                <p>This may take up to five minutes</p>
-            </div>
+            <button id="update" class="btn btn-sm btn-primary" type="submit">Update</button>
+            
         </form>
+        
+    </div>
+    <div class="d-flex justify-content-center align-items-center" id="loading-indicator" style="display: none;">
+        <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+        <div class="spinner-grow" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
     </div>
 
     <!-- JavaScript to show loading indicator when form is submitted -->
     <script>
         document.getElementById("upload-form").addEventListener("submit", function() {
             document.getElementById("loading-indicator").style.display = "block";
+            document.getElementById("update").style.display = "none";
         });
     </script>
     
