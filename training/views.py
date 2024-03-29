@@ -15,6 +15,7 @@ from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
+from django.core.paginator import Paginator
 
 @login_required
 def home(request):
@@ -83,6 +84,9 @@ def all_trainings(request):
 
 def history(request):
     certStatus = CertificationStatus.objects.all()
+    paginator = Paginator(certStatus, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     sidepanel = {
         'title': 'Training',
@@ -91,11 +95,10 @@ def history(request):
     }
     context = {
         'title': 'History',
-        'certStatus': certStatus,
+        'certStatus': page_obj,
         'sidepanel': sidepanel,
     }
     return render(request, 'training/history.html', context)
-
 
 def get_prepared_data():
     # Fetch profiles and certificates
@@ -132,20 +135,20 @@ def get_prepared_data():
     
     return prepare_data
 
-
 def dashboard(request):
     # Your view function
     prepared_data = get_prepared_data()
     profiles = prepared_data['profiles']
     certificates = prepared_data['certificates']
     data = prepared_data['data']
-    context = {'data': data}
-
+    paginator = Paginator(data, 5)  # Change the number 10 to the desired number of items per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     context = {
         'title': 'Dashboard',
         'profiles': profiles,
         'certificates': certificates,
-        'data': data,
+        'data': page_obj,
         'upload_form': UploadFileForm()
     }
 
@@ -189,8 +192,6 @@ def send_reminder_email(request, certification_id):
 
 
     return redirect('training-all_trainings')
-    
-
 
 def statusCertification_detail(request, certification_id):
     profiles = Profile.objects.all()
@@ -305,8 +306,6 @@ def upload_file(request):
     return render(request, 'upload_file.html', {'form': form})
 
 # API routes
-
-
 
 class Certifications(APIView): 
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]

@@ -44,6 +44,27 @@
         <p class="m-3">No trainings yet</p>
     {% endif %}
 
+    <!-- add pagination -->
+    
+    {% if certStatus.has_previous %}
+    <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+    <a class="btn btn-outline-info mb-4" href="?page={{ certStatus.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    {% for num in certStatus.paginator.page_range %}
+        {% if certStatus.number == num %}
+            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > certStatus.number|add:'-3' and num < certStatus.number|add:'3' %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if certStatus.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ certStatus.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ certStatus.paginator.num_pages }}">Last</a>
+    {% endif %}
+    
+
     
 
 
