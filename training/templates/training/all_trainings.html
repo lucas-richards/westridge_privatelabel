@@ -41,6 +41,14 @@
                 
             </div>
             <div class="card-body">
+                {% if certificate.exp_months %}
+                <p>Expiration months: {{ certificate.exp_months }}</p>
+                {% endif %}
+               
+                {% for role in certificate.roles.all %}
+                <!-- basges -->
+                <span class="badge badge-secondary">{{ role }}</span>
+                {% endfor %}
                 
                 
             </div>
