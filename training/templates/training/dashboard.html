@@ -19,9 +19,9 @@
         <thead>
             <tr>
                 <th class="sticky-column">Username</th>
-                <th>Progress</th>
+                
                 {% for certificate in certificates %}
-                        <th class="text-center sticky-column">
+                        <th class="text-center">
                             <a href="{% url 'training-certification-detail' certificate.id %}">
                             {{ certificate }}
                             </a>
@@ -41,7 +41,6 @@
                             {% endfor %}
                         </div>
                     </td>
-                    <td style="max-width: 40px;">{{ row.percentage }}%</td>
                     {% for cert in row.certifications_status %}
                         <td>
                             {% if cert == '+' %}

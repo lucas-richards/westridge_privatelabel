@@ -110,7 +110,7 @@ def new_entry(request):
 
 def history(request):
     certStatus = CertificationStatus.objects.all().order_by('-created_date')
-    paginator = Paginator(certStatus, 10)
+    paginator = Paginator(certStatus, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
