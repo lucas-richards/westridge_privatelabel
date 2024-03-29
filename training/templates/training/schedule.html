@@ -33,17 +33,14 @@
   </div>
   
   <div class="card-body">
-    {% if certification.get_incomplete_certification_profiles %}
               <ul>
                   {% for prof in certification.get_incomplete_certification_profiles %}
+                  
                   <li> 
                       {{prof.user.username}}
                   </li>
                   {% endfor %}
               </ul>
-              {% else %}
-              <p>Everyone up to date</p>
-              {% endif %}
   
 </div>
 
