@@ -102,7 +102,7 @@
         </form>
         
     </div>
-    <div class="d-flex justify-content-center align-items-center" id="loading-indicator" style="display: none;">
+    <div id="loading-indicator" style="display: none;">
         <!-- Your loading indicator here (e.g., spinner or progress bar) -->
         <div class="spinner-grow" role="status">
             <span class="sr-only">Loading...</span>
@@ -113,7 +113,7 @@
     <script>
         document.getElementById("upload-form").addEventListener("submit", function() {
             document.getElementById("loading-indicator").style.display = "block";
-            document.getElementById("update").style.display = "none";
+            document.getElementById("upload-form").style.display = "none";
         });
     </script>
     

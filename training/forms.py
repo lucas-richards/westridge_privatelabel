@@ -1,5 +1,6 @@
 from django import forms
 from .models import CertificationStatus, Certification
+from users.models import Profile
 
 
 class StatusUpdateForm(forms.ModelForm):
@@ -27,6 +28,19 @@ class ScheduleCertificationForm(forms.ModelForm):
     class Meta:
         model = Certification
         fields = ['scheduled_date']
+
+# new certificationStatus
+class NewCertStatus(forms.ModelForm):
+    # choose a profile from dropdown
+    profile = forms.ModelChoiceField(queryset=Profile.objects.all())
+    # choose a certification from dropdown
+    certification = forms.ModelChoiceField(queryset=Certification.objects.all())
+    # select a completed date
+    completed_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+    class Meta:
+        model = CertificationStatus
+        fields = ['profile', 'certification', 'completed_date']
 
 
     

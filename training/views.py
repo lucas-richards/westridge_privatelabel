@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
-from .forms import StatusUpdateForm, UploadFileForm, CertificationUpdateForm, ScheduleCertificationForm
+from .forms import StatusUpdateForm, UploadFileForm, CertificationUpdateForm, ScheduleCertificationForm, NewCertStatus
 from .models import CertificationStatus, Certification
 from django.contrib.auth.models import User
 import pandas as pd
@@ -82,8 +82,34 @@ def all_trainings(request):
     }
     return render(request, 'training/all_trainings.html', context)
 
+@login_required
+def new_entry(request):
+    if request.method == 'POST':
+        form = NewCertStatus(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Certificate has been added!')
+            return redirect('training-history')
+        else:
+            messages.error(request, 'Form is not valid. Please check the entered data.')
+    else:
+        form = NewCertStatus()
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+
+    context = {
+        'title': 'New Entry',
+        'form': form,
+        'sidepanel': sidepanel
+    }
+
+    return render(request, 'training/new_entry.html', context)
+
 def history(request):
-    certStatus = CertificationStatus.objects.all()
+    certStatus = CertificationStatus.objects.all().order_by('-created_date')
     paginator = Paginator(certStatus, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

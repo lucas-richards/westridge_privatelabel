@@ -14,6 +14,9 @@
     <li class="nav-item">
         <a class="nav-link" href="{% url 'training-history' %}">History</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'training-new_entry' %}">New Entry</a>
+    </li>
 </ul>
     
     {% if formswithcert %}
@@ -23,28 +26,31 @@
         <div id="accordion" class="mb-3 card">
             <div class="card-header" id="headingOne">
                 <button  class="btn" data-toggle="collapse" data-target="#collapse{{ certificate.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ certificate.certification.name }}
-                    <span class="badge badge-secondary">
-                        {% now "Y-m-d" as current_datetime %}
-                        {% if certificate.scheduled_date and current_datetime <= certificate.scheduled_date|date:"Y-m-d"  %}
-                        {{ certificate.scheduled_date|date:"Y-m-d" }}
+                    {% if certificate.expiration_date %}
+                        {% if certificate.status != 'Ok'%}
+                            <span class="badge badge-danger">
+                                {{ certificate.status }}
+                            </span>
+                            {% else %}
+                            <span class="badge badge-warning">
+                                {{ certificate.expiration_date|timeuntil }}
+                            </span>
+                            {% endif %}
                         {% else %}
-                        {{ certificate.expiration_date|date:"Y-m-d" }}
+                        <span class="badge badge-success">
+                            {{ certificate.completed_date}}
+                        </span>
                         {% endif %}
-                    </span>
                 </button>
             </div>
             <div id="collapse{{ certificate.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                    <form action="{% url 'training-home' %}" method="POST">
-                        {% csrf_token %}
-                            <div class="d-flex justify-content-between align-items-end" >
-                                <input type="hidden" name="id" value="{{ certificate.id }}">
-                                {{ form|crispy }}
-                                <div class="form-group">
-                                    <button class="btn btn-outline-info" type="submit">Update</button>
-                                </div>
-                            </div>
-                    </form>
+                    <!-- certificate information -->
+                    <h6>{{ certificate.certification.description}}</h6>
+                    This certificate was completed {{certificate.completed_date}}
+                    {% if certificate.expiration_date %}
+                        and expires in {{certificate.expiration_date|timeuntil}}
+                    {% endif %}
                 </div>
             </div>
         </div>
