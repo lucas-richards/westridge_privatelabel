@@ -30,9 +30,12 @@ class Certification(models.Model):
         for profile in Profile.objects.all():
             status_obj = CertificationStatus.objects.filter(profile=profile, certification=self).first()
             status = status_obj.status() if status_obj else ''
+            #  if status Ok skip
+            if status == 'Ok':
+                continue
             if status == 'Expired' or status == 'About to expire' or profile.must_have_certification(self):
                 profiles.append(profile)
-            print(profile, status)
+                print(profile, status, self.name, profile.must_have_certification(self))
         return profiles
 
 

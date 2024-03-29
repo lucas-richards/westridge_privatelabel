@@ -42,7 +42,11 @@
             </div>
             <div class="card-body">
                 
-                
+                {% if certificate.get_incomplete_certification_profiles.count > 0 %}
+                    <div>
+                        <p>{{ certificate.get_incomplete_certification_profiles.count }} have to be trained</p>
+                    </div>
+                {% endif %}
                 
             </div>
         </div>

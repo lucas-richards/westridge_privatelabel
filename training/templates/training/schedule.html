@@ -25,7 +25,7 @@
 
 <div class="card">
   <div class="card-header d-flex justify-content-between">
-    <h5 class="mt-2 ">Update status and send a reminder to:</h5>  
+    <h5 class="mt-2 ">Send a reminder to:</h5>  
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
       Send
     </button>
@@ -63,18 +63,7 @@
           </button>
         </div>
         <div class="modal-body">
-          Are you sure you want to send an email reminder to:
-              {% if certification.get_incomplete_certification_profiles %}
-              <ul>
-                  {% for prof in certification.get_incomplete_certification_profiles %}
-                  <li> 
-                      {{prof.user.username}}
-                  </li>
-                  {% endfor %}
-              </ul>
-              {% else %}
-              <p>Everyone up to date</p>
-              {% endif %}
+          Are you sure you want to send an email reminder to all users who have not completed this certification?
         </div>
         
         <div class="modal-footer">
