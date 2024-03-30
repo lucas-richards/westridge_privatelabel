@@ -61,3 +61,24 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
+# API
+from rest_framework.decorators import api_view
+from django.http import JsonResponse
+from django.contrib.auth import login
+from django.contrib.auth import authenticate
+
+
+@api_view(['POST'])
+def api_login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    print(request.data)
+    user = authenticate(username=username, password=password) 
+    if user is not None:
+        login(request, user)
+        return JsonResponse({'message': 'Login successful'}, status=200)
+    else:
+        return JsonResponse({'message': 'Invalid credentials'}, status=400)
+
+
+
