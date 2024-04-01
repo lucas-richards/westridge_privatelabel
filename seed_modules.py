@@ -105,51 +105,66 @@ modules_data = [
     {
         "name": "TM001",
         "description": "Quality System and GMP",
-        "roles": ["ALL"]
+        "roles": ["ALL"],
+        "retrain_months": 24
     },
     {
         "name": "TM040",
         "description": "Customer Complaints",
-        "roles": ["QCI","SUP","QCI","QAS","SCS"]
+        "roles": ["QCI","SUP","QCI","QAS","SCS"],
+        "retrain_months": 24
                 
     },
     {
         "name": "TM102",
         "description": "Compounding",
-        "roles": ["COM","QCI", "QAS"]
+        "roles": ["COM","QCI", "QAS"],
+        "retrain_months": 24
     },
     {
         "name": "TM201",
         "description": "Forklift",
-        "roles": ["BFK"]
+        "roles": ["BFK"],
+        "retrain_months": 24
     },
     {
         "name": "TM202",
         "description": "Advanced Forklift",
-        "roles": ["AFK"]
+        "roles": ["AFK"],
+        "retrain_months": 24
     },
     {
         "name": "TM303",
         "description": "Quality Inspection",
-        "roles": ["QCI", "QAS"]
+        "roles": ["QCI", "QAS"],
+        "retrain_months": 24
     }
 ]
 
 # Define a function to seed the database with modules and roles
 def seed_modules_roles():
-    for certificate_data in modules_data:
-        # Create the module
+    # Create modules
+    for module_data in modules_data:
         module, created = TrainingModule.objects.get_or_create(
-            name=certificate_data["name"],
-            description=certificate_data["description"]
+            name=module_data['name'],
+            description=module_data['description']
         )
 
-        # Get or create roles and associate them with the module
-        for role_name in certificate_data["roles"]:
-            role, created = Role.objects.get_or_create(name=role_name)
-            role.modules.add(module)
+        # Add retrain_months if it exists in module_data
+        if 'retrain_months' in module_data:
+            module.retrain_months = module_data['retrain_months']
 
-        print(f"Seeded {module}")
+        # Create roles
+        for role_name in module_data['roles']:
+            role, created = Role.objects.get_or_create(name=role_name)
+            module.roles.add(role)
+
+        print(f'Module {module.name} created or updated with roles {module_data["roles"]}')
+
+        module.save()
+
+    print('Modules and roles seeded successfully!')
+
 
 # Call the function to seed the database with modules and roles
 if __name__ == '__main__':

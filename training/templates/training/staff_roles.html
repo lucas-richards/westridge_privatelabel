@@ -1,0 +1,62 @@
+{% extends "training/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<ul class="nav nav-tabs mb-3">
+    <li class="nav-item">
+      <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'training-all_trainings' %}">All Trainings</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" href="{% url 'training-staff_roles' %}">Staff Roles</a>
+      </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'training-roles' %}">Roles</a>
+      </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'training-history' %}">History</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'training-new_entry' %}">New Entry</a>
+    </li>
+</ul>
+    
+    {% if profiles %}
+
+
+        {% for profile in profiles %}
+        <div id="accordion" class="mb-3 card">
+            <div class="card-header" id="headingOne">
+                <button  class="btn" data-toggle="collapse" data-target="#collapse{{ profile.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ profile.user.username }}
+                    {% for role in profile.roles.all %}
+                        <span style="font-size: x-small;" class="badge badge-secondary">
+                            {{ role.name }}
+                        </span>
+                    {% endfor %}
+                </button>
+            </div>
+            <div id="collapse{{ profile.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <!-- profile information -->
+                    <p>Extra info</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    <!-- if there are no profiles yet -->
+    {% else %}
+        <p class="m-3">No trainings yet</p>
+    {% endif %}
+
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}

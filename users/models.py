@@ -17,6 +17,10 @@ class Role(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    # filter trainingmodules that have this role
+    def get_training_modules(self):
+        return self.TrainingModules.all()
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -50,34 +54,31 @@ class Profile(models.Model):
     
     # wtire a function that returns the percentage of training_events completed
     
-    def get_certifications_percentage(self):
-        # today = timezone.now().date()
-        # completed_certifications = 0
-        # # for certification in self.certifications.all():
-        # #     certification_status = self.TrainingEvent_set.filter(certification=certification).first()
-        # #     certExp = certification_status.expiration_date()
-        # #     if certification_status and certExp >= today:
-        # #         completed_certifications += 1
-        # # total_certifications = self.certifications.count()
-        # # percentage = round(completed_certifications / (total_certifications or 1) * 100)
-        # return percentage if percentage != 0 else 0
-        return 0
+    def get_training_modules_percentage(self):
+        # save in a list the modules that this profiles must have
+        must_have = self.training_modules.filter(roles__in=self.roles.all())
+        if not must_have:
+            return 0
+        # for loop must_have and get the status of each module
+        completed = 0
+        expired = 0
+        for module in must_have:
+            status = self.TrainingEvent_set.filter(training_module=module).first()
+            if status is None:
+                continue
+            if status == 'Expired':
+                expired += 1
+            else:
+                completed += 1
+        completed -= expired
+        print(f'{self.user.username} has completed {completed} out of {must_have.count()} training modules')
+        return completed/must_have.count() * 100
+        
 
     # function that returns all training_event status
     def get_training_module_status(self, training_module):
         return self.TrainingEvent_set.filter(training_module=training_module).first()
     
-
-    # write a function that tells you if the user has all the certifications in status 'completed'
-    def has_all_certifications_completed(self):
-        # today = timezone.now().date()
-        # for certification in self.certifications.all():
-        #     certification_status = self.TrainingEvent_set.filter(certification=certification).first()
-        #     if certification_status is None:
-        #         return False
-        #     if certification.retrain_months and certification_status.completed_date + timezone.timedelta(days=certification.retrain_months * 30) < today:
-        #         return False
-        return True
     
     # function that returns true if user birthday is today or timeuntil if is not today
     def birthday_today(self):
@@ -95,6 +96,6 @@ class Profile(models.Model):
     def get_roles(self):
         return self.roles.all()
     
-    # must have training_module is a function that receives a training_module and returns true if the user has the role required for that training_module
-    def must_have_training_module(self, training_module):
-        return training_module.roles.filter(profiles=self).exists()
+    # function that ruturns a list of modules that the user must have based on the roles
+    def must_have_training_modules(self):
+        return self.training_modules.filter(roles__in=self.roles.all())

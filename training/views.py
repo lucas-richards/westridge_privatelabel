@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from users.models import Profile
+from users.models import Profile, Role
 from .forms import TrainingEventUpdateForm, UploadFileForm, TrainingModuleUpdateForm, ScheduleTrainingModuleForm, NewTrainingEvent
 from .models import TrainingEvent, TrainingModule
 from django.contrib.auth.models import User
@@ -21,11 +21,8 @@ from django.core.paginator import Paginator
 def home(request):
     profile_instance = Profile.objects.get(user=request.user)
     
-    # training_events = TrainingEvent.objects.filter(profile=profile_instance)
-    #  get all traininEvents for all users
-    training_events = TrainingEvent.objects.all()
-    
-
+    training_events = TrainingEvent.objects.filter(profile=profile_instance)
+   
     
     sidepanel = {
         'title': 'Training',
@@ -57,6 +54,36 @@ def all_trainings(request):
         'training_modules': training_modules
     }
     return render(request, 'training/all_trainings.html', context)
+
+@login_required
+def staff_roles(request):
+    profiles = Profile.objects.all()
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+    context = {
+        'title': 'Roles',
+        'profiles': profiles,
+        'sidepanel': sidepanel
+    }
+    return render(request, 'training/staff_roles.html', context)
+
+@login_required
+def roles(request):
+    roles = Role.objects.all()
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+    context = {
+        'title': 'Roles',
+        'roles': roles,
+        'sidepanel': sidepanel
+    }
+    return render(request, 'training/roles.html', context)
 
 @login_required
 def new_entry(request):
@@ -113,20 +140,21 @@ def get_prepared_data():
         row = {
             'username': profile.user.username,
             'roles': profile.get_roles(),
-            'percentage': profile.get_training_modules_percentage(),
             'training_events': []
         }
         for training_module in training_modules:
+            must_have = profile.must_have_training_modules()
+            print(f'{profile.user.username} must have {must_have} training modules')
             event = TrainingEvent.objects.filter(profile=profile, training_module=training_module).first()
             
             if event:
-                cert = event
-            elif profile.must_have_training_module(training_module):
-                cert = '+'
+                event = event
+            elif training_module not in must_have:
+                event = '-'
             else:
-                cert = '-'
+                event = '+'
 
-            row['training_events'].append(cert)
+            row['training_events'].append(event)
         data.append(row)
 
         prepare_data = {
@@ -220,7 +248,7 @@ def training_event_detail(request, training_event_id):
         'form': form,
         'sidepanel': sidepanel
     }
-    return render(request, 'training/training_event_detail.html', context)
+    return render(request, 'training/event_detail.html', context)
 
 def training_module_detail(request, training_module_id):
     profiles = Profile.objects.all()
@@ -247,7 +275,7 @@ def training_module_detail(request, training_module_id):
         'form': form,
         'sidepanel': sidepanel
     }
-    return render(request, 'training/training_module_detail.html', context)
+    return render(request, 'training/module_detail.html', context)
 
 def upload_file(request):
     if request.method == 'POST':

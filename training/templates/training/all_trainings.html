@@ -12,6 +12,12 @@
       <a class="nav-link active" href="{% url 'training-all_trainings' %}">All Trainings</a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="{% url 'training-staff_roles' %}">Staff Roles</a>
+      </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'training-roles' %}">Roles</a>
+      </li>
+    <li class="nav-item">
       <a class="nav-link" href="{% url 'training-history' %}">History</a>
     </li>
     <li class="nav-item">
@@ -25,7 +31,7 @@
         {% for module in training_modules %}
         <div id="accordion" class="mb-3 card {% if module.expiration_date > now %}bg-success-light{% endif %}">
             <div class="card-header d-flex justify-content-between" id="headingOne">
-                <a class="text-dark" href="{% url 'training-certification-detail' module.id %}" >
+                <a class="text-dark" href="{% url 'training-module-detail' module.id %}" >
                     <h5>
                         {{ module.name }}:{{ module.description }}
                         
@@ -42,14 +48,13 @@
             </div>
             <div class="card-body">
                 {% if module.retrain_months %}
-                <p>Expiration months: {{ module.retrain_months }}</p>
+                <p>Retrain months: {{ module.retrain_months }}</p>
                 {% endif %}
                
                 {% for role in module.roles.all %}
                 <!-- basges -->
                 <span class="badge badge-secondary">{{ role }}</span>
                 {% endfor %}
-                
                 
             </div>
         </div>

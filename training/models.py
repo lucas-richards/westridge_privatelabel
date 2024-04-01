@@ -28,14 +28,14 @@ class TrainingModule(models.Model):
     def get_incomplete_training_modules_profiles(self):
         profiles = []
         for profile in Profile.objects.all():
-            status_obj = TrainingEvent.objects.filter(profile=profile, training_module=self).first()
-            status = status_obj.status() if status_obj else ''
+            must_have = profile.must_have_training_modules()
+            event = TrainingEvent.objects.filter(profile=profile, training_module=self).first()
+            status = event.status() if event else ''
             #  if status Ok skip
             if status == 'Ok':
                 continue
-            if status == 'Expired' or status == 'About to expire' or profile.must_have_training_module(self):
+            if status == 'Expired' or status == 'About to expire' or event in must_have:
                 profiles.append(profile)
-                print(profile, status, self.name, profile.must_have_training_module(self))
         return profiles
 
 
