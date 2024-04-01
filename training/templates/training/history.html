@@ -19,7 +19,7 @@
     </li>
 </ul>
     
-    {% if certStatus %}
+    {% if training_events %}
 
         <table class="table table-hover">
             <thead>
@@ -31,12 +31,12 @@
                 </tr>
             </thead>
             <tbody>
-                {% for status in certStatus %}
+                {% for event in training_events %}
                     <tr>
-                        <td>{{ status.profile.user.username }}</td>
-                        <td>{{ status.certification.name }}</td>
-                        <td>{{ status.completed_date }}</td>
-                        <td>{{ status.created_date }}</td>
+                        <td>{{ event.profile.user.username }}</td>
+                        <td>{{ event.certification.name }}</td>
+                        <td>{{ event.completed_date }}</td>
+                        <td>{{ event.created_date }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -49,22 +49,22 @@
 
     <!-- add pagination -->
     
-    {% if certStatus.has_previous %}
+    {% if training_events.has_previous %}
     <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-    <a class="btn btn-outline-info mb-4" href="?page={{ certStatus.previous_page_number }}">Previous</a>
+    <a class="btn btn-outline-info mb-4" href="?page={{ training_events.previous_page_number }}">Previous</a>
     {% endif %}
 
-    {% for num in certStatus.paginator.page_range %}
-        {% if certStatus.number == num %}
+    {% for num in training_events.paginator.page_range %}
+        {% if training_events.number == num %}
             <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > certStatus.number|add:'-3' and num < certStatus.number|add:'3' %}
+        {% elif num > training_events.number|add:'-3' and num < training_events.number|add:'3' %}
             <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
         {% endif %}
     {% endfor %}
 
-    {% if certStatus.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ certStatus.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ certStatus.paginator.num_pages }}">Last</a>
+    {% if training_events.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ training_events.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ training_events.paginator.num_pages }}">Last</a>
     {% endif %}
     
 

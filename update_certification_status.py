@@ -6,7 +6,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_projects.settings')
 django.setup()
 from datetime import date
-from training.models import CertificationStatus, Certification
+from training.models import TrainingEvent, Certification
 from datetime import timedelta
 from users.models import Profile
 
@@ -20,9 +20,9 @@ def handle():
     for profile in profiles:
         for certification in profile.certifications.all():
             certificate = Certification.objects.get(id=certification.id)
-            certStatus = CertificationStatus.objects.get(profile=profile, certification=certification)
+            certStatus = TrainingEvent.objects.get(profile=profile, certification=certification)
             certStatus_exp = certStatus.expiration_date()
-            if certificate.exp_months:
+            if certificate.retrain_months:
                 if certStatus.status == 'Completed':
                     if certStatus_exp < today:
                         certStatus.status = 'Expired'

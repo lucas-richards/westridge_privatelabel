@@ -111,7 +111,9 @@ WSGI_APPLICATION = 'django_projects.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-db_from_env = dj_database_url.config(default='postgres://house_o132_user:9QufcJHwj4oEveIOJGy1cEzFheAjVWWP@dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com/house_o132')
+db_from_env = dj_database_url.config(default='postgres://westridge_db_user:Uh6AA01PFj49hGHaDaiYqJlr2rThdapw@dpg-co4vsg4f7o1s739242r0-a.oregon-postgres.render.com/westridge_db')
+# db_from_env = dj_database_url.config(default='postgres://house_o132_user:9QufcJHwj4oEveIOJGy1cEzFheAjVWWP@dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com/house_o132')
+# external                         connection postgres://house_o132_user:9QufcJHwj4oEveIOJGy1cEzFheAjVWWP@dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com/house_o132
 
 DATABASES = {
     'default': db_from_env

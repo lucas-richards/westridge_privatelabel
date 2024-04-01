@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Certification, CertificationStatus
+from .models import TrainingModule, TrainingEvent
 
-admin.site.register(Certification)
-admin.site.register(CertificationStatus)
+admin.site.register(TrainingModule)
+admin.site.register(TrainingEvent)

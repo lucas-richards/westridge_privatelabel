@@ -11,38 +11,38 @@ import os
 # Create your models here.
 
     
-class Certification(models.Model):
+class TrainingModule(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     # expiration time in months
-    exp_months = models.IntegerField(null=True, blank=True)
-    # schedule date for the certification
+    retrain_months = models.IntegerField(null=True, blank=True)
+    # schedule date for the TrainingModule
     scheduled_date = models.DateTimeField(null=True, blank=True)
-    # each certification corresponds to one role
-    roles = models.ManyToManyField('users.Role', related_name='certifications', blank=True)
+    # each TrainingModule corresponds to one role
+    roles = models.ManyToManyField('users.Role', related_name='TrainingModules', blank=True)
 
     def __str__(self):
         return f"{self.name}"
     
     # profiles with this cert 
-    def get_incomplete_certification_profiles(self):
+    def get_incomplete_training_modules_profiles(self):
         profiles = []
         for profile in Profile.objects.all():
-            status_obj = CertificationStatus.objects.filter(profile=profile, certification=self).first()
+            status_obj = TrainingEvent.objects.filter(profile=profile, training_module=self).first()
             status = status_obj.status() if status_obj else ''
             #  if status Ok skip
             if status == 'Ok':
                 continue
-            if status == 'Expired' or status == 'About to expire' or profile.must_have_certification(self):
+            if status == 'Expired' or status == 'About to expire' or profile.must_have_training_module(self):
                 profiles.append(profile)
-                print(profile, status, self.name, profile.must_have_certification(self))
+                print(profile, status, self.name, profile.must_have_training_module(self))
         return profiles
 
 
 
-class CertificationStatus(models.Model):
+class TrainingEvent(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    certification = models.ForeignKey(Certification, on_delete=models.CASCADE)
+    training_module = models.ForeignKey(TrainingModule, on_delete=models.CASCADE)
     completed_date = models.DateField(null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -52,22 +52,22 @@ class CertificationStatus(models.Model):
     
 
     def __str__(self):
-        return f"{self.profile.user.username} - {self.certification.name}"
+        return f"{self.profile.user.username} - {self.training_module.name}"
     
     
-    #  date that the certification expires based on the cert exp_months and conpleted_date
+    #  date that the training_module expires based on the cert retrain_months and conpleted_date
     def expiration_date(self):
         if self.completed_date:
-            # Assuming exp_months is a field in the Certification model
-            if self.certification.exp_months:
-                expiration_months = self.certification.exp_months
+            # Assuming retrain_months is a field in the training_module model
+            if self.training_module.retrain_months:
+                expiration_months = self.training_module.retrain_months
                 return self.completed_date + timezone.timedelta(days=30 * expiration_months)
             else:
                 return None
         else:
             return None
         
-    #  create a function that gives a satus of the certification: expired, about to expire, of ok
+    #  create a function that gives a satus of the training_module: expired, about to expire, of ok
     def status(self):
         today = timezone.now().date()
         if self.completed_date:
@@ -84,14 +84,14 @@ class CertificationStatus(models.Model):
             return 'Incomplete'
 
     
-    # Send email notification when a certification is completed
+    # Send email notification when a training_module is completed
     def send_schedule_notification(self):
         email_user = os.environ.get('EMAIL_USER')
         email_password = os.environ.get('EMAIL_PASS')
         user_email = self.profile.user.email
 
-        subject = f'Schedule Updated: {self.certification.name} was scheduled'
-        message = f'Your certificate {self.certification.name} is due. New training scheduled on {timezone.localtime(self.certification.scheduled_date)}.'
+        subject = f'Schedule Updated: {self.training_module.name} was scheduled'
+        message = f'Your certificate {self.training_module.name} is due. New training scheduled on {timezone.localtime(self.training_module.scheduled_date)}.'
 
         try:
             send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)

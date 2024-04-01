@@ -19,33 +19,33 @@
     </li>
 </ul>
     
-    {% if certificates %}
+    {% if training_modules %}
 
 
-        {% for certificate in certificates %}
-        <div id="accordion" class="mb-3 card {% if certificate.expiration_date > now %}bg-success-light{% endif %}">
+        {% for module in training_modules %}
+        <div id="accordion" class="mb-3 card {% if module.expiration_date > now %}bg-success-light{% endif %}">
             <div class="card-header d-flex justify-content-between" id="headingOne">
-                <a class="text-dark" href="{% url 'training-certification-detail' certificate.id %}" >
+                <a class="text-dark" href="{% url 'training-certification-detail' module.id %}" >
                     <h5>
-                        {{ certificate.name }}:{{ certificate.description }}
+                        {{ module.name }}:{{ module.description }}
                         
                     </h5>
                 </a>
                 {% now "Y-m-d" as current_datetime %}
-                {% if certificate.scheduled_date and current_datetime <= certificate.scheduled_date|date:"Y-m-d"  %}
-                <a class="text-success" href="{% url 'training-schedule' certificate.id %}" >Scheduled: {{certificate.scheduled_date}}</a>
+                {% if module.scheduled_date and current_datetime <= module.scheduled_date|date:"Y-m-d"  %}
+                <a class="text-success" href="{% url 'training-schedule' module.id %}" >Scheduled: {{module.scheduled_date}}</a>
                 {% else%}
-                <a href="{% url 'training-schedule' certificate.id %}" >Schedule</a>
+                <a href="{% url 'training-schedule' module.id %}" >Schedule</a>
                 {% endif %}
 
                 
             </div>
             <div class="card-body">
-                {% if certificate.exp_months %}
-                <p>Expiration months: {{ certificate.exp_months }}</p>
+                {% if module.retrain_months %}
+                <p>Expiration months: {{ module.retrain_months }}</p>
                 {% endif %}
                
-                {% for role in certificate.roles.all %}
+                {% for role in module.roles.all %}
                 <!-- basges -->
                 <span class="badge badge-secondary">{{ role }}</span>
                 {% endfor %}
@@ -54,7 +54,7 @@
             </div>
         </div>
         {% endfor %}
-    <!-- if there are no certificates yet -->
+    <!-- if there are no training_modules yet -->
     {% else %}
         <p class="m-3">No trainings yet</p>
     {% endif %}

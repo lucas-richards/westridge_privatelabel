@@ -19,43 +19,43 @@
     </li>
 </ul>
     
-    {% if formswithcert %}
+    {% if training_events %}
 
 
-        {% for certificate, form in formswithcert %}
+        {% for event in training_events %}
         <div id="accordion" class="mb-3 card">
             <div class="card-header" id="headingOne">
-                <button  class="btn" data-toggle="collapse" data-target="#collapse{{ certificate.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ certificate.certification.name }}
-                    {% if certificate.expiration_date %}
-                        {% if certificate.status != 'Ok'%}
+                <button  class="btn" data-toggle="collapse" data-target="#collapse{{ event.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ event.training_module.name }}
+                    {% if event.expiration_date %}
+                        {% if event.status != 'Ok'%}
                             <span class="badge badge-danger">
-                                {{ certificate.status }}
+                                {{ event.status }}
                             </span>
                             {% else %}
                             <span class="badge badge-warning">
-                                {{ certificate.expiration_date|timeuntil }}
+                                {{ event.expiration_date|timeuntil }}
                             </span>
                             {% endif %}
                         {% else %}
                         <span class="badge badge-success">
-                            {{ certificate.completed_date}}
+                            {{ event.completed_date}}
                         </span>
                         {% endif %}
                 </button>
             </div>
-            <div id="collapse{{ certificate.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapse{{ event.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                    <!-- certificate information -->
-                    <h6>{{ certificate.certification.description}}</h6>
-                    This certificate was completed {{certificate.completed_date}}
-                    {% if certificate.expiration_date %}
-                        and expires in {{certificate.expiration_date|timeuntil}}
+                    <!-- event information -->
+                    <h6>{{ event.training_module.description}}</h6>
+                    This event was completed {{event.completed_date}}
+                    {% if event.expiration_date %}
+                        and expires in {{event.expiration_date|timeuntil}}
                     {% endif %}
                 </div>
             </div>
         </div>
         {% endfor %}
-    <!-- if there are no certificates yet -->
+    <!-- if there are no events yet -->
     {% else %}
         <p class="m-3">No trainings yet</p>
     {% endif %}

@@ -6,11 +6,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_projects.settings')
 django.setup()
 
 # Import your Django models
-from training.models import Certification
+from training.models import TrainingModule
 from users.models import Role  # Adjust 'your_app' and import statement according to your Django app structure
 
-# Define the certificates data array
-certificates_data = [
+# Define the modules data array
+modules_data = [
     {
         "name": "TM000",
         "description": "",
@@ -135,22 +135,22 @@ certificates_data = [
     }
 ]
 
-# Define a function to seed the database with certificates and roles
-def seed_certificates_roles():
-    for certificate_data in certificates_data:
-        # Create the certification
-        certification, created = Certification.objects.get_or_create(
+# Define a function to seed the database with modules and roles
+def seed_modules_roles():
+    for certificate_data in modules_data:
+        # Create the module
+        module, created = TrainingModule.objects.get_or_create(
             name=certificate_data["name"],
             description=certificate_data["description"]
         )
 
-        # Get or create roles and associate them with the certification
+        # Get or create roles and associate them with the module
         for role_name in certificate_data["roles"]:
             role, created = Role.objects.get_or_create(name=role_name)
-            role.certifications.add(certification)
+            role.modules.add(module)
 
-        print(f"Seeded {certification}")
+        print(f"Seeded {module}")
 
-# Call the function to seed the database with certificates and roles
+# Call the function to seed the database with modules and roles
 if __name__ == '__main__':
-    seed_certificates_roles()
+    seed_modules_roles()

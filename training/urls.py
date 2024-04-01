@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import Certifications, StatusCertifications
+from .views import TrainingModules, TrainingEvents
 
 urlpatterns = [
     path('', views.home, name='training-home'),
@@ -8,14 +8,14 @@ urlpatterns = [
     path('history/', views.history, name='training-history'),
     path('new_entry/', views.new_entry, name='training-new_entry'),
     path('dashboard/', views.dashboard, name='training-dashboard'),
-    path('schedule/<int:certification_id>/', views.schedule, name='training-schedule'),
-    path('certification/<int:certification_id>/', views.certification_detail, name='training-certification-detail'),
-    path('statusCertification/<int:certification_id>/', views.statusCertification_detail, name='training-statusCertification-detail'),
+    path('schedule/<int:training_module_id>/', views.schedule, name='training-schedule'),
+    path('training_module/<int:training_module_id>/', views.training_module_detail, name='training-module-detail'),
+    path('training_event/<int:training_event_id>/', views.training_event_detail, name='training-event-detail'),
     path('upload/', views.upload_file, name='training-upload_file'),
-    path('send_reminder_email/<int:certification_id>/', views.send_reminder_email, name='training-send_reminder_email'),
+    path('send_reminder_email/<int:training_module_id>/', views.send_reminder_email, name='training-send_reminder_email'),
     # api urls
     # path('api/dashboard', views.api_dashboard, name='training-api-dashboard'),
-    path('api/certifications', Certifications.as_view(), name='certifications'),
-    path('api/statusCertifications', StatusCertifications.as_view(), name='statusCertifications'),
+    path('api/TrainingModules', TrainingModules.as_view(), name='TrainingModules'),
+    path('api/TrainingEvent', TrainingEvents.as_view(), name='TrainingEvent'),
     
 ]

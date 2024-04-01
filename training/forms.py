@@ -1,46 +1,46 @@
 from django import forms
-from .models import CertificationStatus, Certification
+from .models import TrainingEvent, TrainingModule
 from users.models import Profile
 
 
-class StatusUpdateForm(forms.ModelForm):
+class TrainingEventUpdateForm(forms.ModelForm):
     completed_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
 
     class Meta:
-        model = CertificationStatus
+        model = TrainingEvent
         fields = ['completed_date']
 
 class UploadFileForm(forms.Form):
     file = forms.FileField()
 
-#  certification update form
-class CertificationUpdateForm(forms.ModelForm):
+#  training module update form
+class TrainingModuleUpdateForm(forms.ModelForm):
     scheduled_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
 
     class Meta:
-        model = Certification
-        fields = ['name', 'description', 'exp_months', 'scheduled_date', 'roles']
+        model = TrainingModule
+        fields = ['name', 'description', 'retrain_months', 'scheduled_date', 'roles']
 
-#  schedule certification form
-class ScheduleCertificationForm(forms.ModelForm):
+#  schedule training module form
+class ScheduleTrainingModuleForm(forms.ModelForm):
     scheduled_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
 
     class Meta:
-        model = Certification
+        model = TrainingModule
         fields = ['scheduled_date']
 
-# new certificationStatus
-class NewCertStatus(forms.ModelForm):
+# new TrainingEvent
+class NewTrainingEvent(forms.ModelForm):
     # choose a profile from dropdown
     profile = forms.ModelChoiceField(queryset=Profile.objects.all())
-    # choose a certification from dropdown
-    certification = forms.ModelChoiceField(queryset=Certification.objects.all())
+    # choose a training_module from dropdown
+    training_module = forms.ModelChoiceField(queryset=TrainingModule.objects.all())
     # select a completed date
     completed_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
-        model = CertificationStatus
-        fields = ['profile', 'certification', 'completed_date']
+        model = TrainingEvent
+        fields = ['profile', 'training_module', 'completed_date']
 
 
     

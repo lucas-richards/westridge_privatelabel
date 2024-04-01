@@ -3,14 +3,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import Profile
-from .forms import StatusUpdateForm, UploadFileForm, CertificationUpdateForm, ScheduleCertificationForm, NewCertStatus
-from .models import CertificationStatus, Certification
+from .forms import TrainingEventUpdateForm, UploadFileForm, TrainingModuleUpdateForm, ScheduleTrainingModuleForm, NewTrainingEvent
+from .models import TrainingEvent, TrainingModule
 from django.contrib.auth.models import User
 import pandas as pd
 import datetime
 # API imports
 from rest_framework.response import Response
-from .serializers import CertificationStatusSerializer, CertificationSerializer
+from .serializers import TrainingEventSerializer, TrainingModuleSerializer
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,34 +20,12 @@ from django.core.paginator import Paginator
 @login_required
 def home(request):
     profile_instance = Profile.objects.get(user=request.user)
-    certification_statuses = CertificationStatus.objects.filter(profile=profile_instance)
-    if request.method == 'POST':
-        certificate_id = request.POST.get('id')
-        try:
-            certificate_instance = CertificationStatus.objects.get(pk=certificate_id)
-            
-            # Create a form instance with the posted data
-            form = StatusUpdateForm(request.POST, instance=certificate_instance)
-            
-            if form.is_valid():
-                # Update certificate instance with form data
-                # check which fields have been updated
-                updated_fields = form.changed_data
-                # pass the updated fields to the save method
-                print('updated_fields', updated_fields)
-                form.save()
-                messages.success(request, f'{certificate_instance} certificate has been updated!')
-            else:
-                messages.error(request, 'Form is not valid. Please check the entered data.')
+    
+    # training_events = TrainingEvent.objects.filter(profile=profile_instance)
+    #  get all traininEvents for all users
+    training_events = TrainingEvent.objects.all()
+    
 
-        except CertificationStatus.DoesNotExist:
-            messages.error(request, f'Certificate with ID {certificate_id} does not exist.')
-
-        return redirect('training-home')
-
-    # Create forms for each certificate using the StatusUpdateForm
-    forms = [StatusUpdateForm(instance=certificate) for certificate in certification_statuses]
-    formswithcert = zip(certification_statuses, forms)
     
     sidepanel = {
         'title': 'Training',
@@ -58,16 +36,14 @@ def home(request):
     context = {
         'title': 'Home',
         'sidepanel': sidepanel,
-        'certificates': certification_statuses,
-        'forms': forms,
-        'formswithcert': formswithcert,
+        'training_events': training_events,
     }
     return render(request, 'training/home.html', context)
 
 @login_required
 def all_trainings(request):
-    certificates = Certification.objects.all().order_by('name')
-    # create an array with each certificates and the name and status of each person
+    training_modules = TrainingModule.objects.all().order_by('name')
+    # create an array with each training_modules and the name and status of each person
 
     sidepanel = {
         'title': 'Training',
@@ -78,14 +54,14 @@ def all_trainings(request):
     context = {
         'title': 'Home',
         'sidepanel': sidepanel,
-        'certificates': certificates
+        'training_modules': training_modules
     }
     return render(request, 'training/all_trainings.html', context)
 
 @login_required
 def new_entry(request):
     if request.method == 'POST':
-        form = NewCertStatus(request.POST)
+        form = NewTrainingEvent(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Certificate has been added!')
@@ -93,7 +69,7 @@ def new_entry(request):
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
     else:
-        form = NewCertStatus()
+        form = NewTrainingEvent()
     sidepanel = {
         'title': 'Training',
         'text1': 'Completed all trainings',
@@ -109,8 +85,8 @@ def new_entry(request):
     return render(request, 'training/new_entry.html', context)
 
 def history(request):
-    certStatus = CertificationStatus.objects.all().order_by('-created_date')
-    paginator = Paginator(certStatus, 5)
+    training_events = TrainingEvent.objects.all().order_by('-created_date')
+    paginator = Paginator(training_events, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -121,15 +97,15 @@ def history(request):
     }
     context = {
         'title': 'History',
-        'certStatus': page_obj,
+        'training_events': page_obj,
         'sidepanel': sidepanel,
     }
     return render(request, 'training/history.html', context)
 
 def get_prepared_data():
-    # Fetch profiles and certificates
+    # Fetch profiles and training_modules
     profiles = Profile.objects.all()
-    certificates = Certification.objects.all().order_by('name')
+    training_modules = TrainingModule.objects.all().order_by('name')
 
     # Prepare data to be sent to the template
     data = []
@@ -137,25 +113,25 @@ def get_prepared_data():
         row = {
             'username': profile.user.username,
             'roles': profile.get_roles(),
-            'percentage': profile.get_certifications_percentage(),
-            'certifications_status': []
+            'percentage': profile.get_training_modules_percentage(),
+            'training_events': []
         }
-        for certification in certificates:
-            status_obj = CertificationStatus.objects.filter(profile=profile, certification=certification).first()
+        for training_module in training_modules:
+            event = TrainingEvent.objects.filter(profile=profile, training_module=training_module).first()
             
-            if status_obj:
-                cert = status_obj
-            elif profile.must_have_certification(certification):
+            if event:
+                cert = event
+            elif profile.must_have_training_module(training_module):
                 cert = '+'
             else:
                 cert = '-'
 
-            row['certifications_status'].append(cert)
+            row['training_events'].append(cert)
         data.append(row)
 
         prepare_data = {
             'profiles': profiles,
-            'certificates': certificates,
+            'training_modules': training_modules,
             'data': data
         }
     
@@ -165,7 +141,7 @@ def dashboard(request):
     # Your view function
     prepared_data = get_prepared_data()
     profiles = prepared_data['profiles']
-    certificates = prepared_data['certificates']
+    training_modules = prepared_data['training_modules']
     data = prepared_data['data']
     paginator = Paginator(data, 5)  # Change the number 10 to the desired number of items per page
     page_number = request.GET.get('page')
@@ -173,22 +149,22 @@ def dashboard(request):
     context = {
         'title': 'Dashboard',
         'profiles': profiles,
-        'certificates': certificates,
+        'training_modules': training_modules,
         'data': page_obj,
         'upload_form': UploadFileForm()
     }
 
     return render(request, 'training/dashboard.html', context)
 
-def schedule(request, certification_id):
-    certification = Certification.objects.get(pk=certification_id)
-    form = ScheduleCertificationForm(instance=certification)
+def schedule(request, training_module_id):
+    training_module = TrainingModule.objects.get(pk=training_module_id)
+    form = ScheduleTrainingModuleForm(instance=training_module)
     if request.method == 'POST':
-        form = ScheduleCertificationForm(request.POST, instance=certification)
+        form = ScheduleTrainingModuleForm(request.POST, instance=training_module)
         if form.is_valid():
             form.save()
-            messages.success(request, f'{certification.name} certificate has been scheduled!')
-            return redirect('training-schedule', certification_id=certification_id)
+            messages.success(request, f'{training_module.name} certificate has been scheduled!')
+            return redirect('training-schedule', training_module_id=training_module_id)
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
     
@@ -201,34 +177,34 @@ def schedule(request, certification_id):
     context = {
         'title': 'Schedule',
         'sidepanel': sidepanel,
-        'certification': certification,
+        'training_module': training_module,
         'form': form,
 
     }
     return render(request, 'training/schedule.html', context)
 
-def send_reminder_email(request, certification_id):
-    certification = Certification.objects.get(pk=certification_id)
-    certStatuses = certification.get_incomplete_certification_statuses()
+def send_reminder_email(request, training_module_id):
+    training_module = TrainingModule.objects.get(pk=training_module_id)
+    certStatuses = training_module.get_incomplete_training_events()
     for certStatus in certStatuses:
         certStatus.send_schedule_notification()
         certStatus.save()
-    messages.success(request, f'Reminder emails have been sent for {certification.name} certificate!')
+    messages.success(request, f'Reminder emails have been sent for {training_module.name} certificate!')
 
 
 
     return redirect('training-all_trainings')
 
-def statusCertification_detail(request, certification_id):
+def training_event_detail(request, training_event_id):
     profiles = Profile.objects.all()
-    certification = CertificationStatus.objects.get(pk=certification_id)
-    form = StatusUpdateForm(instance=certification)
+    training_event = TrainingEvent.objects.get(pk=training_event_id)
+    form = TrainingEventUpdateForm(instance=training_event)
     if request.method == 'POST':
-        form = StatusUpdateForm(request.POST, instance=certification)
+        form = TrainingEventUpdateForm(request.POST, instance=training_event)
         if form.is_valid():
             form.save()
-            messages.success(request, f'{certification.certification} certificate has been updated!')
-            return redirect('training-statusCertification-detail', certification_id=certification_id)
+            messages.success(request, f'{training_event.training_module} certificate has been updated!')
+            return redirect('training-event-detail', training_event_id=training_event_id)
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
     sidepanel = {
@@ -238,24 +214,24 @@ def statusCertification_detail(request, certification_id):
     }
 
     context = {
-        'title': certification.certification,
-        'certification': certification,
+        'title': training_event.training_module,
+        'training_event': training_event,
         'profiles': profiles,
         'form': form,
         'sidepanel': sidepanel
     }
-    return render(request, 'training/certification_status_detail.html', context)
+    return render(request, 'training/training_event_detail.html', context)
 
-def certification_detail(request, certification_id):
+def training_module_detail(request, training_module_id):
     profiles = Profile.objects.all()
-    certification = Certification.objects.get(pk=certification_id)
-    form = CertificationUpdateForm(instance=certification)
+    training_module = TrainingModule.objects.get(pk=training_module_id)
+    form = TrainingModuleUpdateForm(instance=training_module)
     if request.method == 'POST':
-        form = CertificationUpdateForm(request.POST, instance=certification)
+        form = TrainingModuleUpdateForm(request.POST, instance=training_module)
         if form.is_valid():
             form.save()
-            messages.success(request, f'{certification.name} certificate has been updated!')
-            return redirect('training-certification-detail', certification_id=certification_id)
+            messages.success(request, f'{training_module.name} certificate has been updated!')
+            return redirect('training-module-detail', training_module_id=training_module_id)
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
     sidepanel = {
@@ -265,13 +241,13 @@ def certification_detail(request, certification_id):
     }
 
     context = {
-        'title': certification.name,
-        'certification': certification,
+        'title': training_module.name,
+        'training_module': training_module,
         'profiles': profiles,
         'form': form,
         'sidepanel': sidepanel
     }
-    return render(request, 'training/certification_detail.html', context)
+    return render(request, 'training/training_module_detail.html', context)
 
 def upload_file(request):
     if request.method == 'POST':
@@ -283,7 +259,7 @@ def upload_file(request):
             df = pd.read_excel(excel_file, sheet_name='FILL HERE_Performed Date')
             
             # save the values of the first five character of each header in a list
-            certificates = df.columns[1:]
+            training_modules = df.columns[1:]
             
             #  save the values of the header in a list
             
@@ -293,7 +269,7 @@ def upload_file(request):
                 
                 print('Analyzing user:', employee_username)
                 # Iterate through each certificate and its completion date
-                for certificate in certificates:
+                for certificate in training_modules:
                     certificate_name = certificate[0:5]  # Get the first 5 characters of the certificate name
                     completion_date = row[certificate]
                     
@@ -302,24 +278,24 @@ def upload_file(request):
                             # Retrieve the profile object using the username
                             user = User.objects.get(username=employee_username)
                             profile = Profile.objects.get(user=user)
-                            certification = Certification.objects.get(name=certificate_name)
+                            training_module = TrainingModule.objects.get(name=certificate_name)
 
-                            # Create CertificationStatus object
-                            if not CertificationStatus.objects.filter(profile=profile, certification=certification, completed_date=completion_date).exists():
-                                CertificationStatus.objects.create(
+                            # Create TrainingEvent object
+                            if not TrainingEvent.objects.filter(profile=profile, training_module=training_module, completed_date=completion_date).exists():
+                                TrainingEvent.objects.create(
                                     profile=profile,
-                                    certification=certification,
+                                    training_module=training_module,
                                     completed_date=completion_date
                                 )
 
-                                print(f'CertificationStatus object created for {profile} and {certification}')
+                                print(f'TrainingEvent object created for {profile} and {training_module}')
 
                         except User.DoesNotExist:
                             print(f"User does not exist for {employee_username}")
                             continue  # Skip the iteration if the user doesn't exist
-                        except (Profile.DoesNotExist, Certification.DoesNotExist):
-                            print(f"Profile or Certification does not exist for {employee_username} or {certificate_name}")
-                            continue  # Skip the iteration if the profile or certification doesn't exist
+                        except (Profile.DoesNotExist, TrainingModule.DoesNotExist):
+                            print(f"Profile or training_module does not exist for {employee_username} or {certificate_name}")
+                            continue  # Skip the iteration if the profile or training_module doesn't exist
                     
                         
                 # return render dashoboard.html with successful message
@@ -333,25 +309,25 @@ def upload_file(request):
 
 # API routes
 
-class Certifications(APIView): 
+class TrainingModules(APIView): 
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
     def get_queryset(self):
-        return Certification.objects.all().order_by('name')
+        return TrainingModule.objects.all().order_by('name')
 
     def get(self, request):
-        certificates = self.get_queryset()
-        serializer = CertificationSerializer(certificates, many=True)
+        training_modules = self.get_queryset()
+        serializer = TrainingModuleSerializer(training_modules, many=True)
         return Response(serializer.data)
 
-class StatusCertifications(APIView):
+class TrainingEvents(APIView):
     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
     def get_queryset(self):
-        return CertificationStatus.objects.all()
+        return TrainingEvent.objects.all()
 
     def get(self, request):
-        certificates = self.get_queryset()
-        serializer = CertificationStatusSerializer(certificates, many=True)
+        training_modules = self.get_queryset()
+        serializer = TrainingEventSerializer(training_modules, many=True)
         return Response(serializer.data)
 

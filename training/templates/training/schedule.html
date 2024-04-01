@@ -7,10 +7,10 @@
 
 {% if user.is_authenticated %}
 
-<h2>Schedule {{certification}}</h2>
+<h2>Schedule {{training_module}}</h2>
 <div class="mb-2 card">
   <div class="card-body">
-    <form method="post" action="{% url 'training-schedule' certification.id %}">
+    <form method="post" action="{% url 'training-schedule' training_module.id %}">
       {% csrf_token %}
       {{ form|crispy }}
     <button id="schedule" type="submit" class="btn btn-primary">Submit</button>
@@ -34,7 +34,7 @@
   
   <div class="card-body">
               <ul>
-                  {% for prof in certification.get_incomplete_certification_profiles %}
+                  {% for prof in training_module.get_incomplete_certification_profiles %}
                   
                   <li> 
                       {{prof.user.username}}
@@ -60,12 +60,12 @@
           </button>
         </div>
         <div class="modal-body">
-          Are you sure you want to send an email reminder to all users who have not completed this certification?
+          Are you sure you want to send an email reminder to all users who have not completed this training_module?
         </div>
         
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <a id="send-email" href="{% url 'training-send_reminder_email' certification.id %}" type="button" class="btn btn-primary">Send</a>
+          <a id="send-email" href="{% url 'training-send_reminder_email' training_module.id %}" type="button" class="btn btn-primary">Send</a>
           <div id="loading-indicator-send-email" style="display: none;">
             <!-- Your loading indicator here (e.g., spinner or progress bar) -->
             <div class="spinner-grow" role="status">
