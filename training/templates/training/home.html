@@ -9,7 +9,7 @@
       <a class="nav-link active" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-all_trainings' %}">All Trainings</a>
+      <a class="nav-link" href="{% url 'training-modules' %}">Modules</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'training-staff_roles' %}">Staff Roles</a>
@@ -27,7 +27,7 @@
     
     {% if training_events %}
 
-
+    <h5>{{percentage}}% of your modules completed</h5>
         {% for event in training_events %}
         <div id="accordion" class="mb-3 card">
             <div class="card-header" id="headingOne">

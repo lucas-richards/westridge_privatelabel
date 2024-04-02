@@ -2,8 +2,8 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<!-- back to all trainings -->
-<a href="{% url 'training-all_trainings' %}">All trainings</a>
+<!-- back to modules -->
+<a href="{% url 'training-modules' %}">Back</a>
 
 {% if user.is_authenticated %}
 
@@ -25,7 +25,7 @@
 
 <div class="card">
   <div class="card-header d-flex justify-content-between">
-    <h5 class="mt-2 ">Send a reminder to:</h5>  
+    <h5 class="mt-2 ">Send a reminder to:</h5>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
       Send
     </button>
@@ -34,7 +34,7 @@
   
   <div class="card-body">
               <ul>
-                  {% for prof in training_module.get_incomplete_certification_profiles %}
+                  {% for prof in training_module.get_incomplete_training_modules_profiles %}
                   
                   <li> 
                       {{prof.user.username}}

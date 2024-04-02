@@ -30,15 +30,17 @@ class TrainingModule(models.Model):
         for profile in Profile.objects.all():
             must_have = profile.must_have_training_modules()
             event = TrainingEvent.objects.filter(profile=profile, training_module=self).first()
+            print(f'Event: {event}, status: {event.status() if event else ""}')
             status = event.status() if event else ''
-            #  if status Ok skip
             if status == 'Ok':
                 continue
-            if status == 'Expired' or status == 'About to expire' or event in must_have:
+            if status == 'Expired' or status == 'About to expire' or self in must_have:
                 profiles.append(profile)
         return profiles
 
-
+    # get training events for this training module
+    def get_training_events(self):
+        return TrainingEvent.objects.filter(training_module=self)
 
 class TrainingEvent(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)

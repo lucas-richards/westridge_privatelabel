@@ -14,6 +14,7 @@ def home(request):
     profile_instance = Profile.objects.get(user=request.user)
     
     training_events = TrainingEvent.objects.filter(profile=profile_instance)
+    percentage = profile_instance.get_training_modules_percentage()
    
     
     sidepanel = {
@@ -26,14 +27,26 @@ def home(request):
         'title': 'Home',
         'sidepanel': sidepanel,
         'training_events': training_events,
+        'percentage': percentage
     }
     return render(request, 'training/home.html', context)
 
 @login_required
-def all_trainings(request):
+def modules(request):
     training_modules = TrainingModule.objects.all().order_by('name')
-    # create an array with each training_modules and the name and status of each person
-
+    # include the profiles that do not have the training module
+    data = [
+        {
+            'training_module': training_module,
+            'profiles': training_module.get_incomplete_training_modules_profiles()
+        }
+        for training_module in training_modules
+    ]
+    
+    paginator = Paginator(data, 5)  # Change the number 5 to the desired number of items per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
     sidepanel = {
         'title': 'Training',
         'text1': 'Completed all trainings',
@@ -43,9 +56,9 @@ def all_trainings(request):
     context = {
         'title': 'Home',
         'sidepanel': sidepanel,
-        'training_modules': training_modules
+        'data': page_obj
     }
-    return render(request, 'training/all_trainings.html', context)
+    return render(request, 'training/modules.html', context)
 
 @login_required
 def staff_roles(request):
@@ -129,14 +142,14 @@ def get_prepared_data():
     # Prepare data to be sent to the template
     data = []
     for profile in profiles:
+        print('Analyzing user:', profile.user.username)
         row = {
             'username': profile.user.username,
             'roles': profile.get_roles(),
             'training_events': []
         }
+        must_have = profile.must_have_training_modules()
         for training_module in training_modules:
-            must_have = profile.must_have_training_modules()
-            print(f'{profile.user.username} must have {must_have} training modules')
             event = TrainingEvent.objects.filter(profile=profile, training_module=training_module).first()
             
             if event:

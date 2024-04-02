@@ -56,14 +56,17 @@ class Profile(models.Model):
     
     def get_training_modules_percentage(self):
         # save in a list the modules that this profiles must have
-        must_have = self.training_modules.filter(roles__in=self.roles.all())
+        must_have = self.must_have_training_modules()
+        print(f'{self.user.username} must have {must_have} training modules')
         if not must_have:
             return 0
         # for loop must_have and get the status of each module
         completed = 0
         expired = 0
         for module in must_have:
-            status = self.TrainingEvent_set.filter(training_module=module).first()
+            training_event = module.get_training_events().filter(profile=self).first()
+            print(f'{self.user.username} - {module.name} - {training_event}')
+            status = training_event.status() if training_event else None
             if status is None:
                 continue
             if status == 'Expired':
@@ -71,13 +74,10 @@ class Profile(models.Model):
             else:
                 completed += 1
         completed -= expired
-        print(f'{self.user.username} has completed {completed} out of {must_have.count()} training modules')
-        return completed/must_have.count() * 100
         
-
-    # function that returns all training_event status
-    def get_training_module_status(self, training_module):
-        return self.TrainingEvent_set.filter(training_module=training_module).first()
+        print(f'{self.user.username} has completed {completed} out of {len(must_have)} training modules')
+        return completed/len(must_have) * 100
+        
     
     
     # function that returns true if user birthday is today or timeuntil if is not today
@@ -98,4 +98,9 @@ class Profile(models.Model):
     
     # function that ruturns a list of modules that the user must have based on the roles
     def must_have_training_modules(self):
-        return self.training_modules.filter(roles__in=self.roles.all())
+        required_modules = []
+        # Iterate over each role associated with the profile
+        for role in self.roles.all():
+            # Add training modules associated with the current role to the array
+            required_modules.extend(role.get_training_modules())
+        return required_modules

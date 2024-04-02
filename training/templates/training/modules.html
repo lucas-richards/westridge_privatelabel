@@ -9,7 +9,7 @@
       <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link active" href="{% url 'training-all_trainings' %}">All Trainings</a>
+      <a class="nav-link active" href="{% url 'training-modules' %}">Modules</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'training-staff_roles' %}">Staff Roles</a>
@@ -25,15 +25,15 @@
     </li>
 </ul>
     
-    {% if training_modules %}
+    {% if data %}
 
 
-        {% for module in training_modules %}
+        {% for module, profiles in data %}
         <div id="accordion" class="mb-3 card {% if module.expiration_date > now %}bg-success-light{% endif %}">
             <div class="card-header d-flex justify-content-between" id="headingOne">
                 <a class="text-dark" href="{% url 'training-module-detail' module.id %}" >
                     <h5>
-                        {{ module.name }}:{{ module.description }}
+                        {{ module.name }}:{{ module.description }}{{profiles.count}}
                         
                     </h5>
                 </a>
@@ -59,6 +59,26 @@
             </div>
         </div>
         {% endfor %}
+
+    <!-- add pagination -->
+    
+    {% if data.has_previous %}
+    <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+    <a class="btn btn-outline-info mb-4" href="?page={{ data.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    {% for num in data.paginator.page_range %}
+        {% if data.number == num %}
+            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > data.number|add:'-3' and num < data.number|add:'3' %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if data.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ data.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ data.paginator.num_pages }}">Last</a>
+    {% endif %}
     <!-- if there are no training_modules yet -->
     {% else %}
         <p class="m-3">No trainings yet</p>

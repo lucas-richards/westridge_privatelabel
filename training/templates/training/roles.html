@@ -9,7 +9,7 @@
       <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-all_trainings' %}">All Trainings</a>
+      <a class="nav-link" href="{% url 'training-modules' %}">Modules</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{% url 'training-staff_roles' %}">Staff Roles</a>
@@ -31,20 +31,16 @@
         {% for role in roles %}
         <div id="accordion" class="mb-3 card">
             <div class="card-header" id="headingOne">
-                <button  class="btn" data-toggle="collapse" data-target="#collapse{{ role.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ role.name }}
+                
+                    <h4>{{ role.name }}: {{role.description}}</h4>
                     {% for training_module in role.get_training_modules %}
-                        <span style="font-size: x-small;" class="badge badge-secondary">
-                            {{ training_module.name }}
-                        </span>
+                        <p style="font-size: small;margin-bottom: -2px;margin-left: 5px;">
+                            {{ training_module.name }}: {{ training_module.description }}
+                        </p>
                     {% endfor %}
-                </button>
+                
             </div>
-            <div id="collapse{{ role.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                <div class="card-body">
-                    <!-- profile information -->
-                    <p>Extra info</p>
-                </div>
-            </div>
+            
         </div>
         {% endfor %}
     <!-- if there are no profiles yet -->
