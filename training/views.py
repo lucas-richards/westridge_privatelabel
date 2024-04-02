@@ -7,14 +7,6 @@ from .forms import TrainingEventUpdateForm, UploadFileForm, TrainingModuleUpdate
 from .models import TrainingEvent, TrainingModule
 from django.contrib.auth.models import User
 import pandas as pd
-import datetime
-# API imports
-from rest_framework.response import Response
-from .serializers import TrainingEventSerializer, TrainingModuleSerializer
-from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from django.core.paginator import Paginator
 
 @login_required
@@ -337,25 +329,25 @@ def upload_file(request):
 
 # API routes
 
-class TrainingModules(APIView): 
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+# class TrainingModules(APIView): 
+#     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
-    def get_queryset(self):
-        return TrainingModule.objects.all().order_by('name')
+#     def get_queryset(self):
+#         return TrainingModule.objects.all().order_by('name')
 
-    def get(self, request):
-        training_modules = self.get_queryset()
-        serializer = TrainingModuleSerializer(training_modules, many=True)
-        return Response(serializer.data)
+#     def get(self, request):
+#         training_modules = self.get_queryset()
+#         serializer = TrainingModuleSerializer(training_modules, many=True)
+#         return Response(serializer.data)
 
-class TrainingEvents(APIView):
-    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
+# class TrainingEvents(APIView):
+#     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
-    def get_queryset(self):
-        return TrainingEvent.objects.all()
+#     def get_queryset(self):
+#         return TrainingEvent.objects.all()
 
-    def get(self, request):
-        training_modules = self.get_queryset()
-        serializer = TrainingEventSerializer(training_modules, many=True)
-        return Response(serializer.data)
+#     def get(self, request):
+#         training_modules = self.get_queryset()
+#         serializer = TrainingEventSerializer(training_modules, many=True)
+#         return Response(serializer.data)
 

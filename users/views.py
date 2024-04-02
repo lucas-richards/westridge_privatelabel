@@ -2,24 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-# API imports
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-# from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
-# from .models import Profile
-# from .serializers import ProfileSerializer
-
-#  API
-# class UserList(APIView):
-#     permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
-
-#     def get_queryset(self):
-#         return Profile.objects.all()
-
-#     def get(self, request):
-#         certificates = self.get_queryset()
-#         serializer = ProfileSerializer(certificates, many=True)
-#         return Response(serializer.data)
 
 
 # Django templates
@@ -62,23 +44,23 @@ def profile(request):
     return render(request, 'users/profile.html', context)
 
 # API
-from rest_framework.decorators import api_view
-from django.http import JsonResponse
-from django.contrib.auth import login
-from django.contrib.auth import authenticate
+# from rest_framework.decorators import api_view
+# from django.http import JsonResponse
+# from django.contrib.auth import login
+# from django.contrib.auth import authenticate
 
 
-@api_view(['POST'])
-def api_login(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    print(request.data)
-    user = authenticate(username=username, password=password) 
-    if user is not None:
-        login(request, user)
-        return JsonResponse({'message': 'Login successful'}, status=200)
-    else:
-        return JsonResponse({'message': 'Invalid credentials'}, status=400)
+# @api_view(['POST'])
+# def api_login(request):
+#     username = request.data.get('username')
+#     password = request.data.get('password')
+#     print(request.data)
+#     user = authenticate(username=username, password=password) 
+#     if user is not None:
+#         login(request, user)
+#         return JsonResponse({'message': 'Login successful'}, status=200)
+#     else:
+#         return JsonResponse({'message': 'Invalid credentials'}, status=400)
 
 
 

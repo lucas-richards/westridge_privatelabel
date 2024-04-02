@@ -17,7 +17,7 @@ urlpatterns = [
     path('send_reminder_email/<int:training_module_id>/', views.send_reminder_email, name='training-send_reminder_email'),
     # api urls
     # path('api/dashboard', views.api_dashboard, name='training-api-dashboard'),
-    path('api/TrainingModules', TrainingModules.as_view(), name='TrainingModules'),
-    path('api/TrainingEvent', TrainingEvents.as_view(), name='TrainingEvent'),
+    # path('api/TrainingModules', TrainingModules.as_view(), name='TrainingModules'),
+    # path('api/TrainingEvent', TrainingEvents.as_view(), name='TrainingEvent'),
     
 ]

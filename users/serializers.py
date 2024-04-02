@@ -1,14 +1,14 @@
-from rest_framework import serializers
-from .models import User, Profile, Role
+# from rest_framework import serializers
+# from .models import User, Profile, Role
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username']  # Include only the 'username' field
+# class UserSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['username']  # Include only the 'username' field
 
-class ProfileSerializer(serializers.ModelSerializer):
-    user = UserSerializer()  # Include UserSerializer as a nested serializer
+# class ProfileSerializer(serializers.ModelSerializer):
+#     user = UserSerializer()  # Include UserSerializer as a nested serializer
 
-    class Meta:
-        model = Profile
-        fields = '__all__'
+#     class Meta:
+#         model = Profile
+#         fields = '__all__'
