@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import TrainingModules, TrainingEvents
 
 urlpatterns = [
     path('', views.home, name='training-home'),
