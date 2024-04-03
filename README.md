@@ -87,5 +87,5 @@ settings: REST_FRAMEWORK
 settings: installed apps  'rest_framework',
 urls 
 views
-serializer
+serializer 
 
