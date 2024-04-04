@@ -50,13 +50,16 @@ def percentage(request):
 def supervisors(request):
     profiles = Profile.objects.all()
     data = []
+    # go over the profiles and get the people they are supervising
     for profile in profiles:
+        user = User.objects.get(username=profile.user.username)
         row = {
-            'username': profile.user.username,
-            'supervisors': profile.get_supervisors()
+            'username': user,
+            'supervise': user.supervisor_profiles.all()
         }
         data.append(row)
-    return render(request, 'training/supervisors.html', {'data': data})
+    print(data)
+    return render(request, 'training/supervisors.html', {'title':'Supervisors','data': data})
 
 @login_required
 def modules(request):

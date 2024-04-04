@@ -1,0 +1,39 @@
+{% extends "training/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+    
+    {% if data %}
+
+    
+        {% for row in data %}
+            {% if row.supervise %}
+                <div class="mb-3 card">
+                    <div class="card-header" id="headingOne">
+                        {{ row.username }}
+                    </div>
+                
+                    <div class="card-body">
+                        <!-- user information -->
+                        {% for sup in row.supervise %}
+                            <p>{{ sup.user.username }}: {{sup.get_training_modules_percentage}}%</p>
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+            {% endif %}
+        {% endfor %}
+    <!-- if there are no supervisors yet -->
+    {% else %}
+        <p class="m-3">No supervisors yet</p>
+    {% endif %}
+
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}
