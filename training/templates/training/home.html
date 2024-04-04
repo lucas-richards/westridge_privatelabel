@@ -4,37 +4,41 @@
 
 {% if user.is_authenticated %}
     
-    {% if training_events %}
+    {% if data %}
 
-    <h5>{{percentage}}% of your modules completed</h5>
-        {% for event in training_events %}
+    <h3 class="ml-3 mb-3">{{percentage}}% completed</h3>
+        {% for row in data %}
         <div id="accordion" class="mb-3 card">
             <div class="card-header" id="headingOne">
-                <button  class="btn" data-toggle="collapse" data-target="#collapse{{ event.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ event.training_module.name }}
-                    {% if event.expiration_date %}
-                        {% if event.status != 'Ok'%}
+                <button  class="btn" data-toggle="collapse" data-target="#collapse{{ row.training_module.id }}" aria-expanded="true" aria-controls="collapseOne" style="font-size: 22px;">{{ row.training_module }}
+                    {% if row.event == None %}
+                        <span class="badge badge-secondary">
+                            Missing
+                        </span>
+                    {% elif row.event.expiration_date %}
+                        {% if row.event.status != 'Ok'%}
                             <span class="badge badge-danger">
-                                {{ event.status }}
+                                {{ row.event.status }}
                             </span>
                             {% else %}
                             <span class="badge badge-warning">
-                                {{ event.expiration_date|timeuntil }}
+                                {{ row.event.expiration_date|timeuntil }}
                             </span>
                             {% endif %}
                         {% else %}
                         <span class="badge badge-success">
-                            {{ event.completed_date}}
+                            {{ row.event.completed_date}}
                         </span>
                         {% endif %}
                 </button>
             </div>
-            <div id="collapse{{ event.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapse{{ row.training_module.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
-                    <!-- event information -->
-                    <h6>{{ event.training_module.description}}</h6>
-                    This event was completed {{event.completed_date}}
-                    {% if event.expiration_date %}
-                        and expires in {{event.expiration_date|timeuntil}}
+                    <!-- row.event information -->
+                    <h6>{{ training_module.description}}</h6>
+                    This event was completed {{row.event.completed_date}}
+                    {% if row.event.expiration_date %}
+                        and expires in {{row.event.expiration_date|timeuntil}}
                     {% endif %}
                 </div>
             </div>

@@ -12,8 +12,18 @@ from django.core.paginator import Paginator
 @login_required
 def home(request):
     profile_instance = Profile.objects.get(user=request.user)
+    must_have = profile_instance.must_have_training_modules()
+    # go over must have training modules and check if they have been completed and if it's not save as '-
+    data = []
     
-    training_events = TrainingEvent.objects.filter(profile=profile_instance)
+    for training_module in must_have:
+        event = TrainingEvent.objects.filter(profile=profile_instance, training_module=training_module).first()
+        print(training_module, event)
+        row = {}
+        row['training_module'] = training_module
+        row['event'] = event
+        data.append(row) 
+    print(data)
     percentage = profile_instance.get_training_modules_percentage()
    
     
@@ -26,7 +36,7 @@ def home(request):
     context = {
         'title': 'Home',
         'sidepanel': sidepanel,
-        'training_events': training_events,
+        'data': data,
         'percentage': percentage
     }
     return render(request, 'training/home.html', context)
@@ -44,7 +54,7 @@ def percentage(request):
     # sort them by percentage
     data = sorted(data, key=lambda x: x['percentage'], reverse=True)
 
-    return render(request, 'training/percentage.html', {'data': data})
+    return render(request, 'training/percentage.html', {'title':'Percentage','data': data})
 
 @login_required
 def supervisors(request):
