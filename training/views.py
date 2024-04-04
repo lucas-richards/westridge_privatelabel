@@ -32,31 +32,44 @@ def home(request):
     return render(request, 'training/home.html', context)
 
 @login_required
-def modules(request):
-    training_modules = TrainingModule.objects.all().order_by('name')
-    # include the profiles that do not have the training module
-    data = [
-        {
-            'training_module': training_module,
-            'profiles': training_module.get_incomplete_training_modules_profiles()
+def percentage(request):
+    profiles = Profile.objects.all()
+    data = []
+    for profile in profiles:
+        row = {
+            'username': profile.user.username,
+            'percentage': profile.get_training_modules_percentage()
         }
-        for training_module in training_modules
-    ]
-    
-    paginator = Paginator(data, 5)  # Change the number 5 to the desired number of items per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
-    sidepanel = {
-        'title': 'Training',
-        'text1': 'Completed all trainings',
-        'text2': 'Almost there',
-    }
-    
+        data.append(row)
+    # sort them by percentage
+    data = sorted(data, key=lambda x: x['percentage'], reverse=True)
+
+    return render(request, 'training/percentage.html', {'data': data})
+
+@login_required
+def supervisors(request):
+    profiles = Profile.objects.all()
+    data = []
+    for profile in profiles:
+        row = {
+            'username': profile.user.username,
+            'supervisors': profile.get_supervisors()
+        }
+        data.append(row)
+    return render(request, 'training/supervisors.html', {'data': data})
+
+@login_required
+def modules(request):
+    prepared_data = get_prepared_data()
+    profiles = prepared_data['profiles']
+    training_modules = prepared_data['training_modules']
+    data = prepared_data['data']
+
     context = {
-        'title': 'Home',
-        'sidepanel': sidepanel,
-        'data': page_obj
+        'title': 'Modules',
+        'profiles': profiles,
+        'data': data,
+        'zip_data': zip(training_modules, range(len(training_modules))),
     }
     return render(request, 'training/modules.html', context)
 
@@ -69,7 +82,7 @@ def staff_roles(request):
         'text2': 'Almost there',
     }
     context = {
-        'title': 'Roles',
+        'title': 'Staff Roles',
         'profiles': profiles,
         'sidepanel': sidepanel
     }
@@ -111,7 +124,8 @@ def new_entry(request):
     context = {
         'title': 'New Entry',
         'form': form,
-        'sidepanel': sidepanel
+        'sidepanel': sidepanel,
+        'upload_form': UploadFileForm()
     }
 
     return render(request, 'training/new_entry.html', context)
@@ -142,12 +156,13 @@ def get_prepared_data():
     # Prepare data to be sent to the template
     data = []
     for profile in profiles:
-        print('Analyzing user:', profile.user.username)
+        print('Get prepared data for user:', profile.user.username)
         row = {
             'username': profile.user.username,
             'roles': profile.get_roles(),
             'training_events': []
         }
+        
         must_have = profile.must_have_training_modules()
         for training_module in training_modules:
             event = TrainingEvent.objects.filter(profile=profile, training_module=training_module).first()
@@ -157,7 +172,7 @@ def get_prepared_data():
             elif training_module not in must_have:
                 event = '-'
             else:
-                event = '+'
+                event = training_module.name
 
             row['training_events'].append(event)
         data.append(row)
@@ -180,11 +195,10 @@ def dashboard(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
-        'title': 'Dashboard',
+        'title': 'Grid',
         'profiles': profiles,
         'training_modules': training_modules,
         'data': page_obj,
-        'upload_form': UploadFileForm()
     }
 
     return render(request, 'training/dashboard.html', context)

@@ -1,87 +1,33 @@
-{% extends "training/base_sidepanel.html" %}
+{% extends "training/tabs_nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
 {% if user.is_authenticated %}
 
-<ul class="nav nav-tabs mb-3">
-    <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="{% url 'training-modules' %}">Modules</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-staff_roles' %}">Staff Roles</a>
-      </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-roles' %}">Roles</a>
-      </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-history' %}">History</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-new_entry' %}">New Entry</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-dashboard' %}">Grid</a>
-    </li>
-</ul>
-    
-    {% if data %}
+    {% if zip_data %}
 
-
-        {% for training_module, profiles in data %}
-        <div id="accordion" class="mb-3 card {% if training_module.expiration_date > now %}bg-success-light{% endif %}">
-            <div class="card-header d-flex justify-content-between" id="headingOne">
-                <a class="text-dark" href="{% url 'training-module-detail' training_module.id %}" >
-                    <h5>
-                        {{ training_module.name }}:{{ training_module.description }}{{profiles.count}}
-                        
-                    </h5>
-                </a>
-                {% now "Y-m-d" as current_datetime %}
-                {% if training_module.scheduled_date and current_datetime <= training_module.scheduled_date|date:"Y-m-d"  %}
-                <a class="text-success" href="{% url 'training-schedule' training_module.id %}" >Scheduled: {{training_module.scheduled_date}}</a>
-                {% else%}
-                <a href="{% url 'training-schedule' training_module.id %}" >Schedule</a>
-                {% endif %}
-
-                
-            </div>
-            <div class="card-body">
-                {% if training_module.retrain_months %}
-                <p>Retrain months: {{ training_module.retrain_months }}</p>
-                {% endif %}
-               
-                {% for role in training_module.roles.all %}
-                <!-- basges -->
-                <span class="badge badge-secondary">{{ role }}</span>
-                {% endfor %}
-                
-            </div>
+    {% for module, index in zip_data %}
+    <div id="accordion" class="m-3 card">
+        <div class="card-header" id="headingOne">
+            <h5>{{ module.name }}</h5>
         </div>
-        {% endfor %}
-
-    <!-- add pagination -->
-    
-    {% if data.has_previous %}
-    <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-    <a class="btn btn-outline-info mb-4" href="?page={{ data.previous_page_number }}">Previous</a>
-    {% endif %}
-
-    {% for num in data.paginator.page_range %}
-        {% if data.number == num %}
-            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > data.number|add:'-3' and num < data.number|add:'3' %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% endif %}
+        <div class="card-body">
+                {% for row in data %}
+                    {% for event in row.training_events %}
+                        {% if event.training_module == module and event.status == 'Expired' %}
+                            <p>{{ row.username }} - {{ event.status }}</p>
+                        {% elif event == module.name %}
+                            <p>{{ row.username }} - missing</p>
+                        {% else %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+    </div>
     {% endfor %}
 
-    {% if data.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ data.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ data.paginator.num_pages }}">Last</a>
-    {% endif %}
+
+
     <!-- if there are no training_modules yet -->
     {% else %}
         <p class="m-3">No trainings yet</p>

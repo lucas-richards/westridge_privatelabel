@@ -25,7 +25,7 @@ class Role(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     #  this profile supervisor
-    supervisor = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='supervisor')
+    supervisor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='supervisor_profiles')
     birthday = models.DateField(null=True, blank=True)
     # use this image url as a default https://img.freepik.com/free-vector/man-profile-account-picture_24908-81754.jpg?w=826&t=st=1710450387~exp=1710450987~hmac=5371500fb04f8770784bc3b434179fc06ff8ae0bd7d4fe480f3358bdb53f62bf
     image = models.ImageField(default='profile_pics/default.webp', upload_to='profile_pics')
@@ -69,14 +69,14 @@ class Profile(models.Model):
             status = training_event.status() if training_event else None
             if status is None:
                 continue
-            if status == 'Expired':
-                expired += 1
             else:
                 completed += 1
+                if status == 'Expired':
+                    expired += 1
         completed -= expired
         
         print(f'{self.user.username} has completed {completed} out of {len(must_have)} training modules')
-        return completed/len(must_have) * 100
+        return round(completed/len(must_have) * 100)
         
     
     

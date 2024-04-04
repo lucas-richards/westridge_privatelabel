@@ -1,0 +1,43 @@
+{% extends "blog/base.html" %}
+{% block maincontent %}
+
+<div class="container">
+
+
+  <ul class="nav nav-tabs mb-3">
+    
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Home' %}active{% endif %}" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Percentage' %}active{% endif %}" aria-current="page" href="{% url 'training-percentage' %}">Percentage</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Supervisors' %}active{% endif %}" aria-current="page" href="{% url 'training-supervisors' %}">Supervisors</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Grid' %}active{% endif %}" href="{% url 'training-dashboard' %}">Grid</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Modules' %}active{% endif %}" href="{% url 'training-modules' %}">Modules</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link {% if title == 'Staff Roles' %}active{% endif %}" href="{% url 'training-staff_roles' %}">Staff Roles</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link {% if title == 'Roles' %}active{% endif %}" href="{% url 'training-roles' %}">Roles</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link {% if title == 'History' %}active{% endif %}" href="{% url 'training-history' %}">History</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link {% if title == 'New Entry' %}active{% endif %}" href="{% url 'training-new_entry' %}">New Entry</a>
+      </li>
+        
+  </ul>
+
+
+
+{% block content %}{% endblock %}
+</div>
+{% endblock maincontent %}

@@ -1,0 +1,40 @@
+{% extends "training/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+    
+    {% if data %}
+
+    <div class="d-flex flex-column justify-content-center align-content-center ">
+        {% for row in data %}
+          <div class="row">
+            <div class="col-md-2">
+              <!-- <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic"> -->
+                <p>{{ row.username }}</p>
+            </div>
+            <div class="col-md-2">
+              <!-- status bar -->
+              <div class="progress w-100 ">
+                <div class="progress-bar" role="progressbar" style="width: {{ row.percentage }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ row.percentage }}%</div>
+              </div>
+            </div>
+            <div class="col-md-8">
+
+            </div>
+          </div>
+      {% endfor %}
+    </div>
+    <!-- if there are no events yet -->
+    {% else %}
+        <p class="m-3">No profiles yet</p>
+    {% endif %}
+
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}

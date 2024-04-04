@@ -1,39 +1,41 @@
-{% extends "training/base_sidepanel.html" %}
+{% extends "training/tabs_nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
 {% if user.is_authenticated %}
+<div class="mt-5 p-3 card ">
+    <h4>New Entry</h4>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+    </form>
 
-<ul class="nav nav-tabs mb-3">
-    <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-modules' %}">Modules</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-staff_roles' %}">Staff Roles</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-roles' %}">Roles</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-history' %}">History</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="{% url 'training-new_entry' %}">New Entry</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-dashboard' %}">Grid</a>
-  </li>
-</ul>
-<form method="POST" class="post-form">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
+</div>
     
+<div class="mt-5 p-3 card ">
+    <h4>Upload Excel to create multiple entries</h4>
+    <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ upload_form|crispy }}
+        <button id="update" class="btn btn-sm btn-primary" type="submit">Update</button>
+        
+    </form>
+    
+</div>
+<div id="loading-indicator" style="display: none;">
+    <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+    <div class="spinner-grow" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 
+<script>
+    document.getElementById("upload-form").addEventListener("submit", function() {
+        document.getElementById("loading-indicator").style.display = "block";
+        document.getElementById("upload-form").style.display = "none";
+    });
+</script>
     
 
 

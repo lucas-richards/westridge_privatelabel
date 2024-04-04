@@ -1,32 +1,9 @@
-{% extends "training/base_sidepanel.html" %}
+{% extends "training/tabs_nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
 {% if user.is_authenticated %}
 
-<ul class="nav nav-tabs mb-3">
-    <li class="nav-item">
-      <a class="nav-link" aria-current="page" href="{% url 'training-home' %}">My Trainings</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'training-modules' %}">Modules</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-staff_roles' %}">Staff Roles</a>
-      </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-roles' %}">Roles</a>
-      </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="{% url 'training-history' %}">History</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-new_entry' %}">New Entry</a>
-    </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'training-dashboard' %}">Grid</a>
-    </li>
-</ul>
     
     {% if training_events %}
 

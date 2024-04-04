@@ -1,4 +1,4 @@
-{% extends "training/base_sidepanel.html" %}
+{% extends "training/tabs_nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -13,7 +13,8 @@
 </style>
 
 {% if user.is_authenticated %}
-<h2>Dashboard</h2>
+<div class="container">
+    <h2>Dashboard</h2>
 
     <table class="table table-hover table-responsive" style="font-size: x-small;">
         <thead>
@@ -43,27 +44,30 @@
                     </td>
                     {% for event in row.training_events %}
                         <td>
-                            {% if event == '+' %}
-                            <div class="d-flex justify-content-center align-items-center">
-                                <a class="text-secondary">missing</a>
-                            </div>
-                            {% elif event.id %}
-                            <a href="{% url 'training-event-detail' event.id %}" class="d-flex justify-content-center align-items-center text-dark">
-                                {% if event.status == 'Expired' %}
-                                <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
-                                    <p class="text-danger">{{ event.status }}</p>
-                                </div>
-                                {% elif event.status == 'About to expire' %}
-                                <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expires in {{ event.expiration_date|timeuntil }}{% endif %}">
-                                    <p class="text-warning">{{ event.status }}</p>
-                                </div>
-                                {% elif event.status == 'Ok' %}
-                                    <p class="text-success">{{ event.completed_date|date:'n/j/Y' }}</p>
-                                {% elif event.status == 'Incomplete' %}
-                                    <p class="text-secondary">Incomplete</p>
+                            {% if event != '-' %}
+                                
+                                {% if event.id %}
+                                
+                                    {% if event.status == 'Expired' %}
+                                    <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
+                                        <p class="text-danger">{{ event.status }}</p>
+                                    </div>
+                                    {% elif event.status == 'About to expire' %}
+                                    <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expires in {{ event.expiration_date|timeuntil }}{% endif %}">
+                                        <p class="text-warning">{{ event.status }}</p>
+                                    </div>
+                                    {% elif event.status == 'Ok' %}
+                                        <p class="text-success">{{ event.completed_date|date:'n/j/Y' }}</p>
+                                    {% elif event.status == 'Incomplete' %}
+                                        <p class="text-secondary">Incomplete</p>
+                                    {% else %}
+                                    {% endif %}
                                 {% else %}
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <a class="text-secondary">missing</a>
+                                    </div>
+                                
                                 {% endif %}
-                                </a>
                             {% endif %}
                         </td>
                     {% endfor %}
@@ -91,31 +95,7 @@
         <a class="btn btn-outline-info mb-4" href="?page={{ data.paginator.num_pages }}">Last</a>
     {% endif %}
 
-
-    <div class="m-3">
-        <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ upload_form|crispy }}
-            <button id="update" class="btn btn-sm btn-primary" type="submit">Update</button>
-            
-        </form>
-        
-    </div>
-    <div id="loading-indicator" style="display: none;">
-        <!-- Your loading indicator here (e.g., spinner or progress bar) -->
-        <div class="spinner-grow" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-
-    <!-- JavaScript to show loading indicator when form is submitted -->
-    <script>
-        document.getElementById("upload-form").addEventListener("submit", function() {
-            document.getElementById("loading-indicator").style.display = "block";
-            document.getElementById("upload-form").style.display = "none";
-        });
-    </script>
-    
+</div>
 
 {% endif %}
     
