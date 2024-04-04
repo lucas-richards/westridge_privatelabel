@@ -14,10 +14,24 @@
         <div class="card-body">
                 {% for row in data %}
                     {% for event in row.training_events %}
-                        {% if event.training_module == module and event.status == 'Expired' %}
-                            <p>{{ row.username }} - {{ event.status }}</p>
+                        {% if event.training_module == module %}
+                            {% if event.status == 'Expired' %}
+                                
+                                <p>{{ row.username }} 
+                                    <span class="badge badge-danger">Expired</span>
+                                </p>
+                            {% elif event.status == 'About to expire' %}
+                                
+                                <p>{{ row.username }} 
+                                    <span class="badge badge-warning">{{ event.expiration_date|timeuntil }}</span>
+                                </p>
+                            {% else %}
+                            {% endif %}
                         {% elif event == module.name %}
-                            <p>{{ row.username }} - missing</p>
+                        
+                            <p>{{ row.username }} 
+                                <span class="badge badge-secondary">Missing</span>
+                            </p>
                         {% else %}
                         {% endif %}
                     {% endfor %}

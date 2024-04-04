@@ -16,7 +16,7 @@
                             Missing
                         </span>
                     {% elif row.event.expiration_date %}
-                        {% if row.event.status != 'Ok'%}
+                        {% if row.event.status == 'Expired'%}
                             <span class="badge badge-danger">
                                 {{ row.event.status }}
                             </span>
@@ -25,18 +25,18 @@
                                 {{ row.event.expiration_date|timeuntil }}
                             </span>
                             {% endif %}
-                        {% else %}
+                    {% else %}
                         <span class="badge badge-success">
                             {{ row.event.completed_date}}
                         </span>
-                        {% endif %}
+                    {% endif %}
                 </button>
             </div>
             <div id="collapse{{ row.training_module.id }}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                     <!-- row.event information -->
                     <h6>{{ training_module.description}}</h6>
-                    This event was completed {{row.event.completed_date}}
+                    This event was {% if row.event == None %}not {% endif %}completed {{row.event.completed_date}}
                     {% if row.event.expiration_date %}
                         and expires in {{row.event.expiration_date|timeuntil}}
                     {% endif %}
