@@ -2,6 +2,16 @@
 {% block maincontent %}
 
 <div class="container">
+  
+  <div class="">
+    {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+      {% endfor %}
+    {% endif %}
+  </div>
 
 
   <ul class="nav nav-tabs mb-3">

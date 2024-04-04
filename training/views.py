@@ -122,7 +122,7 @@ def new_entry(request):
         form = NewTrainingEvent(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Certificate has been added!')
+            messages.success(request, 'Training event has been added!')
             return redirect('training-history')
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
