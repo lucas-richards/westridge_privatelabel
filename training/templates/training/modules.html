@@ -31,30 +31,30 @@
     {% if data %}
 
 
-        {% for module, profiles in data %}
-        <div id="accordion" class="mb-3 card {% if module.expiration_date > now %}bg-success-light{% endif %}">
+        {% for training_module, profiles in data %}
+        <div id="accordion" class="mb-3 card {% if training_module.expiration_date > now %}bg-success-light{% endif %}">
             <div class="card-header d-flex justify-content-between" id="headingOne">
-                <a class="text-dark" href="{% url 'training-module-detail' module.id %}" >
+                <a class="text-dark" href="{% url 'training-module-detail' training_module.id %}" >
                     <h5>
-                        {{ module.name }}:{{ module.description }}{{profiles.count}}
+                        {{ training_module.name }}:{{ training_module.description }}{{profiles.count}}
                         
                     </h5>
                 </a>
                 {% now "Y-m-d" as current_datetime %}
-                {% if module.scheduled_date and current_datetime <= module.scheduled_date|date:"Y-m-d"  %}
-                <a class="text-success" href="{% url 'training-schedule' module.id %}" >Scheduled: {{module.scheduled_date}}</a>
+                {% if training_module.scheduled_date and current_datetime <= training_module.scheduled_date|date:"Y-m-d"  %}
+                <a class="text-success" href="{% url 'training-schedule' training_module.id %}" >Scheduled: {{training_module.scheduled_date}}</a>
                 {% else%}
-                <a href="{% url 'training-schedule' module.id %}" >Schedule</a>
+                <a href="{% url 'training-schedule' training_module.id %}" >Schedule</a>
                 {% endif %}
 
                 
             </div>
             <div class="card-body">
-                {% if module.retrain_months %}
-                <p>Retrain months: {{ module.retrain_months }}</p>
+                {% if training_module.retrain_months %}
+                <p>Retrain months: {{ training_module.retrain_months }}</p>
                 {% endif %}
                
-                {% for role in module.roles.all %}
+                {% for role in training_module.roles.all %}
                 <!-- basges -->
                 <span class="badge badge-secondary">{{ role }}</span>
                 {% endfor %}
