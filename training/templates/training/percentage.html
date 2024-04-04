@@ -6,25 +6,30 @@
     
     {% if data %}
 
-    <div class="d-flex flex-column justify-content-center align-content-center ">
+    
         {% for row in data %}
-          <div class="row">
-            <div class="col-md-2">
-              <!-- <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic"> -->
-                <p>{{ row.username }}</p>
-            </div>
-            <div class="col-md-2">
-              <!-- status bar -->
-              <div class="progress w-100 ">
-                <div class="progress-bar" role="progressbar" style="width: {{ row.percentage }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ row.percentage }}%</div>
+        <div class="mb-2 card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-md-4 d-flex align-items-center ">
+                  <div class="d-flex align-items-center justify-content-center" >
+                    <div>{{ row.username }}</div>
+                  </div>
+              </div>
+              <div class="col-md-4 d-flex align-items-center justify-content-center">
+                <!-- status bar -->
+                <div class="progress w-100 d-flex justify-content-between">
+                  <div class="progress-bar" role="progressbar" style="width: {{ row.percentage }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ row.percentage }}%</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+
               </div>
             </div>
-            <div class="col-md-8">
-
-            </div>
-          </div>
+        </div>
+      </div>
       {% endfor %}
-    </div>
+    
     <!-- if there are no events yet -->
     {% else %}
         <p class="m-3">No profiles yet</p>
