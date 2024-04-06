@@ -12,31 +12,48 @@
             <h5>{{ module.name }}</h5>
         </div>
         <div class="card-body">
+            <!-- <div class="row"> -->
                 {% for row in data %}
                     {% for event in row.training_events %}
                         {% if event.training_module == module %}
                             {% if event.status == 'Expired' %}
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <p>{{ row.username }}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="badge badge-danger">Expired</span>
+                                    </div>
+                                </div>
                                 
-                                <p>{{ row.username }} 
-                                    <span class="badge badge-danger">Expired</span>
-                                </p>
                             {% elif event.status == 'About to expire' %}
                                 
-                                <p>{{ row.username }} 
-                                    <span class="badge badge-warning">{{ event.expiration_date|timeuntil }}</span>
-                                </p>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <p>{{ row.username }}</p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <span class="badge badge-warning">{{ event.expiration_date|timeuntil }}</span>
+                                    </div>
+                                </div>
                             {% else %}
                             {% endif %}
                         {% elif event == module.name %}
                         
-                            <p>{{ row.username }} 
-                                <span class="badge badge-secondary">Missing</span>
-                            </p>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p>{{ row.username }}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <span class="badge badge-secondary">Missing</span>
+                                </div>
+                            </div>
                         {% else %}
                         {% endif %}
                     {% endfor %}
                 {% endfor %}
-            </div>
+            <!-- </div> -->
+        </div>
     </div>
     {% endfor %}
 
