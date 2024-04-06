@@ -145,7 +145,7 @@ def new_entry(request):
 
 def history(request):
     training_events = TrainingEvent.objects.all().order_by('-created_date')
-    paginator = Paginator(training_events, 5)
+    paginator = Paginator(training_events, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -204,7 +204,7 @@ def dashboard(request):
     profiles = prepared_data['profiles']
     training_modules = prepared_data['training_modules']
     data = prepared_data['data']
-    paginator = Paginator(data, 5)  # Change the number 10 to the desired number of items per page
+    paginator = Paginator(data, 8)  # Change the number 10 to the desired number of items per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     context = {
