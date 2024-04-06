@@ -78,7 +78,35 @@ class Profile(models.Model):
         print(f'{self.user.username} has completed {completed} out of {len(must_have)} training modules')
         return round(completed/len(must_have) * 100)
         
-    
+    # go over all the supervised profiles and add on a list those trainings that are missing or expired and those that are completed
+    def get_supervised_training_modules(self):
+        supervised_profiles = self.user.supervisor_profiles.all()
+        modules = {
+            'completed': [],
+            'expired': [],
+            'missing': []
+        }
+        for profile in supervised_profiles:
+            must_have = profile.must_have_training_modules()
+            if not must_have:
+                continue
+            for module in must_have:
+                training_event = module.get_training_events().filter(profile=profile).first()
+                status = training_event.status() if training_event else None
+                if status is None:
+                    modules['missing'].append(module)
+                elif status == 'Expired':
+                    modules['expired'].append(module)
+                else:
+                    modules['completed'].append(module)
+
+                # remove duplicates from the lists
+                modules['completed'] = list(set(modules['completed']) - set(modules['expired']) - set(modules['missing']))
+                modules['expired'] = list(set(modules['expired']))
+                modules['missing'] = list(set(modules['missing']))
+                
+        return modules
+            
     
     # function that returns true if user birthday is today or timeuntil if is not today
     def birthday_today(self):

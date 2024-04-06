@@ -16,16 +16,9 @@
           </div>
           {% endfor %}
         {% endif %}
-        {% block extra_nav_links %}{% endblock %}
+        {% block content %}{% endblock %}
       </div>
       {% if title == 'Dashboard' %}
-      {% elif title == 'Home' %}
-      {% elif title == 'Modules' %}
-      {% elif title == 'Staff Roles' %}
-      {% elif title == 'Roles' %}
-      {% elif title == 'History' %}
-      {% elif title == 'New Entry' %}
-      {% elif title == 'Training' %}
       {% else %}
         <div class="col-md-3">
           <div class="card card-body">
@@ -37,23 +30,8 @@
                 
                 <hr/>
                 <p class='text-muted'>{{ sidepanel.text2 }}</p>
-                <div class="d-flex flex-column justify-content-center align-content-center ">
-                  {% for prof in profiles %}
-                    {% if prof.has_all_certifications_completed %}
-                    {% else %}
-                    <div class="row">
-                      <div class="col-md-2">
-                        <img style="width: 20px; height: 20px;" class="rounded-circle account-img border" src="{{ prof.image.url }}" alt="profile pic">
-                      </div>
-                      <div class="col-md-10">
-                        <!-- status bar -->
-                        <div class="progress w-100 ">
-                          <div class="progress-bar" role="progressbar" style="width: {{ prof.get_training_modules_percentage }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{ prof.get_training_modules_percentage }}%</div>
-                        </div>
-                      </div>
-                    </div>
-                  {% endif %}
-                {% endfor %}
+                
+                 
               </div>
       
           </div>

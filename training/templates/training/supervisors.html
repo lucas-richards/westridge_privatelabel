@@ -8,15 +8,30 @@
 
     
         {% for row in data %}
-            {% if row.supervise %}
+            {% if row.supervised %}
                 <div class="mb-3 card">
                     <div class="card-header" id="headingOne">
-                        {{ row.username }}
+                        <h3>{{ row.username }}<span style="font-size: x-small;">(Supervisor)</span></h3>
+                        {% for module in row.username.profile.get_supervised_training_modules.completed %}
+                            <span class="badge badge-success badge-pill">
+                                {{ module }}
+                            </span>
+                        {% endfor %}
+                        {% for module in row.username.profile.get_supervised_training_modules.missing %}
+                            <span class="badge badge-secondary badge-pill">
+                                {{ module }}
+                            </span>
+                        {% endfor %}
+                        {% for module in row.username.profile.get_supervised_training_modules.expired %}
+                            <span class="badge badge-danger badge-pill">
+                                {{ module }}
+                            </span>
+                        {% endfor %}
                     </div>
                 
                     <div class="card-body">
                         <!-- user information -->
-                        {% for sup in row.supervise %}
+                        {% for sup in row.supervised %}
                             <p>{{ sup.user.username }}: {{sup.get_training_modules_percentage}}%</p>
                         {% endfor %}
                     </div>

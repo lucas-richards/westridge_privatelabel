@@ -65,10 +65,10 @@ def supervisors(request):
         user = User.objects.get(username=profile.user.username)
         row = {
             'username': user,
-            'supervise': user.supervisor_profiles.all()
+            'supervised': user.supervisor_profiles.all()
         }
         data.append(row)
-    print(data)
+    
     return render(request, 'training/supervisors.html', {'title':'Supervisors','data': data})
 
 @login_required
