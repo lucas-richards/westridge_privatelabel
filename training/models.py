@@ -20,7 +20,6 @@ class TrainingModule(models.Model):
     # schedule date for the TrainingModule
     scheduled_date = models.DateTimeField(null=True, blank=True)
     # each TrainingModule corresponds to one role
-    roles = models.ManyToManyField('users.Role', related_name='TrainingModules', blank=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -39,7 +38,7 @@ class TrainingModule(models.Model):
                 profiles.append(profile)
         return profiles
 
-    # get training events for this training module
+#     # get training events for this training module
     def get_training_events(self):
         return TrainingEvent.objects.filter(training_module=self)
 
@@ -58,7 +57,7 @@ class TrainingEvent(models.Model):
         return f"{self.profile.user.username} - {self.training_module.name}"
     
     
-    #  date that the training_module expires based on the cert retrain_months and conpleted_date
+#     #  date that the training_module expires based on the cert retrain_months and conpleted_date
     def expiration_date(self):
         if self.completed_date:
             # Assuming retrain_months is a field in the training_module model
@@ -70,7 +69,7 @@ class TrainingEvent(models.Model):
         else:
             return None
         
-    #  create a function that gives a satus of the training_module: expired, about to expire, of ok
+#     #  create a function that gives a satus of the training_module: expired, about to expire, of ok
     def status(self):
         today = timezone.now().date()
         if self.completed_date:
@@ -87,19 +86,19 @@ class TrainingEvent(models.Model):
             return 'Incomplete'
 
     
-    # Send email notification when a training_module is completed
-    def send_schedule_notification(self):
-        email_user = os.environ.get('EMAIL_USER')
-        email_password = os.environ.get('EMAIL_PASS')
-        user_email = self.profile.user.email
+#     # Send email notification when a training_module is completed
+#     def send_schedule_notification(self):
+#         email_user = os.environ.get('EMAIL_USER')
+#         email_password = os.environ.get('EMAIL_PASS')
+#         user_email = self.profile.user.email
 
-        subject = f'Schedule Updated: {self.training_module.name} was scheduled'
-        message = f'Your certificate {self.training_module.name} is due. New training scheduled on {timezone.localtime(self.training_module.scheduled_date)}.'
+#         subject = f'Schedule Updated: {self.training_module.name} was scheduled'
+#         message = f'Your certificate {self.training_module.name} is due. New training scheduled on {timezone.localtime(self.training_module.scheduled_date)}.'
 
-        try:
-            send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)
-            logging.info(f'Successfully sent schedule update email to {user_email}')
-        except Exception as e:
-            logging.error(f'Error sending schedule update email to {user_email}: {str(e)}')
+#         try:
+#             send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)
+#             logging.info(f'Successfully sent schedule update email to {user_email}')
+#         except Exception as e:
+#             logging.error(f'Error sending schedule update email to {user_email}: {str(e)}')
 
     

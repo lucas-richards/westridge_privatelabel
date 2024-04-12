@@ -14,13 +14,12 @@ class Department(models.Model):
 class Role(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    training_modules = models.ManyToManyField('training.TrainingModule', related_name='roles', blank=True)
 
     def __str__(self):
         return f"{self.name}"
     
-    # filter trainingmodules that have this role
-    def get_training_modules(self):
-        return self.TrainingModules.all()
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -49,10 +48,10 @@ class Profile(models.Model):
     #         img.save(self.image.path)
     
     # write a function that returns all the user's training_events and their status
-    def get_training_modules(self):
-        return self.training_modules.all()
+    # def get_training_modules(self):
+    #     return self.training_modules.all()
     
-    # wtire a function that returns the percentage of training_events completed
+    # # wtire a function that returns the percentage of training_events completed
     
     def get_training_modules_percentage(self):
         # save in a list the modules that this profiles must have
@@ -78,7 +77,7 @@ class Profile(models.Model):
         print(f'{self.user.username} has completed {completed} out of {len(must_have)} training modules')
         return round(completed/len(must_have) * 100)
         
-    # go over all the supervised profiles and add on a list those trainings that are missing or expired and those that are completed
+    # # go over all the supervised profiles and add on a list those trainings that are missing or expired and those that are completed
     def get_supervised_training_modules(self):
         supervised_profiles = self.user.supervisor_profiles.all()
         modules = {
@@ -108,11 +107,11 @@ class Profile(models.Model):
         return modules
             
     
-    # function that returns true if user birthday is today or timeuntil if is not today
+    # # function that returns true if user birthday is today or timeuntil if is not today
     def birthday_today(self):
         return self.birthday == timezone.now().date()
     
-    # get user tasks
+    # # get user tasks
   
     def get_tasks_assigned(self):
         return self.tasks_asignee.all()
@@ -120,15 +119,12 @@ class Profile(models.Model):
     def get_tasks_created(self):
         return self.tasks_created.all()
     
-    #  get user roles
-    def get_roles(self):
-        return self.roles.all()
     
-    # function that ruturns a list of modules that the user must have based on the roles
+    # # function that ruturns a list of modules that the user must have based on the roles
     def must_have_training_modules(self):
         required_modules = []
         # Iterate over each role associated with the profile
         for role in self.roles.all():
             # Add training modules associated with the current role to the array
-            required_modules.extend(role.get_training_modules())
+            required_modules.extend(role.training_modules.all())
         return required_modules

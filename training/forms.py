@@ -19,7 +19,7 @@ class TrainingModuleUpdateForm(forms.ModelForm):
 
     class Meta:
         model = TrainingModule
-        fields = ['name', 'description', 'retrain_months', 'scheduled_date', 'roles']
+        fields = ['name', 'description', 'retrain_months', 'scheduled_date']
 
 #  schedule training module form
 class ScheduleTrainingModuleForm(forms.ModelForm):
@@ -41,6 +41,8 @@ class NewTrainingEvent(forms.ModelForm):
     class Meta:
         model = TrainingEvent
         fields = ['profile', 'training_module', 'completed_date']
+
+
 
 
     

@@ -3,7 +3,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from users.models import Profile, Role
-from .forms import TrainingEventUpdateForm, UploadFileForm, TrainingModuleUpdateForm, ScheduleTrainingModuleForm, NewTrainingEvent
+from .forms import (
+    TrainingEventUpdateForm,
+    UploadFileForm,
+    TrainingModuleUpdateForm,
+    ScheduleTrainingModuleForm,
+    NewTrainingEvent
+)
+from users.forms import RoleForm
 from .models import TrainingEvent, TrainingModule
 from django.contrib.auth.models import User
 import pandas as pd
@@ -87,34 +94,34 @@ def modules(request):
     return render(request, 'training/modules.html', context)
 
 @login_required
-def staff_roles(request):
-    profiles = Profile.objects.all()
-    sidepanel = {
-        'title': 'Training',
-        'text1': 'Completed all trainings',
-        'text2': 'Almost there',
-    }
-    context = {
-        'title': 'Staff Roles',
-        'profiles': profiles,
-        'sidepanel': sidepanel
-    }
-    return render(request, 'training/staff_roles.html', context)
+# def staff_roles(request):
+#     profiles = Profile.objects.all()
+#     sidepanel = {
+#         'title': 'Training',
+#         'text1': 'Completed all trainings',
+#         'text2': 'Almost there',
+#     }
+#     context = {
+#         'title': 'Staff Roles',
+#         'profiles': profiles,
+#         'sidepanel': sidepanel
+#     }
+#     return render(request, 'training/staff_roles.html', context)
 
-@login_required
-def roles(request):
-    roles = Role.objects.all()
-    sidepanel = {
-        'title': 'Training',
-        'text1': 'Completed all trainings',
-        'text2': 'Almost there',
-    }
-    context = {
-        'title': 'Roles',
-        'roles': roles,
-        'sidepanel': sidepanel
-    }
-    return render(request, 'training/roles.html', context)
+# @login_required
+# def roles(request):
+#     roles = Role.objects.all()
+#     sidepanel = {
+#         'title': 'Training',
+#         'text1': 'Completed all trainings',
+#         'text2': 'Almost there',
+#     }
+#     context = {
+#         'title': 'Roles',
+#         'roles': roles,
+#         'sidepanel': sidepanel
+#     }
+#     return render(request, 'training/roles.html', context)
 
 @login_required
 def new_entry(request):
@@ -172,8 +179,8 @@ def get_prepared_data():
         print('Get prepared data for user:', profile.user.username)
         row = {
             'username': profile.user.username,
-            'roles': profile.get_roles(),
-            'training_events': []
+            'roles': profile.roles.all(),
+            'training_events': [],
         }
         
         must_have = profile.must_have_training_modules()
@@ -204,15 +211,30 @@ def dashboard(request):
     profiles = prepared_data['profiles']
     training_modules = prepared_data['training_modules']
     data = prepared_data['data']
-    # paginator = Paginator(data, 8)  # Change the number 10 to the desired number of items per page
-    # page_number = request.GET.get('page')
-    # page_obj = paginator.get_page(page_number)
+    
+    # create a function that returns all the roles in a form format to display it 
+    data2 = []
+
+    for role in Role.objects.all():
+        row = {
+            'role': role,
+            'training_modules': []
+        }
+        for training_module in training_modules:
+            if training_module in role.training_modules.all():
+                row['training_modules'].append(training_module)
+            else:
+                row['training_modules'].append('-')
+        data2.append(row)
+
+
+
     context = {
         'title': 'Grid',
         'profiles': profiles,
         'training_modules': training_modules,
-        # 'data': page_obj,
         'data': data,
+        'data2': data2
     }
 
     return render(request, 'training/dashboard.html', context)

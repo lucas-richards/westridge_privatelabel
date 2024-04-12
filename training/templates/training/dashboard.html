@@ -9,6 +9,11 @@
   z-index: 1;
   background-color: rgb(249,249,249);
 }
+    .link {
+        color: #007bff;
+        text-decoration:underline;
+        cursor: pointer;
+    }
 
     
 </style>
@@ -16,11 +21,15 @@
 {% if user.is_authenticated %}
 <div class="container">
     <h2>Gridd</h2>
-
-    <table class="table table-hover table-responsive table-bordered" style="font-size: x-small;">
+    
+    <table class="table table-hover table-responsive table-bordered" style="font-size: small;">
         <thead>
-            <tr>
-                <th class="sticky-column">Username</th>
+            <tr >
+                <th class="sticky-column" style="width: 200px;">
+                    Username
+                    <small id="roles" class="text-primary link">Roles</small>
+                </th>
+                
                 
                 {% for training_module in training_modules %}
                         <th class="text-center sticky-cell">
@@ -33,16 +42,35 @@
             </tr>
         </thead>
         <tbody>
+            {% for row in data2 %}
+                <tr id="{{row.role.id}}" style="display: none;">
+                    <td class="sticky-column p-0" style="width: 80px;" >
+                        {{ row.role }}
+                        
+                    </td>
+                    {% for module in row.training_modules %}
+                        <td class="p-0 text-center">
+                            {% if module != '-' %}
+                            x
+                            {% else %}
+                            
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
             {% for row in data %}
                 <tr>
-                    <td class="sticky-column" style="width: 60px;">
+                    <td class="sticky-column" style="width: 80px;">
                         {{ row.username }}
                         <div class="d-flex flex-wrap">
                             {% for role in row.roles %}
                                 <span style="width: 20px;font-size: 5px;" class="badge bg-secondary text-white">{{ role }}</span>
                             {% endfor %}
                         </div>
+                        
                     </td>
+                    
                     {% for event in row.training_events %}
                         <td>
                             {% if event != '-' %}
@@ -78,26 +106,26 @@
         </tbody>
     </table>
 
-    {% if data.has_previous %}
-        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ data.previous_page_number }}">Previous</a>
-    {% endif %}
-
-    {% for num in data.paginator.page_range %}
-        {% if data.number == num %}
-            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% elif num > data.number|add:'-3' and num < data.number|add:'3' %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-        {% endif %}
-    {% endfor %}
-
-    {% if data.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ data.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ data.paginator.num_pages }}">Last</a>
-    {% endif %}
+    
 
 </div>
+<script>
+    // show the rows with id roles when clicked roles
+    document.getElementById('roles').addEventListener('click', function(){
+        var roles = document.getElementById('roles');
+        var rows = document.querySelectorAll('tr');
+        rows.forEach(row => {
+            if (row.id){
+                if (row.style.display == 'none'){
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    });
 
+</script>
 
 {% endif %}
     
