@@ -21,6 +21,19 @@
 {% if user.is_authenticated %}
 <div class="container">
     <h2>Gridd</h2>
+
+    <!-- add a form to select supervisor -->
+    <form method="get" action="{% url 'training-dashboard' %}">
+        <div class="form-group">
+            <label for="supervisor">Supervisor</label>
+            <select name="supervisor" id="supervisor" class="form-control">
+                <option value="">All</option>
+                {% for supervisor in supervisors %}
+                    <option value="{{ supervisor.id }}" {% if supervisor.id == selected_supervisor %}selected{% endif %}>{{ supervisor }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     
     <table class="table table-hover table-responsive table-bordered" style="font-size: small;">
         <thead>
@@ -63,7 +76,7 @@
                 <tr>
                     <td class="sticky-column" style="width: 80px;">
                         {{ row.username }}
-                        <div class="d-flex flex-wrap">
+                        <div class="d-flex flex-wrap roles">
                             {% for role in row.roles %}
                                 <span style="width: 20px;font-size: 5px;" class="badge bg-secondary text-white">{{ role }}</span>
                             {% endfor %}
@@ -114,6 +127,8 @@
     document.getElementById('roles').addEventListener('click', function(){
         var roles = document.getElementById('roles');
         var rows = document.querySelectorAll('tr');
+        var roleDivs = document.querySelectorAll('.roles');
+        
         rows.forEach(row => {
             if (row.id){
                 if (row.style.display == 'none'){
@@ -121,6 +136,14 @@
                 } else {
                     row.style.display = 'none';
                 }
+            }
+        });
+        
+        roleDivs.forEach(div => {
+            if (div.style.display == 'none'){
+                div.style.display = 'block';
+            } else {
+                div.style.display = 'none';
             }
         });
     });

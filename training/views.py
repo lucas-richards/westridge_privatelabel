@@ -150,6 +150,7 @@ def new_entry(request):
 
     return render(request, 'training/new_entry.html', context)
 
+@login_required
 def history(request):
     training_events = TrainingEvent.objects.all().order_by('-created_date')
     paginator = Paginator(training_events, 10)
@@ -205,6 +206,7 @@ def get_prepared_data():
     
     return prepare_data
 
+@login_required
 def dashboard(request):
     # Your view function
     prepared_data = get_prepared_data()
@@ -239,6 +241,7 @@ def dashboard(request):
 
     return render(request, 'training/dashboard.html', context)
 
+@login_required
 def schedule(request, training_module_id):
     training_module = TrainingModule.objects.get(pk=training_module_id)
     form = ScheduleTrainingModuleForm(instance=training_module)
@@ -266,6 +269,7 @@ def schedule(request, training_module_id):
     }
     return render(request, 'training/schedule.html', context)
 
+@login_required
 def send_reminder_email(request, training_module_id):
     training_module = TrainingModule.objects.get(pk=training_module_id)
     certStatuses = training_module.get_incomplete_training_events()
@@ -278,6 +282,7 @@ def send_reminder_email(request, training_module_id):
 
     return redirect('training-all_trainings')
 
+@login_required
 def training_event_detail(request, training_event_id):
     profiles = Profile.objects.all()
     training_event = TrainingEvent.objects.get(pk=training_event_id)
@@ -305,6 +310,7 @@ def training_event_detail(request, training_event_id):
     }
     return render(request, 'training/event_detail.html', context)
 
+@login_required
 def training_module_detail(request, training_module_id):
     profiles = Profile.objects.all()
     training_module = TrainingModule.objects.get(pk=training_module_id)
@@ -332,6 +338,7 @@ def training_module_detail(request, training_module_id):
     }
     return render(request, 'training/module_detail.html', context)
 
+@login_required
 def upload_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
