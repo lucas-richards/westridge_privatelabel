@@ -163,7 +163,7 @@ def new_user(request):
             form_p = ProfileUpdateForm(request.POST, instance=user.profile)
             form_p.save()
             messages.success(request, 'New user has been created!')
-            return redirect('training-dashboard')
+            return redirect('training-new_user')
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
     
@@ -280,7 +280,7 @@ def dashboard(request):
         'profiles': profiles,
         'training_modules': training_modules,
         'supervisors': supervisors,
-        'selected_supervisor': selected_supervisor,
+        'selected_supervisor': int(selected_supervisor) if selected_supervisor else selected_supervisor,
         'data': data,
         'data2': data2
     }
