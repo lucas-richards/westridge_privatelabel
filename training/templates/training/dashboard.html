@@ -29,6 +29,7 @@
             <select name="supervisor" id="supervisor" class="form-control">
                 <option value="">All</option>
                 {% for supervisor in supervisors %}
+                    
                     <option value="{{ supervisor.id }}" {% if supervisor.id == selected_supervisor %}selected{% endif %}>{{ supervisor }}</option>
                 {% endfor %}
             </select>
