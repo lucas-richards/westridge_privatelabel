@@ -7,22 +7,15 @@
     <h4>New Entry</h4>
     <form method="POST" class="post-form">
         {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" >Save</button>
+        {{ form_u|crispy }}
+        {{ form_p|crispy }}
+        <button type="submit">Save</button>
     </form>
 
 </div>
+{% else %}
+<div>Log in to add user</div>
     
-<div class="mt-5 p-3 card ">
-    <h4>Upload Excel to create multiple entries</h4>
-    <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ upload_form|crispy }}
-        <button id="update" type="submit">Update</button>
-        
-    </form>
-    
-</div>
 <div id="loading-indicator" style="display: none;">
     <!-- Your loading indicator here (e.g., spinner or progress bar) -->
     <div class="spinner-grow" role="status">

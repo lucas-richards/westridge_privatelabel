@@ -18,8 +18,9 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username','email']
 
+
 class ProfileUpdateForm(forms.ModelForm):
-    birthday = forms.DateField(widget=forms.SelectDateWidget(years=range(1900,1999)))
+    # birthday = forms.DateField(widget=forms.SelectDateWidget(years=range(1900,1999)))
     # roles as checkboxes
     roles = forms.ModelMultipleChoiceField(
         queryset=Role.objects.all(),  # Replace 'Profile' with your actual model name
@@ -29,7 +30,7 @@ class ProfileUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['image','department','roles']
+        fields = ['supervisor','roles']
 
 #  roles form with modules as checkboxes
 class RoleForm(forms.ModelForm):

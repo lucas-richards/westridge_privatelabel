@@ -11,7 +11,6 @@
 }
     .link {
         color: #007bff;
-        text-decoration:underline;
         cursor: pointer;
     }
 
@@ -20,34 +19,43 @@
 
 {% if user.is_authenticated %}
 <div class="container">
-    <h2>Gridd</h2>
+    <h2>Grid</h2>
 
     <!-- add a form to select supervisor -->
     <form method="get" action="{% url 'training-dashboard' %}">
-        <div class="form-group">
+        <div>
             <label for="supervisor">Supervisor</label>
-            <select name="supervisor" id="supervisor" class="form-control">
-                <option value="">All</option>
+            <select name="supervisor" id="supervisor" onchange="this.form.submit()">
+                {% if selected_supervisor == '' %}
+                    <option value="" selected>All</option>
+                {% else %}
+                    <option value="">All</option>
+                {% endif %}
                 {% for supervisor in supervisors %}
-                    
-                    <option value="{{ supervisor.id }}" {% if supervisor.id == selected_supervisor %}selected{% endif %}>{{ supervisor }}</option>
+                    {% if supervisor.id == selected_supervisor %}
+                        <option value="{{ supervisor.id }}" selected>{{ supervisor }}</option>
+                    {% else %}
+                        <option value="{{ supervisor.id }}">{{ supervisor }}</option>
+                    {% endif %}
                 {% endfor %}
+                
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
     
-    <table class="table table-hover table-responsive table-bordered" style="font-size: small;">
+    <table class=" table-hover table-responsive table-bordered" style="font-size: small;">
         <thead>
-            <tr >
-                <th class="sticky-column" style="width: 200px;">
-                    Username
-                    <small id="roles" class="text-primary link">Roles</small>
+            <tr class="table-secondary">
+                <th class="sticky-column pr-1 pl-1" style="width: 150px;">
+                    
+                        <a id="roles" class="text-black link">Username/Roles</a>
+                    
                 </th>
                 
                 
                 {% for training_module in training_modules %}
-                        <th class="text-center sticky-cell">
-                            <a href="{% url 'training-module-detail' training_module.id %}">
+                        <th class="text-center  pl-1 pr-1">
+                            <a style="color: black;" href="{% url 'training-module-detail' training_module.id %}">
                             {{ training_module }}
                             </a>
                         </th>
@@ -58,12 +66,12 @@
         <tbody>
             {% for row in data2 %}
                 <tr id="{{row.role.id}}" style="display: none;">
-                    <td class="sticky-column p-0" style="width: 80px;" >
+                    <td class="sticky-column pl-1 pr-1">
                         {{ row.role }}
                         
                     </td>
                     {% for module in row.training_modules %}
-                        <td class="p-0 text-center">
+                        <td class="text-center">
                             {% if module != '-' %}
                             x
                             {% else %}
@@ -75,7 +83,7 @@
             {% endfor %}
             {% for row in data %}
                 <tr>
-                    <td class="sticky-column" style="width: 80px;">
+                    <td class="sticky-column">
                         {{ row.username }}
                         <div class="d-flex flex-wrap roles">
                             {% for role in row.roles %}
@@ -86,32 +94,32 @@
                     </td>
                     
                     {% for event in row.training_events %}
-                        <td>
+                        <td class="pr-1 pl-1">
+                            <div class="d-flex justify-content-center align-items-center">
                             {% if event != '-' %}
-                                
                                 {% if event.id %}
-                                
                                     {% if event.status == 'Expired' %}
                                     <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
-                                        <p class="text-danger">{{ event.status }}</p>
+                                        <div class="text-danger">{{ event.status }}</div>
                                     </div>
                                     {% elif event.status == 'About to expire' %}
                                     <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expires in {{ event.expiration_date|timeuntil }}{% endif %}">
-                                        <p class="text-warning">{{ event.status }}</p>
+                                        <div class="text-warning">{{ event.status }}</div>
                                     </div>
                                     {% elif event.status == 'Ok' %}
-                                        <p class="text-success">{{ event.completed_date|date:'n/j/Y' }}</p>
+                                        <div class="text-success">{{ event.completed_date|date:'n/j/Y' }}</div>
                                     {% elif event.status == 'Incomplete' %}
-                                        <p class="text-secondary">Incomplete</p>
+                                        <div class="text-secondary">Incomplete</div>
                                     {% else %}
                                     {% endif %}
                                 {% else %}
-                                    <div class="d-flex justify-content-center align-items-center">
+                                    
                                         <a class="text-secondary">missing</a>
-                                    </div>
+                                    
                                 
                                 {% endif %}
                             {% endif %}
+                            </div>
                         </td>
                     {% endfor %}
                 </tr>

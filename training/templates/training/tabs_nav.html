@@ -27,13 +27,13 @@
         <a class="nav-link {% if title == 'Modules' %}active{% endif %}" href="{% url 'training-modules' %}">Modules</a>
       </li>
       <li class="nav-item">
-          <a class="nav-link {% if title == 'History' %}active{% endif %}" href="{% url 'training-history' %}">History</a>
+          <a class="nav-link {% if title == 'History' %}active{% endif %}" href="{% url 'training-history' %}">Log</a>
       </li>
       <li class="nav-item">
-          <a class="nav-link {% if title == 'New Entry' %}active{% endif %}" href="{% url 'training-new_entry' %}">New Entry</a>
+          <a class="nav-link {% if title == 'New Entry' %}active{% endif %}" href="{% url 'training-new_entry' %}">New Event</a>
       </li>
       <li class="nav-item">
-          <a class="nav-link {% if title == 'New Entry' %}active{% endif %}" href="#">New Staff</a>
+          <a class="nav-link {% if title == 'New User' %}active{% endif %}" href="{% url 'training-new_user' %}">New User</a>
       </li>
         
   </ul>

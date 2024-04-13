@@ -36,21 +36,21 @@
     <!-- add pagination -->
     
     {% if training_events.has_previous %}
-    <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
-    <a class="btn btn-outline-info mb-4" href="?page={{ training_events.previous_page_number }}">Previous</a>
+    <a class=" mb-4" href="?page=1">First</a>
+    <a class=" mb-4" href="?page={{ training_events.previous_page_number }}">Previous</a>
     {% endif %}
 
     {% for num in training_events.paginator.page_range %}
         {% if training_events.number == num %}
-            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            <a class=" mb-4" href="?page={{ num }}">{{ num }}</a>
         {% elif num > training_events.number|add:'-3' and num < training_events.number|add:'3' %}
-            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+            <a class=" mb-4" href="?page={{ num }}">{{ num }}</a>
         {% endif %}
     {% endfor %}
 
     {% if training_events.has_next %}
-        <a class="btn btn-outline-info mb-4" href="?page={{ training_events.next_page_number }}">Next</a>
-        <a class="btn btn-outline-info mb-4" href="?page={{ training_events.paginator.num_pages }}">Last</a>
+        <a class=" mb-4" href="?page={{ training_events.next_page_number }}">Next</a>
+        <a class=" mb-4" href="?page={{ training_events.paginator.num_pages }}">Last</a>
     {% endif %}
     
 

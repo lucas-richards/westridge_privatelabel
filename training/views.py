@@ -10,6 +10,7 @@ from .forms import (
     ScheduleTrainingModuleForm,
     NewTrainingEvent
 )
+from users.forms import UserRegisterForm, ProfileUpdateForm
 from users.forms import RoleForm
 from .models import TrainingEvent, TrainingModule
 from django.contrib.auth.models import User
@@ -80,7 +81,7 @@ def supervisors(request):
 
 @login_required
 def modules(request):
-    prepared_data = get_prepared_data()
+    prepared_data = get_prepared_data('')
     profiles = prepared_data['profiles']
     training_modules = prepared_data['training_modules']
     data = prepared_data['data']
@@ -151,6 +152,37 @@ def new_entry(request):
     return render(request, 'training/new_entry.html', context)
 
 @login_required
+def new_user(request):
+    if request.method == 'POST':
+        form_u = UserRegisterForm(request.POST)
+        form_p = ProfileUpdateForm(request.POST)
+        if form_u.is_valid() and form_p.is_valid():
+            form_u.save()
+            # update user profile with form_p data
+            user = User.objects.get(username=form_u.cleaned_data['username'])
+            form_p = ProfileUpdateForm(request.POST, instance=user.profile)
+            form_p.save()
+            messages.success(request, 'New user has been created!')
+            return redirect('training-dashboard')
+        else:
+            messages.error(request, 'Form is not valid. Please check the entered data.')
+    
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+
+    context = {
+        'title': 'New User',
+        'form_u': UserRegisterForm(),
+        'form_p': ProfileUpdateForm(),
+        'sidepanel': sidepanel
+    }
+
+    return render(request, 'training/new_user.html', context)
+
+@login_required
 def history(request):
     training_events = TrainingEvent.objects.all().order_by('-created_date')
     paginator = Paginator(training_events, 10)
@@ -169,9 +201,15 @@ def history(request):
     }
     return render(request, 'training/history.html', context)
 
-def get_prepared_data():
+def get_prepared_data(supervisor):
     # Fetch profiles and training_modules
-    profiles = Profile.objects.all()
+    if supervisor:
+        #  filter profile objects where supervisor = supervisor
+        supervisor = User.objects.get(id=supervisor)
+        profiles = Profile.objects.filter(supervisor=supervisor)
+        print('Profiles:', profiles)
+    else:
+        profiles = Profile.objects.all()
     training_modules = TrainingModule.objects.all().order_by('name')
 
     # Prepare data to be sent to the template
@@ -209,7 +247,15 @@ def get_prepared_data():
 @login_required
 def dashboard(request):
     # Your view function
-    prepared_data = get_prepared_data()
+    supervisors = [user for user in User.objects.all() if user.supervisor_profiles.all().count() != 0]
+
+    # if the request has a supervisor parameter, filter the profiles by the supervisor
+    if 'supervisor' in request.GET:
+        selected_supervisor = request.GET['supervisor']
+    else:
+        selected_supervisor = ''
+
+    prepared_data = get_prepared_data(selected_supervisor)
     profiles = prepared_data['profiles']
     training_modules = prepared_data['training_modules']
     data = prepared_data['data']
@@ -229,12 +275,12 @@ def dashboard(request):
                 row['training_modules'].append('-')
         data2.append(row)
 
-
-
     context = {
         'title': 'Grid',
         'profiles': profiles,
         'training_modules': training_modules,
+        'supervisors': supervisors,
+        'selected_supervisor': selected_supervisor,
         'data': data,
         'data2': data2
     }
