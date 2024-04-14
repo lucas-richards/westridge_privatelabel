@@ -3,15 +3,28 @@
 {% block content %}
 
 <style>
+    .table-container {
+        width: 100%; /* Adjust width as needed */
+        height: 600px; /* Adjust height as needed */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
     .sticky-column {
-  position: sticky;
-  left: 0;
-  z-index: 1;
-  background-color: rgb(249,249,249);
-}
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        background-color: rgb(249,249,249);
+    }
     .link {
         color: #007bff;
         cursor: pointer;
+    }
+    
+
+    .sticky{
+        position: sticky;
+        top: 0px;
+        background-color: #f8f9fa; /* Change this to match your table header background color */
+        z-index: 2;
     }
 
     
@@ -19,7 +32,7 @@
 
 {% if user.is_authenticated %}
 <div class="container">
-    <h2>Grid</h2>
+    <h2 class="sticky">Grid</h2>
 
     <!-- add a form to select supervisor -->
     <form id="supervisor-form" method="get" action="{% url 'training-dashboard' %}">
@@ -50,18 +63,19 @@
     </form>
     
     
-    <table class=" table-hover table-responsive table-bordered" style="font-size: small;">
+    <div class="table-container table-responsive">
+    <table class=" table-hover  table-bordered" style="font-size: small;">
         <thead>
             <tr class="table-secondary">
-                <th class="sticky-column pr-3 pl-1">
+                <th class="sticky-column sticky pr-3 pl-1"  style="z-index: 3;">
                     
-                        <a id="roles" class="text-black link">Username/Roles</a>
+                    <a id="roles" class="text-black link">Username/Roles</a>
                     
                 </th>
                 
                 
                 {% for training_module in training_modules %}
-                        <th class="text-center  pl-1 pr-1">
+                        <th class="text-center sticky pl-1 pr-1">
                             <a style="color: black;" href="{% url 'training-module-detail' training_module.id %}">
                             {{ training_module }}
                             </a>
@@ -134,6 +148,7 @@
             
         </tbody>
     </table>
+</div>
 
     
 
@@ -170,6 +185,7 @@
         document.getElementById("loading-indicator").style.display = "block";
     });
 </script>
+
 
 {% endif %}
     

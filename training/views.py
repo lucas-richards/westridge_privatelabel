@@ -253,7 +253,7 @@ def dashboard(request):
     if 'supervisor' in request.GET:
         selected_supervisor = request.GET['supervisor']
     else:
-        selected_supervisor = ''
+        selected_supervisor = '59'
 
     prepared_data = get_prepared_data(selected_supervisor)
     profiles = prepared_data['profiles']
