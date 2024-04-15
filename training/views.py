@@ -436,7 +436,7 @@ def upload_file(request):
                         
                 # return render dashoboard.html with successful message
             messages.success(request, f'File has been uploaded successfully!')
-            return redirect('training-dashboard')
+            return redirect('training-history')
         else:
             messages.error(request, 'Form is not valid. Please check your input.')
     else:
