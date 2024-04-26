@@ -34,7 +34,7 @@ class Profile(models.Model):
     training_modules = models.ManyToManyField('training.TrainingModule', related_name='profiles', through='training.TrainingEvent')
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.username}'
     
     #resize the image to save space
     # def save(self, *args, **kwargs):

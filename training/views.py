@@ -10,7 +10,7 @@ from .forms import (
     ScheduleTrainingModuleForm,
     NewTrainingEvent
 )
-from users.forms import UserRegisterForm, ProfileUpdateForm
+from users.forms import UserRegisterForm, ProfileUpdateForm, UserRegisterForm2
 from users.forms import RoleForm
 from .models import TrainingEvent, TrainingModule
 from django.contrib.auth.models import User
@@ -126,16 +126,31 @@ def modules(request):
 
 @login_required
 def new_entry(request):
+    users = sorted(User.objects.all(), key=lambda x: x.username)
+    training_modules = sorted(TrainingModule.objects.all(), key=lambda x: x.name)
     if request.method == 'POST':
-        form = NewTrainingEvent(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Training event has been added!')
-            return redirect('training-history')
-        else:
-            messages.error(request, 'Form is not valid. Please check the entered data.')
-    else:
-        form = NewTrainingEvent()
+        user_ids = request.POST.getlist('user1')
+        module_ids = request.POST.getlist('training_module1')
+        print('POST:', request.POST)
+        for user in user_ids:
+            for module in module_ids:
+                # create a new training event
+                try:
+                    training_event = TrainingEvent.objects.create(
+                        profile=Profile.objects.get(user=user),
+                        training_module=TrainingModule.objects.get(pk=module),
+                        completed_date=request.POST['completed_date']
+                    )
+                    training_event.save()
+                    print('Training event created:', training_event)
+                    messages.success(request, f'Training event {training_event} has been added!')
+                    
+                except:
+                    print('Error creating training event')
+                    messages.error(request, 'Error creating training event')
+        return redirect('training-history')
+        
+    form = NewTrainingEvent()
     sidepanel = {
         'title': 'Training',
         'text1': 'Completed all trainings',
@@ -144,6 +159,8 @@ def new_entry(request):
 
     context = {
         'title': 'New Entry',
+        'users': users,
+        'training_modules': training_modules,
         'form': form,
         'sidepanel': sidepanel,
         'upload_form': UploadFileForm()
@@ -154,12 +171,18 @@ def new_entry(request):
 @login_required
 def new_user(request):
     if request.method == 'POST':
-        form_u = UserRegisterForm(request.POST)
+        # the request will receive only first name, last name and email we need to create a username and password with it
+        username = request.POST['first_name'] + '_' + request.POST['last_name']
+        # replace all spaces with underscores and make it lowercase
+        username = username.replace(' ', '_').lower()
+        password = username
+        print('username:', username, 'password:', password)
+        form_r = UserRegisterForm(data={'username': username, 'password1': password, 'password2': password, 'first_name': request.POST['first_name'], 'last_name': request.POST['last_name'], 'email': request.POST['email']}) 
         form_p = ProfileUpdateForm(request.POST)
-        if form_u.is_valid() and form_p.is_valid():
-            form_u.save()
+        if form_r.is_valid() and form_p.is_valid():
+            form_r.save()
             # update user profile with form_p data
-            user = User.objects.get(username=form_u.cleaned_data['username'])
+            user = User.objects.get(username=form_r.cleaned_data['username'])
             form_p = ProfileUpdateForm(request.POST, instance=user.profile)
             form_p.save()
             messages.success(request, 'New user has been created!')
@@ -175,7 +198,7 @@ def new_user(request):
 
     context = {
         'title': 'New User',
-        'form_u': UserRegisterForm(),
+        'form_u': UserRegisterForm2(),
         'form_p': ProfileUpdateForm(),
         'sidepanel': sidepanel
     }

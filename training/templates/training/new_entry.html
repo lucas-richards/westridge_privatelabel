@@ -3,38 +3,152 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-<div class="mt-5 p-3 card ">
-    <h4>New Entry</h4>
-    <form method="POST" class="post-form">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" >Save</button>
-    </form>
 
-</div>
-    
-<div class="mt-5 p-3 card ">
-    <h4>Upload Excel to create multiple entries</h4>
-    <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ upload_form|crispy }}
-        <button id="update" type="submit">Update</button>
+<!-- create two columns -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="mt-5 p-3 card ">
+            <h4>New Entry</h4>
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+                <!-- drop down to select user 1 -->
+                <div class="users">
+                    <label for="user1">Users:</label>
+                    <select name="user1" id="user1" class="form-control">
+                        {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- add a + that will create another selector for user 2 -->
+                <button class="mt-1 btn btn-link" type="button" id="add_user">+</button>
+                
+                <!-- drop down to select training_module1 -->
+                <div class="modules">
+                    <label for="training_module1">Trainings:</label>
+                    <select name="training_module1" id="training_module1" class="form-control">
+                        {% for training_module in training_modules %}
+                            <option value="{{ training_module.id }}">{{ training_module.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- add a + that will create another selector for user 2 -->
+                <button class="mt-1 btn btn-link" type="button" id="add_module">+</button>
+                <!-- completed date field -->
+                <div class="form-group">
+                    <label for="completed_date1" >Completed Date:</label>
+                    <input type="date" id="completed_date" name="completed_date" class="dateinput form-control" required>
         
-    </form>
-    
-</div>
-<div id="loading-indicator" style="display: none;">
-    <!-- Your loading indicator here (e.g., spinner or progress bar) -->
-    <div class="spinner-grow" role="status">
-        <span class="sr-only">Loading...</span>
+                </div>
+                <button type="submit" class="btn btn-sm btn-secondary" >Save</button>
+            </form>
+        </div>
+        
     </div>
-</div>
+    <div class="col-md-6">
+        <div class="mt-5 p-3 card ">
+            <h4>Upload Excel to create multiple entries</h4>
+            <form id="upload-form" method="post" action="{% url 'training-upload_file' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ upload_form|crispy }}
+                <button id="update" class="btn btn-sm btn-secondary" type="submit">Upload</button>
+                
+            </form>
+            
+        </div>
+        <div id="loading-indicator" style="display: none;">
+            <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+            <div class="spinner-grow" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        
+    </div>
+
+
+    
+
 
 <script>
     document.getElementById("upload-form").addEventListener("submit", function() {
         document.getElementById("loading-indicator").style.display = "block";
         document.getElementById("upload-form").style.display = "none";
     });
+</script>
+<script>
+    // when add_user is pressed it will create another user selector for user 2
+    document.getElementById("add_user").addEventListener("click", function() {
+    var div1 = document.createElement("div");
+    div1.className = "div1 d-flex justify-content-between mt-1";
+    
+    var user1 = document.createElement("select");
+    user1.className = "form-control mt-1";
+    user1.name = "user1"; // Ensure this is unique if multiple divs are added
+    
+    // Remove the Django template tags
+    // Assuming users is an array of objects with id and username properties
+    {% for user in users %}
+        var option = document.createElement("option");
+        option.value = "{{ user.id }}";
+        option.text = "{{ user.username }}";
+        // add marign top
+        option.style.marginTop = "5px";
+        user1.appendChild(option);
+    {% endfor %}
+    
+    var button1 = document.createElement("button");
+    button1.className = "mt-1 ml-1 btn btn-link text-danger";
+    button1.type = "button";
+    button1.innerHTML = "-";
+    button1.addEventListener("click", function() {
+        div1.remove();
+    });
+    
+    // Append button and select to the div
+    div1.appendChild(user1);
+    div1.appendChild(button1);
+    
+    // Append div to the container
+    document.querySelector(".users").appendChild(div1);
+});
+</script>
+<script>
+    // when add_module is pressed it will create another div with a module selector and a delete button
+    document.getElementById("add_module").addEventListener("click", function() {
+    var div2 = document.createElement("div");
+    div2.className = "div2 d-flex justify-content-between mt-1";
+    
+    var training_module1 = document.createElement("select");
+    training_module1.className = "form-control mt-1";
+    training_module1.name = "training_module1"; // Ensure this is unique if multiple divs are added
+    
+    // Remove the Django template tags
+    // Assuming users is an array of objects with id and username properties
+    {% for module1 in training_modules %}
+        var option = document.createElement("option");
+        option.value = "{{ module1.id }}";
+        option.text = "{{ module1 }}";
+        // add marign top
+        option.style.marginTop = "5px";
+        training_module1.appendChild(option);
+    {% endfor %}
+    
+    var button2 = document.createElement("button");
+    button2.className = "mt-1 ml-1 btn btn-link text-danger";
+    button2.type = "button";
+    button2.innerHTML = "-";
+    button2.addEventListener("click", function() {
+        div2.remove();
+    });
+    
+    // Append button and select to the div
+    div2.appendChild(training_module1);
+    div2.appendChild(button2);
+    
+    // Append div to the container
+    document.querySelector(".modules").appendChild(div2);
+});
+
 </script>
     
 

@@ -69,7 +69,16 @@ def seed_users_roles():
 
     # Loop through the data and create users with roles
     for username, supervisor, email, roles_names in users_roles_data:
-        user, created = User.objects.get_or_create(username=username, email=email)  # Assuming User model has username and email fields
+        # replace spaces with underscores and make lowercase in username
+        first_name = username.split(' ')[0]
+        if username.split(' ')[2]:
+            first_name = username.split(' ')[0] + ' ' + username.split(' ')[1]
+            last_name = username.split(' ')[2]
+        else:
+            last_name = username.split(' ')[1]
+        
+        username = username.replace(" ", "_").lower()
+        user, created = User.objects.get_or_create(first_name=first_name,last_name=last_name,username=username, email=email)  # Assuming User model has username and email fields
         roles = Role.objects.filter(name__in=roles_names)
         profile, created = Profile.objects.get_or_create(user=user)
         profile.roles.add(*roles)
