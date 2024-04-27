@@ -84,7 +84,7 @@ class TrainingEvent(models.Model):
                 if self.expiration_date() < today:
                     return 'Expired'
                 elif self.expiration_date() < today + timezone.timedelta(days=90):
-                    return 'About to expire'
+                    return 'To Expire'
                 else:
                     return self.completed_date.strftime('%m/%d/%y')
             else:

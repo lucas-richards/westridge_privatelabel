@@ -8,36 +8,37 @@
 
     
         {% for row in data %}
-            {% if row.supervised %}
+            
                 <div class="mb-3 card">
                     <div class="card-header" id="headingOne">
-                        <h3>{{ row.username }}<span style="font-size: x-small;">(Supervisor)</span></h3>
-                        {% for module in row.username.profile.get_supervised_training_modules.completed %}
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h3>{{ row.username }}<span style="font-size: x-small;">(Supervisor)</span></h3>
+                            </div>
+                            <div>
+                                {{ row.percentage }}%
+                            </div>
+
+                        </div>
+                        {% for module in row.modules.completed %}
                             <span class="badge badge-success badge-pill">
                                 {{ module }}
                             </span>
                         {% endfor %}
-                        {% for module in row.username.profile.get_supervised_training_modules.missing %}
+                        {% for module in row.modules.missing %}
                             <span class="badge badge-secondary badge-pill">
                                 {{ module }}
                             </span>
                         {% endfor %}
-                        {% for module in row.username.profile.get_supervised_training_modules.expired %}
+                        {% for module in row.modules.expired %}
                             <span class="badge badge-danger badge-pill">
                                 {{ module }}
                             </span>
                         {% endfor %}
                     </div>
-                
-                    <div class="card-body">
-                        <!-- user information -->
-                        {% for sup in row.supervised %}
-                            <p>{{ sup.user.username }}: {{sup.get_training_modules_percentage}}%</p>
-                        {% endfor %}
-                    </div>
                     
                 </div>
-            {% endif %}
+            
         {% endfor %}
     <!-- if there are no supervisors yet -->
     {% else %}

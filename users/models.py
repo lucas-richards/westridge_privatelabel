@@ -105,6 +105,7 @@ class Profile(models.Model):
         
     # # go over all the supervised profiles and add on a list those trainings that are missing or expired and those that are completed
     def get_supervised_training_modules(self):
+
         supervised_profiles = self.user.supervisor_profiles.all()
         modules = {
             'completed': [],
@@ -112,9 +113,22 @@ class Profile(models.Model):
             'missing': []
         }
         for profile in supervised_profiles:
+            print(f'Checking {profile.user.username}')
             must_have = profile.must_have_training_modules()
+            # training_modules = profile.training_modules.all().order_by('name')  # Order training modules alphabetically
             if not must_have:
                 continue
+            # for i in range(len(training_modules)):
+            #     for profile in supervised_profiles:
+            #         profile_training_event = ProfileTrainingEvents.objects.filter(profile=profile).split(',')[i]
+            #         if profile_training_event == '-':
+            #             continue
+            #         elif profile_training_event[0] == 'T':
+            #             modules['missing'].append(training_modules[i])
+            #         elif profile_training_event[0] == 'E':
+            #             modules['expired'].append(training_modules[i])
+            #         else:
+            #             modules['completed'].append(training_modules[i])
             for module in must_have:
                 training_event = module.get_training_events().filter(profile=profile).first()
                 status = training_event.status() if training_event else None
@@ -125,10 +139,10 @@ class Profile(models.Model):
                 else:
                     modules['completed'].append(module)
 
-                # remove duplicates from the lists
-                modules['completed'] = list(set(modules['completed']) - set(modules['expired']) - set(modules['missing']))
-                modules['expired'] = list(set(modules['expired']))
-                modules['missing'] = list(set(modules['missing']))
+            # remove duplicates from the lists
+            modules['completed'] = list(set(modules['completed']) - set(modules['expired']) - set(modules['missing']))
+            modules['expired'] = list(set(modules['expired']))
+            modules['missing'] = list(set(modules['missing']))
                 
         return modules
             
@@ -150,5 +164,11 @@ class Profile(models.Model):
         for role in self.roles.all():
             # Add training modules associated with the current role to the array
             required_modules.extend(role.training_modules.all())
+
+        # Remove duplicates from the list
+        required_modules = list(set(required_modules))
+        # order them alphabetically
+        required_modules.sort(key=lambda x: x.name)
+        
         return required_modules
 

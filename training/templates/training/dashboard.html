@@ -105,8 +105,9 @@
                     <td class="sticky-column">
 
                         <!-- add link to user profile -->
-
-                        {{ row.username }}
+                        <a href="{% url 'training-profile' row.profile.id %}">
+                        {{ row.profile.user.first_name }} {{ row.profile.user.last_name }}
+                        </a>
                         <div class="d-flex flex-wrap roles">
                             {% for role in row.roles %}
                                 <span style="width: 20px;font-size: 5px;" class="badge bg-secondary text-white">{{ role }}</span>
@@ -123,7 +124,7 @@
                                 <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
                                     <div class="text-danger">{{ event }}</div>
                                 </div>
-                                {% elif event == 'About to expire' %}
+                                {% elif event == 'To Expire' %}
                                 <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expires in {{ event.expiration_date|timeuntil }}{% endif %}">
                                     <div class="text-warning">{{ event }}</div>
                                 </div>

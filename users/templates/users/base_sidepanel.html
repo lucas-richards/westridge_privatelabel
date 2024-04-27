@@ -1,0 +1,62 @@
+{% extends "blog/base.html" %}
+{% block maincontent %}
+<style>
+   .overlay-content {
+      position: absolute;
+      
+    }
+</style>
+<main role="main" class="container">
+    <div class="row">
+      <div class="col-md-{% if title == 'Dashboard' %}12{% else %}9{% endif %}">
+        {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+          </div>
+          {% endfor %}
+        {% endif %}
+        {% block content %}{% endblock %}
+      </div>
+      {% if title == 'Dashboard' %}
+      {% else %}
+        <div class="col-md-3">
+          <div class="card card-body">
+                <div class="">
+                  <h3>{{ sidepanel.title }}</h3>
+                  {% for row in data %}
+                    <p>
+                      <a class="btn btn-link" data-toggle="collapse" href="#{{row.training_module}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        {{row.training_module}}
+                      </a>
+                    </p>
+                    <div class="collapse" id="{{row.training_module}}">
+                      <div class="card card-body">
+                        {% if row.events == 'missing' %}
+                          <p class="text-muted small">{{row.events}}</p> 
+                        {% else %}
+                            {% for event in row.events %}
+                              <p class="text-muted small">{{event.completed_date}}</p>
+                            {% endfor %}
+                        {% endif %}
+                      </div>
+                    </div>
+                    
+                  {% endfor %}
+                </div>
+                
+                
+                <hr/>
+                <p class='text-muted'>{{ sidepanel.text2 }}</p>
+                
+                 
+              </div>
+      
+          </div>
+    
+            
+        </div>
+      {% endif %}
+    </div>
+  </main>
+{% endblock maincontent %}

@@ -66,33 +66,53 @@ def percentage(request):
 
 @login_required
 def supervisors(request):
-    profiles = Profile.objects.all()
+    supervisors = User.objects.filter(supervisor_profiles__isnull=False).distinct()
+    training_modules = TrainingModule.objects.all().order_by('name')
     data = []
-    # go over the profiles and get the people they are supervising
-    for profile in profiles:
-        user = User.objects.get(username=profile.user.username)
+    
+    for sup in supervisors:
+        print('Get supervisor:', sup.username)
         row = {
-            'username': user,
-            'supervised': user.supervisor_profiles.all()
+            'username': sup.first_name + ' ' + sup.last_name,
+            'percentage':'',
+            'total_modules': '',
+            'modules':''
         }
+        modules = {
+            'completed': [],
+            'expired': [],
+            'missing': []
+        }
+        
+        for i, training_module in enumerate(training_modules):
+            print(i)
+            profiles = sup.supervisor_profiles.all()
+            profile_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).values_list('row', flat=True)
+            
+            for profile_training_event in profile_training_events:
+                profile_training_event = profile_training_event.split(',')[i]
+                
+                if profile_training_event == '-':
+                    continue
+                elif profile_training_event[0] == 'T':
+                    modules['missing'].append(training_module)
+                elif profile_training_event[0] == 'E':
+                    modules['expired'].append(training_module)
+                else:
+                    modules['completed'].append(training_module)
+        
+        modules['completed'] = list(set(modules['completed']) - set(modules['expired']) - set(modules['missing']))
+        modules['expired'] = list(set(modules['expired']))
+        modules['missing'] = list(set(modules['missing']))
+        
+        # percentage of completed modules over total
+        row['total_modules'] = len(modules['completed']) + len(modules['expired']) + len(modules['missing'])
+        row['percentage'] = round(len(modules['completed']) / row['total_modules'] * 100)
+        print('##########', row)
+        row['modules'] = modules
         data.append(row)
     
     return render(request, 'training/supervisors.html', {'title':'Supervisors','data': data})
-
-@login_required
-def modules(request):
-    prepared_data = get_prepared_data('')
-    profiles = prepared_data['profiles']
-    training_modules = prepared_data['training_modules']
-    data = prepared_data['data']
-
-    context = {
-        'title': 'Modules',
-        'profiles': profiles,
-        'data': data,
-        'zip_data': zip(training_modules, range(len(training_modules))),
-    }
-    return render(request, 'training/modules.html', context)
 
 @login_required
 # def staff_roles(request):
@@ -225,8 +245,48 @@ def history(request):
     return render(request, 'training/history.html', context)
 
 @login_required
+def training_profile(request, profile_id):
+    profile = Profile.objects.get(pk=profile_id)
+    training_events = TrainingEvent.objects.filter(profile=profile).order_by('-completed_date')
+    training_modules = profile.must_have_training_modules()
+    print('Training modules:', training_modules)
+    # zip training events with training modules
+    data = []
+    for training_module in training_modules:
+        events = TrainingEvent.objects.filter(profile=profile, training_module=training_module).order_by('-completed_date')
+        row = {}
+        row['training_module'] = training_module
+        row['events'] = events if events.exists() else 'missing'
+        data.append(row)
+
+    if request.method == 'POST':
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        if p_form.is_valid():
+            p_form.save()
+            messages.success(request,f'Account has been updated!')
+            return redirect('training-profile', profile_id=profile_id)
+    else:
+        p_form = ProfileUpdateForm( instance= profile)
+
+    sidepanel = {
+        'title': 'Modules History',
+        'text1': 'Completed all trainings',
+        'text2': '',
+    }
+    context = {
+        'title': 'Profile',
+        'profile': profile,
+        'training_modules': training_modules,
+        'training_events': training_events,
+        'sidepanel': sidepanel,
+        'p_form':p_form,
+        'data': data
+    }
+    return render(request, 'users/profile.html', context)
+
+@login_required
 def dashboard(request):
-    # Your view function
+    # get all the supervisors
     supervisors = User.objects.filter(supervisor_profiles__isnull=False).distinct()
     
     # if the request has a supervisor parameter, filter the profiles by the supervisor
@@ -249,7 +309,7 @@ def dashboard(request):
         # profile.update_training_events()
         print('Get prepared data for user:', profile.user.username)
         row = {
-            'username': profile.user.first_name + ' ' + profile.user.last_name,
+            'profile': profile,
             'roles': profile.roles.all(),
             'training_events': [],
         }
