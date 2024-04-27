@@ -79,9 +79,9 @@ class TrainingEvent(models.Model):
                 elif self.expiration_date() < today + timezone.timedelta(days=90):
                     return 'About to expire'
                 else:
-                    return 'Ok'
+                    return self.completed_date.strftime('%m/%d/%y')
             else:
-                return 'Ok'
+                return self.completed_date.strftime('%m/%d/%y')
         else:
             return 'Incomplete'
 
@@ -103,25 +103,28 @@ class TrainingEvent(models.Model):
 
 class ProfileTrainingEvents(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    row = models.TextField(default=',,,,,,,,,,,,,,,,,,,,,,,', blank=True)
+    row = models.TextField(default='', blank=True)
 
     def __str__(self):
         return f"{self.profile} {self.row}"
     
     def update_row(self):
         must_have = self.profile.must_have_training_modules()
+        print(f'Must have: {must_have}')
         training_modules = TrainingModule.objects.all().order_by('name')  # Order training modules alphabetically
         events = []
         for training_module in training_modules:
             event = TrainingEvent.objects.filter(profile=self.profile, training_module=training_module).first()
 
             if event:
-                events.append(str(event.id))
+                # events.append(str(event.id))
+                # add the status
+                events.append(event.status())
             elif training_module not in must_have:
                 events.append('-')
             else:
                 events.append(training_module.name)
-        print(f'### {self.profile} - {events} ')
+
         self.row = ','.join(events)
         print(f'{self.profile} updated training events: {self.row}')
         self.save()

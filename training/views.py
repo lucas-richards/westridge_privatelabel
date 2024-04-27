@@ -224,11 +224,20 @@ def history(request):
     }
     return render(request, 'training/history.html', context)
 
-def get_prepared_data(supervisor):
-    # Fetch profiles and training_modules
-    if supervisor:
+@login_required
+def dashboard(request):
+    # Your view function
+    supervisors = [user for user in User.objects.all() if user.supervisor_profiles.all().count() != 0]
+
+    # if the request has a supervisor parameter, filter the profiles by the supervisor
+    if 'supervisor' in request.GET:
+        selected_supervisor = request.GET['supervisor']
+    else:
+        selected_supervisor = ''
+
+    if selected_supervisor:
         #  filter profile objects where supervisor = supervisor
-        supervisor = User.objects.get(id=supervisor)
+        supervisor = User.objects.get(id=selected_supervisor)
         profiles = Profile.objects.filter(supervisor=supervisor)
         print('Profiles:', profiles)
     else:
@@ -246,8 +255,12 @@ def get_prepared_data(supervisor):
             'training_events': [],
         }
         profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
+        # if a new user was added and the profile_training_events object was not created
+        if profile_training_events.row == '':
+            profile_training_events.update_row()
+            profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
+            
         events = profile_training_events.row.split(',')
-        # training_events = profile.training_events.split(',')
         for i in range(len(events)):
             if events[i] == '-':
                 continue
@@ -259,32 +272,10 @@ def get_prepared_data(supervisor):
                 except:
                     continue
         row['training_events'] = events
+        print('Row:', row)
 
         data.append(row)
-
-        prepare_data = {
-            'profiles': profiles,
-            'training_modules': training_modules,
-            'data': data
-        }
-    
-    return prepare_data
-
-@login_required
-def dashboard(request):
-    # Your view function
-    supervisors = [user for user in User.objects.all() if user.supervisor_profiles.all().count() != 0]
-
-    # if the request has a supervisor parameter, filter the profiles by the supervisor
-    if 'supervisor' in request.GET:
-        selected_supervisor = request.GET['supervisor']
-    else:
-        selected_supervisor = ''
-
-    prepared_data = get_prepared_data(selected_supervisor)
-    profiles = prepared_data['profiles']
-    training_modules = prepared_data['training_modules']
-    data = prepared_data['data']
+        
     
     # create a function that returns all the roles in a form format to display it 
     data2 = []

@@ -2,7 +2,7 @@ from django.dispatch import receiver
 from django.db import models
 from django.db.models.signals import post_save
 from .models import TrainingEvent, ProfileTrainingEvents, RoleTrainingModules
-from users.models import Role
+from users.models import Role, Profile
 
 
 # update the ProfileTrainingEvents row when a TrainingEvent is created
@@ -24,3 +24,11 @@ def create_role_training_modules(sender, instance, created, **kwargds):
     else:
         role_training_modules = RoleTrainingModules.objects.get(role=instance)
     role_training_modules.update_row()
+
+@receiver(post_save, sender=Profile)
+def create_profile_training(sender, instance, created, **kwargds):
+    if created:
+        profile_training_events = ProfileTrainingEvents.objects.create(profile=instance)
+    else:
+        profile_training_events = ProfileTrainingEvents.objects.get(profile=instance)
+    

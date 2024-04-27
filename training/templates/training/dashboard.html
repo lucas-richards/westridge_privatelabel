@@ -119,7 +119,22 @@
                         <td class="pr-1 pl-1">
                             <div class="d-flex justify-content-center align-items-center">
                             {% if event != '-' %}
-                                {% if event.id %}
+                                {% if event == 'Expired' %}
+                                <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
+                                    <div class="text-danger">{{ event }}</div>
+                                </div>
+                                {% elif event == 'About to expire' %}
+                                <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expires in {{ event.expiration_date|timeuntil }}{% endif %}">
+                                    <div class="text-warning">{{ event }}</div>
+                                </div>
+                                {% elif event|slice:":2" == "TM" %}
+                                    <a class="text-secondary">missing</a>
+                                {% else %}
+                                    <div class="text-success">{{ event }}</div>
+                                {% endif %}
+
+                                
+                                <!-- {% if event.id %}
                                     {% if event.status == 'Expired' %}
                                     <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
                                         <div class="text-danger">{{ event.status }}</div>
@@ -134,9 +149,7 @@
                                         <div class="text-secondary">Incomplete</div>
                                     {% else %}
                                     {% endif %}
-                                {% else %}
-                                    
-                                        <a class="text-secondary">missing</a>
+                                {% else %} -->
                                     
                                 
                                 {% endif %}
