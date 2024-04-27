@@ -56,6 +56,13 @@ class TrainingEvent(models.Model):
     def __str__(self):
         return f"{self.profile.user.username} - {self.training_module.name}"
     
+    # update the ProfileTrainingEvents row when a TrainingEvent is created or deleted
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        profile_training_event = ProfileTrainingEvents.objects.get(profile=self.profile)
+        profile_training_event.update_row()
+        print(f'ProfileTrainingEvents updated for {self.profile.user.username}')
+    
     
 #     #  date that the training_module expires based on the cert retrain_months and conpleted_date
     def expiration_date(self):
@@ -110,15 +117,12 @@ class ProfileTrainingEvents(models.Model):
     
     def update_row(self):
         must_have = self.profile.must_have_training_modules()
-        print(f'Must have: {must_have}')
         training_modules = TrainingModule.objects.all().order_by('name')  # Order training modules alphabetically
         events = []
         for training_module in training_modules:
             event = TrainingEvent.objects.filter(profile=self.profile, training_module=training_module).first()
 
             if event:
-                # events.append(str(event.id))
-                # add the status
                 events.append(event.status())
             elif training_module not in must_have:
                 events.append('-')

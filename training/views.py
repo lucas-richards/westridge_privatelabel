@@ -227,8 +227,8 @@ def history(request):
 @login_required
 def dashboard(request):
     # Your view function
-    supervisors = [user for user in User.objects.all() if user.supervisor_profiles.all().count() != 0]
-
+    supervisors = User.objects.filter(supervisor_profiles__isnull=False).distinct()
+    
     # if the request has a supervisor parameter, filter the profiles by the supervisor
     if 'supervisor' in request.GET:
         selected_supervisor = request.GET['supervisor']
@@ -237,8 +237,7 @@ def dashboard(request):
 
     if selected_supervisor:
         #  filter profile objects where supervisor = supervisor
-        supervisor = User.objects.get(id=selected_supervisor)
-        profiles = Profile.objects.filter(supervisor=supervisor)
+        profiles = Profile.objects.filter(supervisor=selected_supervisor)
         print('Profiles:', profiles)
     else:
         profiles = Profile.objects.all()
@@ -260,23 +259,10 @@ def dashboard(request):
             profile_training_events.update_row()
             profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
             
-        events = profile_training_events.row.split(',')
-        for i in range(len(events)):
-            if events[i] == '-':
-                continue
-            else:
-                try:
-                    e = TrainingEvent.objects.get(pk=events[i])
-                    # replace event with e
-                    events[i] = e
-                except:
-                    continue
-        row['training_events'] = events
+        row['training_events'] = profile_training_events.row.split(',')
         print('Row:', row)
-
         data.append(row)
         
-    
     # create a function that returns all the roles in a form format to display it 
     data2 = []
     
