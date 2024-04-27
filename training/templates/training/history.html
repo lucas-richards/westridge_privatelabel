@@ -23,6 +23,12 @@
                         <td>{{ event.training_module.name }}</td>
                         <td>{{ event.completed_date }}</td>
                         <td>{{ event.created_date }}</td>
+                        <!-- delete event -->
+                        <td>
+                            <form action="{% url 'training-confirm-delete' event.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link text-danger"> - </button>
+                            </form>
                     </tr>
                 {% endfor %}
             </tbody>

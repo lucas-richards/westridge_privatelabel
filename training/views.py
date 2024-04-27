@@ -356,6 +356,31 @@ def training_event_detail(request, training_event_id):
     return render(request, 'training/event_detail.html', context)
 
 @login_required
+def training_confirm_delete(request, training_event_id):
+    training_event = TrainingEvent.objects.get(pk=training_event_id)
+    context = {
+        'title': 'Delete',
+        'training_event': training_event,
+        'event': training_event,
+    }
+    return render(request, 'training/confirm_delete.html', context)
+
+@login_required
+def training_delete(request, training_event_id):
+    training_event = TrainingEvent.objects.get(pk=training_event_id)
+    training_event.delete()
+    messages.success(request, f'{training_event} certificate has been deleted!')
+    return redirect('training-history')
+
+@login_required
+def training_event_delete(request, training_event_id):
+    # are you sure you want to delete this training event?
+    training_event = TrainingEvent.objects.get(pk=training_event_id)
+    training_event.delete()
+    messages.success(request, f'{training_event.training_module} certificate has been deleted!')
+    return redirect('training-history')
+
+@login_required
 def training_module_detail(request, training_module_id):
     profiles = Profile.objects.all()
     training_module = TrainingModule.objects.get(pk=training_module_id)

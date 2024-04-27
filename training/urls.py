@@ -15,6 +15,10 @@ urlpatterns = [
     path('schedule/<int:training_module_id>/', views.schedule, name='training-schedule'),
     path('training_module/<int:training_module_id>/', views.training_module_detail, name='training-module-detail'),
     path('training_event/<int:training_event_id>/', views.training_event_detail, name='training-event-detail'),
+    # confirm delete
+    path('training_event/<int:training_event_id>/delete/confirm/', views.training_confirm_delete, name='training-confirm-delete'),
+    # delete
+    path('training_event/<int:training_event_id>/delete/', views.training_delete, name='training-event-delete'),
     path('upload/', views.upload_file, name='training-upload_file'),
     path('send_reminder_email/<int:training_module_id>/', views.send_reminder_email, name='training-send_reminder_email'),
     # api urls

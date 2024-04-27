@@ -9,7 +9,7 @@
     <div class="col-md-6">
         <div class="mt-5 p-3 card ">
             <h4>New Entry</h4>
-            <form method="POST" class="post-form">
+            <form id="entry_form" method="POST" class="post-form">
                 {% csrf_token %}
                 <!-- drop down to select user 1 -->
                 <div class="users">
@@ -42,6 +42,12 @@
                 </div>
                 <button type="submit" class="btn btn-sm btn-secondary" >Save</button>
             </form>
+            <div id="loading-indicator2" style="display: none;">
+                <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+                <div class="spinner-grow" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </div>
         
     </div>
@@ -69,6 +75,12 @@
     
 
 
+<script>
+    document.getElementById("entry_form").addEventListener("submit", function() {
+        document.getElementById("loading-indicator2").style.display = "block";
+        document.getElementById("entry_form").style.display = "none";
+    });
+</script>
 <script>
     document.getElementById("upload-form").addEventListener("submit", function() {
         document.getElementById("loading-indicator").style.display = "block";
