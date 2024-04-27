@@ -12,7 +12,7 @@ from .forms import (
 )
 from users.forms import UserRegisterForm, ProfileUpdateForm, UserRegisterForm2
 from users.forms import RoleForm
-from .models import TrainingEvent, TrainingModule
+from .models import TrainingEvent, TrainingModule, ProfileTrainingEvents, RoleTrainingModules
 from django.contrib.auth.models import User
 import pandas as pd
 from django.core.paginator import Paginator
@@ -237,26 +237,29 @@ def get_prepared_data(supervisor):
 
     # Prepare data to be sent to the template
     data = []
-    for profile in profiles:
+    for profile in profiles.order_by('user__username'):
+        # profile.update_training_events()
         print('Get prepared data for user:', profile.user.username)
         row = {
-            'username': profile.user.username,
+            'username': profile.user.first_name + ' ' + profile.user.last_name,
             'roles': profile.roles.all(),
             'training_events': [],
         }
-        
-        must_have = profile.must_have_training_modules()
-        for training_module in training_modules:
-            event = TrainingEvent.objects.filter(profile=profile, training_module=training_module).first()
-            
-            if event:
-                event = event
-            elif training_module not in must_have:
-                event = '-'
+        profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
+        events = profile_training_events.row.split(',')
+        # training_events = profile.training_events.split(',')
+        for i in range(len(events)):
+            if events[i] == '-':
+                continue
             else:
-                event = training_module.name
+                try:
+                    e = TrainingEvent.objects.get(pk=events[i])
+                    # replace event with e
+                    events[i] = e
+                except:
+                    continue
+        row['training_events'] = events
 
-            row['training_events'].append(event)
         data.append(row)
 
         prepare_data = {
@@ -276,7 +279,7 @@ def dashboard(request):
     if 'supervisor' in request.GET:
         selected_supervisor = request.GET['supervisor']
     else:
-        selected_supervisor = '59'
+        selected_supervisor = ''
 
     prepared_data = get_prepared_data(selected_supervisor)
     profiles = prepared_data['profiles']
@@ -285,17 +288,13 @@ def dashboard(request):
     
     # create a function that returns all the roles in a form format to display it 
     data2 = []
-
-    for role in Role.objects.all():
+    
+    for obj in RoleTrainingModules.objects.all().order_by('role'):
+        # role.update_training_modules_row()
         row = {
-            'role': role,
-            'training_modules': []
+            'role': obj.role,
+            'training_modules':obj.row.split(',')
         }
-        for training_module in training_modules:
-            if training_module in role.training_modules.all():
-                row['training_modules'].append(training_module)
-            else:
-                row['training_modules'].append('-')
         data2.append(row)
 
     context = {
@@ -424,7 +423,7 @@ def upload_file(request):
             
             for index, row in df.iterrows():
                 # Rest of your code here
-                employee_username = row['Employee']  # Assuming 'Employee' is the column name in Excel
+                employee_username = row['Employee'].replace(' ', '_').lower()  # Assuming 'Employee' is the column name in Excel
                 
                 print('Analyzing user:', employee_username)
                 # Iterate through each certificate and its completion date

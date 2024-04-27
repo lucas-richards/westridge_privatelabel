@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from PIL import Image
 from django.utils import timezone
 
+
 class Department(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -19,6 +20,11 @@ class Role(models.Model):
     def __str__(self):
         return f"{self.name}"
     
+    # each role should have a RoleTrainingModules object and has to be updated every time a role is updated
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+    
 
 
 class Profile(models.Model):
@@ -33,8 +39,30 @@ class Profile(models.Model):
     roles = models.ManyToManyField(Role, related_name='profiles', blank=True)
     training_modules = models.ManyToManyField('training.TrainingModule', related_name='profiles', through='training.TrainingEvent')
 
+
     def __str__(self):
-        return f'{self.user.username}'
+        return f"{self.user.username} profile"
+
+    # def update_training_events(self):
+        
+        # from training.models import TrainingEvent, TrainingModule
+        # must_have = self.must_have_training_modules()
+        # training_modules = TrainingModule.objects.all().order_by('name')  # Order training modules alphabetically
+       
+        # events = []
+
+        # for training_module in training_modules:
+        #     event = TrainingEvent.objects.filter(profile=self, training_module=training_module).first()
+        #     if event:
+        #         events.append(str(event.id))
+        #     elif training_module not in must_have:
+        #         events.append('-')
+        #     else:
+        #         events.append(training_module.name)
+
+        # self.training_events = ','.join(events)
+        # print(f'{self.user.username} updated training events: {self.training_events}')
+        # self.save()
     
     #resize the image to save space
     # def save(self, *args, **kwargs):
@@ -50,8 +78,6 @@ class Profile(models.Model):
     # write a function that returns all the user's training_events and their status
     # def get_training_modules(self):
     #     return self.training_modules.all()
-    
-    # # wtire a function that returns the percentage of training_events completed
     
     def get_training_modules_percentage(self):
         # save in a list the modules that this profiles must have
@@ -106,19 +132,16 @@ class Profile(models.Model):
                 
         return modules
             
-    
     # # function that returns true if user birthday is today or timeuntil if is not today
     def birthday_today(self):
         return self.birthday == timezone.now().date()
     
     # # get user tasks
-  
     def get_tasks_assigned(self):
         return self.tasks_asignee.all()
    
     def get_tasks_created(self):
         return self.tasks_created.all()
-    
     
     # # function that ruturns a list of modules that the user must have based on the roles
     def must_have_training_modules(self):
@@ -128,3 +151,4 @@ class Profile(models.Model):
             # Add training modules associated with the current role to the array
             required_modules.extend(role.training_modules.all())
         return required_modules
+

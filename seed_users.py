@@ -6,63 +6,63 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_projects.settings')
 django.setup()
 
 # Import your Django models
-from users.models import User, Role, Profile  # Replace 'your_app' with the name of your Django app
-
+from users.models import User, Role, Profile
+from training.models import ProfileTrainingEvents
 # Define a function to seed the database with users and their roles
 def seed_users_roles():
     users_roles_data = [
-        ('Gregg Haskell', '' , 'lucasrichardsdev@gmail.com', ['ALL', 'SUP', 'ALM', 'SAA', 'PMR']),
-        ('John Spielman', '' , 'lucasrichardsdev@gmail.com', ['ALL', 'SUP', 'DOC', 'ALM']),
-        ('Todd Haskell', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SUP', 'SCS']),
-        ('Tom Kelly', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SCS']),
-        ('Osmin Ventura', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS', 'BFK', 'AFK', 'SUP']),
-        ('Chris Roman', 'Osmin Ventura' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS']),
-        ('Ivan Caracheo', 'Osmin Ventura' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS', 'BFK', 'AFK', 'TRK']),
-        ('Jorge Ascencio', 'Osmin Ventura' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS', 'BFK', 'AFK']),
-        ('Liset Marin', 'Osmin Ventura' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS']),
-        ('Randall Martinez', 'Osmin Ventura' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS', 'BFK', 'AFK', 'TRK']),
-        ('Robert Gantt', 'Osmin Ventura' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS', 'BFK', 'AFK', 'TRK']),
-        ('Servando Machuca', 'Osmin Ventura' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS']),
-        ('Jerry Araiza', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SCS', 'ALM', 'SUP']),
-        ('Marcelle Moraes', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'QAS', 'SUP']),
-        ('Frederick Wade', 'Marcelle Moraes' , 'lucasrichardsdev@gmail.com', ['ALL', 'QAS', 'QCI']),
-        ('Emilia Guerrero', 'Marcelle Moraes' , 'lucasrichardsdev@gmail.com', ['ALL', 'QCI']),
-        ('Anthony De Nicola', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SAA', 'PMR']),
-        ('Cristina Ripley', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'PUR']),
-        ('Paloma Carvajal', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'PUR']),
-        ('Maryam Parissa', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL']),
-        ('Erika Larios',  'Jia Jeng' ,'lucasrichardsdev@gmail.com', ['ALL']),
-        ('Jia Jeng', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SUP', 'PMR']),
-        ('Juliet Hamby', 'Jia Jeng' , 'lucasrichardsdev@gmail.com', ['ALL']),
-        ('Liz Garibay', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SCS']),
-        ('Edgar Torres', 'Liz Garibay' , 'lucasrichardsdev@gmail.com', ['ALL', 'SCS']),
-        ('Rocio Lopez', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SCS']),
-        ('Yarely Gomez', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'WHS', 'BFK', 'SCS']),
-        ('Robert Mason', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SUP', 'SCS']),
-        ('Rod Burton',  'Gregg Haskell' ,'lucasrichardsdev@gmail.com', ['ALL', 'SCS', 'SUP']),
-        ('Scott Lamborn',  'Gregg Haskell' ,'lucasrichardsdev@gmail.com', ['ALL', 'SCS']),
-        ('Ivis Beza', 'Gregg Haskell' , 'lucasrichardsdev@gmail.com', ['ALL', 'SUP', 'ALM', 'PRD', 'CLN', 'COM', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
-        ('Aracely Tapia', 'Ivis Beza' , 'lucasrichardsdev@gmail.com', ['ALL', 'SUP', 'ALM', 'PRD', 'CLN', 'COM', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
-        ('Claudia Berzanez', 'Ivis Beza' , 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
-        ('Eden Mao',  'Ivis Beza' ,'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'MCH', 'FOL', 'TUB', 'HKP', 'LNE']),
-        ('Esmeralda Samano',  'Ivis Beza' ,'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE', 'COM']),
-        ('Ever Santana', 'Ivis Beza' , 'lucasrichardsdev@gmail.com', ['ALL', 'ALM', 'PRD', 'CLN', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
-        ('Julio Gallegas', 'Ivis Beza','lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'COM']),
-        ('Tereza Maria Bautista','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD']),
-        ('Maria Bermudez', 'Ivis Beza','lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'TUB', 'ASM', 'LNE']),
-        ('Maria Macias','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'TUB', 'ASM', 'HKP', 'LNE']),
-        ('Maria Molina','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'FOL', 'ASM', 'HKP', 'LNE']),
-        ('Olga L Guerrero','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'ASM', 'HKP', 'LNE']),
-        ('Rafael Rojas', 'Ivis Beza','lucasrichardsdev@gmail.com', ['ALL', 'PRD']),
-        ('Thy Chan', 'Ivis Beza','lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'CLN', 'MCH', 'FOL', 'TUB', 'LNE']),
-        ('Yesenia Merin','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
-        ('Maria Garcia', 'Ivis Beza','lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
-        ('Nancy Teran', 'Ivis Beza','lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
-        ('Mayra Jimenez','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
-        ('Dayrin Miranda','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
-        ('Gabriela Rodriguez','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
-        ('Haidee Esparza','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
-        ('Carmen Rojo','Ivis Beza', 'lucasrichardsdev@gmail.com', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Gregg Haskell', '', '', ['ALL', 'SUP', 'ALM', 'SAA', 'PMR']),
+        ('John Spielman', '', '', ['ALL', 'SUP', 'DOC', 'ALM']),
+        ('Todd Haskell', 'gregg_haskell', '', ['ALL', 'SUP', 'SCS']),
+        ('Tom Kelly', 'gregg_haskell', '', ['ALL', 'SCS']),
+        ('Osmin Ventura', 'gregg_haskell', '', ['ALL', 'WHS', 'BFK', 'AFK', 'SUP']),
+        ('Chris Roman', 'osmin_ventura', '', ['ALL', 'WHS']),
+        ('Ivan Caracheo', 'osmin_ventura', '', ['ALL', 'WHS', 'BFK', 'AFK', 'TRK']),
+        ('Jorge Ascencio', 'osmin_ventura', '', ['ALL', 'WHS', 'BFK', 'AFK']),
+        ('Liset Marin', 'osmin_ventura', '', ['ALL', 'WHS']),
+        ('Randall Martinez', 'osmin_ventura', '', ['ALL', 'WHS', 'BFK', 'AFK', 'TRK']),
+        ('Robert Gantt', 'osmin_ventura', '', ['ALL', 'WHS', 'BFK', 'AFK', 'TRK']),
+        ('Servando Machuca', 'osmin_ventura', '', ['ALL', 'WHS']),
+        ('Jerry Araiza', 'gregg_haskell', '', ['ALL', 'SCS', 'ALM', 'SUP']),
+        ('Marcelle Moraes', 'gregg_haskell', '', ['ALL', 'QAS', 'SUP']),
+        ('Frederick Wade', 'marcelle_moraes', '', ['ALL', 'QAS', 'QCI']),
+        ('Emilia Guerrero', 'marcelle_moraes', '', ['ALL', 'QCI']),
+        ('Anthony De Nicola', 'gregg_haskell', '', ['ALL', 'SAA', 'PMR']),
+        ('Cristina Ripley', 'gregg_haskell', '', ['ALL', 'PUR']),
+        ('Paloma Carvajal', 'gregg_haskell', '', ['ALL', 'PUR']),
+        ('Maryam Parissa', 'gregg_haskell', '', ['ALL']),
+        ('Erika Larios', '', '', ['ALL']),
+        ('Jia Jeng', 'gregg_haskell', '', ['ALL', 'SUP', 'PMR']),
+        ('Juliet Hamby', 'jia_jeng', '', ['ALL']),
+        ('Liz Garibay', 'gregg_haskell', '', ['ALL', 'SCS']),
+        ('Edgar Torres', 'liz_garibay', '', ['ALL', 'SCS']),
+        ('Rocio Lopez', 'gregg_haskell', '', ['ALL', 'SCS']),
+        ('Yarely Gomez', 'gregg_haskell', '', ['ALL', 'WHS', 'BFK', 'SCS']),
+        ('Robert Mason', 'gregg_haskell', '', ['ALL', 'SUP', 'SCS']),
+        ('Rod Burton', 'gregg_haskell', '', ['ALL', 'SCS', 'SUP']),
+        ('Scott Lamborn', 'gregg_haskell', '', ['ALL', 'SCS']),
+        ('Ivis Beza', 'gregg_haskell', '', ['ALL', 'SUP', 'ALM', 'PRD', 'CLN', 'COM', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
+        ('Aracely Tapia', 'ivis_beza', '', ['ALL', 'SUP', 'ALM', 'PRD', 'CLN', 'COM', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
+        ('Claudia Berzanez', 'ivis_beza', '', ['ALL', 'PRD', 'CLN', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
+        ('Eden Mao', 'ivis_beza', '', ['ALL', 'PRD', 'CLN', 'MCH', 'FOL', 'TUB', 'HKP', 'LNE']),
+        ('Esmeralda Samano', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE', 'COM']),
+        ('Ever Santana', 'ivis_beza', '', ['ALL', 'ALM', 'PRD', 'CLN', 'FOL', 'TUB', 'ASM', 'HKP', 'LNE']),
+        ('Julio Gallegas', 'ivis_beza', '', ['ALL', 'PRD', 'COM']),
+        ('Tereza Maria Bautista', 'ivis_beza', '', ['ALL', 'PRD']),
+        ('Maria Bermudez', 'ivis_beza', '', ['ALL', 'PRD', 'CLN', 'TUB', 'ASM', 'LNE']),
+        ('Maria Macias', 'ivis_beza', '', ['ALL', 'PRD', 'CLN', 'TUB', 'ASM', 'HKP', 'LNE']),
+        ('Maria Molina', 'ivis_beza', '', ['ALL', 'PRD', 'CLN', 'FOL', 'ASM', 'HKP', 'LNE']),
+        ('Olga L Guerrero', 'ivis_beza', '', ['ALL', 'PRD', 'CLN', 'ASM', 'HKP', 'LNE']),
+        ('Rafael Rojas', 'ivis_beza', '', ['ALL', 'PRD']),
+        ('Thy Chan', 'ivis_beza', '', ['ALL', 'PRD', 'CLN', 'MCH', 'FOL', 'TUB', 'LNE']),
+        ('Yesenia Merin', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Maria Garcia', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Nancy Teran', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Mayra Jimenez', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Dayrin Miranda', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Gabriela Rodriguez', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Haidee Esparza', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE']),
+        ('Carmen Rojo', 'ivis_beza', '', ['ALL', 'PRD', 'ASM', 'HKP', 'LNE'])
 
 
     ]
@@ -71,7 +71,7 @@ def seed_users_roles():
     for username, supervisor, email, roles_names in users_roles_data:
         # replace spaces with underscores and make lowercase in username
         first_name = username.split(' ')[0]
-        if username.split(' ')[2]:
+        if len(username.split(' ')) > 2:
             first_name = username.split(' ')[0] + ' ' + username.split(' ')[1]
             last_name = username.split(' ')[2]
         else:
@@ -82,6 +82,9 @@ def seed_users_roles():
         roles = Role.objects.filter(name__in=roles_names)
         profile, created = Profile.objects.get_or_create(user=user)
         profile.roles.add(*roles)
+        if profile:
+            profileTraining, created = ProfileTrainingEvents.objects.get_or_create(profile=profile)
+            profileTraining.update_row()
         if supervisor:
             try:
                 profile.supervisor = User.objects.get(username=supervisor)

@@ -7,7 +7,7 @@ django.setup()
 
 # Import your Django models
 from users.models import Role  # Replace 'your_app' with the description of your Django app
-from training.models import TrainingModule
+from training.models import TrainingModule, RoleTrainingModules
 # Define a function to seed the database with roles
 def seed_roles():
     roles_data = [
@@ -41,9 +41,12 @@ def seed_roles():
         # get or create
         role, _ = Role.objects.get_or_create(name=role_data['name'], description=role_data['description'])
         # add training modules
+        role_training_modules = RoleTrainingModules.objects.create(role=role)
         for tm in role_data['training_modules']:
             training = TrainingModule.objects.get(name=tm)
             role.training_modules.add(training)
+        # save
+        role.save()
         
 
         print(f'Role {role.name} created or updated with {role.training_modules.all()}')

@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import Profile
+from users.models import Profile, User, Role
 from datetime import date
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
@@ -19,7 +19,7 @@ class TrainingModule(models.Model):
     retrain_months = models.IntegerField(null=True, blank=True)
     # schedule date for the TrainingModule
     scheduled_date = models.DateTimeField(null=True, blank=True)
-    # each TrainingModule corresponds to one role
+
 
     def __str__(self):
         return f"{self.name}"
@@ -101,4 +101,46 @@ class TrainingEvent(models.Model):
 #         except Exception as e:
 #             logging.error(f'Error sending schedule update email to {user_email}: {str(e)}')
 
+class ProfileTrainingEvents(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    row = models.TextField(default=',,,,,,,,,,,,,,,,,,,,,,,', blank=True)
+
+    def __str__(self):
+        return f"{self.profile} {self.row}"
     
+    def update_row(self):
+        must_have = self.profile.must_have_training_modules()
+        training_modules = TrainingModule.objects.all().order_by('name')  # Order training modules alphabetically
+        events = []
+        for training_module in training_modules:
+            event = TrainingEvent.objects.filter(profile=self.profile, training_module=training_module).first()
+
+            if event:
+                events.append(str(event.id))
+            elif training_module not in must_have:
+                events.append('-')
+            else:
+                events.append(training_module.name)
+        print(f'### {self.profile} - {events} ')
+        self.row = ','.join(events)
+        print(f'{self.profile} updated training events: {self.row}')
+        self.save()
+
+class RoleTrainingModules(models.Model):
+    role = models.OneToOneField(Role, on_delete=models.CASCADE)
+    row = models.TextField(default='', blank=True)
+
+    def __str__(self):
+        return f"{self.role.name} {self.row}"
+    
+    def update_row(self):
+        from training.models import TrainingModule
+        training_modules = TrainingModule.objects.all().order_by('name')
+        row = []
+        for training_module in training_modules:
+            if training_module in self.role.training_modules.all():
+                row.append(training_module.name)
+            else:
+                row.append('-')
+        self.row = ','.join(row)
+        self.save()
