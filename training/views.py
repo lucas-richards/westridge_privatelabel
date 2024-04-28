@@ -84,11 +84,11 @@ def supervisors(request):
             'missing': []
         }
         
+        profiles = sup.supervisor_profiles.all()
+        profile_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).values_list('row', flat=True)
+        
         for i, training_module in enumerate(training_modules):
             print(i)
-            profiles = sup.supervisor_profiles.all()
-            profile_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).values_list('row', flat=True)
-            
             for profile_training_event in profile_training_events:
                 profile_training_event = profile_training_event.split(',')[i]
                 
@@ -108,9 +108,11 @@ def supervisors(request):
         # percentage of completed modules over total
         row['total_modules'] = len(modules['completed']) + len(modules['expired']) + len(modules['missing'])
         row['percentage'] = round(len(modules['completed']) / row['total_modules'] * 100)
-        print('##########', row)
+        
         row['modules'] = modules
         data.append(row)
+    # sort them by percentage
+    data = sorted(data, key=lambda x: x['percentage'], reverse=True)
     
     return render(request, 'training/supervisors.html', {'title':'Supervisors','data': data})
 
@@ -226,6 +228,31 @@ def new_user(request):
     return render(request, 'training/new_user.html', context)
 
 @login_required
+def graph(request):
+    # how many training events have been completed this year, last year, etc
+    training_events = TrainingEvent.objects.all()
+    data = {}
+    for event in training_events:
+        year = event.completed_date.year
+        if year in data:
+            data[year] += 1
+        else:
+            data[year] = 1
+    data1 = sorted(data.items(), key=lambda x: x[0])
+    # reverse data1
+    data1 = data1[::-1]
+    # create two different lists for the x and y axis
+    data2 = {'x': [x[0] for x in data1], 'y': [x[1] for x in data1]}
+
+    context = {
+        'title': 'Graph',
+        'data1':data1,
+        'data2':data2,
+    }
+
+    return render(request, 'training/graph.html', context)
+
+@login_required
 def history(request):
     training_events = TrainingEvent.objects.all().order_by('-created_date')
     paginator = Paginator(training_events, 10)
@@ -290,10 +317,7 @@ def dashboard(request):
     supervisors = User.objects.filter(supervisor_profiles__isnull=False).distinct()
     
     # if the request has a supervisor parameter, filter the profiles by the supervisor
-    if 'supervisor' in request.GET:
-        selected_supervisor = request.GET['supervisor']
-    else:
-        selected_supervisor = ''
+    selected_supervisor = request.GET.get('supervisor', '265')
 
     if selected_supervisor:
         #  filter profile objects where supervisor = supervisor
@@ -305,34 +329,26 @@ def dashboard(request):
 
     # Prepare data to be sent to the template
     data = []
-    for profile in profiles.order_by('user__username'):
-        # profile.update_training_events()
-        print('Get prepared data for user:', profile.user.username)
+    profile_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).select_related('profile')
+    for profile_training_event in profile_training_events:
+        profile = profile_training_event.profile
         row = {
             'profile': profile,
             'roles': profile.roles.all(),
-            'training_events': [],
+            'training_events': profile_training_event.row.split(',') if profile_training_event.row else [],
         }
-        profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
-        # if a new user was added and the profile_training_events object was not created
-        if profile_training_events.row == '':
-            profile_training_events.update_row()
-            profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
-            
-        row['training_events'] = profile_training_events.row.split(',')
-        print('Row:', row)
         data.append(row)
+    # order by the first name of the profile
+    data = sorted(data, key=lambda x: x['profile'].user.first_name)
         
     # create a function that returns all the roles in a form format to display it 
-    data2 = []
-    
-    for obj in RoleTrainingModules.objects.all().order_by('role'):
-        # role.update_training_modules_row()
-        row = {
+    data2 = [
+        {
             'role': obj.role,
-            'training_modules':obj.row.split(',')
+            'training_modules': obj.row.split(',')
         }
-        data2.append(row)
+        for obj in RoleTrainingModules.objects.all().order_by('role')
+    ]
 
     context = {
         'title': 'Grid',
