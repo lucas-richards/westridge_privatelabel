@@ -66,7 +66,7 @@ def percentage(request):
 
 @login_required
 def supervisors(request):
-    supervisors = User.objects.filter(supervisor_profiles__isnull=False).distinct()
+    supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
     training_modules = TrainingModule.objects.all().order_by('name')
     data = []
     
@@ -85,10 +85,11 @@ def supervisors(request):
         }
         
         profiles = sup.supervisor_profiles.all()
+        # filter only active profiles
+        profiles = [profile for profile in profiles if profile.active]
         profile_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).values_list('row', flat=True)
         
         for i, training_module in enumerate(training_modules):
-            print(i)
             for profile_training_event in profile_training_events:
                 profile_training_event = profile_training_event.split(',')[i]
                 
@@ -107,6 +108,8 @@ def supervisors(request):
         
         # percentage of completed modules over total
         row['total_modules'] = len(modules['completed']) + len(modules['expired']) + len(modules['missing'])
+        if row['total_modules'] == 0:
+            row['total_modules'] = 1
         row['percentage'] = round(len(modules['completed']) / row['total_modules'] * 100)
         
         row['modules'] = modules
@@ -332,17 +335,17 @@ def training_profile(request, profile_id):
 @login_required
 def dashboard(request):
     # get all the supervisors
-    supervisors = User.objects.filter(supervisor_profiles__isnull=False).distinct()
+    supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
     
     # if the request has a supervisor parameter, filter the profiles by the supervisor
     selected_supervisor = request.GET.get('supervisor', '265')
 
     if selected_supervisor:
         #  filter profile objects where supervisor = supervisor
-        profiles = Profile.objects.filter(supervisor=selected_supervisor)
+        profiles = Profile.objects.filter(supervisor=selected_supervisor, active=True)
         print('Profiles:', profiles)
     else:
-        profiles = Profile.objects.all()
+        profiles = Profile.objects.filter(active=True)
     training_modules = TrainingModule.objects.all().order_by('name')
 
     # Prepare data to be sent to the template
