@@ -1,0 +1,28 @@
+{% extends "training/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<div class="mt-5 p-3 card ">
+    <h4>Inactive Users</h4>
+    {% for prof in inactive_users %}
+    <ul>
+        <li>
+            <a href="{% url 'training-profile' prof.id %}">
+                {{ prof.user.first_name }} {{ prof.user.last_name }}
+            </a>
+        </li>
+    </ul>
+           
+        
+    {% endfor %}
+    
+</div>
+{% else %}
+<div>Log in to see inactive users</div>
+{% endif %}
+    
+
+
+
+{% endblock content %}

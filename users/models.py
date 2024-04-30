@@ -29,6 +29,7 @@ class Role(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
     #  this profile supervisor
     supervisor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='supervisor_profiles')
     birthday = models.DateField(null=True, blank=True)

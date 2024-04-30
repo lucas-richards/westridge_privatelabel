@@ -207,6 +207,8 @@ def new_user(request):
             user = User.objects.get(username=form_r.cleaned_data['username'])
             form_p = ProfileUpdateForm(request.POST, instance=user.profile)
             form_p.save()
+            profile_training_events = ProfileTrainingEvents.objects.create(profile=user.profile)
+            profile_training_events.update_row()
             messages.success(request, 'New user has been created!')
             return redirect('training-new_user')
         else:
@@ -251,6 +253,22 @@ def graph(request):
     }
 
     return render(request, 'training/graph.html', context)
+
+@login_required
+def inactive(request):
+    # get profiles with active = False
+    inactive_users = Profile.objects.filter(active=False)
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+    context = {
+        'title': 'Inactive',
+        'inactive_users': inactive_users,
+        'sidepanel': sidepanel
+    }
+    return render(request, 'training/inactive.html', context)
 
 @login_required
 def history(request):

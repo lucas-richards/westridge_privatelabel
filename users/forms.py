@@ -44,7 +44,7 @@ class ProfileUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['supervisor','roles']
+        fields = ['active','supervisor','roles']
 
 #  roles form with modules as checkboxes
 class RoleForm(forms.ModelForm):

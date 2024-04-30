@@ -20,10 +20,7 @@ def create_role_training_modules(sender, instance, created, **kwargds):
         role_training_modules = RoleTrainingModules.objects.get(role=instance)
     role_training_modules.update_row()
 
-@receiver(post_save, sender=Profile)
-def create_profile_training(sender, instance, created, **kwargds):
-    if created:
-        profile_training_events = ProfileTrainingEvents.objects.create(profile=instance)
-    else:
-        profile_training_events = ProfileTrainingEvents.objects.get(profile=instance)
+
+        
+    
     
