@@ -64,7 +64,7 @@ def percentage(request):
 
     return render(request, 'training/percentage.html', {'title':'Percentage','data': data})
 
-@login_required
+
 def supervisors(request):
     supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
     training_modules = TrainingModule.objects.all().order_by('name')
@@ -257,7 +257,7 @@ def graph(request):
 
     return render(request, 'training/graph.html', context)
 
-@login_required
+
 def inactive(request):
     # get profiles with active = False
     inactive_users = Profile.objects.filter(active=False)
@@ -332,7 +332,7 @@ def training_profile(request, profile_id):
     }
     return render(request, 'users/profile.html', context)
 
-@login_required
+
 def dashboard(request):
     # get all the supervisors
     supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
