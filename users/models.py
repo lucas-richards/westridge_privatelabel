@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 from django.utils import timezone
+from django.core.mail import send_mail
+import os
+import logging
 
 
 class Department(models.Model):
@@ -173,3 +176,18 @@ class Profile(models.Model):
         
         return required_modules
 
+    # send email with the code
+    def send_code(self, code):
+        email_user = os.environ.get('EMAIL_USER')
+        email_password = os.environ.get('EMAIL_PASS')
+        user_email = self.user.email
+
+        subject = f' New code generated for {self.user.username}'
+        message = f' You are now able to log in with the code {code}'
+
+        try:
+            send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)
+            logging.info(f'Successfully sent code to {user_email}')
+        
+        except Exception as e:
+            logging.error(f'Error sending code to {user_email}: {str(e)}')

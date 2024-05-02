@@ -2,10 +2,14 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
+        <a href="{% url 'get-code' %}">Send Code to Log In</a>
+    </div>
+    <div class="content-section">
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Log In</legend>
+                
                 {{ form|crispy }}
                 <div class="form-group">
                     <button type="subimt" class="btn btn-sm btn-secondary">Login</button>
@@ -21,6 +25,8 @@
             <small class="text-muted">
                 Need An account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
             </small>
+            
         </div>
     </div>
+    
 {% endblock content %}

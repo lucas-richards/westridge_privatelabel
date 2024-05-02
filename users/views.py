@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from training.models import TrainingEvent
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, UserLoginCodeForm, UserLoginCodeForm2
+from django.utils import timezone
+from django.contrib.auth.models import User
+from django.utils.crypto import get_random_string
+from django.contrib.auth import login
+from django.contrib.auth import authenticate
 
 
 # Django templates
@@ -40,10 +44,64 @@ def profile(request):
 
     context = {
         'u_form':u_form,
-        'p_form':p_form
+        'p_form':p_form,
+
     }
     return render(request, 'users/profile.html', context)
 
+def get_code(request):
+    form = UserLoginCodeForm()
+    if request.method == 'POST':
+        username = request.POST['username']
+        user = User.objects.filter(username=username).first()
+        if user:
+            verification_code = get_random_string(length=6, allowed_chars='0123456789')  # Generate a 6-digit verification code
+            user.set_password(verification_code)  # Set password to verification code
+            user.save()
+            
+            # Send verification code to user's email
+            user.profile.send_code(verification_code)
+            print('code',verification_code)
+            request.session['username'] = username  # Store username in session to verify later
+            # store the time that the code was generated in session
+            request.session['timestamp'] = timezone.now().isoformat()
+            messages.success(request, f'Verification code sent to {user.email}')
+            messages.warning(request, f'Your code expires in 1 minute')
+            return redirect('login-code')
+        else:
+            # Handle error if user not found
+            messages.error(request, 'User not found')
+            return render(request, 'users/get_code.html', {'form': form})
+    return render(request, 'users/get_code.html', {'form': form})
+
+def login_code(request):
+    if request.method == 'POST':
+        verification_code = request.POST['code']
+        username = request.session.get('username')
+        timestamp_str = request.session.get('timestamp')
+        timestamp = timezone.datetime.fromisoformat(timestamp_str)
+        print(username)
+        print(verification_code)
+        try:
+            
+            user = authenticate(request, username=username, password=verification_code)
+            if user:
+                # check expiration time
+                print('time difference', (timezone.now() - timestamp).seconds)
+                if (timezone.now() - timestamp).seconds > 60:
+                    messages.error(request, 'Verification code expired')
+                    return render(request, 'users/login_code.html')
+            login(request, user)
+            messages.success(request, 'Login successful')
+            del request.session['timestamp']  # Remove code_time from session after successful login
+            del request.session['username']  # Remove username from session after successful login
+            return redirect('training-graph')
+        except:
+            # Authentication failed, handle error
+            messages.error(request, 'Invalid verification code')
+            return render(request, 'users/verify.html')
+    return render(request, 'users/verify.html')
+    
 # API
 # from rest_framework.decorators import api_view
 # from django.http import JsonResponse

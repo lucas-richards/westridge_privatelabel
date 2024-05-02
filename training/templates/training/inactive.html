@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-{% if user.is_authenticated %}
+
 <div class="mt-5 p-3 card ">
     <h4>Inactive Users</h4>
     {% for prof in inactive_users %}
@@ -18,9 +18,7 @@
     {% endfor %}
     
 </div>
-{% else %}
-<div>Log in to see inactive users</div>
-{% endif %}
+
     
 
 

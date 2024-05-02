@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-{% if user.is_authenticated %}
+
     
     {% if data %}
 
@@ -44,12 +44,6 @@
     {% else %}
         <p class="m-3">No supervisors yet</p>
     {% endif %}
-
-    
-
-
-{% endif %}
-    
 
 
 {% endblock content %}

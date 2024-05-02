@@ -195,7 +195,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
-LOGIN_REDIRECT_URL = 'training-home'
+LOGIN_REDIRECT_URL = 'training-graph'
 LOGIN_URL = 'login'
 
 #variables to send email and reset password

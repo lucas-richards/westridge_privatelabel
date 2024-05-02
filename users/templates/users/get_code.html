@@ -1,0 +1,32 @@
+{% extends "blog/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        
+        <form id="form" method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Enter Username</legend>
+                {{ form|crispy }}
+                <div class="form-group d-flex">
+                    <button type="subimt" class="btn btn-sm btn-secondary">Send Code</button>
+                    
+                    <div id="loading-indicator" style="display: none;">
+                        <div class="ml-1 spinner-grow" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </fieldset>
+
+        </form>
+        
+    </div>
+    <script>
+        document.getElementById("form").addEventListener("submit", function() {
+            document.getElementById("loading-indicator").style.display = "block";
+            // document.getElementById("form").style.display = "none";
+        });
+    </script>
+{% endblock content %}

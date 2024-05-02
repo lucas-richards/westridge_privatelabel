@@ -232,7 +232,6 @@ def new_user(request):
 
     return render(request, 'training/new_user.html', context)
 
-@login_required
 def graph(request):
     # how many training events have been completed this year, last year, etc
     training_events = TrainingEvent.objects.all()

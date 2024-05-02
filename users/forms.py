@@ -58,4 +58,17 @@ class RoleForm(forms.ModelForm):
         model = Role
         fields = ['training_modules']
 
+# form to login with code, only enter username
+# form to login with code, only enter username
+class UserLoginCodeForm(forms.Form):
+    username = forms.CharField()
+
+# form to submit code password
+class UserLoginCodeForm2(forms.ModelForm):
+    password = forms.CharField()
+
+    class Meta:
+        model = User
+        fields = ['password']
+
 

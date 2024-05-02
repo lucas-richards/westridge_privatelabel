@@ -1,0 +1,44 @@
+{% extends "blog/base_sidepanel.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    #div_id_password label {
+        display: none;
+
+    }
+</style>
+    <div class="content-section">
+        
+        <form id="form" method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Enter Code</legend>
+                <input type="text" class="mb-3 textinput form-control" name="code" placeholder="Code">
+                <div class="form-group d-flex">
+                    <button type="subimt" class="btn btn-sm btn-secondary">Submit Code</button>
+                    <div id="loading-indicator" style="display: none;">
+                        <div class="ml-1 spinner-grow" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </fieldset>
+
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Didn't receive an email? <a class="ml-2" href="{% url 'get-code' %}">Try Again</a>
+            </small>
+            
+        </div>
+    </div>
+    <script>
+        document.getElementById("form").addEventListener("submit", function() {
+            document.getElementById("loading-indicator").style.display = "block";
+            // document.getElementById("form").style.display = "none";
+        });
+    </script>
+
+
+{% endblock content %}
