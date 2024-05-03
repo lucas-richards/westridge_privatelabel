@@ -274,7 +274,16 @@ def inactive(request):
 
 @login_required
 def history(request):
-    training_events = TrainingEvent.objects.all().order_by('-created_date')
+
+    selected_user = request.GET.get('user', '')
+    users = User.objects.all()
+
+    if selected_user:
+        selected_user = User.objects.get(id=selected_user)
+        training_events = TrainingEvent.objects.filter(profile=selected_user.profile).order_by('-created_date')
+        
+    else:
+        training_events = TrainingEvent.objects.all().order_by('-created_date')
     paginator = Paginator(training_events, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -288,6 +297,7 @@ def history(request):
         'title': 'History',
         'training_events': page_obj,
         'sidepanel': sidepanel,
+        'users': users
     }
     return render(request, 'training/history.html', context)
 

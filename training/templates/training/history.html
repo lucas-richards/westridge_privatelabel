@@ -5,6 +5,34 @@
 {% if user.is_authenticated %}
 
     
+    
+
+    <form id="user-form" method="get" action="{% url 'training-history' %}">
+        <div>
+            <label for="user">user</label>
+            <select name="user" id="user" onchange="this.form.submit()">
+                {% if selected_user == '' %}
+                    <option value="" selected>All</option>
+                {% else %}
+                    <option value="">All</option>
+                {% endif %}
+                {% for user in users %}
+                    {% if user.id == selected_user %}
+                        <option value="{{ user.id }}" selected>{{ user }}</option>
+                    {% else %}
+                        <option value="{{ user.id }}">{{ user }}</option>
+                    {% endif %}
+                {% endfor %}
+                
+            </select>
+            <div id="loading-indicator" style="display: none;">
+                <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+                <div class="spinner-grow" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </form>
     {% if training_events %}
 
         <table class="table table-hover">
@@ -64,7 +92,11 @@
 
 
 {% endif %}
-    
+<script>
+    document.getElementById("supervisor-form").addEventListener("change", function() {
+        document.getElementById("loading-indicator").style.display = "block";
+    });
+</script>
 
 
 {% endblock content %}
