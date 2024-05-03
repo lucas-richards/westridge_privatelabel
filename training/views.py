@@ -276,11 +276,11 @@ def inactive(request):
 def history(request):
 
     selected_user = request.GET.get('user', '')
-    users = User.objects.all()
+    users = User.objects.all().order_by('username')
 
     if selected_user:
-        selected_user = User.objects.get(id=selected_user)
-        training_events = TrainingEvent.objects.filter(profile=selected_user.profile).order_by('-created_date')
+        filter_user = User.objects.get(id=selected_user)
+        training_events = TrainingEvent.objects.filter(profile=filter_user.profile).order_by('-created_date')
         
     else:
         training_events = TrainingEvent.objects.all().order_by('-created_date')
@@ -297,7 +297,8 @@ def history(request):
         'title': 'History',
         'training_events': page_obj,
         'sidepanel': sidepanel,
-        'users': users
+        'users': users,
+        'selected_user': int(selected_user) if selected_user else selected_user,
     }
     return render(request, 'training/history.html', context)
 

@@ -5,11 +5,12 @@
 {% if user.is_authenticated %}
 
     
-    
+<div class="container">
+    <h2 class="sticky">Log</h2>
 
     <form id="user-form" method="get" action="{% url 'training-history' %}">
         <div>
-            <label for="user">user</label>
+            <label for="user">User:</label>
             <select name="user" id="user" onchange="this.form.submit()">
                 {% if selected_user == '' %}
                     <option value="" selected>All</option>
@@ -86,6 +87,7 @@
         <a class=" mb-4" href="?page={{ training_events.next_page_number }}">Next</a>
         <a class=" mb-4" href="?page={{ training_events.paginator.num_pages }}">Last</a>
     {% endif %}
+</div>
     
 
     
@@ -93,7 +95,7 @@
 
 {% endif %}
 <script>
-    document.getElementById("supervisor-form").addEventListener("change", function() {
+    document.getElementById("user-form").addEventListener("change", function() {
         document.getElementById("loading-indicator").style.display = "block";
     });
 </script>
