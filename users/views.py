@@ -55,19 +55,28 @@ def get_code(request):
         username = request.POST['username']
         user = User.objects.filter(username=username).first()
         if user:
-            verification_code = get_random_string(length=6, allowed_chars='0123456789')  # Generate a 6-digit verification code
-            user.set_password(verification_code)  # Set password to verification code
-            user.save()
-            
-            # Send verification code to user's email
-            user.profile.send_code(verification_code)
-            print('code',verification_code)
-            request.session['username'] = username  # Store username in session to verify later
-            # store the time that the code was generated in session
-            request.session['timestamp'] = timezone.now().isoformat()
-            messages.success(request, f'Verification code sent to {user.email}')
-            messages.warning(request, f'Your code expires in 1 minute')
-            return redirect('login-code')
+            # if user has staff status
+            if user.is_staff:
+                if user.email:
+                    verification_code = get_random_string(length=6, allowed_chars='0123456789')  # Generate a 6-digit verification code
+                    user.set_password(verification_code)  # Set password to verification code
+                    user.save()
+                    
+                    # Send verification code to user's email
+                    user.profile.send_code(verification_code)
+                    print('code',verification_code)
+                    request.session['username'] = username  # Store username in session to verify later
+                    # store the time that the code was generated in session
+                    request.session['timestamp'] = timezone.now().isoformat()
+                    messages.success(request, f'Verification code sent to {user.email}')
+                    messages.warning(request, f'Your code expires in 1 minute')
+                    return redirect('login-code')
+                else:
+                    messages.error(request, 'User does not have a correct email address. Please contact administator to update it.')
+                    return render(request, 'users/get_code.html', {'form': form})
+            else:
+                messages.error(request, 'User is not staff')
+                return render(request, 'users/get_code.html', {'form': form})
         else:
             # Handle error if user not found
             messages.error(request, 'User not found')
