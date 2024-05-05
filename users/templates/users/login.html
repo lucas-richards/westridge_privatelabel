@@ -1,14 +1,13 @@
 {% extends "blog/base_sidepanel.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
-        <a href="{% url 'get-code' %}">Send Code to Log In</a>
-    </div>
+    
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Log In</legend>
+                
                 
                 {{ form|crispy }}
                 <div class="form-group">
@@ -18,14 +17,23 @@
                     </small>
                 </div>
                 
+                
             </fieldset>
 
         </form>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Need An account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
-            </small>
-            
+        <hr>
+        <div class="d-flex align-items-center justify-content-between">
+
+            <div class="pt-1">
+                <small class="text-muted">
+                    Need An account? <a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+                </small>
+            </div>
+            <div class="pt-1">
+                <small class="text-muted">
+                    <a class="ml-2" href="{% url 'get-code' %}">Code Login</a>
+                </small>
+            </div>
         </div>
     </div>
     

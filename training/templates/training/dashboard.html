@@ -2,203 +2,149 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<style>
-    .table-container {
-        width: 100%;
-        height: 600px; 
-        overflow-y: auto; /* Enable vertical scrolling */
-    }
-    .sticky-column {
-        position: sticky;
-        left: 0;
-        z-index: 1;
-        background-color: rgb(249,249,249);
-    }
-    .link {
-        color: #007bff;
-        cursor: pointer;
-    }
-    
-
-    .sticky{
-        position: sticky;
-        top: 0px;
-        background-color: #f8f9fa; /* Change this to match your table header background color */
-        z-index: 2;
-    }
-
-    
-</style>
-
-
-<div class="container">
-    <h2 class="sticky">Grid</h2>
-
-    <!-- add a form to select supervisor -->
-    <form id="supervisor-form" method="get" action="{% url 'training-dashboard' %}">
-        <div>
-            <label for="supervisor">Supervisor</label>
-            <select name="supervisor" id="supervisor" onchange="this.form.submit()">
-                {% if selected_supervisor == '' %}
-                    <option value="" selected>All</option>
-                {% else %}
-                    <option value="">All</option>
-                {% endif %}
-                {% for supervisor in supervisors %}
-                    {% if supervisor.id == selected_supervisor %}
-                        <option value="{{ supervisor.id }}" selected>{{ supervisor }}</option>
-                    {% else %}
-                        <option value="{{ supervisor.id }}">{{ supervisor }}</option>
-                    {% endif %}
-                {% endfor %}
-                
-            </select>
-            <div id="loading-indicator" style="display: none;">
-                <!-- Your loading indicator here (e.g., spinner or progress bar) -->
-                <div class="spinner-grow" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
+<!-- create two columns -->
+<div class="row">
+    <div class="col-md-4">
+        <div class="mt-5 p-3 card ">
+            <h4>Training By Year</h4>
+            <canvas class="p-3" id="myChart"></canvas>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Trainings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x,y in by_year1 %}
+                    <tr>
+                        <td>{{ x }}</td>
+                        <td>{{ y }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </form>
-    
-    
-    <div class="table-container table-responsive">
-    <table class=" table-hover  table-bordered" style="font-size: small;">
-        <thead>
-            <tr class="table-secondary">
-                <th class="sticky-column sticky pr-4 pl-4"  style="z-index: 3;">
-                    <a id="roles" class="text-black link">Username/<span class="text-primary">Roles</span> </a>
-                </th>
-                
-                
-                {% for training_module in training_modules %}
-                        <th class="text-center sticky pl-2 pr-2">
-                            <a style="color: black;" href="{% url 'training-module-detail' training_module.id %}">
-                            {{ training_module }}
-                            </a>
-                        </th>
-                {% endfor %}
-            
-            </tr>
-        </thead>
-        <tbody>
-            {% for row in data2 %}
-                <tr id="{{row.role.id}}" style="display: none;">
-                    <td class="sticky-column pl-1 pr-1">
-                        {{ row.role }}
-                        
-                    </td>
-                    {% for module in row.training_modules %}
-                        <td class="text-center">
-                            {% if module != '-' %}
-                            x
-                            {% else %}
-                            
-                            {% endif %}
-                        </td>
+    </div>
+    <div class="col-md-4">
+        <div class="mt-5 p-3 card ">
+            <h4>Training History</h4>
+            <canvas class="p-3" id="myChart2"></canvas>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Less Than</th>
+                        <th>People</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x,y in history1 %}
+                    <tr>
+                        <td>{{ x }}</td>
+                        <td>{{ y }}</td>
+                    </tr>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-            {% for row in data %}
-                <tr>
-                    <td class="sticky-column">
-
-                        <!-- add link to user profile -->
-                        <a href="{% url 'training-profile' row.profile.id %}">
-                        {{ row.profile.user.first_name }} {{ row.profile.user.last_name }}
-                        </a>
-                        <div class="d-flex flex-wrap roles">
-                            {% for role in row.roles %}
-                                <span style="width: 20px;font-size: 5px;" class="badge bg-secondary text-white">{{ role }}</span>
-                            {% endfor %}
-                        </div>
-                        
-                    </td>
-                    
-                    {% for event in row.training_events %}
-                        <td class="pr-1 pl-1">
-                            <div class="d-flex justify-content-center align-items-center">
-                            {% if event != '-' %}
-                                {% if event == 'Expired' %}
-                                <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
-                                    <div class="text-danger">{{ event }}</div>
-                                </div>
-                                {% elif event == 'To Expire' %}
-                                <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expires in {{ event.expiration_date|timeuntil }}{% endif %}">
-                                    <div class="text-warning">{{ event }}</div>
-                                </div>
-                                {% elif event|slice:":2" == "TM" %}
-                                    <a class="text-secondary">missing</a>
-                                {% else %}
-                                    <div class="text-success">{{ event }}</div>
-                                {% endif %}
-
-                                
-                                <!-- {% if event.id %}
-                                    {% if event.status == 'Expired' %}
-                                    <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expired: {{ event.expiration_date|date:'n/j/Y'}}{% endif %}">
-                                        <div class="text-danger">{{ event.status }}</div>
-                                    </div>
-                                    {% elif event.status == 'About to expire' %}
-                                    <div data-toggle="tooltip" data-placement="right" title="{% if event.expiration_date %}Expires in {{ event.expiration_date|timeuntil }}{% endif %}">
-                                        <div class="text-warning">{{ event.status }}</div>
-                                    </div>
-                                    {% elif event.status == 'Ok' %}
-                                        <div class="text-success">{{ event.completed_date|date:'n/j/y' }}</div>
-                                    {% elif event.status == 'Incomplete' %}
-                                        <div class="text-secondary">Incomplete</div>
-                                    {% else %}
-                                    {% endif %}
-                                {% else %} -->
-                                    
-                                
-                                {% endif %}
-                            {% endif %}
-                            </div>
-                        </td>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="mt-5 p-3 card ">
+            <h4>Total Retraining</h4>
+            <canvas class="p-3" id="myChart"></canvas>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Year</th>
+                        <th>Trainings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for x,y in by_year1 %}
+                    <tr>
+                        <td>{{ x }}</td>
+                        <td>{{ y }}</td>
+                    </tr>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-            
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 </div>
-
     
 
-</div>
+
+<!-- dynamic charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    // show the rows with id roles when clicked roles
-    document.getElementById('roles').addEventListener('click', function(){
-        var roles = document.getElementById('roles');
-        var rows = document.querySelectorAll('tr');
-        var roleDivs = document.querySelectorAll('.roles');
-        
-        rows.forEach(row => {
-            if (row.id){
-                if (row.style.display == 'none'){
-                    row.style.display = 'table-row';
-                } else {
-                    row.style.display = 'none';
-                }
-            }
-        });
-        
-        roleDivs.forEach(div => {
-            if (div.style.display == 'none'){
-                div.style.display = 'block';
-            } else {
-                div.style.display = 'none';
-            }
-        });
-    });
+  const ctx = document.getElementById('myChart');
 
+  new Chart(ctx, {
+      type: 'pie',
+      data: {
+          labels: {{ by_year2.x }},
+          datasets: [{
+              label: 'Trainings',
+              data: {{ by_year2.y }},
+              borderWidth: 1,
+              backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)']
+          }]
+      },
+      options: {
+          plugins: {
+              legend: {
+                  display: false,
+              },
+              tooltip: {
+                  enabled: true,
+              }
+          },
+          scales: {
+              x: {
+                  display: false
+              },
+              y: {
+                  display: false
+              }
+          }
+      }
+  });
 </script>
 <script>
-    document.getElementById("supervisor-form").addEventListener("change", function() {
-        document.getElementById("loading-indicator").style.display = "block";
-    });
+  const ctx2 = document.getElementById('myChart2');
+
+  new Chart(ctx2, {
+      type: 'pie',
+      data: {
+          labels: ['1 Year', '2 Years', '5 Years', 'Others'],
+          datasets: [{
+              label: 'Trainings',
+              data: {{ history2.y }},
+              borderWidth: 1,
+              backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)']
+          }]
+      },
+      options: {
+          plugins: {
+              legend: {
+                  display: false,
+              },
+              tooltip: {
+                  enabled: true,
+              }
+          },
+          scales: {
+              x: {
+                  display: false
+              },
+              y: {
+                  display: false
+              }
+          }
+      }
+  });
 </script>
 
 

@@ -16,6 +16,8 @@ from .models import TrainingEvent, TrainingModule, ProfileTrainingEvents, RoleTr
 from django.contrib.auth.models import User
 import pandas as pd
 from django.core.paginator import Paginator
+from django.utils import timezone
+from datetime import datetime
 
 @login_required
 def home(request):
@@ -232,30 +234,59 @@ def new_user(request):
 
     return render(request, 'training/new_user.html', context)
 
-def graph(request):
+def dashboard(request):
     # how many training events have been completed this year, last year, etc
+    profiles = Profile.objects.all()
     training_events = TrainingEvent.objects.all()
-    data = {}
+    # create data that counts how many profiles have been trained a year from now, between 1 and two and between 2 and five years
+    history = {
+        '1year': 0,
+        '2years': 0,
+        '5years': 0,
+        'others': 0
+    }
+    for profile in profiles:
+        # year of the last training event
+        event = TrainingEvent.objects.filter(profile=profile).order_by('-completed_date').first()
+        if event:
+            date = event.completed_date
+            # convert date to timezone format
+            date = datetime.combine(date, datetime.min.time())
+            date = timezone.make_aware(date)
+            if  timezone.now() - date < timezone.timedelta(days=365):
+                history['1year'] += 1
+            elif timezone.now() - date < timezone.timedelta(days=365*2):
+                history['2years'] += 1
+            elif timezone.now() - date < timezone.timedelta(days=365*5):
+                history['5years'] += 1
+            else:
+                history['others'] += 1
+    
+    # graph for history
+    history2 = {'x': ['1 year', '2 years', '5 years', 'others'], 'y': [history['1year'], history['2years'], history['5years'], history['others']]}
+    history1 = sorted(history.items(), key=lambda x: x[0])
+    by_year = {}
     for event in training_events:
         year = event.completed_date.year
-        if year in data:
-            data[year] += 1
+        if year in by_year:
+            by_year[year] += 1
         else:
-            data[year] = 1
-    data1 = sorted(data.items(), key=lambda x: x[0])
-    # reverse data1
-    data1 = data1[::-1]
+            by_year[year] = 1
+    by_year1 = sorted(by_year.items(), key=lambda x: x[0])
+    # reverse by_year1
+    by_year1 = by_year1[::-1]
     # create two different lists for the x and y axis
-    data2 = {'x': [x[0] for x in data1], 'y': [x[1] for x in data1]}
+    by_year2 = {'x': [x[0] for x in by_year1], 'y': [x[1] for x in by_year1]}
 
     context = {
-        'title': 'Graph',
-        'data1':data1,
-        'data2':data2,
+        'title': 'Dashboard',
+        'by_year1':by_year1,
+        'by_year2':by_year2,
+        'history1': history1,
+        'history2': history2
     }
 
-    return render(request, 'training/graph.html', context)
-
+    return render(request, 'training/dashboard.html', context)
 
 def inactive(request):
     # get profiles with active = False
@@ -327,7 +358,7 @@ def training_profile(request, profile_id):
         p_form = ProfileUpdateForm( instance= profile)
 
     sidepanel = {
-        'title': 'Modules History',
+        'title': 'Required Modules',
         'text1': 'Completed all trainings',
         'text2': '',
     }
@@ -343,7 +374,7 @@ def training_profile(request, profile_id):
     return render(request, 'users/profile.html', context)
 
 
-def dashboard(request):
+def grid(request):
     # get all the supervisors
     supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
     
@@ -391,7 +422,7 @@ def dashboard(request):
         'data2': data2
     }
 
-    return render(request, 'training/dashboard.html', context)
+    return render(request, 'training/grid.html', context)
 
 @login_required
 def schedule(request, training_module_id):
