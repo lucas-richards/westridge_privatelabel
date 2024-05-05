@@ -262,7 +262,7 @@ def dashboard(request):
             else:
                 history['others'] += 1
     
-    # graph for history
+    
     history2 = {'x': ['1 year', '2 years', '5 years', 'others'], 'y': [history['1year'], history['2years'], history['5years'], history['others']]}
     history1 = sorted(history.items(), key=lambda x: x[0])
     by_year = {}
