@@ -89,22 +89,20 @@ def login_code(request):
         username = request.session.get('username')
         timestamp_str = request.session.get('timestamp')
         timestamp = timezone.datetime.fromisoformat(timestamp_str)
-        print(username)
-        print(verification_code)
+        
         try:
             
             user = authenticate(request, username=username, password=verification_code)
             if user:
                 # check expiration time
-                print('time difference', (timezone.now() - timestamp).seconds)
                 if (timezone.now() - timestamp).seconds > 60:
                     messages.error(request, 'Verification code expired')
-                    return render(request, 'users/login_code.html')
+                    return render(request, 'users/verify.html')
             login(request, user)
             messages.success(request, 'Login successful')
             del request.session['timestamp']  # Remove code_time from session after successful login
             del request.session['username']  # Remove username from session after successful login
-            return redirect('training-graph')
+            return redirect('training-dashboard')
         except:
             # Authentication failed, handle error
             messages.error(request, 'Invalid verification code')
