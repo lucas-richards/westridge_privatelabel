@@ -238,7 +238,19 @@ def dashboard(request):
     # how many training events have been completed this year, last year, etc
     profiles = Profile.objects.all()
     training_events = TrainingEvent.objects.all()
-    # create data that counts how many profiles have been trained a year from now, between 1 and two and between 2 and five years
+    # training events with certificate that have a retrain_months value
+    training_events_exp = [event for event in training_events if event.training_module.retrain_months]
+    # co
+    count = len(training_events_exp)
+    # get the percentage of completed and expires
+    completed = len([event for event in training_events_exp if event.status() == 'Ok'])
+    expired = len([event for event in training_events_exp if event.status() == 'Expired'])
+    almost_expired = len([event for event in training_events_exp if event.status() == 'About to expire'])
+
+    
+    print(count)
+    print(len(training_events))
+    # create data that counts how many profiles have been trained a year from now, between 1 and two and between 2 and five years)
     history = {
         '1year': 0,
         '2years': 0,
