@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
+from training.models import TrainingEvent
 
 
 # Django templates
@@ -28,6 +29,21 @@ def register(request):
 
 @login_required
 def profile(request):
+    # get user 
+    user = request.user
+    # get all profile training events
+    training_events = TrainingEvent.objects.filter(profile=user.profile).order_by('-completed_date')
+    # profile must have modules
+    training_modules = user.profile.must_have_training_modules()
+
+    data = []
+    for training_module in training_modules:
+        events = TrainingEvent.objects.filter(profile=user.profile, training_module=training_module).order_by('-completed_date')
+        row = {}
+        row['training_module'] = training_module
+        row['events'] = events if events.exists() else 'missing'
+        data.append(row)
+    
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance = request.user)
         p_form = ProfileUpdateForm( request.POST,
@@ -42,9 +58,19 @@ def profile(request):
         u_form = UserUpdateForm(instance = request.user)
         p_form = ProfileUpdateForm( instance= request.user.profile)
 
+    sidepanel = {
+            'title': 'Required Modules',
+            'text1': 'Completed all trainings',
+            'text2': '',
+        }
+
     context = {
         'u_form':u_form,
         'p_form':p_form,
+        'sidepanel': sidepanel,
+        'training_events': training_events,
+        'training_modules': training_modules,
+        'data': data,
 
     }
     return render(request, 'users/profile.html', context)
