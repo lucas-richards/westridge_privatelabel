@@ -41,7 +41,7 @@ def seed_roles():
         # get or create
         role, _ = Role.objects.get_or_create(name=role_data['name'], description=role_data['description'])
         # add training modules
-        role_training_modules = RoleTrainingModules.objects.create(role=role)
+        # role_training_modules = RoleTrainingModules.objects.create(role=role)
         for tm in role_data['training_modules']:
             training = TrainingModule.objects.get(name=tm)
             role.training_modules.add(training)
