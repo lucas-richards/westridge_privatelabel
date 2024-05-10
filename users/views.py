@@ -25,7 +25,7 @@ def register(request):
     
     return render(request, 'users/register.html',{'form':form})
 
-# only when they are logged in, show form to update name user and image
+# only when they are logged in, show form to update name user and image.
 
 @login_required
 def profile(request):
