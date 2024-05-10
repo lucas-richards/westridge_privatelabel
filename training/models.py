@@ -123,7 +123,7 @@ class ProfileTrainingEvents(models.Model):
             event = TrainingEvent.objects.filter(profile=self.profile, training_module=training_module).first()
 
             if event:
-                events.append(event.status())
+                events.append(event.completed_date.strftime('%m/%d/%y'))
             elif training_module not in must_have:
                 events.append('-')
             else:

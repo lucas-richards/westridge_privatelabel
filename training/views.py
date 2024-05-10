@@ -18,6 +18,7 @@ import pandas as pd
 from django.core.paginator import Paginator
 from django.utils import timezone
 from datetime import datetime
+import datetime as dt
 
 @login_required
 def home(request):
@@ -385,13 +386,12 @@ def training_profile(request, profile_id):
     }
     return render(request, 'users/profile.html', context)
 
-
 def grid(request):
     # get all the supervisors
     supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
     
     # if the request has a supervisor parameter, filter the profiles by the supervisor
-    selected_supervisor = request.GET.get('supervisor', '265')
+    selected_supervisor = request.GET.get('supervisor', '')
 
     if selected_supervisor:
         #  filter profile objects where supervisor = supervisor
@@ -411,6 +411,32 @@ def grid(request):
             'roles': profile.roles.all(),
             'training_events': profile_training_event.row.split(',') if profile_training_event.row else [],
         }
+        # combine trainin_modules and row.training_events in a for loop to check expired modules
+        for i, training_module in enumerate(training_modules):
+            if row['training_events'][i] == '-' or row['training_events'][i] == '':
+                continue
+            if row['training_events'][i][0] == 'T':
+                continue
+            # if it's a date compare it with the training_module retrain_months
+            try:
+                parsed_date = dt.datetime.strptime(row['training_events'][i], '%m/%d/%y')  # Assuming the date format is MM/DD/YY
+                current_date = dt.datetime.now()
+                delta = current_date - parsed_date
+                months_difference = delta.days // 30  # Approximate calculation for months
+                
+                if training_module.retrain_months:
+                    if months_difference > training_module.retrain_months:
+                        row['training_events'][i] = 'Expired'
+                        
+                    elif months_difference > training_module.retrain_months - 3 and training_module.retrain_months > months_difference:
+                        row['training_events'][i] = 'To Expire'
+                    else:
+                        print('module up to date')
+                   
+            except ValueError:
+                print('this is the value that couldnt convert to date',row['training_events'][i])
+                
+
         data.append(row)
     # order by the first name of the profile
     data = sorted(data, key=lambda x: x['profile'].user.first_name)
