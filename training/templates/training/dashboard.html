@@ -3,73 +3,84 @@
 {% block content %}
 
 <!-- create two columns -->
-<div class="row">
-    <div class="col-md-4">
-        <div class="mt-5 p-3 card ">
-            <h4>Training By Year</h4>
-            <canvas class="p-3" id="myChart"></canvas>
-            <table class="table table-striped">
+<div class="mb-4 row">
+    <div class="col-md-6">
+        <div class="mt-5 p-3 card " style="height: 450px;">
+            <h4 class="mb-2">Training History</h4>
+            <table class="mb-3 table-hover  table-bordered text-center" style="width: 300px;">
                 <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Trainings</th>
+                    <tr class="table-secondary">
+                        <th>Total Employees</th>
+                        <th>100% Trained</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for x,y in by_year1 %}
+                    
                     <tr>
-                        <td>{{ x }}</td>
-                        <td>{{ y }}</td>
+                        <td>65</td>
+                        <td>90%</td>
                     </tr>
-                    {% endfor %}
+                    
                 </tbody>
             </table>
+            <div style="height: 300px;">
+                <canvas class="p-3" id="myChart2"></canvas>
+            </div>
         </div>
+        <div class="mt-5 p-3 card " style="height: 450px;">
+            <h4 class="mb-2">Training By Year</h4>
+            <div style="height: 300px;">
+                <canvas class="p-3" id="myChart"></canvas>
+            </div>
+
+        </div>
+        
     </div>
-    <div class="col-md-4">
-        <div class="mt-5 p-3 card ">
-            <h4>Training History</h4>
-            <canvas class="p-3" id="myChart2"></canvas>
-            <table class="table table-striped">
+    <div class="col-md-6">
+        <div class="mt-5 p-3 card " style="height: 450px;">
+            <h4 class="mb-2">Total Training</h4>
+            <table class="mb-3 table-hover  table-bordered text-center w-100" style="width: 300px;">
                 <thead>
-                    <tr>
-                        <th>Less Than</th>
-                        <th>People</th>
+                    <tr class="table-secondary">
+                        <th>Total Training</th>
+                        <th>Total Training Performed</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for x,y in history1 %}
+                    
                     <tr>
-                        <td>{{ x }}</td>
-                        <td>{{ y }}</td>
+                        <td>{{ training.total }}</td>
+                        <td>{{ total_training_perc }}%</td>
                     </tr>
-                    {% endfor %}
+                    
                 </tbody>
             </table>
+            <canvas id="myChart3"></canvas>
+            
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="mt-5 p-3 card ">
-            <h4>Total Retraining</h4>
-            <canvas class="p-3" id="myChart"></canvas>
-            <table class="table table-striped">
+        <div class="mt-5 p-3 card " style="height: 450px;">
+            <h4 class="mb-2">Total Retraining</h4>
+            <table class="mb-3 table-hover  table-bordered text-center w-100" style="width: 300px;">
                 <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Trainings</th>
+                    <tr class="table-secondary">
+                        <th>Total Retraining</th>
+                        <th>Total Retraining Performed</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for x,y in by_year1 %}
+                    
                     <tr>
-                        <td>{{ x }}</td>
-                        <td>{{ y }}</td>
+                        <td>{{ retraining.total }}</td>
+                        <td>{{ total_retraining_perc }}%</td>
                     </tr>
-                    {% endfor %}
+                    
                 </tbody>
             </table>
+            <canvas  id="myChart4"></canvas>
+            
         </div>
     </div>
+    
     
 </div>
     
@@ -82,35 +93,40 @@
   const ctx = document.getElementById('myChart');
 
   new Chart(ctx, {
-      type: 'pie',
-      data: {
-          labels: {{ by_year2.x }},
-          datasets: [{
-              label: 'Trainings',
-              data: {{ by_year2.y }},
-              borderWidth: 1,
-              backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)']
-          }]
-      },
-      options: {
-          plugins: {
-              legend: {
-                  display: false,
-              },
-              tooltip: {
-                  enabled: true,
-              }
-          },
-          scales: {
-              x: {
-                  display: false
-              },
-              y: {
-                  display: false
-              }
-          }
-      }
-  });
+    type: 'pie',
+    data: {
+        labels: {{ by_year2.x }},
+        datasets: [{
+            label: 'Trainings',
+            data: {{ by_year2.y }},
+            borderWidth: 1,
+            backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)']
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true, // Display the legend
+                labels: {
+                    fontColor: 'black', // Color of text in legend
+                    boxWidth: 20, // Width of colored box
+                    padding: 20 // Padding between legend elements
+                }
+            },
+            tooltip: {
+                enabled: true,
+            }
+        },
+        scales: {
+            x: {
+                display: false
+            },
+            y: {
+                display: false
+            }
+        }
+    }
+});
 </script>
 <script>
   const ctx2 = document.getElementById('myChart2');
@@ -127,25 +143,110 @@
           }]
       },
       options: {
-          plugins: {
-              legend: {
-                  display: false,
-              },
-              tooltip: {
-                  enabled: true,
-              }
-          },
-          scales: {
-              x: {
-                  display: false
-              },
-              y: {
-                  display: false
-              }
-          }
-      }
+        plugins: {
+            legend: {
+                display: true, // Display the legend
+                labels: {
+                    fontColor: 'black', // Color of text in legend
+                    boxWidth: 20, // Width of colored box
+                    padding: 20 // Padding between legend elements
+                }
+            },
+            tooltip: {
+                enabled: true,
+            }
+        },
+        scales: {
+            x: {
+                display: false
+            },
+            y: {
+                display: false
+            }
+        }
+    }
   });
 </script>
+<script>
+  const ctx3 = document.getElementById('myChart3');
+
+  new Chart(ctx3, {
+    type: 'bar',
+    data: {
+        labels: ['Performed', 'Not Performed', 'Overdue'],
+        datasets: [{
+            label: 'Trainings',
+            data: [
+                ({{training.performed}} / {{training.total}}) * 100,
+                ({{training.not_performed}} / {{training.total}}) * 100,
+                ({{training.overdue}} / {{training.total}}) * 100
+            ],
+            backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        scales: {
+            x: {
+                min: 0,
+                max: 100,
+                ticks: {
+                    stepSize: 20,
+                    callback: function(value) {
+                        return value + '%';
+                    }
+                }
+            }
+        },
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    }
+});
+</script>
+<script>
+  const ctx4 = document.getElementById('myChart4');
+
+  new Chart(ctx4, {
+      type: 'bar',
+      data: {
+          labels: ['Performed', 'Not Performed', 'Overdue'],
+          datasets: [{
+              label: 'Trainings',
+              data: [{{retraining.performed}}/{{retraining.total}}*100, {{retraining.not_performed}}/{{retraining.total}}*100, {{retraining.overdue}}/{{retraining.total}}*100],
+              borderWidth: 1,
+              backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)']
+          }]
+      },
+      
+      options: {
+        indexAxis: 'y',
+        scales: {
+            x: {
+                min: 0,
+                max: 100,
+                ticks: {
+                    stepSize: 20,
+                    callback: function(value) {
+                        return value + '%';
+                    }
+                }
+            }
+        },
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top'
+            }
+        }
+    }
+  });
+</script>
+
 
 
 {% endblock content %}

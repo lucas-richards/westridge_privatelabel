@@ -239,18 +239,60 @@ def dashboard(request):
     # how many training events have been completed this year, last year, etc
     profiles = Profile.objects.all()
     training_events = TrainingEvent.objects.all()
+    training_modules = TrainingModule.objects.all().order_by('name')
     # training events with certificate that have a retrain_months value
-    training_events_exp = [event for event in training_events if event.training_module.retrain_months]
-    # co
-    count = len(training_events_exp)
-    # get the percentage of completed and expires
-    completed = len([event for event in training_events_exp if event.status() == 'Ok'])
-    expired = len([event for event in training_events_exp if event.status() == 'Expired'])
-    almost_expired = len([event for event in training_events_exp if event.status() == 'About to expire'])
-
+    # profiles_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).select_related('profile')
+    # this data is for total training and total retraining
+    training = {
+        'performed' : 0,
+        'overdue' : 0,
+        'not_performed' : 0,
+        'total' : 0
+    }
+    retraining = {
+        'performed' : 0,
+        'overdue' : 0,
+        'not_performed' : 0,
+        'total' : 0
+    }
+    for profile in profiles:
+        profile_training_events = ProfileTrainingEvents.objects.filter(profile=profile).first()
+        training_events_now = profile_training_events.row.split(',')
+    # combine trainin_modules and row.training_events in a for loop to check expired modules
+        for i, training_module in enumerate(training_modules):
+                if training_events_now[i] == '-':
+                    continue
+                elif training_events_now[i][0] == 'T':
+                    if training_module.retrain_months:
+                        retraining['total'] += 1
+                        retraining['not_performed'] += 1
+                        continue
+                    else:
+                        training['total'] += 1
+                        training['not_performed'] += 1
+                        continue
     
-    print(count)
-    print(len(training_events))
+                # if it's a date compare it with the training_module retrain_months
+                try:
+                    parsed_date = dt.datetime.strptime(training_events_now[i], '%m/%d/%y')  # Assuming the date format is MM/DD/YY
+                    current_date = dt.datetime.now()
+                    delta = current_date - parsed_date
+                    months_difference = delta.days // 30  # Approximate calculation for months
+                    
+                    if training_module.retrain_months:
+                        if months_difference > training_module.retrain_months:
+                            retraining['overdue'] += 1
+                        else:
+                            retraining['performed'] += 1
+                        retraining['total'] += 1
+                    else:
+                        training['total'] += 1
+                        training['performed'] += 1
+                        
+                except ValueError:
+                    print('this is the value that couldnt convert to date',training_events_now[i])
+    
+    
     # create data that counts how many profiles have been trained a year from now, between 1 and two and between 2 and five years)
     history = {
         '1year': 0,
@@ -293,10 +335,15 @@ def dashboard(request):
 
     context = {
         'title': 'Dashboard',
+        'profiles_count': profiles.count(),
         'by_year1':by_year1,
         'by_year2':by_year2,
         'history1': history1,
-        'history2': history2
+        'history2': history2,
+        'training': training,
+        'retraining': retraining,
+        'total_training_perc': round(training['performed'] / training['total'] * 100) if training['total'] else 0,
+        'total_retraining_perc': round(retraining['performed'] / retraining['total'] * 100) if retraining['total'] else 0
     }
 
     return render(request, 'training/dashboard.html', context)
