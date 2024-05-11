@@ -5,9 +5,9 @@
 <!-- create two columns -->
 <div class="mb-4 row">
     <div class="col-md-6">
-        <div class="mt-5 p-3 card " style="height: 450px;">
-            <h4 class="mb-2">Training History</h4>
-            <table class="mb-3 table-hover  table-bordered text-center" style="width: 300px;">
+        <div class="mt-5 p-3 card " style="height: 400px;">
+            <h2 class="mb-4 text-center">Training History</h2>
+            <table class="mb-2 table-hover table-bordered text-center" style="font-size: larger;">
                 <thead>
                     <tr class="table-secondary">
                         <th>Total Employees</th>
@@ -17,18 +17,18 @@
                 <tbody>
                     
                     <tr>
-                        <td>65</td>
-                        <td>90%</td>
+                        <td>{{ profiles_count }}</td>
+                        <td>95%</td>
                     </tr>
                     
                 </tbody>
             </table>
-            <div style="height: 300px;">
-                <canvas class="p-3" id="myChart2"></canvas>
+            <div style="height: 200px;width: 300px;">
+                <canvas id="myChart2" style="height: 200px;width: 300px;"></canvas>
             </div>
         </div>
-        <div class="mt-5 p-3 card " style="height: 450px;">
-            <h4 class="mb-2">Training By Year</h4>
+        <div class="mt-5 p-3 card " style="height: 400px;">
+            <h2 class="mb-4 text-center">Training By Year</h2>
             <div style="height: 300px;">
                 <canvas class="p-3" id="myChart"></canvas>
             </div>
@@ -37,9 +37,9 @@
         
     </div>
     <div class="col-md-6">
-        <div class="mt-5 p-3 card " style="height: 450px;">
-            <h4 class="mb-2">Total Training</h4>
-            <table class="mb-3 table-hover  table-bordered text-center w-100" style="width: 300px;">
+        <div class="mt-5 p-3 card " style="height: 400px;">
+            <h2 class="mb-4 text-center">Total Training</h2>
+            <table class="mb-2 table-hover table-bordered text-center" style="font-size: larger;">
                 <thead>
                     <tr class="table-secondary">
                         <th>Total Training</th>
@@ -58,9 +58,9 @@
             <canvas id="myChart3"></canvas>
             
         </div>
-        <div class="mt-5 p-3 card " style="height: 450px;">
-            <h4 class="mb-2">Total Retraining</h4>
-            <table class="mb-3 table-hover  table-bordered text-center w-100" style="width: 300px;">
+        <div class="mt-5 p-3 card " style="height: 400px;">
+            <h2 class="mb-4 text-center">Total Retraining</h2>
+            <table class="mb-2 table-hover table-bordered text-center" style="font-size: larger;">
                 <thead>
                     <tr class="table-secondary">
                         <th>Total Retraining</th>
@@ -90,83 +90,103 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  const ctx = document.getElementById('myChart');
-
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: {{ by_year2.x }},
-        datasets: [{
-            label: 'Trainings',
-            data: {{ by_year2.y }},
-            borderWidth: 1,
-            backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)']
-        }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                display: true, // Display the legend
-                labels: {
-                    fontColor: 'black', // Color of text in legend
-                    boxWidth: 20, // Width of colored box
-                    padding: 20 // Padding between legend elements
-                }
-            },
-            tooltip: {
-                enabled: true,
-            }
-        },
-        scales: {
-            x: {
-                display: false
-            },
-            y: {
-                display: false
-            }
-        }
-    }
-});
-</script>
-<script>
-  const ctx2 = document.getElementById('myChart2');
-
-  new Chart(ctx2, {
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
       type: 'pie',
       data: {
-          labels: ['1 Year', '2 Years', '5 Years', 'Others'],
+          labels: {{ by_year2.x }},
           datasets: [{
               label: 'Trainings',
-              data: {{ history2.y }},
+              data: {{ by_year2.y }},
               borderWidth: 1,
-              backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)']
-          }]
+              backgroundColor: ['rgba(102, 204, 153, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)'],
+              
+            }]
       },
       options: {
-        plugins: {
-            legend: {
-                display: true, // Display the legend
-                labels: {
-                    fontColor: 'black', // Color of text in legend
-                    boxWidth: 20, // Width of colored box
-                    padding: 20 // Padding between legend elements
-                }
-            },
-            tooltip: {
-                enabled: true,
-            }
+          plugins: {
+              legend: {
+                  display: true, // Display the legend
+                  labels: {
+                      fontColor: 'black', // Color of text in legend
+                      boxWidth: 20, // Width of colored box
+                      padding: 20 // Padding between legend elements
+                  }
+              },
+              tooltip: {
+                  enabled: true,
+              }
+          },
+          scales: {
+              x: {
+                  display: false
+              },
+              y: {
+                  display: false
+              }
+          }
+      }
+    });
+  
+    Chart.register({
+      id: 'overrideLegendPosition',
+      beforeInit: function(chart, args, options) {
+          if (chart.config.type === 'pie') {
+              chart.options.plugins.legend.position = 'right';
+          }
+      }
+    });
+  
+    // Creating the second pie chart
+    const ctx2 = document.getElementById('myChart2');
+  
+    new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: ['1 Year or less', '1 to 2 Years', '5 Years or more', 'Others'],
+            datasets: [{
+                label: 'Trainings',
+                data: {{ history2.y }},
+                borderWidth: 1,
+                backgroundColor: ['rgba(102, 204, 153, 0.8)', 'rgba(251, 192, 147, 0.5)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)']
+            }]
         },
-        scales: {
-            x: {
-                display: false
-            },
-            y: {
-                display: false
-            }
-        }
-    }
-  });
-</script>
+        options: {
+          plugins: {
+              legend: {
+                  display: true, // Display the legend
+                  labels: {
+                      fontColor: 'black', // Color of text in legend
+                      boxWidth: 20, // Width of colored box
+                      padding: 20 // Padding between legend elements
+                  }
+              },
+              tooltip: {
+                  enabled: true,
+              }
+          },
+          scales: {
+              x: {
+                  display: false
+              },
+              y: {
+                  display: false
+              }
+          }
+      }
+    });
+  
+    // Registering the legend position override for the second pie chart
+    Chart.register({
+      id: 'overrideLegendPosition2',
+      beforeInit: function(chart, args, options) {
+          if (chart.config.type === 'pie') {
+              chart.options.plugins.legend.position = 'right';
+          }
+      }
+    });
+  </script>
 <script>
   const ctx3 = document.getElementById('myChart3');
 
