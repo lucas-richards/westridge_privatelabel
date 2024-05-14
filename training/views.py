@@ -100,10 +100,20 @@ def supervisors(request):
                     continue
                 elif profile_training_event[0] == 'T':
                     modules['missing'].append(training_module)
-                elif profile_training_event[0] == 'E':
-                    modules['expired'].append(training_module)
                 else:
-                    modules['completed'].append(training_module)
+                    try:
+                        parsed_date = dt.datetime.strptime(profile_training_event, '%m/%d/%y')  # Assuming the date format is MM/DD/YY
+                        current_date = dt.datetime.now()
+                        delta = current_date - parsed_date
+                        months_difference = delta.days // 30  # Approximate calculation for months
+                        
+                        if training_module.retrain_months:
+                            if months_difference > training_module.retrain_months:
+                                modules['expired'].append(training_module)
+                            else:
+                                modules['completed'].append(training_module)
+                    except ValueError:
+                        continue
         
         modules['completed'] = list(set(modules['completed']) - set(modules['expired']) - set(modules['missing']))
         modules['expired'] = list(set(modules['expired']))
@@ -266,11 +276,10 @@ def dashboard(request):
                     if training_module.retrain_months:
                         retraining['total'] += 1
                         retraining['not_performed'] += 1
-                        continue
-                    else:
-                        training['total'] += 1
-                        training['not_performed'] += 1
-                        continue
+                        
+                    training['total'] += 1
+                    training['not_performed'] += 1
+                    continue
     
                 # if it's a date compare it with the training_module retrain_months
                 try:
@@ -282,16 +291,25 @@ def dashboard(request):
                     if training_module.retrain_months:
                         if months_difference > training_module.retrain_months:
                             retraining['overdue'] += 1
+                            training['overdue'] += 1
                         else:
                             retraining['performed'] += 1
                         retraining['total'] += 1
-                    else:
-                        training['total'] += 1
-                        training['performed'] += 1
+
+                    training['performed'] += 1
+                    training['total'] += 1
+                    
                         
                 except ValueError:
                     print('this is the value that couldnt convert to date',training_events_now[i])
     
+    # round and divide by total to get the percentage of training and retraining
+    training['performed'] = round(training['performed'] / training['total'] * 100) if training['total'] else 0
+    retraining['performed'] = round(retraining['performed'] / retraining['total'] * 100) if retraining['total'] else 0
+    training['overdue'] = round(training['overdue'] / training['total'] * 100) if training['total'] else 0
+    retraining['overdue'] = round(retraining['overdue'] / retraining['total'] * 100) if retraining['total'] else 0
+    training['not_performed'] = round(training['not_performed'] / training['total'] * 100) if training['total'] else 0
+    retraining['not_performed'] = round(retraining['not_performed'] / retraining['total'] * 100) if retraining['total'] else 0
     
     # create data that counts how many profiles have been trained a year from now, between 1 and two and between 2 and five years)
     history = {
@@ -341,9 +359,7 @@ def dashboard(request):
         'history1': history1,
         'history2': history2,
         'training': training,
-        'retraining': retraining,
-        'total_training_perc': round(training['performed'] / training['total'] * 100) if training['total'] else 0,
-        'total_retraining_perc': round(retraining['performed'] / retraining['total'] * 100) if retraining['total'] else 0
+        'retraining': retraining
     }
 
     return render(request, 'training/dashboard.html', context)
@@ -477,8 +493,7 @@ def grid(request):
                         
                     elif months_difference > training_module.retrain_months - 3 and training_module.retrain_months > months_difference:
                         row['training_events'][i] = 'To Expire'
-                    else:
-                        print('module up to date')
+                    
                    
             except ValueError:
                 print('this is the value that couldnt convert to date',row['training_events'][i])
