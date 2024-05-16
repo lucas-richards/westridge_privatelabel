@@ -6,10 +6,10 @@
 <div class="mb-4 row">
     <div class="col-md-6">
         <div class="p-3 card " style="height: 300px;">
-            <table class="mb-2 table-hover table-bordered text-center" style="font-size:larger;">
+            <table class="mb-2 table-hover table-bordered rounded text-center " style="font-size:larger;">
                 <thead>
                     <tr class="table-secondary">
-                        <th>Total Employees</th>
+                        <th>Total Active Employees</th>
                         <th>100% Trained</th>
                     </tr>
                 </thead>
@@ -17,7 +17,7 @@
                     
                     <tr>
                         <td>{{ profiles_count }}</td>
-                        <td>95%</td>
+                        <td>{{ perc_fully_trained }}%</td>
                     </tr>
                     
                 </tbody>
@@ -74,7 +74,9 @@
                     
                 </tbody>
             </table>
-            <canvas class="p-2"  id="myChart4"></canvas>
+            <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
+                <canvas class="p-2"  id="myChart4"></canvas>
+            </div>
             
         </div>
     </div>
@@ -92,19 +94,19 @@
   
     new Chart(ctx, {
       type: 'pie',
-      data: {
-          labels: {{ by_year2.x }},
-          datasets: [{
-              label: 'Trainings',
-              data: {{ by_year2.y }},
-              borderWidth: 1,
-              backgroundColor: [ 'rgba(54, 162, 235, 0.1)','rgba(251, 192, 147, 0.5)','rgba(102, 204, 153, 0.8)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 100, 235, 0.5)', 'rgba(54, 162, 235, 0.9)', 'rgba(54, 162, 235, 0.7)', 'rgba(54, 162, 235, 0.4)', 'rgba(54, 162, 235, 0.2)', 'rgba(54, 162, 235, 0.6)', 'rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 0.9)', 'rgba(54, 162, 235, 0.7)', 'rgba(54, 162, 235, 0.4)', 'rgba(54, 162, 235, 0.2)', 'rgba(54, 162, 235, 0.6)', 'rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 0.9)', 'rgba(54, 162, 235, 0.7)', 'rgba(54, 162, 235, 0.4)', 'rgba(54, 162, 235, 0.2)', 'rgba(54, 162, 235, 0.6)', 'rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)', 'rgba(54, 162, 235, 0.5)', 'rgba(54, 162, 235, 0.9)', 'rgba(54, 162, 235, 0.7)', 'rgba(54, 162, 235, 0.4)', 'rgba(54, 162, 235, 0.2)', 'rgba(54, 162, 235, 0.6)']
-              
+        data: {
+            labels: {{ by_year2.x}},
+            datasets: [{
+                label: 'Trainings',
+                data: {{ by_year2.y }},
+                borderWidth: 1,
+                backgroundColor: ['rgba(54, 162, 235, 0.1)','rgba(102, 204, 153, 0.8)', 'rgba(251, 192, 147, 0.5)',  'rgba(54, 162, 235, 0.3)', 'rgba(255, 99, 132, 0.8)', 'rgba(255, 159, 64, 0.5)', 'rgba(75, 192, 192, 0.1)', 'rgba(153, 102, 255, 0.3)', 'rgba(255, 205, 86, 0.8)', 'rgba(54, 162, 235, 0.5)']
             }]
-      },
-      options: {
+        },
+        options: {
           plugins: {
               legend: {
+                position: 'bottom',
                   display: true, // Display the legend
                   labels: {
                       fontColor: 'black', // Color of text in legend

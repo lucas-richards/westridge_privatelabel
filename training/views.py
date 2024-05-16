@@ -265,20 +265,23 @@ def dashboard(request):
         'not_performed' : 0,
         'total' : 0
     }
-    for profile in profiles:
+    profiles_fully_trained = 0
+    for profile in profiles.filter(active=True):
         profile_training_events = ProfileTrainingEvents.objects.filter(profile=profile).first()
         training_events_now = profile_training_events.row.split(',')
+        fully_trained = True
     # combine trainin_modules and row.training_events in a for loop to check expired modules
         for i, training_module in enumerate(training_modules):
                 if training_events_now[i] == '-':
                     continue
                 elif training_events_now[i][0] == 'T':
+                    fully_trained = False
                     if training_module.retrain_months:
                         retraining['total'] += 1
                         retraining['not_performed'] += 1
-                        
-                    training['total'] += 1
-                    training['not_performed'] += 1
+                    else:
+                        training['total'] += 1
+                        training['not_performed'] += 1
                     continue
     
                 # if it's a date compare it with the training_module retrain_months
@@ -291,18 +294,24 @@ def dashboard(request):
                     if training_module.retrain_months:
                         if months_difference > training_module.retrain_months:
                             retraining['overdue'] += 1
-                            training['overdue'] += 1
+                            fully_trained = False
                         else:
                             retraining['performed'] += 1
                         retraining['total'] += 1
 
-                    training['performed'] += 1
-                    training['total'] += 1
+                    else:
+                        training['performed'] += 1
+                        training['total'] += 1
                     
                         
                 except ValueError:
                     print('this is the value that couldnt convert to date',training_events_now[i])
-    
+        if fully_trained:
+            profiles_fully_trained += 1
+            print('Fully trained:', profile.user.username)
+    perc_fully_trained = round(profiles_fully_trained / profiles.filter(active=True).count() * 100) if profiles.filter(active=True).count() else 0
+    print('Training:', training)
+    print('Retraining:', retraining)
     # round and divide by total to get the percentage of training and retraining
     training['performed'] = round(training['performed'] / training['total'] * 100) if training['total'] else 0
     retraining['performed'] = round(retraining['performed'] / retraining['total'] * 100) if retraining['total'] else 0
@@ -348,12 +357,17 @@ def dashboard(request):
     by_year1 = sorted(by_year.items(), key=lambda x: x[0])
     # reverse by_year1
     by_year1 = by_year1[::-1]
-    # create two different lists for the x and y axis
+    # prepare this data for a chart
+    print('By year1:', by_year1)
+
     by_year2 = {'x': [x[0] for x in by_year1], 'y': [x[1] for x in by_year1]}
+    
+    print('By year2:', by_year2)
 
     context = {
         'title': 'Dashboard',
-        'profiles_count': profiles.count(),
+        'profiles_count': profiles.filter(active=True).count(),
+        'perc_fully_trained': perc_fully_trained,
         'by_year1':by_year1,
         'by_year2':by_year2,
         'history1': history1,
@@ -491,7 +505,7 @@ def grid(request):
                     if months_difference > training_module.retrain_months:
                         row['training_events'][i] = 'Expired'
                         
-                    elif months_difference > training_module.retrain_months - 3 and training_module.retrain_months > months_difference:
+                    elif months_difference > training_module.retrain_months - 4 and training_module.retrain_months > months_difference:
                         row['training_events'][i] = 'To Expire'
                     
                    
