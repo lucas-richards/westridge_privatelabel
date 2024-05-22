@@ -77,6 +77,10 @@ def seed_users_roles():
         ('Ray Albrechtsen', '', '', [], False),
         ('Anthony De Nicola', '', '', [], False),
         ('Jorge Ascencio', '', '', [], False),
+        ('Sergio Rangel', '', '', [], False),
+        ('Jennifer Flores', '', '', [], False),
+        ('Stephanie Cazarin [C]', '', '', [], False),
+        ('Linda Weiler [C]', '', '', [], False),
 
 
     ]

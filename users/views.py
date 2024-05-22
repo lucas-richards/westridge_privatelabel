@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.utils.crypto import get_random_string
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
-from training.models import TrainingEvent
+from training.models import TrainingEvent, ProfileTrainingEvents
 
 
 # Django templates
@@ -53,6 +53,10 @@ def profile(request):
             u_form.save()
             p_form.save()
             messages.success(request,f'Your account has been updated!')
+            # update the profile training events
+            profile_training_events = ProfileTrainingEvents.objects.filter(profile=user.profile).first()
+            profile_training_events.update_row()
+            print('prof_training_events',profile_training_events)
             return redirect('profile')
     else:
         u_form = UserUpdateForm(instance = request.user)

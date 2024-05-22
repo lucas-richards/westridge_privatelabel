@@ -443,6 +443,8 @@ def training_profile(request, profile_id):
         if p_form.is_valid():
             p_form.save()
             messages.success(request,f'Account has been updated!')
+            profile_training_events = ProfileTrainingEvents.objects.filter(profile=profile).first()
+            profile_training_events.update_row()
             return redirect('training-profile', profile_id=profile_id)
     else:
         p_form = ProfileUpdateForm( instance= profile)
