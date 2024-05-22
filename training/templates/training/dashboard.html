@@ -27,6 +27,7 @@
             </div>
         </div>
         <div class="p-3 mt-3 card " style="height: 300px;">
+            <p style="position: absolute;font-weight: bold;font-size: large;">Trainings Per Year</p>
             <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
                 <canvas class="p-3" id="myChart"></canvas>
             </div>
@@ -88,9 +89,12 @@
 
 <!-- dynamic charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 <script>
     const ctx = document.getElementById('myChart');
+
+    Chart.register(ChartDataLabels);
   
     new Chart(ctx, {
       type: 'pie',
@@ -116,7 +120,8 @@
               },
               tooltip: {
                   enabled: true,
-              }
+              },
+              
           },
           scales: {
               x: {
@@ -197,9 +202,9 @@
   new Chart(ctx3, {
     type: 'bar',
     data: {
-        labels: ['Performed %', 'Not Performed %', 'Overdue %'],
+        labels: ['Performed', 'Not Performed', 'Overdue'],
         datasets: [{
-            label: 'Trainings (%)',
+            label: 'Trainings',
             data: [
                 {{training.performed}} ,
                 {{training.not_performed}} ,
@@ -227,6 +232,14 @@
         plugins: {
             legend: {
                 position: 'top'
+            },
+            datalabels: {
+                display: true,
+                color: 'black',
+                // add percentage sign to the value
+                formatter: function(value, context) {
+                    return value + '%';
+                }
             }
         }
     }
@@ -238,9 +251,9 @@
   new Chart(ctx4, {
       type: 'bar',
       data: {
-          labels: ['Performed %', 'Not Performed %', 'Overdue %'],
+          labels: ['Performed', 'Not Performed', 'Overdue'],
           datasets: [{
-              label: 'Trainings (%)',
+              label: 'Trainings',
               data: [{{retraining.performed}}, {{retraining.not_performed}}, {{retraining.overdue}}],
               borderWidth: 1,
               backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)']
@@ -263,9 +276,19 @@
         },
         responsive: true,
         plugins: {
+            
             legend: {
                 position: 'top'
+            },
+            datalabels: {
+                display: true,
+                color: 'black',
+                // add percentage sign to the value
+                formatter: function(value, context) {
+                    return value + '%';
+                }
             }
+                
         }
     }
   });
