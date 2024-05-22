@@ -122,7 +122,7 @@ class ProfileTrainingEvents(models.Model):
         for training_module in training_modules:
             event = TrainingEvent.objects.filter(profile=self.profile, training_module=training_module).first()
 
-            if event:
+            if event and training_module in must_have:
                 events.append(event.completed_date.strftime('%m/%d/%y'))
             elif training_module not in must_have:
                 events.append('-')

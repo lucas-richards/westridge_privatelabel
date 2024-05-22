@@ -32,7 +32,10 @@
 
 
 <div class="container">
-    <h2 class="sticky">Grid</h2>
+    <div class="d-flex justify-content-start align-items-start">
+        <h2 class="sticky">Grid</h2>
+        <p>*</p>
+    </div>
 
     <!-- add a form to select supervisor -->
     <form id="supervisor-form" method="get" action="{% url 'training-grid' %}">
@@ -63,7 +66,7 @@
     </form>
     
     
-    <div class="table-container table-responsive">
+<div class="table-container table-responsive">
     <table class=" table-hover  table-bordered" style="font-size: small;">
         <thead>
             <tr class="table-secondary">
@@ -129,7 +132,7 @@
                                     <div class="text-warning">{{ event }}</div>
                                 </div>
                                 {% elif event|slice:":2" == "TM" %}
-                                    <a class="text-secondary">missing</a>
+                                    <a class="text-danger">Missing</a>
                                 {% else %}
                                     <div class="text-success">{{ event }}</div>
                                 {% endif %}
@@ -164,6 +167,7 @@
         </tbody>
     </table>
 </div>
+<p>*The grid shows only required modules</p>
 
     
 
