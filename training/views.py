@@ -19,6 +19,12 @@ from django.core.paginator import Paginator
 from django.utils import timezone
 from datetime import datetime
 import datetime as dt
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+from django.http import HttpResponse
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side, Color
+from openpyxl.worksheet.table import Table, TableStyleInfo
+
 
 @login_required
 def home(request):
@@ -518,6 +524,8 @@ def grid(request):
         data.append(row)
     # order by the first name of the profile
     data = sorted(data, key=lambda x: x['profile'].user.first_name)
+
+    
         
     # create a function that returns all the roles in a form format to display it 
     data2 = [
@@ -527,6 +535,73 @@ def grid(request):
         }
         for obj in RoleTrainingModules.objects.all().order_by('role')
     ]
+
+    # Check if download parameter is true
+    download = request.GET.get('download', 'false').lower() == 'true'
+    if download:
+        # Create an Excel workbook and sheet
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Training Data"
+
+        # Add headers
+        headers = ["First name", "Last name"] + [tm.name for tm in training_modules]
+        ws.append(headers)
+
+        # Apply styles to the header
+        header_font = Font(bold=True)
+        header_fill = PatternFill(start_color="D3D3D3", end_color="D3D3D3", fill_type="solid")
+        thin_border = Border(left=Side(style='thin'), 
+                             right=Side(style='thin'), 
+                             top=Side(style='thin'), 
+                             bottom=Side(style='thin'))
+        for col_num, header in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col_num)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = Alignment(horizontal="center", vertical="center")
+            cell.border = thin_border
+
+        # Add data rows
+        for item in data:
+            profile = item['profile']
+            first_name = profile.user.first_name
+            last_name = profile.user.last_name
+            training_events = item['training_events']
+
+            row = [first_name, last_name] + training_events
+            ws.append(row)
+
+        # Apply styles to the data rows
+        for row in ws.iter_rows(min_row=2, min_col=3, max_col=len(headers), max_row=len(data) + 1):
+            for cell in row:
+                # if the first letter is "TM" then change to Missing
+                if cell.value[0]== 'T' and cell.value[1] == 'M':
+                    cell.value = 'Missing'
+                if cell.value == 'Missing':
+                    cell.font = Font(color="A9A9A9")  # Gray text
+                elif cell.value == 'Expired':
+                    cell.font = Font(color="FF0000")  # Red text
+                elif cell.value == 'To Expire':
+                    cell.font = Font(color="FFD700")  # Yellow text
+                elif cell.value == '-':
+                    # black text
+                    cell.font = Font(color="000000")
+                # else green
+                else:
+                    cell.font = Font(color="008000")  # Green text
+
+        # Adjust column widths
+        for col in ws.columns:
+            max_length = max(len(str(cell.value)) for cell in col)
+            col_letter = get_column_letter(col[0].column)
+            ws.column_dimensions[col_letter].width = max_length + 2
+
+        # Create an HTTP response with the Excel file
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=training_data.xlsx'
+        wb.save(response)
+        return response
 
     context = {
         'title': 'Grid',
