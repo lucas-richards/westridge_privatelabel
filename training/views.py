@@ -587,9 +587,9 @@ def grid(request):
                 elif cell.value == '-':
                     # black text
                     cell.font = Font(color="000000")
-                # else green
+                # else green text
                 else:
-                    cell.font = Font(color="008000")  # Green text
+                    cell.font = Font(color="008000")  
 
         # Adjust column widths
         for col in ws.columns:
