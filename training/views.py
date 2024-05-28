@@ -585,7 +585,7 @@ def grid(request):
                 elif cell.value == 'To Expire':
                     cell.font = Font(color="FFD700")  # Yellow text
                 elif cell.value == '-':
-                    # black text
+                
                     cell.font = Font(color="000000")
                 # else green text
                 else:
