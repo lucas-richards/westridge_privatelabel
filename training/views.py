@@ -261,7 +261,6 @@ def dashboard(request):
     # this data is for total training and total retraining
     training = {
         'performed' : 0,
-        'overdue' : 0,
         'not_performed' : 0,
         'total' : 0
     }
@@ -272,6 +271,9 @@ def dashboard(request):
         'total' : 0
     }
     profiles_fully_trained = 0
+    training_not_performed_users=[]
+    retraining_not_performed_users=[]
+    retraining_overdue_users=[]
     for profile in profiles.filter(active=True):
         profile_training_events = ProfileTrainingEvents.objects.filter(profile=profile).first()
         training_events_now = profile_training_events.row.split(',')
@@ -285,9 +287,11 @@ def dashboard(request):
                     if training_module.retrain_months:
                         retraining['total'] += 1
                         retraining['not_performed'] += 1
+                        retraining_not_performed_users.append(profile.user)
                     else:
                         training['total'] += 1
                         training['not_performed'] += 1
+                        training_not_performed_users.append(profile.user)
                     continue
     
                 # if it's a date compare it with the training_module retrain_months
@@ -301,6 +305,7 @@ def dashboard(request):
                         if months_difference > training_module.retrain_months:
                             retraining['overdue'] += 1
                             fully_trained = False
+                            retraining_overdue_users.append(profile.user)
                         else:
                             retraining['performed'] += 1
                         retraining['total'] += 1
@@ -316,12 +321,15 @@ def dashboard(request):
             profiles_fully_trained += 1
             print('Fully trained:', profile.user.username)
     perc_fully_trained = round(profiles_fully_trained / profiles.filter(active=True).count() * 100) if profiles.filter(active=True).count() else 0
+    # remove duplicates from lists
+    training_not_performed_users = list(set(training_not_performed_users))
+    retraining_not_performed_users = list(set(retraining_not_performed_users))
+    retraining_overdue_users = list(set(retraining_overdue_users))
     print('Training:', training)
     print('Retraining:', retraining)
     # round and divide by total to get the percentage of training and retraining
     training['performed'] = round(training['performed'] / training['total'] * 100) if training['total'] else 0
     retraining['performed'] = round(retraining['performed'] / retraining['total'] * 100) if retraining['total'] else 0
-    training['overdue'] = round(training['overdue'] / training['total'] * 100) if training['total'] else 0
     retraining['overdue'] = round(retraining['overdue'] / retraining['total'] * 100) if retraining['total'] else 0
     training['not_performed'] = round(training['not_performed'] / training['total'] * 100) if training['total'] else 0
     retraining['not_performed'] = round(retraining['not_performed'] / retraining['total'] * 100) if retraining['total'] else 0
@@ -330,10 +338,15 @@ def dashboard(request):
     history = {
         '1year': 0,
         '2years': 0,
+        '3years': 0,
         '5years': 0,
-        'others': 0
     }
-    for profile in profiles:
+    
+    year3_users=[]
+    year5_users=[]
+    
+    
+    for profile in profiles.filter(active=True):
         # year of the last training event
         event = TrainingEvent.objects.filter(profile=profile).order_by('-completed_date').first()
         if event:
@@ -343,15 +356,19 @@ def dashboard(request):
             date = timezone.make_aware(date)
             if  timezone.now() - date < timezone.timedelta(days=365):
                 history['1year'] += 1
-            elif timezone.now() - date < timezone.timedelta(days=365*2):
+            elif timezone.now() - date < timezone.timedelta(days=365*3):
                 history['2years'] += 1
             elif timezone.now() - date < timezone.timedelta(days=365*5):
-                history['5years'] += 1
+                history['3years'] += 1
+                year3_users.append(profile.user)
             else:
-                history['others'] += 1
+                history['5years'] += 1
+                year5_users.append(profile.user)
+        else:
+            print('No training event for:', profile.user.username)
     
     
-    history2 = {'x': ['1 year', '2 years', '5 years', 'others'], 'y': [history['1year'], history['2years'], history['5years'], history['others']]}
+    history2 = {'x': ['1 year', '2 years', '3 years', '5 years'], 'y': [history['1year'], history['2years'], history['3years'], history['5years']]}
     history1 = sorted(history.items(), key=lambda x: x[0])
     by_year = {}
     for event in training_events:
@@ -379,7 +396,12 @@ def dashboard(request):
         'history1': history1,
         'history2': history2,
         'training': training,
-        'retraining': retraining
+        'retraining': retraining,
+        'training_not_performed_users': training_not_performed_users,
+        'retraining_not_performed_users': retraining_not_performed_users,
+        'retraining_overdue_users': retraining_overdue_users,
+        'year3_users': year3_users,
+        'year5_users': year5_users
     }
 
     return render(request, 'training/dashboard.html', context)

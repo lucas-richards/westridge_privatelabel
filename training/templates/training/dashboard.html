@@ -14,27 +14,120 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
                     <tr>
                         <td>{{ profiles_count }}</td>
                         <td>{{ perc_fully_trained }}%</td>
                     </tr>
-                    
                 </tbody>
             </table>
             <div class="d-flex align-items-center justify-content-center" style="height: 250px;">
                 <canvas id="myChart2" ></canvas>
             </div>
         </div>
-        <div class="p-3 mt-3 card " style="height: 300px;">
-            <p style="position: absolute;font-weight: bold;font-size: large;">Trainings Per Year</p>
-            <div class="d-flex align-items-center justify-content-center" style="height: 300px;">
-                <canvas class="p-3" id="myChart"></canvas>
-            </div>
-
+        <div class="p-3 mt-3 card " >
+            
+            <div id="accordion">
+                <div class="card">
+                  <div  id="headingOne">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        3-4 Years
+                      </button>
+                    </h5>
+                  </div>
+              
+                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        {% for user in year3_users|slice:":3" %}
+                            {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
+                        {% empty %}
+                            No users found.
+                        {% endfor %}
+                        
+                        {% if year3_users|length > 3 %}
+                            <p class="btn-link d-inline">More</p>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="" id="headingTwo">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        +5 Years
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        {% for user in year5_users %}
+                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
+                        {% empty %}
+                            No users found.
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div id="headingThree">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Training Not Performed
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <div class="card-body">
+                        {% for user in training_not_performed_users %}
+                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
+                        {% empty %}
+                            No users found.
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div id="headingFour">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Retraining Not Performed
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+                    <div class="card-body">
+                        {% for user in retraining_not_performed_users %}
+                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
+                        {% empty %}
+                            No users found.
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+                <div class="card">
+                  <div id="headingFive">
+                    <h5 class="mb-0">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        Retraining Expired
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
+                    <div class="card-body">
+                        {% for user in retraining_overdue_users %}
+                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
+                        {% empty %}
+                            No users found.
+                        {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
         </div>
-        
     </div>
+            
+        
+    
     <div class="col-md-6">
         <div class="p-3 card " style="height: 300px;">
             <table class="mb-2 table-hover table-bordered text-center" style="font-size: larger;">
@@ -91,67 +184,19 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
-<script>
-    const ctx = document.getElementById('myChart');
 
-    Chart.register(ChartDataLabels);
+
+    
   
-    new Chart(ctx, {
-      type: 'pie',
-        data: {
-            labels: {{ by_year2.x}},
-            datasets: [{
-                label: 'Trainings',
-                data: {{ by_year2.y }},
-                borderWidth: 1,
-                backgroundColor: ['rgba(54, 162, 235, 0.1)','rgba(102, 204, 153, 0.8)', 'rgba(251, 192, 147, 0.5)',  'rgba(54, 162, 235, 0.3)', 'rgba(255, 99, 132, 0.8)', 'rgba(255, 159, 64, 0.5)', 'rgba(75, 192, 192, 0.1)', 'rgba(153, 102, 255, 0.3)', 'rgba(255, 205, 86, 0.8)', 'rgba(54, 162, 235, 0.5)']
-            }]
-        },
-        options: {
-          plugins: {
-              legend: {
-                position: 'bottom',
-                  display: true, // Display the legend
-                  labels: {
-                      fontColor: 'black', // Color of 
-                      boxWidth: 20, 
-                      padding: 20 
-                  }
-              },
-              tooltip: {
-                  enabled: true,
-              },
-              
-          },
-          scales: {
-              x: {
-                  display: false
-              },
-              y: {
-                  display: false
-              }
-          }
-      }
-    });
-  
-    Chart.register({
-      id: 'overrideLegendPosition',
-      beforeInit: function(chart, args, options) {
-          if (chart.config.type === 'pie') {
-              chart.options.plugins.legend.position = 'right';
-          }
-      }
-    });
-    </script>
     <script>
-  
+    Chart.register(ChartDataLabels);
     // Creating the second pie chart
     const ctx2 = document.getElementById('myChart2');
   
     new Chart(ctx2, {
         type: 'pie',
         data: {
-            labels: ['1 Year or less', '1 to 2 Years', '5 Years or more', 'Others'],
+            labels: ['1 Year or less', '1-2 Years','3-4 Years', '+5 Years '],
             datasets: [{
                 label: 'Trainings',
                 data: {{ history2.y }},
@@ -202,7 +247,7 @@
   new Chart(ctx3, {
     type: 'bar',
     data: {
-        labels: ['Performed', 'Not Performed', 'Overdue'],
+        labels: ['Performed', 'Not Performed'],
         datasets: [{
             label: 'Trainings',
             data: [

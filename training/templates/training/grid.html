@@ -99,7 +99,7 @@
             {% for row in data2 %}
                 <tr id="{{row.role.id}}" style="display: none;">
                     <td class="sticky-column pl-1 pr-1">
-                        {{ row.role }}
+                        {{ row.role.name }}
                         
                     </td>
                     {% for module in row.training_modules %}
@@ -123,7 +123,7 @@
                         </a>
                         <div class="d-flex flex-wrap roles">
                             {% for role in row.roles %}
-                                <span style="width: 20px;font-size: 5px;" class="badge bg-secondary text-white">{{ role }}</span>
+                                <span style="width: 20px;font-size: 5px;" class="badge bg-secondary text-white">{{ role.name }}</span>
                             {% endfor %}
                         </div>
                         

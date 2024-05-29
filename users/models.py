@@ -21,11 +21,12 @@ class Role(models.Model):
     training_modules = models.ManyToManyField('training.TrainingModule', related_name='roles', blank=True)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.description}"
     
     # each role should have a RoleTrainingModules object and has to be updated every time a role is updated
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        
 
     
 
