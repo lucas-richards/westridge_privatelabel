@@ -5,7 +5,7 @@
 <style>
     .table-container {
         width: 100%;
-        height: 600px; 
+        height: 500px; 
         overflow-y: auto; /* Enable vertical scrolling */
     }
     .sticky-column {
@@ -32,11 +32,10 @@
 
 
 <div class="container">
+    
     <div class="d-flex justify-content-between align-items-start">
-        <div class="d-flex justify-content-start align-items-start">
-            <h2 class="sticky">Grid</h2>
-            <p>*</p>
-        </div>
+        <h2 class="sticky">Grid</h2>
+        
         <form method="get" action="{% url 'training-grid' %}">
             {% if selected_supervisor %}
                 <input type="hidden" name="supervisor" value="{{ selected_supervisor }}">
@@ -46,34 +45,12 @@
                 <?xml version="1.0" ?><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M22,16 L22,20 C22,21.1045695 21.1045695,22 20,22 L4,22 C2.8954305,22 2,21.1045695 2,20 L2,16 L4,16 L4,20 L20,20 L20,16 L22,16 Z M13,12.5857864 L16.2928932,9.29289322 L17.7071068,10.7071068 L12,16.4142136 L6.29289322,10.7071068 L7.70710678,9.29289322 L11,12.5857864 L11,2 L13,2 L13,12.5857864 Z" fill-rule="evenodd"/></svg>            </button>
         </form>
     </div>
+    <!-- filter users -->
+    <div class="mb-4 d-flex justify-content-center align-items-start">
+        <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Employee" style="width: 450px;" oninput="filterUsers()">
+    </div>
 
-    <!-- add a form to select supervisor -->
-    <form id="supervisor-form" method="get" action="{% url 'training-grid' %}">
-        <div>
-            <label for="supervisor">Supervisor</label>
-            <select name="supervisor" id="supervisor" onchange="this.form.submit()">
-                {% if selected_supervisor == '' %}
-                    <option value="" selected>All</option>
-                {% else %}
-                    <option value="">All</option>
-                {% endif %}
-                {% for supervisor in supervisors %}
-                    {% if supervisor.id == selected_supervisor %}
-                        <option value="{{ supervisor.id }}" selected>{{ supervisor }}</option>
-                    {% else %}
-                        <option value="{{ supervisor.id }}">{{ supervisor }}</option>
-                    {% endif %}
-                {% endfor %}
-                
-            </select>
-            <div id="loading-indicator" style="display: none;">
-                <!-- Your loading indicator here (e.g., spinner or progress bar) -->
-                <div class="spinner-grow" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-            </div>
-        </div>
-    </form>
+    
     
     
 <div class="table-container table-responsive">
@@ -81,7 +58,7 @@
         <thead>
             <tr class="table-secondary">
                 <th class="sticky-column sticky pr-4 pl-4"  style="z-index: 3;">
-                    <a id="roles" class="text-black link">Username/<span class="text-primary">Roles</span> </a>
+                    <a id="roles" class="text-black link">Employee/<span class="text-primary">Roles</span> </a>
                 </th>
                 
                 
@@ -114,7 +91,7 @@
                 </tr>
             {% endfor %}
             {% for row in data %}
-                <tr>
+                <tr class="user">
                     <td class="sticky-column">
 
                         <!-- add link to user profile -->
@@ -181,7 +158,33 @@
         </tbody>
     </table>
 </div>
-<p>*The grid shows only required modules</p>
+<!-- add a form to select supervisor -->
+<form id="supervisor-form" class="mt-2"  method="get" action="{% url 'training-grid' %}">
+    <div>
+        <label for="supervisor">Filter by supervisor: </label>
+        <select name="supervisor" id="supervisor" onchange="this.form.submit()">
+            {% if selected_supervisor == '' %}
+                <option value="" selected>All</option>
+            {% else %}
+                <option value="">All</option>
+            {% endif %}
+            {% for supervisor in supervisors %}
+                {% if supervisor.id == selected_supervisor %}
+                    <option value="{{ supervisor.id }}" selected>{{ supervisor }}</option>
+                {% else %}
+                    <option value="{{ supervisor.id }}">{{ supervisor }}</option>
+                {% endif %}
+            {% endfor %}
+            
+        </select>
+        <div id="loading-indicator" style="display: none;">
+            <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+            <div class="spinner-grow" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+</form>
 
     
 
@@ -217,6 +220,23 @@
     document.getElementById("supervisor-form").addEventListener("change", function() {
         document.getElementById("loading-indicator").style.display = "block";
     });
+</script>
+<script>
+    function filterUsers() {
+        var input = document.getElementById("searchBox");
+        var filter = input.value.toUpperCase();
+        var users = document.getElementsByClassName("user");
+
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            var name = user.innerText.toUpperCase();
+            if (name.indexOf(filter) > -1) {
+                user.style.display = "";
+            } else {
+                user.style.display = "none";
+            }
+        }
+    }
 </script>
 
 
