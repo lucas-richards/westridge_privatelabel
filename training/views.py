@@ -520,7 +520,7 @@ def grid(request):
         }
         # combine trainin_modules and row.training_events in a for loop to check expired modules
         for i, training_module in enumerate(training_modules):
-            if row['training_events'][i] == '-' or row['training_events'][i] == '':
+            if row['training_events'][i] == '-' or row['training_events'][i] == '' or row['training_events'][i] == '+':
                 continue
             if row['training_events'][i][0] == 'T':
                 continue

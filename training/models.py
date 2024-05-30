@@ -124,6 +124,8 @@ class ProfileTrainingEvents(models.Model):
 
             if event and training_module in must_have:
                 events.append(event.completed_date.strftime('%m/%d/%y'))
+            elif event and training_module not in must_have:
+                events.append('+')
             elif training_module not in must_have:
                 events.append('-')
             else:
