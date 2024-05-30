@@ -3,21 +3,41 @@
 {% block content %}
 
 
-<div class="mt-5 p-3 card ">
+<div class="mt-5 p-3 card">
+    
     <h4>Inactive Users</h4>
+    <input type="text" id="searchBox" class="mb-4 form-control" placeholder="Search" style="width: 150px;" oninput="filterUsers()">
+    
     {% for prof in inactive_users %}
     <ul>
-        <li>
+        <li class="user">
             <a href="{% url 'training-profile' prof.id %}">
                 {{ prof.user.first_name }} {{ prof.user.last_name }}
             </a>
         </li>
     </ul>
-           
-        
+    {% empty %}
+    <p>No inactive users found.</p>
     {% endfor %}
-    
 </div>
+
+<script>
+    function filterUsers() {
+        var input = document.getElementById("searchBox");
+        var filter = input.value.toUpperCase();
+        var users = document.getElementsByClassName("user");
+
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            var name = user.innerText.toUpperCase();
+            if (name.indexOf(filter) > -1) {
+                user.style.display = "";
+            } else {
+                user.style.display = "none";
+            }
+        }
+    }
+</script>
 
     
 
