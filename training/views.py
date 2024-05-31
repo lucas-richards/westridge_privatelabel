@@ -23,7 +23,7 @@ from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
 from django.http import HttpResponse
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side, Color
-from openpyxl.worksheet.table import Table, TableStyleInfo
+from django.shortcuts import get_object_or_404
 
 
 @login_required
@@ -77,9 +77,26 @@ def percentage(request):
 def supervisors(request):
     supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
     training_modules = TrainingModule.objects.all().order_by('name')
+    users = User.objects.filter(profile__active=True).order_by('username')
     data = []
+    if request.method == 'POST':
+        current_supervisor_id = request.POST.get('current_supervisor')
+        new_supervisor_id = request.POST.get('new_supervisor')
+        print('POST:', request.POST)
+
+        if current_supervisor_id and new_supervisor_id:
+            current_supervisor = get_object_or_404(User, pk=current_supervisor_id)
+            new_supervisor = get_object_or_404(User, pk=new_supervisor_id)
+
+            # Update the supervisor for all relevant profiles
+            profiles = current_supervisor.supervisor_profiles.all()
+            for profile in profiles:
+                profile.supervisor = new_supervisor
+                profile.save()
+            messages.success(request, f'Supervisor has been updated for {len(profiles)} profiles!')
     
     for sup in supervisors:
+        
         print('Get supervisor:', sup.username)
         row = {
             'username': sup.first_name + ' ' + sup.last_name,
@@ -136,7 +153,7 @@ def supervisors(request):
     # sort them by percentage
     data = sorted(data, key=lambda x: x['percentage'], reverse=True)
     
-    return render(request, 'training/supervisors.html', {'title':'Supervisors','data': data})
+    return render(request, 'training/supervisors.html', {'title':'Supervisors','data': data, 'users': users, 'supervisors': supervisors})
 
 @login_required
 # def staff_roles(request):
@@ -254,6 +271,7 @@ def new_user(request):
 def dashboard(request):
     # how many training events have been completed this year, last year, etc
     profiles = Profile.objects.all()
+    active_profiles = profiles.filter(active=True)
     training_events = TrainingEvent.objects.all()
     training_modules = TrainingModule.objects.all().order_by('name')
     # training events with certificate that have a retrain_months value
@@ -274,49 +292,53 @@ def dashboard(request):
     training_not_performed_users=[]
     retraining_not_performed_users=[]
     retraining_overdue_users=[]
-    for profile in profiles.filter(active=True):
-        profile_training_events = ProfileTrainingEvents.objects.filter(profile=profile).first()
-        training_events_now = profile_training_events.row.split(',')
-        fully_trained = True
-    # combine trainin_modules and row.training_events in a for loop to check expired modules
-        for i, training_module in enumerate(training_modules):
-                if training_events_now[i] == '-':
-                    continue
-                elif training_events_now[i][0] == 'T':
-                    fully_trained = False
-                    if training_module.retrain_months:
-                        retraining['total'] += 1
-                        retraining['not_performed'] += 1
-                        retraining_not_performed_users.append(profile.user)
-                    else:
-                        training['total'] += 1
-                        training['not_performed'] += 1
-                        training_not_performed_users.append(profile.user)
-                    continue
-    
-                # if it's a date compare it with the training_module retrain_months
-                try:
-                    parsed_date = dt.datetime.strptime(training_events_now[i], '%m/%d/%y')  # Assuming the date format is MM/DD/YY
-                    current_date = dt.datetime.now()
-                    delta = current_date - parsed_date
-                    months_difference = delta.days // 30  # Approximate calculation for months
-                    
-                    if training_module.retrain_months:
-                        if months_difference > training_module.retrain_months:
-                            retraining['overdue'] += 1
-                            fully_trained = False
-                            retraining_overdue_users.append(profile.user)
+    for profile in active_profiles:
+        try:
+            profile_training_events = ProfileTrainingEvents.objects.filter(profile=profile).first()
+            training_events_now = profile_training_events.row.split(',')
+            fully_trained = True
+        # combine trainin_modules and row.training_events in a for loop to check expired modules
+            for i, training_module in enumerate(training_modules):
+                    if training_events_now[i] == '-':
+                        continue
+                    elif training_events_now[i][0] == 'T':
+                        fully_trained = False
+                        if training_module.retrain_months:
+                            retraining['total'] += 1
+                            retraining['not_performed'] += 1
+                            retraining_not_performed_users.append(profile.user)
                         else:
-                            retraining['performed'] += 1
-                        retraining['total'] += 1
-
-                    else:
-                        training['performed'] += 1
-                        training['total'] += 1
-                    
+                            training['total'] += 1
+                            training['not_performed'] += 1
+                            training_not_performed_users.append(profile.user)
+                        continue
+        
+                    # if it's a date compare it with the training_module retrain_months
+                    try:
+                        parsed_date = dt.datetime.strptime(training_events_now[i], '%m/%d/%y')  # Assuming the date format is MM/DD/YY
+                        current_date = dt.datetime.now()
+                        delta = current_date - parsed_date
+                        months_difference = delta.days // 30  # Approximate calculation for months
                         
-                except ValueError:
-                    print('this is the value that couldnt convert to date',training_events_now[i])
+                        if training_module.retrain_months:
+                            if months_difference > training_module.retrain_months:
+                                retraining['overdue'] += 1
+                                fully_trained = False
+                                retraining_overdue_users.append(profile.user)
+                            else:
+                                retraining['performed'] += 1
+                            retraining['total'] += 1
+
+                        else:
+                            training['performed'] += 1
+                            training['total'] += 1
+                        
+                            
+                    except ValueError:
+                        print('this is the value that couldnt convert to date',training_events_now[i])
+        except:
+            print('Error for:', profile.user.username)
+            continue
         if fully_trained:
             profiles_fully_trained += 1
             print('Fully trained:', profile.user.username)
@@ -346,7 +368,7 @@ def dashboard(request):
     year5_users=[]
     
     
-    for profile in profiles.filter(active=True):
+    for profile in active_profiles:
         # year of the last training event
         event = TrainingEvent.objects.filter(profile=profile).order_by('-completed_date').first()
         if event:
@@ -368,7 +390,7 @@ def dashboard(request):
             print('No training event for:', profile.user.username)
     
     
-    history2 = {'x': ['1 year', '2 years', '3 years', '5 years'], 'y': [history['1year'], history['2years'], history['3years'], history['5years']]}
+    history2 = {'x': ['1 year', '2 years', '3 years', '5 years'], 'y': [round(history['1year']/active_profiles.count()*100), round(history['2years']/active_profiles.count()*100), round(history['3years']/active_profiles.count()*100), round(history['5years']/active_profiles.count()*100)]}
     history1 = sorted(history.items(), key=lambda x: x[0])
     by_year = {}
     for event in training_events:
