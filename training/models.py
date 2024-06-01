@@ -9,7 +9,20 @@ import logging
 import os
 
 
-# Create your models here.
+# KPI models
+class KPI(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class KPIValue(models.Model):
+    kpi = models.ForeignKey(KPI, on_delete=models.CASCADE)
+    value = models.FloatField()
+    date = models.DateField()
+
+    def __str__(self):
+        return f"{self.kpi.name} - {self.date}: {self.value}"
 
     
 class TrainingModule(models.Model):

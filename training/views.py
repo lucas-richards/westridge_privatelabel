@@ -12,7 +12,7 @@ from .forms import (
 )
 from users.forms import UserRegisterForm, ProfileUpdateForm, UserRegisterForm2
 from users.forms import RoleForm
-from .models import TrainingEvent, TrainingModule, ProfileTrainingEvents, RoleTrainingModules
+from .models import TrainingEvent, TrainingModule, ProfileTrainingEvents, RoleTrainingModules, KPIValue
 from django.contrib.auth.models import User
 import pandas as pd
 from django.core.paginator import Paginator
@@ -269,6 +269,11 @@ def new_user(request):
     return render(request, 'training/new_user.html', context)
 
 def dashboard(request):
+    # get kpi values for fully trained
+    fully_trained = KPIValue.objects.filter(kpi__name='Percentage Fully Trained').order_by('date')
+    # separate the values for a line graph
+    fully_trained_values = [value.value for value in fully_trained]
+    fully_trained_dates = [value.date.strftime('%Y-%m-%d') for value in fully_trained]  # Convert dates to strings
     # how many training events have been completed this year, last year, etc
     profiles = Profile.objects.all()
     active_profiles = profiles.filter(active=True)
@@ -408,6 +413,8 @@ def dashboard(request):
     by_year2 = {'x': [x[0] for x in by_year1], 'y': [x[1] for x in by_year1]}
     
     print('By year2:', by_year2)
+    print('fully_trained_values:', fully_trained_values)
+    print('fully_trained_dates:', fully_trained_dates)
 
     context = {
         'title': 'Dashboard',
@@ -423,7 +430,9 @@ def dashboard(request):
         'retraining_not_performed_users': retraining_not_performed_users,
         'retraining_overdue_users': retraining_overdue_users,
         'year3_users': year3_users,
-        'year5_users': year5_users
+        'year5_users': year5_users,
+        'fully_trained_values': fully_trained_values,
+        'fully_trained_dates': fully_trained_dates,
     }
 
     return render(request, 'training/dashboard.html', context)
