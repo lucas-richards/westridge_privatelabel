@@ -1,3 +1,10 @@
+import os
+import django
+
+# Set up Django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_projects.settings')
+django.setup()
+
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import date
@@ -105,3 +112,4 @@ class Command(BaseCommand):
         self.save_kpi('Percentage Fully Trained', perc_fully_trained)
         
         self.stdout.write(self.style.SUCCESS('Successfully saved daily KPI values'))
+        print('Successfully saved daily KPI values')
