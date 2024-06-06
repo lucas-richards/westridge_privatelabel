@@ -2,6 +2,19 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<style>
+    #div_id_training_modules > div {
+        padding: 10px;
+        display: flex;
+        /* wrap */
+        flex-wrap: wrap;
+
+    }
+    .form-check {
+        width: 100px;
+    }
+</style>
+
 {% if user.is_authenticated %}
 <!-- role detail -->
 <h2>{{ role.name }} </h2>
@@ -9,8 +22,17 @@
 <!-- show form -->
 <form method="post" class="form" action="{% url 'training-role-detail' role.id %}">
     {% csrf_token %}
-    {{ form|crispy }}
-<button type="submit" >Save</button>
+    <div class="form-group">
+        {{ form.name|as_crispy_field }}
+    </div>
+    <div class="form-group">
+        {{ form.description|as_crispy_field }}
+    </div>
+    <div class="form-group">
+        {{ form.training_modules|as_crispy_field }}
+    </div>
+    <button type="submit" class="mb-4 btn btn-secondary">Save</button>
+</form>
     
     
 

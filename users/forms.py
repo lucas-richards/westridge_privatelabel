@@ -49,7 +49,7 @@ class ProfileUpdateForm(forms.ModelForm):
 #  roles form with modules as checkboxes
 class RoleForm(forms.ModelForm):
     training_modules = forms.ModelMultipleChoiceField(
-        queryset=TrainingModule.objects.all(),  # Replace 'Profile' with your actual model name
+        queryset=TrainingModule.objects.all().order_by('name'),  # Replace 'Profile' with your actual model name
         widget=forms.CheckboxSelectMultiple,
         required=False
     )
