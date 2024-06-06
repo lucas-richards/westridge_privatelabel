@@ -73,7 +73,9 @@
             {% for row in data2 %}
                 <tr id="{{row.role.id}}" style="display: none;">
                     <td class="sticky-column pl-1 pr-1">
-                        {{ row.role.name }}
+                        <a style="color: black;" href="{% url 'training-role-detail' row.role.id %}">
+                            {{ row.role.name }}
+                        </a>
                         
                     </td>
                     {% for module in row.training_modules %}

@@ -11,7 +11,7 @@ from .forms import (
     NewTrainingEvent
 )
 from users.forms import UserRegisterForm, ProfileUpdateForm, UserRegisterForm2
-from users.forms import RoleForm
+from users.forms import RoleForm, RoleUpdateForm
 from .models import TrainingEvent, TrainingModule, ProfileTrainingEvents, RoleTrainingModules, KPIValue
 from django.contrib.auth.models import User
 import pandas as pd
@@ -780,6 +780,37 @@ def training_event_delete(request, training_event_id):
     training_event.delete()
     messages.success(request, f'{training_event.training_module} certificate has been deleted!')
     return redirect('training-history')
+
+@login_required
+def training_role_detail(request, role_id):
+    role = Role.objects.get(pk=role_id)
+    role_modules = RoleTrainingModules.objects.filter(role=role).first()
+    training_profiles = ProfileTrainingEvents.objects.all()
+    form = RoleUpdateForm(instance=role)
+    if request.method == 'POST':
+        form = RoleUpdateForm(request.POST, instance=role)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f'{role.name} role has been updated!')
+            role_modules.update_row()
+            for profile in training_profiles:
+                profile.update_row()
+            return redirect('training-role-detail', role_id=role_id)
+        else:
+            messages.error(request, 'Form is not valid. Please check the entered data.')
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+
+    context = {
+        'title': role.name,
+        'role': role,
+        'form': form,
+        'sidepanel': sidepanel
+    }
+    return render(request, 'training/role_detail.html', context)
 
 @login_required
 def training_module_detail(request, training_module_id):

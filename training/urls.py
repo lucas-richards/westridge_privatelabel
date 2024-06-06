@@ -15,6 +15,7 @@ urlpatterns = [
     path('profile/<int:profile_id>/', views.training_profile, name='training-profile'),
     path('', views.grid, name='training-grid'),
     path('schedule/<int:training_module_id>/', views.schedule, name='training-schedule'),
+    path('role/<int:role_id>/', views.training_role_detail, name='training-role-detail'),
     path('training_module/<int:training_module_id>/', views.training_module_detail, name='training-module-detail'),
     path('training_event/<int:training_event_id>/', views.training_event_detail, name='training-event-detail'),
     # confirm delete

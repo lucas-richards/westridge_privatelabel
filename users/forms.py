@@ -58,6 +58,17 @@ class RoleForm(forms.ModelForm):
         model = Role
         fields = ['training_modules']
 
+class RoleUpdateForm(forms.ModelForm):
+    training_modules = forms.ModelMultipleChoiceField(
+        queryset=TrainingModule.objects.all().order_by('name'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+
+    class Meta:
+        model = Role
+        fields = ['name','description','training_modules']
+
 # form to login with code, only enter username
 # form to login with code, only enter username
 class UserLoginCodeForm(forms.Form):

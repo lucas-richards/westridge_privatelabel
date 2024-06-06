@@ -23,7 +23,6 @@ class KPIValue(models.Model):
 
     def __str__(self):
         return f"{self.kpi.name} - {self.date}: {self.value}"
-
     
 class TrainingModule(models.Model):
     name = models.CharField(max_length=255)
@@ -104,23 +103,7 @@ class TrainingEvent(models.Model):
                 return self.completed_date.strftime('%m/%d/%y')
         else:
             return 'Incomplete'
-
     
-#     # Send email notification when a training_module is completed
-#     def send_schedule_notification(self):
-#         email_user = os.environ.get('EMAIL_USER')
-#         email_password = os.environ.get('EMAIL_PASS')
-#         user_email = self.profile.user.email
-
-#         subject = f'Schedule Updated: {self.training_module.name} was scheduled'
-#         message = f'Your certificate {self.training_module.name} is due. New training scheduled on {timezone.localtime(self.training_module.scheduled_date)}.'
-
-#         try:
-#             send_mail(subject, message, email_user, [user_email], auth_user=email_user, auth_password=email_password)
-#             logging.info(f'Successfully sent schedule update email to {user_email}')
-#         except Exception as e:
-#             logging.error(f'Error sending schedule update email to {user_email}: {str(e)}')
-
 class ProfileTrainingEvents(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     row = models.TextField(default='', blank=True)
