@@ -13,7 +13,7 @@ import datetime as dt
 
 class Command(BaseCommand):
     help = 'Calculate and save daily KPI values'
-
+    
     def save_kpi(self, kpi_name, value):
         today = date.today()
         kpi, created = KPI.objects.get_or_create(name=kpi_name)
@@ -112,4 +112,8 @@ class Command(BaseCommand):
         self.save_kpi('Percentage Fully Trained', perc_fully_trained)
         
         self.stdout.write(self.style.SUCCESS('Successfully saved daily KPI values'))
-        print('Successfully saved daily KPI values')
+
+# Call the function to calculate and save daily KPI values
+if __name__ == '__main__':
+    Command().handle()
+
