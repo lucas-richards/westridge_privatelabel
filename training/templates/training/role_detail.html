@@ -20,7 +20,7 @@
 <h2>{{ role.name }} </h2>
 <p>{{ role.description }}</p>
 <!-- show form -->
-<form method="post" class="form" action="{% url 'training-role-detail' role.id %}">
+<form id="u-form" method="post" class="form" action="{% url 'training-role-detail' role.id %}">
     {% csrf_token %}
     <div class="form-group">
         {{ form.name|as_crispy_field }}
@@ -33,12 +33,22 @@
     </div>
     <button type="submit" class="mb-4 btn btn-secondary">Save</button>
 </form>
-    
+<div id="loading-indicator" style="display: none;">
+    <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+    <div class="spinner-grow" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
     
 
 
 {% endif %}
-    
+<script>
+    document.getElementById("u-form").addEventListener("submit", function() {
+        document.getElementById("loading-indicator").style.display = "block";
+        document.getElementById("u-form").style.display = "none";
+    });
+</script>
 
 
 {% endblock content %}

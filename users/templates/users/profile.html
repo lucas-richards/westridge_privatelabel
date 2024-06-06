@@ -1,6 +1,20 @@
 {% extends "users/base_sidepanel.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<style>
+  #div_id_roles > div {
+      padding: 10px;
+      display: flex;
+      /* wrap */
+      flex-wrap: wrap;
+
+  }
+  .form-check {
+      width: 280px;
+  }
+</style>
+
+
   <div class="content-section">
     <div class="media">
       <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
