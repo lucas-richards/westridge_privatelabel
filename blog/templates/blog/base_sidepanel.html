@@ -24,7 +24,7 @@
               <div class=" ">
                 {% for u in users %}
                   {% now "n/j" as today %}
-                  <p class="m-1" style="font-size: x-small;">Liz 🎉</p>
+                  <p class="m-1" style="font-size: x-small;">Lucas 🎉</p>
                   {% if u.profile.birthday|date:"n/j" == today %}
                     <p class="m-1" style="font-size: x-small;">{{ u.username }} 🎉</p>
                   {% endif %}
