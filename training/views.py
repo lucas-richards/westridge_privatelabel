@@ -26,8 +26,9 @@ from openpyxl.styles import Font, PatternFill, Alignment, Border, Side, Color
 from django.shortcuts import get_object_or_404
 
 
-@login_required
+
 def home(request):
+    return redirect('http://10.1.1.18')
     profile_instance = Profile.objects.get(user=request.user)
     must_have = profile_instance.must_have_training_modules()
     # go over must have training modules and check if they have been completed and if it's not save as '-

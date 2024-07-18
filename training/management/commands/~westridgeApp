@@ -1,10 +1,3 @@
-import os
-import django
-
-# Set up Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_projects.settings')
-django.setup()
-
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import date
@@ -13,7 +6,7 @@ import datetime as dt
 
 class Command(BaseCommand):
     help = 'Calculate and save daily KPI values'
-    
+
     def save_kpi(self, kpi_name, value):
         today = date.today()
         kpi, created = KPI.objects.get_or_create(name=kpi_name)
@@ -112,8 +105,3 @@ class Command(BaseCommand):
         self.save_kpi('Percentage Fully Trained', perc_fully_trained)
         
         self.stdout.write(self.style.SUCCESS('Successfully saved daily KPI values'))
-
-# Call the function to calculate and save daily KPI values
-if __name__ == '__main__':
-    Command().handle()
-

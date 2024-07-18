@@ -28,13 +28,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-85!1hn^grnxz4ow*!b&)v=3f_v6ir$zz^*lxd3s@29i15mna($'
 
 #Secret key generated with python
-SECRET_KEY = os.environ.get('SECRET_KEY')
+#SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = '123456'
+EMAIL_USER="lucasrichardsdev@gmail.com"
+EMAIL_PASS="kcuz qlta puhu mzwy"
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG_VALUE')
-#DEBUG = True
+#DEBUG = os.environ.get('DEBUG_VALUE')
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',
+ALLOWED_HOSTS = ['*','127.0.0.1','10.1.1.19',
                  'localhost',
                  'http://localhost:3000',
                  'westridgeapp.onrender.com']
@@ -111,29 +115,24 @@ WSGI_APPLICATION = 'django_projects.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-db_from_env = dj_database_url.config(default='postgres://westridge_db_user:Uh6AA01PFj49hGHaDaiYqJlr2rThdapw@dpg-co4vsg4f7o1s739242r0-a.oregon-postgres.render.com/westridge_db')
+#db_from_env = dj_database_url.config(default='postgres://westridge_db_user:Uh6AA01PFj49hGHaDaiYqJlr2rThdapw@dpg-co4vsg4f7o1s739242r0-a.oregon-postgres.render.com/westridge_db')
 # db_from_env = dj_database_url.config(default='postgres://house_o132_user:9QufcJHwj4oEveIOJGy1cEzFheAjVWWP@dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com/house_o132')
 # external                         connection postgres://house_o132_user:9QufcJHwj4oEveIOJGy1cEzFheAjVWWP@dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com/house_o132
 
-DATABASES = {
-    'default': db_from_env
-}
+#DATABASES = {
+#    'default': db_from_env
+#}
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'house_o132',
-#         'USER': 'house_o132_user',
-#         'PASSWORD': '9QufcJHwj4oEveIOJGy1cEzFheAjVWWP',
-#         'HOST': 'dpg-cmqs4amg1b2c73d808bg-a.oregon-postgres.render.com',
-#         'PORT': '',
-#     }
-   
-#     # 'default': {
-#     #     'ENGINE': 'django.db.backends.sqlite3',
-#     #     'NAME': BASE_DIR / 'db.sqlite3',
-#     # }
-# }
+DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.postgresql',
+         'NAME': 'mydb',
+         'USER': 'lucas',
+         'PASSWORD': 'lucas',
+         'HOST': 'localhost',
+         'PORT': '5432',
+     }
+ }
 
 
 # Password validation
