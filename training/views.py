@@ -7,7 +7,6 @@ from .forms import (
     TrainingEventUpdateForm,
     UploadFileForm,
     TrainingModuleUpdateForm,
-    ScheduleTrainingModuleForm,
     NewTrainingEvent
 )
 from users.forms import UserRegisterForm, ProfileUpdateForm, UserRegisterForm2
@@ -253,6 +252,36 @@ def new_user(request):
             return redirect('training-new_user')
         else:
             messages.error(request, 'Form is not valid. Please check the entered data.')
+    
+    sidepanel = {
+        'title': 'Training',
+        'text1': 'Completed all trainings',
+        'text2': 'Almost there',
+    }
+
+    context = {
+        'title': 'New User',
+        'form_u': UserRegisterForm2(),
+        'form_p': ProfileUpdateForm(),
+        'sidepanel': sidepanel
+    }
+
+    return render(request, 'training/new_user.html', context)
+
+@login_required
+def new_module(request):
+    if request.method == 'POST':
+        form = TrainingModuleUpdateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'New module has been created!')
+            return redirect('training-grid')
+        else:
+            messages.error(request, 'Form is not valid. Please check the entered data.')
+
+    else:
+        form = TrainingModuleUpdateForm()
+        return render(request, 'training/new_module.html', {'title':'New Module','form': form})
     
     sidepanel = {
         'title': 'Training',
@@ -550,6 +579,8 @@ def grid(request):
     
     # if the request has a supervisor parameter, filter the profiles by the supervisor
     selected_supervisor = request.GET.get('supervisor', '')
+    other = request.GET.get('other', '')
+    print('request:', request.GET)
 
     if selected_supervisor:
         #  filter profile objects where supervisor = supervisor
@@ -557,7 +588,14 @@ def grid(request):
         print('Profiles:', profiles)
     else:
         profiles = Profile.objects.filter(active=True)
-    training_modules = TrainingModule.objects.all().order_by('name')
+
+    # if other is false filter trainingmodules that have other false
+    if other:
+        training_modules = TrainingModule.objects.all().order_by('name')
+    else:    
+        training_modules = TrainingModule.objects.all().order_by('name').filter(other=False)
+        out_of_grid = TrainingModule.objects.all().count() - TrainingModule.objects.all().filter(other=False).count()
+        print('Out of grid:', out_of_grid)
 
     # Prepare data to be sent to the template
     data = []
@@ -569,8 +607,14 @@ def grid(request):
             'roles': profile.roles.all(),
             'training_events': profile_training_event.row.split(',') if profile_training_event.row else [],
         }
+        if other == '':
+            # remove the items from training_events list, the last ones and the quantity is given by out_of_grid
+            row['training_events'] = row['training_events'][:-out_of_grid]
         # combine trainin_modules and row.training_events in a for loop to check expired modules
         for i, training_module in enumerate(training_modules):
+            # if list out of range add an extra element (This is for when adding a new module)
+            if len(row['training_events']) < len(training_modules):
+                row['training_events'].append('')
             if row['training_events'][i] == '-' or row['training_events'][i] == '' or row['training_events'][i] == '+':
                 continue
             if row['training_events'][i][0] == 'T':
@@ -640,7 +684,7 @@ def grid(request):
             profile = item['profile']
             first_name = profile.user.first_name
             last_name = profile.user.last_name
-            training_events = item['training_events']
+            training_events = item['training_events'] 
 
             row = [first_name, last_name] + training_events
             ws.append(row)
@@ -682,39 +726,14 @@ def grid(request):
         'training_modules': training_modules,
         'supervisors': supervisors,
         'selected_supervisor': int(selected_supervisor) if selected_supervisor else selected_supervisor,
+        # if it was selected return true if it was not return false
+        'selected_other': 'other' if other else '',
         'data': data,
         'data2': data2
     }
 
     return render(request, 'training/grid.html', context)
 
-@login_required
-def schedule(request, training_module_id):
-    training_module = TrainingModule.objects.get(pk=training_module_id)
-    form = ScheduleTrainingModuleForm(instance=training_module)
-    if request.method == 'POST':
-        form = ScheduleTrainingModuleForm(request.POST, instance=training_module)
-        if form.is_valid():
-            form.save()
-            messages.success(request, f'{training_module.name} certificate has been scheduled!')
-            return redirect('training-schedule', training_module_id=training_module_id)
-        else:
-            messages.error(request, 'Form is not valid. Please check the entered data.')
-    
-    sidepanel = {
-        'title': 'Training',
-        'text1': 'Completed all trainings',
-        'text2': 'Almost there',
-    }
-
-    context = {
-        'title': 'Schedule',
-        'sidepanel': sidepanel,
-        'training_module': training_module,
-        'form': form,
-
-    }
-    return render(request, 'training/schedule.html', context)
 
 @login_required
 def send_reminder_email(request, training_module_id):

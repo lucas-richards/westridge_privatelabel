@@ -15,19 +15,11 @@ class UploadFileForm(forms.Form):
 
 #  training module update form
 class TrainingModuleUpdateForm(forms.ModelForm):
-    scheduled_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
 
     class Meta:
         model = TrainingModule
-        fields = ['name', 'description', 'retrain_months', 'scheduled_date']
+        fields = ['name', 'description', 'other', 'retrain_months']
 
-#  schedule training module form
-class ScheduleTrainingModuleForm(forms.ModelForm):
-    scheduled_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
-
-    class Meta:
-        model = TrainingModule
-        fields = ['scheduled_date']
 
 # new TrainingEvent
 class NewTrainingEvent(forms.ModelForm):

@@ -157,33 +157,52 @@
         </tbody>
     </table>
 </div>
-<!-- add a form to select supervisor -->
-<form id="supervisor-form" class="mt-2"  method="get" action="{% url 'training-grid' %}">
-    <div>
-        <label for="supervisor">Filter by supervisor: </label>
-        <select name="supervisor" id="supervisor" onchange="this.form.submit()">
-            {% if selected_supervisor == '' %}
-                <option value="" selected>All</option>
-            {% else %}
-                <option value="">All</option>
-            {% endif %}
-            {% for supervisor in supervisors %}
-                {% if supervisor.id == selected_supervisor %}
-                    <option value="{{ supervisor.id }}" selected>{{ supervisor }}</option>
+
+<div class="d-flex justify-content-between align-items-center">
+    <!-- add a form to select supervisor -->
+    <form id="supervisor-form" class="mt-2"  method="get" action="{% url 'training-grid' %}">
+        <div>
+            <label for="supervisor">Filter by supervisor: </label>
+            <select name="supervisor" id="supervisor" onchange="this.form.submit()">
+                {% if selected_supervisor == '' %}
+                    <option value="" selected>All</option>
                 {% else %}
-                    <option value="{{ supervisor.id }}">{{ supervisor }}</option>
+                    <option value="">All</option>
                 {% endif %}
-            {% endfor %}
-            
-        </select>
-        <div id="loading-indicator" style="display: none;">
-            <!-- Your loading indicator here (e.g., spinner or progress bar) -->
-            <div class="spinner-grow" role="status">
-                <span class="sr-only">Loading...</span>
+                {% for supervisor in supervisors %}
+                    {% if supervisor.id == selected_supervisor %}
+                        <option value="{{ supervisor.id }}" selected>{{ supervisor }}</option>
+                    {% else %}
+                        <option value="{{ supervisor.id }}">{{ supervisor }}</option>
+                    {% endif %}
+                {% endfor %}
+                
+            </select>
+            <div id="loading-indicator" style="display: none;">
+                <!-- Your loading indicator here (e.g., spinner or progress bar) -->
+                <div class="spinner-grow" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+
+    <!-- add a form to check other -->
+    <form id="other-form" class="mt-2"  method="get" action="{% url 'training-grid' %}">
+        <div>
+            <label for="other">Others: </label>
+            <!-- add checkbox selected if other is true if not unselected -->
+            {% if selected_other %}
+                <input type="checkbox" name="other" id="other" value="other" checked onchange="this.form.submit()">
+            {% else %}
+                <input type="checkbox" name="other" id="other" value="other" onchange="this.form.submit()">
+            {% endif %}
+            
+        </div>
+    </form>
+
+</div>
+
 
     
 

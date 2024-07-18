@@ -27,10 +27,11 @@ class KPIValue(models.Model):
 class TrainingModule(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    # other boolean to identify modules other than required by FDA
+    other = models.BooleanField(default=False)
     # expiration time in months
     retrain_months = models.IntegerField(null=True, blank=True)
-    # schedule date for the TrainingModule
-    scheduled_date = models.DateTimeField(null=True, blank=True)
+    
 
 
     def __str__(self):

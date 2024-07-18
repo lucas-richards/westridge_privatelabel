@@ -1,0 +1,24 @@
+{% extends "training/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+<div class="mt-5 p-3 card ">
+    <h4>New Module</h4>
+
+    <!-- show form -->
+    <form method="post" class="form" action="{% url 'training-new_module' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+        <button class="btn btn-secondary" type="submit" >Save</button>
+    </form>
+</div>
+    
+    
+
+
+{% endif %}
+    
+
+
+{% endblock content %}
