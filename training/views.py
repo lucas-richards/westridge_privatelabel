@@ -76,7 +76,7 @@ def percentage(request):
 
 def supervisors(request):
     supervisors = User.objects.filter(supervisor_profiles__isnull=False, profile__active=True).distinct()
-    training_modules = TrainingModule.objects.all().order_by('name')
+    training_modules = TrainingModule.objects.filter(other=False).order_by('name')
     users = User.objects.filter(profile__active=True).order_by('username')
     data = []
     if request.method == 'POST':
@@ -191,7 +191,7 @@ def supervisors(request):
 
 @login_required
 def new_entry(request):
-    users = sorted(User.objects.all(), key=lambda x: x.username)
+    users = sorted(User.objects.filter(profile__active=True), key=lambda x: x.username)
     training_modules = sorted(TrainingModule.objects.all(), key=lambda x: x.name)
     if request.method == 'POST':
         user_ids = request.POST.getlist('user1')
@@ -321,7 +321,8 @@ def dashboard(request):
     profiles = Profile.objects.all()
     active_profiles = profiles.filter(active=True)
     training_events = TrainingEvent.objects.all()
-    training_modules = TrainingModule.objects.all().order_by('name')
+    # only not other trainings
+    training_modules = TrainingModule.objects.filter(other=False).order_by('name')
     # training events with certificate that have a retrain_months value
     # profiles_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).select_related('profile')
     # this data is for total training and total retraining

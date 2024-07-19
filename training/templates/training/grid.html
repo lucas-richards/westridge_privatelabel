@@ -190,7 +190,7 @@
     <!-- add a form to check other -->
     <form id="other-form" class="mt-2"  method="get" action="{% url 'training-grid' %}">
         <div>
-            <label for="other">Others: </label>
+            <label for="other">Other Trainings: </label>
             <!-- add checkbox selected if other is true if not unselected -->
             {% if selected_other %}
                 <input type="checkbox" name="other" id="other" value="other" checked onchange="this.form.submit()">

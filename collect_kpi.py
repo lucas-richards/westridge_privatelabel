@@ -26,7 +26,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         profiles = Profile.objects.all()
         active_profiles = profiles.filter(active=True)
-        training_modules = TrainingModule.objects.all().order_by('name')
+        training_modules = TrainingModule.objects.filter(other=False).order_by('name')
 
         training = {
             'performed': 0,
