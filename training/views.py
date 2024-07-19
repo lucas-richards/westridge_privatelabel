@@ -113,10 +113,14 @@ def supervisors(request):
         profiles = sup.supervisor_profiles.all()
         # filter only active profiles
         profiles = [profile for profile in profiles if profile.active]
+        print('Profiles:', profiles)
         profile_training_events = ProfileTrainingEvents.objects.filter(profile__in=profiles).values_list('row', flat=True)
         
         for i, training_module in enumerate(training_modules):
+            print('Training module:', training_module)
             for profile_training_event in profile_training_events:
+                print('Profile training event:', profile_training_event)
+                print('iii', i)
                 profile_training_event = profile_training_event.split(',')[i]
                 
                 if profile_training_event == '-':
@@ -609,7 +613,7 @@ def grid(request):
         }
         if other == '':
             # remove the items from training_events list, the last ones and the quantity is given by out_of_grid
-            row['training_events'] = row['training_events'][:-out_of_grid]
+            row['training_events'] = row['training_events'][:-(out_of_grid)]
         # combine trainin_modules and row.training_events in a for loop to check expired modules
         for i, training_module in enumerate(training_modules):
             # if list out of range add an extra element (This is for when adding a new module)
@@ -652,6 +656,11 @@ def grid(request):
         }
         for obj in RoleTrainingModules.objects.all().order_by('role')
     ]
+    # if other is false remove th last modules from the list
+    if other == '':
+        for obj in data2:
+            obj['training_modules'] = obj['training_modules'][:-out_of_grid]
+
 
     # Check if download parameter is true
     download = request.GET.get('download', 'false').lower() == 'true'
@@ -664,6 +673,8 @@ def grid(request):
         # Add headers
         headers = ["First name", "Last name"] + [tm.name for tm in training_modules]
         ws.append(headers)
+
+        print('Headers:', headers)
 
         # Apply styles to the header
         header_font = Font(bold=True)

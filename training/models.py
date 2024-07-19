@@ -36,6 +36,19 @@ class TrainingModule(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    # when a module is created, update the RoleTrainingModules row and Profile trainings
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        for role in Role.objects.all():
+            role_training_modules = RoleTrainingModules.objects.get(role=role)
+            role_training_modules.update_row()
+        print('RoleTrainingModules updated')
+
+        for profile in Profile.objects.all():
+            profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
+            profile_training_events.update_row()
+        print('ProfileTrainingEvents updated')
     
     # profiles with this cert 
     def get_incomplete_training_modules_profiles(self):
