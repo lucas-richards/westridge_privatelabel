@@ -28,11 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = 'django-insecure-85!1hn^grnxz4ow*!b&)v=3f_v6ir$zz^*lxd3s@29i15mna($'
 
 #Secret key generated with python
-#SECRET_KEY = os.environ.get('SECRET_KEY')
-SECRET_KEY = '123456'
-EMAIL_USER="lucasrichardsdev@gmail.com"
-EMAIL_PASS="kcuz qlta puhu mzwy"
-
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = os.environ.get('DEBUG_VALUE')
