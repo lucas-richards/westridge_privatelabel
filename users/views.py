@@ -99,7 +99,7 @@ def get_code(request):
                     # store the time that the code was generated in session
                     request.session['timestamp'] = timezone.now().isoformat()
                     messages.success(request, f'Verification code sent to {user.email}')
-                    messages.warning(request, f'Your code expires in 1 minute')
+                    messages.warning(request, f'Your code expires in 5 minutes')
                     return redirect('login-code')
                 else:
                     messages.error(request, 'User does not have a correct email address. Please contact administator to update it.')
@@ -125,7 +125,7 @@ def login_code(request):
             user = authenticate(request, username=username, password=verification_code)
             if user:
                 # check expiration time
-                if (timezone.now() - timestamp).seconds > 60:
+                if (timezone.now() - timestamp).seconds > 300:
                     messages.error(request, 'Verification code expired')
                     return render(request, 'users/verify.html')
             login(request, user)
