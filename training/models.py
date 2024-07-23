@@ -46,6 +46,7 @@ class TrainingModule(models.Model):
         print('RoleTrainingModules updated')
 
         for profile in Profile.objects.all():
+            print('profile',profile)
             profile_training_events = ProfileTrainingEvents.objects.get(profile=profile)
             profile_training_events.update_row()
         print('ProfileTrainingEvents updated')
