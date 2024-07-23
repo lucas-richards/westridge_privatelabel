@@ -305,16 +305,21 @@ def new_module(request):
 def dashboard(request):
     # get kpi values for fully trained
     fully_trained = KPIValue.objects.filter(kpi__name='Percentage Fully Trained').order_by('date')
+    training_performed = KPIValue.objects.filter(kpi__name='Training Performed').order_by('date')
     training_not_performed = KPIValue.objects.filter(kpi__name='Training Not Performed').order_by('date')
     retraining_not_performed = KPIValue.objects.filter(kpi__name='Retraining Not Performed').order_by('date')
     retraining_overdue = KPIValue.objects.filter(kpi__name='Retraining Overdue').order_by('date')
     # separate the values for a line graph
     fully_trained_values = [value.value for value in fully_trained]
+    training_performed_values = [value.value for value in training_performed]
+    
     training_not_performed_values = [value.value for value in training_not_performed]
     retraining_not_performed_values = [value.value for value in retraining_not_performed]
     retraining_overdue_values = [value.value for value in retraining_overdue]
     fully_trained_dates = [value.date.strftime('%Y-%m-%d') for value in fully_trained] 
     training_not_performed_dates = [value.date.strftime('%Y-%m-%d') for value in training_not_performed]
+    training_performed_dates = [value.date.strftime('%Y-%m-%d') for value in training_performed]
+    
     retraining_not_performed_dates = [value.date.strftime('%Y-%m-%d') for value in retraining_not_performed]
     retraining_overdue_dates = [value.date.strftime('%Y-%m-%d') for value in retraining_overdue]
     # how many training events have been completed this year, last year, etc
@@ -338,6 +343,7 @@ def dashboard(request):
         'total' : 0
     }
     profiles_fully_trained = 0
+    training_performed_users = []
     training_not_performed_users=[]
     retraining_not_performed_users=[]
     retraining_overdue_users=[]
@@ -381,6 +387,7 @@ def dashboard(request):
                         else:
                             training['performed'] += 1
                             training['total'] += 1
+                            training_performed_users.append(profile.user)
                         
                             
                     except ValueError:
@@ -394,6 +401,7 @@ def dashboard(request):
 
     perc_fully_trained = round(profiles_fully_trained / profiles.filter(active=True).count() * 100) if profiles.filter(active=True).count() else 0
     # remove duplicates from lists
+    training_performed_users = list(set(training_performed_users))
     training_not_performed_users = list(set(training_not_performed_users))
     retraining_not_performed_users = list(set(retraining_not_performed_users))
     retraining_overdue_users = list(set(retraining_overdue_users))
@@ -457,6 +465,8 @@ def dashboard(request):
 
     by_year2 = {'x': [x[0] for x in by_year1], 'y': [x[1] for x in by_year1]}
     
+    print('training_performed_users:', training_performed_values)
+    print('training_performed_dates:', training_performed_dates)
     print('training_not_performed_values:', training_not_performed_values)
     print('training_not_performed_dates:', training_not_performed_dates)
     print('retraining_not_performed_values:', retraining_not_performed_values)
@@ -481,6 +491,8 @@ def dashboard(request):
         'year5_users': year5_users,
         'fully_trained_values': fully_trained_values,
         'fully_trained_dates': fully_trained_dates,
+        'training_performed_values': training_performed_values,
+        'training_performed_dates': training_performed_dates,
         'training_not_performed_values': training_not_performed_values,
         'training_not_performed_dates': training_not_performed_dates,
         'retraining_not_performed_values': retraining_not_performed_values,

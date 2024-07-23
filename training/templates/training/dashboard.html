@@ -242,7 +242,9 @@
             },
             plugins: {
                 datalabels: {
-                    display: true,
+                    display: function(context) {
+                        return context.dataIndex === context.dataset.data.length - 1; // Only display the last label
+                    },
                     anchor: 'end',
                     align: 'top',
                     color: 'black',
@@ -266,10 +268,10 @@
     const myChart5 = new Chart(ctx5, {
         type: 'line',
         data: {
-            labels: {{ training_not_performed_dates|safe }},
+            labels: {{ training_performed_dates|safe }},
             datasets: [{
-                label: 'Not Performed %',
-                data:  {{ training_not_performed_values|safe }},
+                label: 'Performed %',
+                data:  {{ training_performed_values|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1
@@ -280,7 +282,7 @@
                 y: {
                     beginAtZero: true,
                     min: 0,
-                    max: 50,
+                    max: 100,
                     ticks: {
                         callback: function(value) {
                             return value + '%'; // add percentage sign 
@@ -290,7 +292,9 @@
             },
             plugins: {
                 datalabels: {
-                    display: true,
+                    display: function(context) {
+                        return context.dataIndex === context.dataset.data.length - 1; // Only display the last label
+                    },
                     anchor: 'end',
                     align: 'top',
                     color: 'black',
@@ -334,7 +338,7 @@
                 y: {
                     beginAtZero: true,
                     min: 0,
-                    max: 30,
+                    max: 20,
                     ticks: {
                         callback: function(value) {
                             return value + '%'; // add percentage sign 
@@ -344,7 +348,9 @@
             },
             plugins: {
                 datalabels: {
-                    display: true,
+                    display: function(context) {
+                        return context.dataIndex === context.dataset.data.length - 1; // Only display the last label
+                    },
                     anchor: 'end',
                     align: 'top',
                     color: 'black',
