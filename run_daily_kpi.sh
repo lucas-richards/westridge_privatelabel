@@ -9,3 +9,7 @@ cd ~/westridgeApp
 
 # Run the Django management command
 python3 collect_kpi.py
+
+# backup data base
+
+pg_dumpall > /home/lr/database_backup/backup.sql
