@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from .models import Asset
+from .models import Asset, Vendor, WorkOrder
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -13,6 +14,25 @@ def dashboard(request):
 
     return render(request, 'workorder/dashboard.html', context)
 
+def asset(request, id):
+    try:
+        asset = Asset.objects.get(id=id)
+        print('this is asset',asset)
+        data = {
+            'code': asset.code,
+            'name': asset.name,
+            'status': asset.status,
+            'description': asset.description,
+            'image_url': asset.image.url, 
+            'serial_number': asset.serial_number,
+            'model': asset.model,
+            'manufacturer': asset.manufacturer,
+            'year': asset.year,
+        }
+        return JsonResponse(data)
+    except Asset.DoesNotExist:
+        return JsonResponse({'error': 'Asset not found'}, status=404)
+
 def assets(request):
     assets = Asset.objects.all()
     context = {
@@ -22,14 +42,14 @@ def assets(request):
 
     return render(request, 'workorder/assets.html', context)
 
-def asset(request, id):
-    asset = Asset.objects.get(id=id)
-    context = {
-        'title': 'Asset',
-        'asset': asset,
-    }
+# def asset(request, id):
+#     asset = Asset.objects.get(id=id)
+#     context = {
+#         'title': 'Asset',
+#         'asset': asset,
+#     }
 
-    return render(request, 'workorder/asset.html', context)
+#     return render(request, 'workorder/asset.html', context)
 
 def add_asset(request):
     if request.method == 'POST':

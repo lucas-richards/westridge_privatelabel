@@ -1,57 +1,149 @@
 {% extends "workorder/tabs_nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<style>
+    .truncate {
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px; /* Adjust the width as needed */
+    }
+
+    .highlight {
+        background-color: #f0f0f0; /* Adjust the color as needed */
+        border-left: 4px solid #007bff; /* Adjust the color as needed */
+    }
+
+    .asset-item {
+        padding: 10px; /* Add padding to the items */
+        cursor: pointer; /* Show hand cursor on hover */
+    }
+
+    .asset-item:hover {
+        background-color: #e9ecef; /* Optional: Add a hover effect */
+    }
+
+    .asset-details {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .asset-details img {
+        width: 150px; /* Set the width of the image */
+        height: auto;
+        border-radius: 25px;
+        margin-bottom: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+
+    .asset-details h5 {
+        margin-bottom: 15px;
+    }
+
+    .asset-details p {
+        margin-bottom: 10px;
+    }
+
+    .asset-details .badge {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+</style>
 
 <!-- create two columns -->
 <div class="mb-4 row">
     <div class="col-md-4">
         <!-- Fully trained graph -->
-         {% if assets %}
-         <div class="p-3 mt-3 card " style="height: 300px;">
+        {% if assets %}
+        <div class="p-3 mt-3 card" style="height: 300px; overflow-y: scroll;">
             {% for asset in assets %}
-                
-                    <div class="d-flex justify-content-between align-items-bottom">
-                        <div class="d-flex justify-content-center align-items-bottom">
-                            <h5 class="mr-2 font-weight-bold">{{ asset.code }}</h5>
-                            <p style="max-width: fit-content;">{{ asset.name }}</p>
-                        </div>
-                        <!-- green dot if status is online -->
-                        {% if asset.status == 'online' %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
-                                <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-                              </svg>
-                            
-                        {% else %}
+                <div class="d-flex justify-content-between align-items-bottom asset-item" data-asset-id="{{ asset.id }}">
+                    <div class="d-flex justify-content-center align-items-bottom">
+                        <h5 class="mr-2 font-weight-bold">{{ asset.code }}</h5>
+                        <p class="truncate">{{ asset.name }}</p>
+                    </div>
+                    <!-- green dot if status is online -->
+                    {% if asset.status == 'online' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
+                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                        </svg>
+                    {% else %}
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-danger" viewBox="0 0 10 10">
                             <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-                          </svg>
-                        {% endif %}
-                    </div>
-                    
-                
+                        </svg>
+                    {% endif %}
+                </div>
             {% endfor %}
         </div>
         {% else %}
-            <div class="p-3 mt-3 card " style="height: 300px;">
+            <div class="p-3 mt-3 card " style="height: 600px;">
                 <h5>No assets found</h5>
             </div>
         {% endif %}
-
-            
     </div>
 
-    
     <div class="col-md-8">
-        <!-- KPI 1 graph -->
-        <div class="p-3 mt-3 card " style="height: 300px;">
-            
+        <!-- item details -->
+        <div class="p-3 mt-3 card" style="height: 600px;" id="asset-details">
+            <h5>Select an asset to see details</h5>
         </div>
-        
     </div>
-    
-    
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const assetItems = document.querySelectorAll('.asset-item');
+        const assetDetailsDiv = document.getElementById('asset-details');
+        let selectedAssetItem = null;
+
+        assetItems.forEach(item => {
+            item.addEventListener('click', function () {
+                const assetId = this.getAttribute('data-asset-id');
+
+                // Highlight the selected item
+                if (selectedAssetItem) {
+                    selectedAssetItem.classList.remove('highlight');
+                }
+                this.classList.add('highlight');
+                selectedAssetItem = this;
+
+                fetch(`/workorder/asset/${assetId}/`)
+                    .then(response => response.json())
+                    .then(data => {
+                        assetDetailsDiv.innerHTML = `
+                            <div class="asset-details">
+                                <div class="mb-4 row">
+                                    <div class="col-md-4">
+                                        <img src="${data.image_url}" alt="${data.name}">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h5>${data.name}</h5>
+                                        <p><strong>Code:</strong> ${data.code}</p>
+                                        <p><strong>Description:</strong> ${data.description}</p>
+                                        <p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <h5>Details</h5>
+                                    <p><strong>Location:</strong> ${data.location}</p>
+                                    <p><strong>Model:</strong> ${data.model}</p>
+                                    <p><strong>Serial Number:</strong> ${data.serial_number}</p>
+                                    <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
+                                    <p><strong>Year Purchased:</strong> ${data.year}</p>
+                            </div>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Error fetching asset details:', error);
+                        assetDetailsDiv.innerHTML = '<p>Error loading asset details.</p>';
+                    });
+            });
+        });
+    });
+</script>
 
 
 
