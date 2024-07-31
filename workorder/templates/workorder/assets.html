@@ -1,0 +1,58 @@
+{% extends "workorder/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<!-- create two columns -->
+<div class="mb-4 row">
+    <div class="col-md-4">
+        <!-- Fully trained graph -->
+         {% if assets %}
+         <div class="p-3 mt-3 card " style="height: 300px;">
+            {% for asset in assets %}
+                
+                    <div class="d-flex justify-content-between align-items-bottom">
+                        <div class="d-flex justify-content-center align-items-bottom">
+                            <h5 class="mr-2 font-weight-bold">{{ asset.code }}</h5>
+                            <p style="max-width: fit-content;">{{ asset.name }}</p>
+                        </div>
+                        <!-- green dot if status is online -->
+                        {% if asset.status == 'online' %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
+                                <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                              </svg>
+                            
+                        {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-danger" viewBox="0 0 10 10">
+                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                          </svg>
+                        {% endif %}
+                    </div>
+                    
+                
+            {% endfor %}
+        </div>
+        {% else %}
+            <div class="p-3 mt-3 card " style="height: 300px;">
+                <h5>No assets found</h5>
+            </div>
+        {% endif %}
+
+            
+    </div>
+
+    
+    <div class="col-md-8">
+        <!-- KPI 1 graph -->
+        <div class="p-3 mt-3 card " style="height: 300px;">
+            
+        </div>
+        
+    </div>
+    
+    
+</div>
+
+
+
+
+{% endblock content %}
