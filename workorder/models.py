@@ -59,7 +59,7 @@ def asset_attachment_path(instance, filename):
     return f'asset_attachments/{instance.code}/{filename}'
 
 class Asset(models.Model):
-    code = models.CharField(max_length=255)
+    code = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     status = models.CharField(
         max_length=20,

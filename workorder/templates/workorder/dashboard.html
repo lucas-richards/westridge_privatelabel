@@ -7,20 +7,7 @@
     <div class="col-md-6">
         <!-- Fully trained graph -->
         <div class="p-3 mt-3 card " style="height: 300px;">
-            <table class="mb-2 table-hover table-bordered rounded text-center " style="font-size:larger;">
-                <thead>
-                    <tr class="table-secondary">
-                        <th>Total Active Employees</th>
-                        <th>100% Trained</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ profiles_count }}</td>
-                        <td>{{ perc_fully_trained }}%</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h4 class="text-center">Work Orders</h4>
             <div class="d-flex align-items-center justify-content-center" style="height: 250px;">
                 <canvas id="myChart2" ></canvas>
             </div>
@@ -28,22 +15,7 @@
 
         <!-- train graph -->
         <div class="p-3 mt-3 card " style="height: 300px;">
-            <table class="mb-2 table-hover table-bordered text-center" style="font-size: larger;">
-                <thead>
-                    <tr class="table-secondary">
-                        <th>Total OT Training</th>
-                        <th>Total OT Training Performed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <tr>
-                        <td>{{ training.total }}</td>
-                        <td>{{ training.performed }}%</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
+            <h4 class="text-center">Assets</h4>
             <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
                 <canvas class="p-2" id="myChart3"></canvas>
             </div>
@@ -52,146 +24,36 @@
 
         <!-- retrain graph -->
         <div class="mt-3 p-3 card " style="height: 300px;">
-            <table class="mb-2 table-hover table-bordered text-center" style="font-size: larger;">
-                <thead>
-                    <tr class="table-secondary">
-                        <th>Total Retraining</th>
-                        <th>Total Retraining Performed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    <tr>
-                        <td>{{ retraining.total }}</td>
-                        <td>{{ retraining.performed }}%</td>
-                    </tr>
-                    
-                </tbody>
-            </table>
+            <h4 class="text-center">Extra data</h4>
             <div class="d-flex align-items-center justify-content-center" style="height: 200px;">
                 <canvas class="p-2"  id="myChart4"></canvas>
             </div>
             
         </div>
 
-        <!-- accordion -->
-        <div class="p-3 mt-3 card " >
-            
-            <div id="accordion">
-                <div class="card">
-                  <div  id="headingOne">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        3-4 Years
-                      </button>
-                    </h5>
-                  </div>
-              
-                  <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                        {% for user in year3_users %}
-                            {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
-                        {% empty %}
-                            No users found.
-                        {% endfor %}
-                    </div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div class="" id="headingTwo">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        +5 Years
-                      </button>
-                    </h5>
-                  </div>
-                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">
-                        {% for user in year5_users %}
-                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
-                        {% empty %}
-                            No users found.
-                        {% endfor %}
-                    </div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div id="headingThree">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Training Not Performed
-                      </button>
-                    </h5>
-                  </div>
-                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    <div class="card-body">
-                        {% for user in training_not_performed_users %}
-                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
-                        {% empty %}
-                            No users found.
-                        {% endfor %}
-                    </div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div id="headingFour">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        Retraining Not Performed
-                      </button>
-                    </h5>
-                  </div>
-                  <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
-                    <div class="card-body">
-                        {% for user in retraining_not_performed_users %}
-                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
-                        {% empty %}
-                            No users found.
-                        {% endfor %}
-                    </div>
-                  </div>
-                </div>
-                <div class="card">
-                  <div id="headingFive">
-                    <h5 class="mb-0">
-                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                        Retraining Expired
-                      </button>
-                    </h5>
-                  </div>
-                  <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordion">
-                    <div class="card-body">
-                        {% for user in retraining_overdue_users %}
-                        {{ user.profile.user.first_name }} {{ user.profile.user.last_name }},
-                        {% empty %}
-                            No users found.
-                        {% endfor %}
-                    </div>
-                  </div>
-                </div>
-              </div>
-        </div>
+        
+        
 
     </div>
     
     <div class="col-md-6">
         <!-- KPI 1 graph -->
         <div class="p-3 mt-3 card " style="height: 300px;">
-            <h4 class="text-center">Fully Trained KPI</h4>
+            <h4 class="text-center">Work Orders KPI</h4>
             <div class="d-flex align-items-center justify-content-center" style="height: 220px;">
                 <canvas id="myChart" ></canvas>
             </div>
         </div>
         <!-- KPI 2 graph -->
         <div class="p-3 mt-3 card " style="height: 300px;">
-            <h4 class="text-center">OT Training KPI</h4>
+            <h4 class="text-center">Assets KPI</h4>
             <div class="d-flex align-items-center justify-content-center" style="height: 220px;">
                 <canvas id="myChart5" ></canvas>
             </div>
         </div>
         <!-- KPI 3 graph -->
         <div class="p-3 mt-3 card " style="height: 300px;">
-            <h4 class="text-center">Retraining KPI</h4>
+            <h4 class="text-center">Extra KPI</h4>
             <div class="d-flex align-items-center justify-content-center" style="height: 220px;">
                 <canvas id="myChart6" ></canvas>
             </div>

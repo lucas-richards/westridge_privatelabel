@@ -15,8 +15,10 @@
     }
 
     .asset-item {
-        padding: 10px; /* Add padding to the items */
+        padding:10px;
         cursor: pointer; /* Show hand cursor on hover */
+        /* bottom border gray */
+        border-bottom: 1px solid #e9ecef;
     }
 
     .asset-item:hover {
@@ -25,7 +27,6 @@
 
     .asset-details {
         max-height: 600px;
-        overflow-y: auto;
     }
 
     .asset-details img {
@@ -54,11 +55,14 @@
 </style>
 
 <!-- create two columns -->
+ <div class="text-right">
+     <a href="{% url 'workorder-add-asset' %}" class="btn btn-outline-primary">Create Asset</a>
+ </div>
 <div class="mb-4 row">
     <div class="col-md-4">
         <!-- Fully trained graph -->
         {% if assets %}
-        <div class="p-3 mt-3 card" style="height: 300px; overflow-y: scroll;">
+        <div class=" mt-3 card" style="height: 600px; overflow-y: scroll;">
             {% for asset in assets %}
                 <div class="d-flex justify-content-between align-items-bottom asset-item" data-asset-id="{{ asset.id }}">
                     <div class="d-flex justify-content-center align-items-bottom">
@@ -75,11 +79,13 @@
                             <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                         </svg>
                     {% endif %}
+                    
                 </div>
+                
             {% endfor %}
         </div>
         {% else %}
-            <div class="p-3 mt-3 card " style="height: 600px;">
+            <div class="p-3 mt-3 card ">
                 <h5>No assets found</h5>
             </div>
         {% endif %}
@@ -87,7 +93,7 @@
 
     <div class="col-md-8">
         <!-- item details -->
-        <div class="p-3 mt-3 card" style="height: 600px;" id="asset-details">
+        <div class="p-3 mt-3 card" id="asset-details">
             <h5>Select an asset to see details</h5>
         </div>
     </div>
@@ -95,54 +101,109 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const assetItems = document.querySelectorAll('.asset-item');
-        const assetDetailsDiv = document.getElementById('asset-details');
-        let selectedAssetItem = null;
+    const assetItems = document.querySelectorAll('.asset-item');
+    const assetDetailsDiv = document.getElementById('asset-details');
+    let selectedAssetItem = null;
 
-        assetItems.forEach(item => {
-            item.addEventListener('click', function () {
-                const assetId = this.getAttribute('data-asset-id');
+    assetItems.forEach(item => {
+        item.addEventListener('click', function () {
+            const assetId = this.getAttribute('data-asset-id');
 
-                // Highlight the selected item
-                if (selectedAssetItem) {
-                    selectedAssetItem.classList.remove('highlight');
-                }
-                this.classList.add('highlight');
-                selectedAssetItem = this;
+            // Highlight the selected item
+            if (selectedAssetItem) {
+                selectedAssetItem.classList.remove('highlight');
+            }
+            this.classList.add('highlight');
+            selectedAssetItem = this;
 
-                fetch(`/workorder/asset/${assetId}/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        assetDetailsDiv.innerHTML = `
-                            <div class="asset-details">
-                                <div class="mb-4 row">
-                                    <div class="col-md-4">
-                                        <img src="${data.image_url}" alt="${data.name}">
-                                    </div>
-                                    <div class="col-md-8">
-                                        <h5>${data.name}</h5>
-                                        <p><strong>Code:</strong> ${data.code}</p>
-                                        <p><strong>Description:</strong> ${data.description}</p>
-                                        <p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>
-                                    </div>
-                                </div>
-                                <div class="mb-4">
-                                    <h5>Details</h5>
-                                    <p><strong>Location:</strong> ${data.location}</p>
-                                    <p><strong>Model:</strong> ${data.model}</p>
-                                    <p><strong>Serial Number:</strong> ${data.serial_number}</p>
-                                    <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
-                                    <p><strong>Year Purchased:</strong> ${data.year}</p>
-                            </div>
-                        `;
-                    })
-                    .catch(error => {
-                        console.error('Error fetching asset details:', error);
-                        assetDetailsDiv.innerHTML = '<p>Error loading asset details.</p>';
-                    });
-            });
+            // Update the URL without reloading the page
+            history.pushState(null, '', `/workorder/asset/${assetId}/`);
+            loadAssetDetails(assetId);
         });
     });
+
+    window.addEventListener('popstate', function () {
+        const urlParts = window.location.pathname.split('/');
+        const assetId = urlParts[urlParts.length - 2];
+        if (assetId) {
+            loadAssetDetails(assetId);
+        } else {
+            assetDetailsDiv.innerHTML = '<h5>Select an asset to see details</h5>';
+        }
+    });
+
+    function loadAssetDetails(assetId) {
+        fetch(`/workorder/asset/${assetId}/`)
+            .then(response => response.json())
+            .then(data => {
+                assetDetailsDiv.innerHTML = `
+                    <div class="asset-details">
+                        <div class="mb-3 d-flex justify-content-between align-items-bottom">
+                                <button id="wo-button" class="btn btn-primary">Creat Work Order</button>
+                                <button id="edit-button" class="btn btn-primary">Edit</button>
+                            </div>
+                        <div class="mb-4 row">
+                            
+                            <div class="col-md-7">
+                                
+                                <h5>${data.name}</h5>
+                                <p><strong>Code:</strong> ${data.code}</p>
+                                <p><strong>Description:</strong> ${data.description}</p>
+                                <p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>
+                                <p><strong>Serial Number:</strong> ${data.serial_number}</p>
+                                <p><strong>Model:</strong> ${data.model}</p>
+                                <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
+                                <p><strong>Year:</strong> ${data.year}</p>
+                                <p><strong>Location:</strong> ${data.location}</p>
+                                <p><strong>Parent:</strong> ${data.parent}</p>
+                                <p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>
+                                <p><strong>Vendors:</strong> ${data.vendors}</p>
+                                <p><strong>Created By:</strong> ${data.created_by}</p>
+                                <p><strong>Created On:</strong> ${data.created_on}</p>
+                                <p><strong>Last Updated:</strong> ${data.last_updated}</p>
+                                <p><strong>Criticality:</strong> ${data.criticality}</p>
+                                <p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>
+                                
+                            </div>
+                            <div class="col-md-5">
+                                
+                                <img src="${data.image_url}" alt="${data.name}">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                `;
+
+                const editButton = document.getElementById('edit-button');
+                editButton.addEventListener('click', function () {
+                    // Redirect to the edit page
+                    window.location.href = `/workorder/asset/edit/${assetId}/`;
+                });
+                const woButton = document.getElementById('wo-button');
+                woButton.addEventListener('click', function () {
+                    // Redirect to the edit page
+                    window.location.href = `/workorder/asset/${assetId}/workorders/new/`;
+                });
+            })
+            .catch(error => {
+                console.error('Error loading asset details:', error);
+            });
+    }
+
+    // Trigger a click event on the first asset item to load its details by default
+    if (assetItems.length > 0) {
+        assetItems[0].click();
+    }
+
+    // Load asset details if needed
+    const currentUrlParts = window.location.pathname.split('/');
+    const currentAssetId = currentUrlParts[currentUrlParts.length - 2];
+    if (currentAssetId) {
+        loadAssetDetails(currentAssetId);
+    }
+});
+
 </script>
 
 

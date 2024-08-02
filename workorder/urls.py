@@ -18,5 +18,6 @@ urlpatterns = [
     path('workorder/add/', views.add_workorder, name='workorder-add-workorder'),
     path('workorder/edit/<int:id>/', views.edit_workorder, name='workorder-edit-workorder'),
     path('workorder/delete/<int:id>/', views.delete_workorder, name='workorder-delete-workorder'),
+    path('asset/<int:id>/workorders/new/', views.asset_workorders_new, name='workorder-asset-workorders-new'),
     
 ]

@@ -1,6 +1,13 @@
 from django.shortcuts import render
-from .models import Asset, Vendor, WorkOrder
+from .models import Asset, Vendor, WorkOrder, Location
+from users.models import Department
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import redirect
+import json
+from .forms import AssetEditForm, WorkOrderEditForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -14,27 +21,40 @@ def dashboard(request):
 
     return render(request, 'workorder/dashboard.html', context)
 
+@csrf_exempt
+@require_http_methods(["GET", "PUT"])
 def asset(request, id):
     try:
         asset = Asset.objects.get(id=id)
-        print('this is asset',asset)
-        data = {
-            'code': asset.code,
-            'name': asset.name,
-            'status': asset.status,
-            'description': asset.description,
-            'image_url': asset.image.url, 
-            'serial_number': asset.serial_number,
-            'model': asset.model,
-            'manufacturer': asset.manufacturer,
-            'year': asset.year,
-        }
-        return JsonResponse(data)
+        if request.method == "GET":
+            data = {
+                'code': asset.code,
+                'name': asset.name,
+                'status': asset.status,
+                'description': asset.description,
+                'image_url': asset.image.url if asset.image else '',
+                'serial_number': asset.serial_number,
+                'model': asset.model,
+                'manufacturer': asset.manufacturer,
+                'year': asset.year,
+                'location': asset.location.name if asset.location else '',
+                'parent': asset.parent.name if asset.parent else '',
+                'department_in_charge': asset.department_in_charge.name if asset.department_in_charge else '',
+                'vendors': asset.vendors.name if asset.vendors else '',
+                'created_by': asset.created_by.username if asset.created_by else '',
+                'created_on': asset.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                'last_updated': asset.last_updated.strftime('%Y-%m-%d %H:%M:%S'),
+                'criticality': asset.criticality,
+                'attachments': asset.attachments.url if asset.attachments else '',
+            }
+            return JsonResponse(data)
     except Asset.DoesNotExist:
         return JsonResponse({'error': 'Asset not found'}, status=404)
+    except (Location.DoesNotExist, Asset.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
+        return JsonResponse({'error': 'Related entity not found'}, status=404)
 
 def assets(request):
-    assets = Asset.objects.all()
+    assets = Asset.objects.all().order_by('code')
     context = {
         'title': 'Assets',
         'assets': assets,
@@ -42,37 +62,68 @@ def assets(request):
 
     return render(request, 'workorder/assets.html', context)
 
-# def asset(request, id):
-#     asset = Asset.objects.get(id=id)
-#     context = {
-#         'title': 'Asset',
-#         'asset': asset,
-#     }
-
-#     return render(request, 'workorder/asset.html', context)
-
 def add_asset(request):
     if request.method == 'POST':
-        pass
+        form = AssetEditForm(request.POST, request.FILES)
+        # add created by
+        form.instance.created_by = request.user
+        if form.is_valid():
+            form.save()
+            return redirect('workorder-assets')
+    else:
+        form = AssetEditForm()
     context = {
         'title': 'Add Asset',
+        'form': form,
     }
-
-    return render(request, 'workorder/add_asset.html', context)
+    return render(request, 'workorder/new_asset.html', context)
 
 def edit_asset(request, id):
+    assets = Asset.objects.all().order_by('code')
     asset = Asset.objects.get(id=id)
+
+    if request.method == 'POST':
+        form = AssetEditForm(request.POST, request.FILES, instance=asset)
+        if form.is_valid():
+            form.save()
+            return redirect('workorder-assets')
+    else:
+        form = AssetEditForm(instance=asset)
     context = {
         'title': 'Edit Asset',
         'asset': asset,
+        'form': form,
     }
-
-    return render(request, 'workorder/edit_asset.html', context)
+    return render(request, 'workorder/edit_asset.html', context) 
 
 def delete_asset(request, id):
     asset = Asset.objects.get(id=id)
-    asset.delete()
+    try:
+        asset.delete()
+        messages.success(request, 'Asset deleted successfully')
+    except Exception as e:
+        messages.error(request, 'Error deleting asset')
     return redirect('workorder-assets')
+
+def asset_workorders_new(request, id):
+    asset = Asset.objects.get(id=id)
+    if request.method == 'POST':
+        form = WorkOrderEditForm(request.POST, request.FILES)
+        # add created by
+        form.instance.asset = asset
+        form.instance.created_by = request.user
+        if form.is_valid():
+            form.save()
+            return redirect('workorder-workorders')
+    else:
+        form = WorkOrderEditForm()
+        form.fields['asset'].initial = asset
+    context = {
+        'title': 'Add Work Order',
+        'form': form,
+    }
+    return render(request, 'workorder/new_workorder.html', context)
+
 
 def vendors(request):
     vendors = Vendor.objects.all()
@@ -124,32 +175,74 @@ def workorders(request):
 
     return render(request, 'workorder/workorders.html', context)
 
+@csrf_exempt
+@require_http_methods(["GET", "PUT"])
 def workorder(request, id):
-    workorder = WorkOrder.objects.get(id=id)
-    context = {
-        'title': 'Work Order',
-        'workorder': workorder,
-    }
-
-    return render(request, 'workorder/workorder.html', context)
+    try:
+        workorder = WorkOrder.objects.get(id=id)
+        if request.method == "GET":
+            data = {
+                'title': workorder.title,
+                'status': workorder.status,
+                'priority': workorder.priority,
+                'work_type': workorder.work_type,
+                'description': workorder.description,
+                'assigned_to': workorder.assigned_to.username if workorder.assigned_to else '',
+                'department_assigned_to': workorder.department_assigned_to.name if workorder.department_assigned_to else '',
+                'created_by': workorder.created_by.username if workorder.created_by else '',
+                'created_on': workorder.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                'planned_start_date': workorder.planned_start_date.strftime('%Y-%m-%d %H:%M:%S') if workorder.planned_start_date else '',
+                'due_date': workorder.due_date.strftime('%Y-%m-%d %H:%M:%S') if workorder.due_date else '',
+                'estimated_hours': workorder.estimated_hours.total_seconds() if workorder.estimated_hours else '',
+                'started_on': workorder.started_on.strftime('%Y-%m-%d %H:%M:%S') if workorder.started_on else '',
+                'completed_on': workorder.completed_on.strftime('%Y-%m-%d %H:%M:%S') if workorder.completed_on else '',
+                'completed_by': workorder.completed_by.username if workorder.completed_by else '',
+                'last_updated': workorder.last_updated.strftime('%Y-%m-%d %H:%M:%S'),
+                'recurrence': workorder.recurrence,
+                'asset': workorder.asset.name if workorder.asset else '',
+                'time_to_complete': workorder.time_to_complete.total_seconds() if workorder.time_to_complete else '',
+                'image_url': workorder.image.url if workorder.image else '',
+                'attachments': workorder.attachments.url if workorder.attachments else '',
+            }
+            return JsonResponse(data)
+    except WorkOrder.DoesNotExist:
+        return JsonResponse({'error': 'workorder not found'}, status=404)
+    except (Location.DoesNotExist, WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
+        return JsonResponse({'error': 'Related entity not found'}, status=404)
 
 def add_workorder(request):
     if request.method == 'POST':
-        pass
+        form = WorkOrderEditForm(request.POST, request.FILES)
+        # add created by
+        form.instance.created_by = request.user
+        if form.is_valid():
+            form.save()
+            return redirect('workorder-workorders')
+    else:
+        form = WorkOrderEditForm()
     context = {
         'title': 'Add Work Order',
+        'form': form,
     }
-
-    return render(request, 'workorder/add_workorder.html', context)
+    return render(request, 'workorder/new_workorder.html', context)
 
 def edit_workorder(request, id):
+    workorders = WorkOrder.objects.all().order_by('created_on')
     workorder = WorkOrder.objects.get(id=id)
-    context = {
-        'title': 'Edit Work Order',
-        'workorder': workorder,
-    }
 
-    return render(request, 'workorder/edit_workorder.html', context)
+    if request.method == 'POST':
+        form = WorkOrderEditForm(request.POST, request.FILES, instance=workorder)
+        if form.is_valid():
+            form.save()
+            return redirect('workorder-workorders')
+    else:
+        form = WorkOrderEditForm(instance=workorder)
+    context = {
+        'title': 'Edit workorder',
+        'workorder': workorder,
+        'form': form,
+    }
+    return render(request, 'workorder/edit_workorder.html', context) 
 
 def delete_workorder(request, id):
     workorder = WorkOrder.objects.get(id=id)
