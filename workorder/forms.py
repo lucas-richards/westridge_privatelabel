@@ -20,8 +20,9 @@ class AssetEditForm(forms.ModelForm):
 class WorkOrderEditForm(forms.ModelForm):
     class Meta:
         model = WorkOrder
-        fields = ['title', 'description','asset', 'status', 'priority', 'attachments', 'work_type', 'assigned_to', 'department_assigned_to']
+        fields = ['status','recurrence','title','work_type', 'due_date','assigned_to', 'department_assigned_to','image','description','asset', 'priority', 'attachments', ]
         widgets = {
             'status': forms.Select(choices=STATUS),
             'priority': forms.Select(choices=CRITICALITY_CHOICES),
+            'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }

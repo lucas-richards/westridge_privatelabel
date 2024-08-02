@@ -25,6 +25,7 @@ STATUS2 = [
     ]
 
 RECURRENCE = [
+    ('once', 'Once'),
     ('daily', 'Daily'),
     ('weekly', 'Weekly'),
     ('monthly', 'Monthly'),
@@ -105,14 +106,14 @@ class WorkOrder(models.Model):
         choices=CRITICALITY_CHOICES,
         default='medium',
     )
-    work_type = models.CharField(max_length=50)
+    work_type = models.CharField(null=True, max_length=50)
     description = models.TextField(null=True, blank=True)
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_workorders')
     department_assigned_to = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_workorders')
     created_on = models.DateTimeField(auto_now_add=True)
     planned_start_date = models.DateTimeField(null=True, blank=True)
-    due_date = models.DateTimeField(null=True, blank=True)
+    due_date = models.DateTimeField(default=timezone.now)
     estimated_hours = models.DurationField(null=True, blank=True)
     started_on = models.DateTimeField(null=True, blank=True)
     completed_on = models.DateTimeField(null=True, blank=True)
@@ -121,8 +122,7 @@ class WorkOrder(models.Model):
     recurrence = models.CharField(
         max_length=20,
         choices=RECURRENCE,
-        null=True,
-        blank=True,
+        default='once',
     )
     asset = models.ForeignKey(Asset, on_delete=models.SET_NULL, null=True, blank=True)
     time_to_complete = models.DurationField(null=True, blank=True)
@@ -133,3 +133,20 @@ class WorkOrder(models.Model):
     def __str__(self):
         return self.title
 
+class WorkOrderRecord(models.Model):
+    workorder = models.ForeignKey(WorkOrder, on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS,
+        default='open',
+    )
+    created_on = models.DateTimeField(auto_now_add=True)
+    due_date = models.DateTimeField(default=timezone.now)
+    completed_on = models.DateTimeField(null=True, blank=True)
+    completed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    time_to_complete = models.DurationField(null=True, blank=True)
+    attachments = models.FileField(upload_to=workorder_attachment_path, null=True, blank=True)
+    comments = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return self.workorder.title

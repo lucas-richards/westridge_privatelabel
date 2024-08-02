@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Asset, Vendor, WorkOrder, Location
+from .models import Asset, Vendor, WorkOrder, Location, WorkOrderRecord
 from users.models import Department
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -167,7 +167,7 @@ def delete_vendor(request, id):
     return redirect('workorder-vendors')
 
 def workorders(request):
-    workorders = WorkOrder.objects.all()
+    workorders = WorkOrder.objects.all().order_by('due_date')
     context = {
         'title': 'Work Orders',
         'workorders': workorders,
@@ -180,10 +180,14 @@ def workorders(request):
 def workorder(request, id):
     try:
         workorder = WorkOrder.objects.get(id=id)
+        # workorder records
+        records = WorkOrderRecord.objects.filter(workorder=workorder).order_by('-due_date')
+        last_record = records.first()
+
         if request.method == "GET":
             data = {
                 'title': workorder.title,
-                'status': workorder.status,
+                'status': last_record.status if last_record else '',
                 'priority': workorder.priority,
                 'work_type': workorder.work_type,
                 'description': workorder.description,
@@ -192,17 +196,19 @@ def workorder(request, id):
                 'created_by': workorder.created_by.username if workorder.created_by else '',
                 'created_on': workorder.created_on.strftime('%Y-%m-%d %H:%M:%S'),
                 'planned_start_date': workorder.planned_start_date.strftime('%Y-%m-%d %H:%M:%S') if workorder.planned_start_date else '',
-                'due_date': workorder.due_date.strftime('%Y-%m-%d %H:%M:%S') if workorder.due_date else '',
+                # time until the due date in days
                 'estimated_hours': workorder.estimated_hours.total_seconds() if workorder.estimated_hours else '',
                 'started_on': workorder.started_on.strftime('%Y-%m-%d %H:%M:%S') if workorder.started_on else '',
                 'completed_on': workorder.completed_on.strftime('%Y-%m-%d %H:%M:%S') if workorder.completed_on else '',
                 'completed_by': workorder.completed_by.username if workorder.completed_by else '',
                 'last_updated': workorder.last_updated.strftime('%Y-%m-%d %H:%M:%S'),
-                'recurrence': workorder.recurrence,
+                'recurrence': workorder.get_recurrence_display(),
                 'asset': workorder.asset.name if workorder.asset else '',
                 'time_to_complete': workorder.time_to_complete.total_seconds() if workorder.time_to_complete else '',
                 'image_url': workorder.image.url if workorder.image else '',
                 'attachments': workorder.attachments.url if workorder.attachments else '',
+                'time_until_due': (last_record.due_date - last_record.created_on).days if last_record.due_date else '',
+                'records': [{'created_on': record.created_on.strftime('%Y-%m-%d'), 'status': record.status, 'due_date': record.due_date.strftime('%Y-%m-%d'), 'completed_on': record.completed_on.strftime('%Y-%m-%d %H') if record.completed_on else '', 'completed_by': record.completed_by.username if record.completed_by else '', 'time_to_complete': record.time_to_complete.total_seconds() if record.time_to_complete else '', 'attachments': record.attachments.url if record.attachments else '', 'comments': record.comments} for record in records],
             }
             return JsonResponse(data)
     except WorkOrder.DoesNotExist:

@@ -2,6 +2,10 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <style>
+    .flex-container {
+        display: flex;
+        align-items: baseline;
+    }
     .truncate {
         white-space: nowrap; 
         overflow: hidden;
@@ -67,15 +71,18 @@
                 <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="{{ workorder.id }}">
                     <div class="d-flex justify-content-center align-items-bottom">
                         <h5 class="mr-2 font-weight-bold">{{ workorder.title }}</h5>
-                        <p class="truncate">{{ workorder.asset }}</p>
                     </div>
                     <!-- green dot if status is online -->
-                    {% if workorder.status == 'online' %}
+                    {% if workorder.status == 'done' %}
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
                             <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                         </svg>
+                    {% elif workorder.status == 'on_hold' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-warning" viewBox="0 0 10 10">
+                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                        </svg>
                     {% else %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-danger" viewBox="0 0 10 10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-primary" viewBox="0 0 10 10">
                             <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                         </svg>
                     {% endif %}
@@ -141,20 +148,24 @@
                         <div class="mb-4 row">
                             
                             <div class="col-md-7">
+                                <h6 class="btn btn-sm btn-outline-primary">${data.recurrence}</h6>
+                                <div class="flex-container">
+                                    <h6>Next due in ${data.time_until_due} days</h6>
+                                    <span class="badge badge-${data.status === 'done' ? 'success' : data.status === 'on_hold' ? 'warning' : data.status === 'cancelled' ? 'secondary' : 'primary'}">${data.status}</span>
+                                </div>
                                 
                                 <h5>${data.title}</h5>
                                 <p>${data.description}</p>
-                                <span class="badge badge-primary">${data.status}</span>
-                                <span class="badge badge-secondary">${data.work_type}</span>
-                                <span class="badge badge-info">${data.priority}</span>
-                                <span class="badge badge-warning">${data.created_on}</span>
-                                <span class="badge badge-success">${data.last_updated}</span>
-                                
+                                <h4 class="mt-2">History</h4>
+                                <ul>
+                                    ${data.records.map(record => 
+                                    `<li class="mt-2">${record.due_date}: 
+                                        <span class="badge badge-${record.status === 'done' ? 'success' : record.status === 'on_hold' ? 'warning' : record.status === 'cancelled' ? 'secondary' : 'primary'}">${record.status}</span>
+                                    </li>`).join('')}
+                                </ul>
                             </div>
                             <div class="col-md-3">
-                                
-                                <img src="${data.image_url}" alt="${data.name}">
-                                
+                                ${data.image_url ? `<img src="${data.image_url}" alt="image missing">` : ''}
                             </div>
                             <div class="col-md-2">
                                 <button id="edit-button" class="btn btn-primary">Edit</button>
@@ -162,6 +173,7 @@
                         </div>
                     </div>
                 `;
+                
 
                 const editButton = document.getElementById('edit-button');
                 editButton.addEventListener('click', function () {
