@@ -39,6 +39,7 @@ class Location(models.Model):
     image = models.ImageField(upload_to='loc_images/', null=True, blank=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     controlled_env = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

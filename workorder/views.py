@@ -12,13 +12,11 @@ from django.contrib import messages
 # Create your views here.
 
 def dashboard(request):
-    
 
     context = {
         'title': 'Dashboard',
         
     }
-
     return render(request, 'workorder/dashboard.html', context)
 
 @csrf_exempt
