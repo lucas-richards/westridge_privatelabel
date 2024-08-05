@@ -133,6 +133,13 @@ class WorkOrder(models.Model):
     def __str__(self):
         return self.title
 
+    #  when a work order is created, I want to automatically create a work order record with same due date and assigned to the same person
+    def save(self, *args, **kwargs):
+        super(WorkOrder, self).save(*args, **kwargs)
+        WorkOrderRecord.objects.create(workorder=self, due_date=self.due_date, assigned_to=self.assigned_to)
+
+    
+
 class WorkOrderRecord(models.Model):
     workorder = models.ForeignKey(WorkOrder, on_delete=models.CASCADE)
     status = models.CharField(
@@ -142,6 +149,7 @@ class WorkOrderRecord(models.Model):
     )
     created_on = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(default=timezone.now)
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_workorders_record')
     completed_on = models.DateTimeField(null=True, blank=True)
     completed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     time_to_complete = models.DurationField(null=True, blank=True)

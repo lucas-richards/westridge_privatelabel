@@ -113,6 +113,39 @@ class Command(BaseCommand):
         
         self.stdout.write(self.style.SUCCESS('Successfully saved daily KPI values'))
 
+        # Check if any work order records are in the past, the work order recurrence is not 'once' and create a new work order record acording to the recurrence if it does not exist
+        work_orders = WorkOrder.objects.all()
+        for work_order in work_orders:
+            if work_order.recurrence != 'once':
+                work_order_records = WorkOrderRecord.objects.filter(workorder=work_order)
+                if work_order_records:
+                    last_record = work_order_records.latest('due_date')
+                    if last_record.due_date < timezone.now():
+                        if work_order.recurrence == 'weekly':
+                            due_date = last_record.due_date + dt.timedelta(weeks=1)
+                        elif work_order.recurrence == 'monthly':
+                            due_date = last_record.due_date + dt.timedelta(days=30)
+                        elif work_order.recurrence == 'quarterly':
+                            due_date = last_record.due_date + dt.timedelta(days=90)
+                        elif work_order.recurrence == 'yearly':
+                            due_date = last_record.due_date + dt.timedelta(days=365)
+                        # Add more conditions for other recurrence options if needed
+                        else:
+                            due_date = last_record.due_date
+
+                        try:
+                            WorkOrderRecord.objects.create(workorder=work_order, due_date=due_date, assigned_to=work_order.assigned_to)
+                        except:
+                            print('Error creating work order record for:', work_order.title)
+                    else:
+                        continue
+                else:
+                    try:
+                        WorkOrderRecord.objects.create(workorder=work_order, due_date=work_order.due_date, assigned_to=work_order.assigned_to)
+                    except:
+                        print('Error creating first work order record for:', work_order.title)
+                    
+
 # Call the function to calculate and save daily KPI values
 if __name__ == '__main__':
     Command().handle()

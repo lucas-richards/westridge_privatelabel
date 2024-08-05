@@ -124,7 +124,7 @@
             selectedworkorderItem = this;
 
             // Update the URL without reloading the page
-            history.pushState(null, '', `/workorder/workorder/${workorderId}/`);
+            history.pushState(null, '', `/maintenance/workorder/${workorderId}/`);
             loadworkorderDetails(workorderId);
         });
     });
@@ -140,7 +140,7 @@
     });
 
     function loadworkorderDetails(workorderId) {
-        fetch(`/workorder/workorder/${workorderId}/`)
+        fetch(`/maintenance/workorder/${workorderId}/`)
             .then(response => response.json())
             .then(data => {
                 workorderDetailsDiv.innerHTML = `
@@ -178,7 +178,7 @@
                 const editButton = document.getElementById('edit-button');
                 editButton.addEventListener('click', function () {
                     // Redirect to the edit page
-                    window.location.href = `/workorder/workorder/edit/${workorderId}/`;
+                    window.location.href = `/maintenance/workorder/edit/${workorderId}/`;
                 });
             })
             .catch(error => {

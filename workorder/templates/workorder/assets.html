@@ -117,7 +117,7 @@
             selectedAssetItem = this;
 
             // Update the URL without reloading the page
-            history.pushState(null, '', `/workorder/asset/${assetId}/`);
+            history.pushState(null, '', `/maintenance/asset/${assetId}/`);
             loadAssetDetails(assetId);
         });
     });
@@ -133,13 +133,13 @@
     });
 
     function loadAssetDetails(assetId) {
-        fetch(`/workorder/asset/${assetId}/`)
+        fetch(`/maintenance/asset/${assetId}/`)
             .then(response => response.json())
             .then(data => {
                 assetDetailsDiv.innerHTML = `
                     <div class="asset-details">
                         <div class="mb-3 d-flex justify-content-between align-items-bottom">
-                                <button id="wo-button" class="btn btn-primary">Creat Work Order</button>
+                                <button id="wo-button" class="btn btn-primary">Create Work Order</button>
                                 <button id="edit-button" class="btn btn-primary">Edit</button>
                             </div>
                         <div class="mb-4 row">
@@ -178,12 +178,12 @@
                 const editButton = document.getElementById('edit-button');
                 editButton.addEventListener('click', function () {
                     // Redirect to the edit page
-                    window.location.href = `/workorder/asset/edit/${assetId}/`;
+                    window.location.href = `/maintenance/asset/edit/${assetId}/`;
                 });
                 const woButton = document.getElementById('wo-button');
                 woButton.addEventListener('click', function () {
                     // Redirect to the edit page
-                    window.location.href = `/workorder/asset/${assetId}/workorders/new/`;
+                    window.location.href = `/maintenance/asset/${assetId}/workorders/new/`;
                 });
             })
             .catch(error => {
