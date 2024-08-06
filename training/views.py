@@ -119,8 +119,6 @@ def supervisors(request):
         for i, training_module in enumerate(training_modules):
             print('Training module:', training_module)
             for profile_training_event in profile_training_events:
-                print('Profile training event:', profile_training_event)
-                print('iii', i)
                 profile_training_event = profile_training_event.split(',')[i]
                 
                 if profile_training_event == '-':
