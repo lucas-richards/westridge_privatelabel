@@ -14,8 +14,9 @@ CRITICALITY_CHOICES = [
 STATUS = [
         ('in_progress', 'In Progress'),
         ('on_hold', 'On Hold'),
-        ('open', 'Open'),
         ('done', 'Done'),
+        ('scheduled', 'Scheduled'),
+        ('cancelled', 'Cancelled'),
     ]
 
 STATUS2 = [
@@ -100,7 +101,7 @@ class WorkOrder(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS,
-        default='on_hold',
+        default='scheduled',
     )
     priority = models.CharField(
         max_length=20,

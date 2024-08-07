@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 import json
 from .forms import AssetEditForm, WorkOrderEditForm
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -60,6 +61,7 @@ def assets(request):
 
     return render(request, 'workorder/assets.html', context)
 
+@login_required
 def add_asset(request):
     if request.method == 'POST':
         form = AssetEditForm(request.POST, request.FILES)
@@ -76,6 +78,7 @@ def add_asset(request):
     }
     return render(request, 'workorder/new_asset.html', context)
 
+@login_required
 def edit_asset(request, id):
     assets = Asset.objects.all().order_by('code')
     asset = Asset.objects.get(id=id)
@@ -94,6 +97,7 @@ def edit_asset(request, id):
     }
     return render(request, 'workorder/edit_asset.html', context) 
 
+@login_required
 def delete_asset(request, id):
     asset = Asset.objects.get(id=id)
     try:
@@ -122,7 +126,7 @@ def asset_workorders_new(request, id):
     }
     return render(request, 'workorder/new_workorder.html', context)
 
-
+@login_required
 def vendors(request):
     vendors = Vendor.objects.all()
     context = {
@@ -132,6 +136,7 @@ def vendors(request):
 
     return render(request, 'workorder/vendors.html', context)
 
+@login_required
 def vendor(request, id):
     vendor = Vendor.objects.get(id=id)
     context = {
@@ -141,6 +146,7 @@ def vendor(request, id):
 
     return render(request, 'workorder/vendor.html', context)
 
+@login_required
 def add_vendor(request):
     if request.method == 'POST':
         pass
@@ -150,6 +156,7 @@ def add_vendor(request):
 
     return render(request, 'workorder/add_vendor.html', context)
 
+@login_required
 def edit_vendor(request, id):
     vendor = Vendor.objects.get(id=id)
     context = {
@@ -159,6 +166,7 @@ def edit_vendor(request, id):
 
     return render(request, 'workorder/edit_vendor.html', context)
 
+@login_required
 def delete_vendor(request, id):
     vendor = Vendor.objects.get(id=id)
     vendor.delete()
@@ -192,6 +200,7 @@ def workorders(request):
 
     return render(request, 'workorder/workorders.html', context)
 
+@login_required
 @csrf_exempt
 @require_http_methods(["GET", "PUT"])
 def workorder(request, id):
@@ -233,6 +242,7 @@ def workorder(request, id):
     except (Location.DoesNotExist, WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
         return JsonResponse({'error': 'Related entity not found'}, status=404)
 
+@login_required
 def add_workorder(request):
     if request.method == 'POST':
         form = WorkOrderEditForm(request.POST, request.FILES)
@@ -249,6 +259,7 @@ def add_workorder(request):
     }
     return render(request, 'workorder/new_workorder.html', context)
 
+@login_required
 def edit_workorder(request, id):
     workorders = WorkOrder.objects.all().order_by('created_on')
     workorder = WorkOrder.objects.get(id=id)
@@ -267,13 +278,15 @@ def edit_workorder(request, id):
     }
     return render(request, 'workorder/edit_workorder.html', context) 
 
+@login_required
 def delete_workorder(request, id):
     workorder = WorkOrder.objects.get(id=id)
     workorder.delete()
     return redirect('workorder-workorders')
 
+@login_required
 def workorder_records(request):
-    records = WorkOrderRecord.objects.all()
+    records = WorkOrderRecord.objects.all().order_by('-due_date')
     context = {
         'title': 'Work Order Records',
         'records': records,
@@ -281,6 +294,7 @@ def workorder_records(request):
 
     return render(request, 'workorder/workorder_records.html', context)
 
+@login_required
 @csrf_exempt
 @require_http_methods(["GET", "PUT"])
 def workorder_record(request, id):
@@ -289,14 +303,19 @@ def workorder_record(request, id):
         data = {
                 'id': record.id,
                 'status': record.status,
+                'due_date': record.due_date.strftime('%Y-%m-%d') if record.due_date else '',
+                'completed_on': record.completed_on.strftime('%Y-%m-%d %H:%M:%S') if record.completed_on else '',
+                'attachments': record.attachments.url if record.attachments else '',
+                'comments': record.comments if record.comments else '',
         }        
-        
         status = request.GET.get('status')
-        print(status)
 
         if status:
             print('PUT')
             record.status = status
+            record.completed_on = request.GET.get('completed_on')
+            record.attachments = request.GET.get('attachments')
+            record.comments = request.GET.get('comments')
             record.save()
             messages.success(request, 'Record updated successfully')
             return redirect('workorder-workorder-records')
