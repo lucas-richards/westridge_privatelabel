@@ -9,6 +9,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import date
 from training.models import KPI, KPIValue, Profile, TrainingEvent, TrainingModule, ProfileTrainingEvents
+from workorder.models import WorkOrder, WorkOrderRecord
 import datetime as dt
 
 class Command(BaseCommand):
@@ -84,14 +85,13 @@ class Command(BaseCommand):
                             training['total'] += 1
 
                     except ValueError:
-                        print('this is the value that couldnt convert to date', training_events_now[i])
+                        continue
             except:
                 print('Error for:', profile.user.username)
                 continue
 
             if fully_trained:
                 profiles_fully_trained += 1
-                print('Fully trained:', profile.user.username)
 
         perc_fully_trained = round(profiles_fully_trained / active_profiles.count() * 100) if active_profiles.count() else 0
         training_not_performed_users = list(set(training_not_performed_users))
@@ -116,7 +116,7 @@ class Command(BaseCommand):
         # Check if any work order records are in the past, the work order recurrence is not 'once' and create a new work order record acording to the recurrence if it does not exist
         work_orders = WorkOrder.objects.all()
         for work_order in work_orders:
-            if work_order.recurrence != 'once':
+            if work_order.recurrence != 'once' and work_order.asset.status == 'active':
                 work_order_records = WorkOrderRecord.objects.filter(workorder=work_order)
                 if work_order_records:
                     last_record = work_order_records.latest('due_date')

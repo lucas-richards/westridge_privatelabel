@@ -231,16 +231,21 @@
     
     // Creating the second pie chart
     const ctx2 = document.getElementById('myChart2');
+
+    var data = {{ work_orders_records_status|safe }};
+
+    var labels = Object.keys(data);
+    var values = Object.values(data);
   
     new Chart(ctx2, {
         type: 'pie',
         data: {
-            labels: ['1 Year or less', '1-2 Years','3-4 Years', '+5 Years '],
+            labels: labels,
             datasets: [{
                 label: 'Trainings',
-                data: {{ history2.y }},
+                data: values,
                 borderWidth: 1,
-                backgroundColor: ['rgba(102, 204, 153, 0.8)', 'rgba(251, 192, 147, 0.5)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)']
+                backgroundColor: ['rgba(25, 135, 84, 0.5)', 'rgba(13, 110, 253, 0.5)',  'rgba(255, 193, 7, 0.5)','rgba(13, 110, 253, 0.5)', 'rgba(108, 117, 125, 0.5)']
             }]
         },
         options: {

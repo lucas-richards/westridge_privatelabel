@@ -13,9 +13,21 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def dashboard(request):
+    # get the work orders records status and count
+    work_orders_records = WorkOrderRecord.objects.all()
+    work_orders_records_status = {
+        'done': work_orders_records.filter(status='done').count(),
+        'in_progress': work_orders_records.filter(status='in_progress').count(),
+        'on_hold': work_orders_records.filter(status='on_hold').count(),
+        'scheduled': work_orders_records.filter(status='scheduled').count(),
+        'cancelled': work_orders_records.filter(status='cancelled').count(),
+    }
+    print(work_orders_records_status)
+
 
     context = {
         'title': 'Dashboard',
+        'work_orders_records_status': work_orders_records_status,
         
     }
     return render(request, 'workorder/dashboard.html', context)
