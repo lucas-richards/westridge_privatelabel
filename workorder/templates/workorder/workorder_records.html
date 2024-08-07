@@ -61,20 +61,21 @@
 
 <!-- create two columns -->
  <div class="text-right">
-     <a href="{% url 'workorder-add-workorder' %}" class="btn btn-outline-primary">Create workorder</a>
+     <a href="#" class="btn btn-outline-primary">Create workorder Record</a>
  </div>
  
     
 <div class="mb-4 row">
     <div class="col-md-4">
         <!-- Fully trained graph -->
-        {% if workorders %}
+        {% if records %}
         <div class=" mt-3 card" style="height: 600px; overflow-y: scroll;">
-            {% for data in workorders %}
-                <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="{{ data.workorder.id }}">
-                    <div class="d-flex justify-content-center align-items-bottom">
-                        <h5 class="mr-2 font-weight-bold">{{ data.workorder.asset.code }} - </h5>
-                        <h5 class="mr-2 font-weight-bold">{{ data.workorder.title }}</h5>
+            {% for data in records %}
+                <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="{{ data.id }}">
+                    <div class="d-flex justify-content-center align-items-baseline">
+                        <p class="mr-2 font-weight-bold">#{{ data.id }} - </p>
+                        <p class="mr-2 font-weight-bold">{{ data.workorder.asset.code }}</p>
+                        <p class="mr-2 font-weight-bold">{{ data.workorder.title }}</p>
                     </div>
                     <!-- green dot if status is online -->
                     {% if data.last_record.status == 'done' %}
@@ -100,7 +101,7 @@
         </div>
         {% else %}
             <div class="p-3 mt-3 card ">
-                <h5>No workorders found</h5>
+                <h5>No records found</h5>
             </div>
         {% endif %}
     </div>
@@ -122,7 +123,7 @@
 
     workorderItems.forEach(item => {
         item.addEventListener('click', function () {
-            const workorderId = this.getAttribute('data-workorder-id');
+            const recordId = this.getAttribute('data-workorder-id');
 
             // Highlight the selected item
             if (selectedworkorderItem) {
@@ -132,79 +133,40 @@
             selectedworkorderItem = this;
 
             // Update the URL without reloading the page
-            history.pushState(null, '', `/maintenance/workorder/${workorderId}/`);
-            loadworkorderDetails(workorderId);
+            history.pushState(null, '', `/maintenance/workorder_record/${recordId}/`);
+            loadworkorderDetails(recordId);
         });
     });
 
     window.addEventListener('popstate', function () {
         const urlParts = window.location.pathname.split('/');
-        const workorderId = urlParts[urlParts.length - 2];
-        if (workorderId) {
-            loadworkorderDetails(workorderId);
+        const recordId = urlParts[urlParts.length - 2];
+        if (recordId) {
+            loadworkorderDetails(recordId);
         } else {
             workorderDetailsDiv.innerHTML = '<h5>Select an workorder to see details</h5>';
         }
     });
 
-    function loadworkorderDetails(workorderId) {
-        fetch(`/maintenance/workorder/${workorderId}/`)
+    function loadworkorderDetails(recordId) {
+        fetch(`/maintenance/workorder_record/${recordId}/`)
             .then(response => response.json())
             .then(data => {
                 workorderDetailsDiv.innerHTML = `
                     <div class="workorder-details">
-                        <div class="mb-4 row">
-                            
-                            <div class="col-md-7">
-                                <div class="flex-container">
-                                    <h6 class="mr-3 btn btn-sm btn-outline-primary">${data.recurrence}</h6>
-                                    <h6> <span class=" ${data.time_until_due < 0 ? 'text-danger' : 'font-weight-bold'}">${data.status === 'done'? '' : data.time_until_due < 0 ? 'Overdue' : 'Next due in ' + data.time_until_due + ' days'} </span></h6>
-                                </div>
-                                
-                                
-                                <h5>${data.title}</h5>
-                                <p>${data.description}</p>
-                                
-                            </div>
-                            <div class="col-md-3">
-                                ${data.image_url ? `<img src="${data.image_url}" alt="image missing">` : ''}
-                            </div>
-                            <div class="col-md-2">
-                                <button id="edit-button" class="btn btn-primary">Edit WO</button>
+                        <form method='PUT' action="/maintenance/workorder_record/${ data.id }/">
+                            <div class="form-group">
+                                <label for="status">Status:</label>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="done" ${ data.status === 'done' ? 'selected': ''}>Done</option>
+                                    <option value="on_hold" ${ data.status === 'on_hold' ? 'selected': ''}>On Hold</option>
+                                    <option value="open" ${ data.status === 'open' ? 'selected': ''}>Open</option>
+                                    <option value="in_progress" ${ data.status === 'in_progress' ? 'selected': ''}>In Progress</option>
+                                </select>
                             </div>
                             
-                        </div>
-
-                        
-
-                        <h4 class="mt-5">History</h4>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Record ID</th>
-                                    <th>Due Date</th>
-                                    <th>Completed Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${data.records.map(record => 
-                                `<tr>
-                                    <td>
-                                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#ID${record.id}">
-                                            #${record.id}
-                                        </button>
-                                    </td>
-                                    
-                                    <td>${record.due_date}</td>
-                                    <td>${record.completed_on ? record.completed_on + ' by '+ record.completed_by : ' Not completed yet'}</td>
-                                    <td><span class="badge badge-${record.status === 'done' ? 'success' : record.status === 'on_hold' ? 'warning' : record.status === 'cancelled' ? 'secondary' : 'primary'}">${record.status}</span></td>
-                                </tr>
-                                
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
+                            <button type="submit" class="btn btn-primary">Update Status</button>
+                        </form>
                     </div>
 
                     
@@ -214,7 +176,7 @@
                 const editButton = document.getElementById('edit-button');
                 editButton.addEventListener('click', function () {
                     // Redirect to the edit page
-                    window.location.href = `/maintenance/workorder/edit/${workorderId}/`;
+                    window.location.href = `/maintenance/workorder/edit/${recordId}/`;
                 });
             })
             .catch(error => {
@@ -229,9 +191,9 @@
 
     // Load workorder details if needed
     const currentUrlParts = window.location.pathname.split('/');
-    const currentworkorderId = currentUrlParts[currentUrlParts.length - 2];
-    if (currentworkorderId) {
-        loadworkorderDetails(currentworkorderId);
+    const currentrecordId = currentUrlParts[currentUrlParts.length - 2];
+    if (currentrecordId) {
+        loadworkorderDetails(currentrecordId);
     }
 });
 

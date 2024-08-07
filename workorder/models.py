@@ -137,7 +137,8 @@ class WorkOrder(models.Model):
     #  when a work order is created, I want to automatically create a work order record with same due date and assigned to the same person
     def save(self, *args, **kwargs):
         super(WorkOrder, self).save(*args, **kwargs)
-        WorkOrderRecord.objects.create(workorder=self, due_date=self.due_date, assigned_to=self.assigned_to)
+        if not self.workorderrecord_set.exists():
+            WorkOrderRecord.objects.create(workorder=self, due_date=self.due_date, assigned_to=self.assigned_to)
 
     
 
@@ -158,4 +159,4 @@ class WorkOrderRecord(models.Model):
     comments = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.workorder.title
+        return f"{self.workorder.asset} - {self.workorder.title}"

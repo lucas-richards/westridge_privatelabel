@@ -1,6 +1,6 @@
 from django import forms
-from workorder.models import Asset, Location, Vendor, WorkOrder, STATUS, STATUS2, CRITICALITY_CHOICES
-from users.models import Department
+from workorder.models import Asset, Location, Vendor, WorkOrder, WorkOrderRecord, STATUS, STATUS2, CRITICALITY_CHOICES
+from users.models import Department, User
 
 
 
@@ -25,4 +25,15 @@ class WorkOrderEditForm(forms.ModelForm):
             'status': forms.Select(choices=STATUS),
             'priority': forms.Select(choices=CRITICALITY_CHOICES),
             'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
+
+# form to edit work order record
+class WorkOrderRecordEditForm(forms.ModelForm):
+    class Meta:
+        model = WorkOrderRecord
+        fields = ['status', 'completed_on', 'completed_by', 'comments']
+        widgets = {
+            'status': forms.Select(choices=STATUS),
+            'completed_on': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+            'completed_by': forms.Select(choices=User.objects.values_list('username', 'username')),
         }

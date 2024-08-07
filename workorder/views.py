@@ -165,10 +165,29 @@ def delete_vendor(request, id):
     return redirect('workorder-vendors')
 
 def workorders(request):
-    workorders = WorkOrder.objects.all().order_by('due_date')
+    workorders = WorkOrder.objects.all()
+    workorders_with_last_record = []
+    form = WorkOrderEditForm()
+    if request.method == 'POST':
+        form = WorkOrderEditForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('workorder-workorders')
+        else:
+            print(form.errors)
+
+
+    for workorder in workorders:
+        last_record = workorder.workorderrecord_set.order_by('-created_on').first()
+        workorders_with_last_record.append({
+            'workorder': workorder,
+            'last_record': last_record
+        })
+    
     context = {
         'title': 'Work Orders',
-        'workorders': workorders,
+        'workorders': workorders_with_last_record,
+        'form': form,
     }
 
     return render(request, 'workorder/workorders.html', context)
@@ -197,7 +216,7 @@ def workorder(request, id):
                 # time until the due date in days
                 'estimated_hours': workorder.estimated_hours.total_seconds() if workorder.estimated_hours else '',
                 'started_on': workorder.started_on.strftime('%Y-%m-%d %H:%M:%S') if workorder.started_on else '',
-                'completed_on': workorder.completed_on.strftime('%Y-%m-%d %H:%M:%S') if workorder.completed_on else '',
+                'completed_on': workorder.completed_on.strftime('%Y-%m-%d') if workorder.completed_on else 'Not Specified',
                 'completed_by': workorder.completed_by.username if workorder.completed_by else '',
                 'last_updated': workorder.last_updated.strftime('%Y-%m-%d %H:%M:%S'),
                 'recurrence': workorder.get_recurrence_display(),
@@ -206,7 +225,7 @@ def workorder(request, id):
                 'image_url': workorder.image.url if workorder.image else '',
                 'attachments': workorder.attachments.url if workorder.attachments else '',
                 'time_until_due': (last_record.due_date - last_record.created_on).days if last_record.due_date else '',
-                'records': [{'created_on': record.created_on.strftime('%Y-%m-%d'), 'status': record.status, 'due_date': record.due_date.strftime('%Y-%m-%d'), 'completed_on': record.completed_on.strftime('%Y-%m-%d %H') if record.completed_on else '', 'completed_by': record.completed_by.username if record.completed_by else '', 'time_to_complete': record.time_to_complete.total_seconds() if record.time_to_complete else '', 'attachments': record.attachments.url if record.attachments else '', 'comments': record.comments} for record in records],
+                'records': [{'id': record.id, 'created_on': record.created_on.strftime('%Y-%m-%d'), 'status': record.status, 'due_date': record.due_date.strftime('%Y-%m-%d'), 'completed_on': record.completed_on.strftime('%Y-%m-%d %H') if record.completed_on else '', 'completed_by': record.completed_by.username if record.completed_by else '', 'time_to_complete': record.time_to_complete.total_seconds() if record.time_to_complete else '', 'attachments': record.attachments.url if record.attachments else '', 'comments': record.comments} for record in records],
             }
             return JsonResponse(data)
     except WorkOrder.DoesNotExist:
@@ -253,3 +272,40 @@ def delete_workorder(request, id):
     workorder.delete()
     return redirect('workorder-workorders')
 
+def workorder_records(request):
+    records = WorkOrderRecord.objects.all()
+    context = {
+        'title': 'Work Order Records',
+        'records': records,
+    }
+
+    return render(request, 'workorder/workorder_records.html', context)
+
+@csrf_exempt
+@require_http_methods(["GET", "PUT"])
+def workorder_record(request, id):
+    try:
+        record = WorkOrderRecord.objects.get(id=id)
+        data = {
+                'id': record.id,
+                'status': record.status,
+        }        
+        
+        status = request.GET.get('status')
+        print(status)
+
+        if status:
+            print('PUT')
+            record.status = status
+            record.save()
+            messages.success(request, 'Record updated successfully')
+            return redirect('workorder-workorder-records')
+
+            
+        if request.method == "GET":
+            return JsonResponse(data)
+
+    except WorkOrder.DoesNotExist:
+        return JsonResponse({'error': 'workorder not found'}, status=404)
+    except (Location.DoesNotExist, WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
+        return JsonResponse({'error': 'Related entity not found'}, status=404)

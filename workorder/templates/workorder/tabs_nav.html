@@ -16,6 +16,9 @@
       <li class="nav-item">
         <a class="nav-link {% if title == 'Work Orders' %}active{% endif %}" href="{% url 'workorder-workorders' %}">Work Orders</a>
       </li>  
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Work Order Records' %}active{% endif %}" href="{% url 'workorder-workorder-records' %}">Work Order Records</a>
+      </li>
   </ul>
 
   <div id="loading-indicator" style="display: none;text-align: center;">

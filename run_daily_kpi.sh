@@ -12,3 +12,5 @@ python3 collect_kpi.py
 
 # backup data base
 pg_dumpall > /home/lr/database_backup/backup.sql
+# echo time of backup
+echo "Backup completed at $(date)"
