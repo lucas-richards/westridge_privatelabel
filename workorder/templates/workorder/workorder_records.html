@@ -20,7 +20,8 @@
     }
 
     .workorder-item {
-        padding:10px;
+        padding-top: 10px;
+        padding-left: 10px;
         cursor: pointer; /* Show hand cursor on hover */
         /* bottom border gray */
         border-bottom: 1px solid #e9ecef;
@@ -73,29 +74,42 @@
         <div class=" mt-3 card" style="height: 600px; overflow-y: scroll;">
             {% for data in records %}
             <div class="asset">
-                <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="{{ data.id }}">
-                    <div class="d-flex justify-content-center align-items-baseline" style="height: 15px;">
+                <div class="d-flex justify-content-between align-items-center workorder-item" data-workorder-id="{{ data.id }}">
+                    <div class="d-flex justify-content-center align-items-baseline">
                         <p class="mr-2 font-weight-bold ">#{{ data.id }} </p>
                         <p class="mr-2 ">{{ data.workorder.asset.code }} - {{ data.workorder.title }}</p>
-                        <p class="mr-2 "></p>
-                    </div>
-                    <!-- green dot if status is online -->
-                    {% if data.status == 'done' %}
-                    <span class="badge badge-success">{{ data.status }}</span>
-                        
-                    {% elif data.status == 'on_hold' %}
-                    <span class="badge badge-warning">{{ data.status }}</span>
-                        
-                    {% elif data.status == 'in_progress' %}
-                    <span class="badge badge-info">{{ data.status }}</span>
-                        
-                    {% elif data.status == 'scheduled' %}
-                    <span class="badge badge-primary">{{ data.status }}</span>
-                        
-                    {% elif data.status == 'cancelled' %}
-                    <span class="badge badge-seconday">{{ data.status }}</span>
+                        <!-- green dot if status is online -->
+                        {% if data.status == 'done' %}
+                        <span class="badge badge-success">{{ data.status }}</span>
+                            
+                        {% elif data.status == 'on_hold' %}
+                        <span class="badge badge-warning">{{ data.status }}</span>
+                            
+                        {% elif data.status == 'in_progress' %}
+                        <span class="badge badge-info">{{ data.status }}</span>
+                            
+                        {% elif data.status == 'scheduled' %}
+                        <span class="badge badge-primary">{{ data.status }}</span>
+                            
+                        {% elif data.status == 'cancelled' %}
+                        <span class="badge badge-secondary">{{ data.status }}</span>
 
-                    {% endif %}
+                        {% endif %}
+                    </div>
+                    <div>
+                        {% if data.status == 'done' or data.status == 'cancelled' %}
+                    
+                        {% else %}
+                            {% if data.time_until_due > 0 %}
+                                <p class="mr-2 text-success">On Time</p>
+                            {% else %}
+                                <p class="mr-2 text-danger">Overdue</p>
+                            {% endif %}
+                        {% endif %}
+
+                    </div>
+                    
+                    
                     
                 </div>
             </div>  

@@ -312,6 +312,7 @@ def workorder_records(request):
 def workorder_record(request, id):
     try:
         record = WorkOrderRecord.objects.get(id=id)
+        
         data = {
                 'id': record.id,
                 'status': record.status,
@@ -319,6 +320,7 @@ def workorder_record(request, id):
                 'completed_on': record.completed_on.strftime('%Y-%m-%d %H:%M:%S') if record.completed_on else '',
                 'attachments': record.attachments.url if record.attachments else '',
                 'comments': record.comments if record.comments else '',
+                'time_until_due': (record.due_date - record.created_on).days if record.due_date else '',
         }        
         status = request.GET.get('status')
 
