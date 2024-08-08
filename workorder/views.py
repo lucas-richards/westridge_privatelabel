@@ -6,9 +6,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import redirect
 import json
-from .forms import AssetEditForm, WorkOrderEditForm
+from .forms import AssetEditForm, WorkOrderEditForm, WorkOrderRecordForm, WorkOrderRecordEditForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+import datetime
+from users.models import User
 
 # Create your views here.
 
@@ -225,28 +228,21 @@ def workorder(request, id):
         if request.method == "GET":
             data = {
                 'title': workorder.title,
-                'status': last_record.status if last_record else '',
                 'priority': workorder.priority,
-                'work_type': workorder.work_type,
                 'description': workorder.description,
                 'assigned_to': workorder.assigned_to.username if workorder.assigned_to else '',
                 'department_assigned_to': workorder.department_assigned_to.name if workorder.department_assigned_to else '',
                 'created_by': workorder.created_by.username if workorder.created_by else '',
                 'created_on': workorder.created_on.strftime('%Y-%m-%d %H:%M:%S'),
-                'planned_start_date': workorder.planned_start_date.strftime('%Y-%m-%d %H:%M:%S') if workorder.planned_start_date else '',
                 # time until the due date in days
-                'estimated_hours': workorder.estimated_hours.total_seconds() if workorder.estimated_hours else '',
-                'started_on': workorder.started_on.strftime('%Y-%m-%d %H:%M:%S') if workorder.started_on else '',
-                'completed_on': workorder.completed_on.strftime('%Y-%m-%d') if workorder.completed_on else 'Not Specified',
-                'completed_by': workorder.completed_by.username if workorder.completed_by else '',
                 'last_updated': workorder.last_updated.strftime('%Y-%m-%d %H:%M:%S'),
                 'recurrence': workorder.get_recurrence_display(),
                 'asset': workorder.asset.name if workorder.asset else '',
-                'time_to_complete': workorder.time_to_complete.total_seconds() if workorder.time_to_complete else '',
                 'image_url': workorder.image.url if workorder.image else '',
                 'attachments': workorder.attachments.url if workorder.attachments else '',
                 'time_until_due': (last_record.due_date - last_record.created_on).days if last_record.due_date else '',
-                'records': [{'id': record.id, 'created_on': record.created_on.strftime('%Y-%m-%d'), 'status': record.status, 'due_date': record.due_date.strftime('%Y-%m-%d'), 'completed_on': record.completed_on.strftime('%Y-%m-%d %H') if record.completed_on else '', 'completed_by': record.completed_by.username if record.completed_by else '', 'time_to_complete': record.time_to_complete.total_seconds() if record.time_to_complete else '', 'attachments': record.attachments.url if record.attachments else '', 'comments': record.comments} for record in records],
+                'records': [{'id': record.id, 'created_on': record.created_on.strftime('%Y-%m-%d'), 'status': record.status, 'due_date': record.due_date.strftime('%Y-%m-%d'), 'completed_on': record.completed_on.strftime('%Y-%m-%d') if record.completed_on else '', 'completed_by': record.completed_by.username if record.completed_by else '', 'time_to_complete': record.time_to_complete.total_seconds() if record.time_to_complete else '', 'attachments': record.attachments.url if record.attachments else '', 'comments': record.comments} for record in records],
+                'last_record_status': last_record.status if last_record else '',
             }
             return JsonResponse(data)
     except WorkOrder.DoesNotExist:
@@ -299,6 +295,10 @@ def delete_workorder(request, id):
 @login_required
 def workorder_records(request):
     records = WorkOrderRecord.objects.all().order_by('-due_date')
+    # add this to each record 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
+    for record in records:
+        record.time_until_due = (record.due_date - timezone.now() ).days if record.due_date else ''
+
     context = {
         'title': 'Work Order Records',
         'records': records,
@@ -317,17 +317,24 @@ def workorder_record(request, id):
                 'id': record.id,
                 'status': record.status,
                 'due_date': record.due_date.strftime('%Y-%m-%d') if record.due_date else '',
-                'completed_on': record.completed_on.strftime('%Y-%m-%d %H:%M:%S') if record.completed_on else '',
+                'completed_on': record.completed_on.strftime('%Y-%m-%d') if record.completed_on else '',
                 'attachments': record.attachments.url if record.attachments else '',
                 'comments': record.comments if record.comments else '',
-                'time_until_due': (record.due_date - record.created_on).days if record.due_date else '',
+                'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
         }        
         status = request.GET.get('status')
 
         if status:
-            print('PUT')
+            # get user
+            user = User.objects.get(username=request.user)
+            record.completed_by = user
             record.status = status
-            record.completed_on = request.GET.get('completed_on')
+            completed_on = request.GET.get('completed_on')
+            if completed_on:
+                # Convert string to a timezone-aware datetime
+                record.completed_on = timezone.make_aware(
+                    timezone.datetime.strptime(completed_on, '%Y-%m-%d')
+                )
             record.attachments = request.GET.get('attachments')
             record.comments = request.GET.get('comments')
             record.save()
@@ -342,3 +349,19 @@ def workorder_record(request, id):
         return JsonResponse({'error': 'workorder not found'}, status=404)
     except (Location.DoesNotExist, WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
         return JsonResponse({'error': 'Related entity not found'}, status=404)
+
+def add_workorder_record(request):
+    if request.method == 'POST':
+        form = WorkOrderRecordForm(request.POST, request.FILES)
+        # add created by
+        form.instance.created_by = request.user
+        if form.is_valid():
+            form.save()
+            return redirect('workorder-workorder-records')
+    else:
+        form = WorkOrderRecordForm()
+    context = {
+        'title': 'Add Work Order Record',
+        'form': form,
+    }
+    return render(request, 'workorder/new_workorder_record.html', context)

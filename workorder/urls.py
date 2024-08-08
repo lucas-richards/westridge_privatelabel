@@ -21,5 +21,6 @@ urlpatterns = [
     path('asset/<int:id>/workorders/new/', views.asset_workorders_new, name='workorder-asset-workorders-new'),
     path('workorder_records/', views.workorder_records, name='workorder-workorder-records'),
     path('workorder_record/<int:id>/', views.workorder_record, name='workorder-workorder-record'),
+    path('workorder_record/add/', views.add_workorder_record, name='workorder-add-workorder-record'),
     
 ]

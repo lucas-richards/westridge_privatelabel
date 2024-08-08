@@ -98,28 +98,17 @@ def workorder_attachment_path(instance, filename):
 
 class WorkOrder(models.Model):
     title = models.CharField(max_length=255)
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS,
-        default='scheduled',
-    )
     priority = models.CharField(
         max_length=20,
         choices=CRITICALITY_CHOICES,
         default='medium',
     )
-    work_type = models.CharField(null=True, max_length=50)
     description = models.TextField(null=True, blank=True)
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_workorders')
     department_assigned_to = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_workorders')
     created_on = models.DateTimeField(auto_now_add=True)
-    planned_start_date = models.DateTimeField(null=True, blank=True)
-    due_date = models.DateTimeField(default=timezone.now)
-    estimated_hours = models.DurationField(null=True, blank=True)
-    started_on = models.DateTimeField(null=True, blank=True)
-    completed_on = models.DateTimeField(null=True, blank=True)
-    completed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='completed_workorders')
+    first_due_date = models.DateTimeField(default=timezone.now)
     last_updated = models.DateTimeField(auto_now=True)
     recurrence = models.CharField(
         max_length=20,
@@ -127,7 +116,6 @@ class WorkOrder(models.Model):
         default='once',
     )
     asset = models.ForeignKey(Asset, on_delete=models.SET_NULL, null=True, blank=True)
-    time_to_complete = models.DurationField(null=True, blank=True)
     image = models.ImageField(upload_to='wo_images/', null=True, blank=True)
     attachments = models.FileField(upload_to=workorder_attachment_path, null=True, blank=True)
 
@@ -148,7 +136,7 @@ class WorkOrderRecord(models.Model):
     status = models.CharField(
         max_length=20,
         choices=STATUS,
-        default='open',
+        default='scheduled',
     )
     created_on = models.DateTimeField(auto_now_add=True)
     due_date = models.DateTimeField(default=timezone.now)
@@ -160,4 +148,4 @@ class WorkOrderRecord(models.Model):
     comments = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.workorder.asset} - {self.workorder.title}"
+        return f"{self.workorder.asset} - {self.workorder.title} - {self.due_date}"

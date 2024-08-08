@@ -20,12 +20,20 @@ class AssetEditForm(forms.ModelForm):
 class WorkOrderEditForm(forms.ModelForm):
     class Meta:
         model = WorkOrder
-        fields = ['status','recurrence','title','work_type', 'due_date','assigned_to', 'department_assigned_to','image','description','asset', 'priority', 'attachments', ]
+        fields = ['recurrence','title','assigned_to', 'department_assigned_to','image','description','asset', 'priority', 'attachments', ]
         widgets = {
-            'status': forms.Select(choices=STATUS),
             'priority': forms.Select(choices=CRITICALITY_CHOICES),
+        }
+# form to create a work order record
+class WorkOrderRecordForm(forms.ModelForm):
+    class Meta:
+        model = WorkOrderRecord
+        fields = ['workorder', 'due_date', 'comments']
+        widgets = {
+            'workorder': forms.Select(choices=WorkOrder.objects.values_list('asset')),
             'due_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
 
 # form to edit work order record
 class WorkOrderRecordEditForm(forms.ModelForm):

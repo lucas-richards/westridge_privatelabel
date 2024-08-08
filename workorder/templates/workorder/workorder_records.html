@@ -63,7 +63,7 @@
 <!-- create two columns -->
  <div class="d-flex justify-content-between align-items-center">
     <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Record" style="width: 50%;" oninput="filterassets()">
-     <a href="#" class="btn btn-outline-primary">Create workorder Record</a>
+     <a href="{% url 'workorder-add-workorder-record' %}" class="btn btn-outline-primary">Create workorder Record</a>
  </div>
  
     
@@ -100,8 +100,10 @@
                         {% if data.status == 'done' or data.status == 'cancelled' %}
                     
                         {% else %}
-                            {% if data.time_until_due > 0 %}
+                            {% if data.time_until_due > 7 %}
                                 <p class="mr-2 text-success">On Time</p>
+                            {% elif data.time_until_due > 0 %}
+                                <p class="mr-2 text-warning">Coming up</p>
                             {% else %}
                                 <p class="mr-2 text-danger">Overdue</p>
                             {% endif %}
@@ -183,7 +185,10 @@
                                     <option value="cancelled" ${ data.status === 'cancelled' ? 'selected': ''}>Cancelled</option>
                                 </select>
                             </div>
-                            
+                            <div class="form-group">
+                                <label for="completed_on">Completed On:</label>
+                                <input type="date" class="form-control" id="completed_on" name="completed_on" value="${ data.completed_on }">
+                            </div>
                             <div class="form-group">
                                 <label for="attachment">Attachment:</label>
                                 <input type="file" class="form-control-file" id="attachment" name="attachment">

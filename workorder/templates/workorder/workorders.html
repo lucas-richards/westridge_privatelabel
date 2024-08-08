@@ -60,8 +60,9 @@
 </style>
 
 <!-- create two columns -->
- <div class="text-right">
-     <a href="{% url 'workorder-add-workorder' %}" class="btn btn-outline-primary">Create workorder</a>
+ <div class="d-flex justify-content-between align-items-center">
+    <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Record" style="width: 33%;" oninput="filterassets()">
+    <a href="{% url 'workorder-add-workorder' %}" class="btn btn-outline-primary">Create workorder</a>
  </div>
  
     
@@ -69,12 +70,15 @@
     <div class="col-md-4">
         <!-- Fully trained graph -->
         {% if workorders %}
+        
         <div class=" mt-3 card" style="height: 600px; overflow-y: scroll;">
             {% for data in workorders %}
+            <div class="asset">
                 <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="{{ data.workorder.id }}">
                     <div class="d-flex justify-content-center align-items-bottom">
-                        <h5 class="mr-2 font-weight-bold">{{ data.workorder.asset.code }} - </h5>
-                        <h5 class="mr-2 font-weight-bold">{{ data.workorder.title }}</h5>
+                        <h5 class="mr-2 btn btn-sm btn-outline-primary">{{ data.workorder.recurrence }}</h5>
+                        <h5 class="mr-2 font-weight-bold">{{ data.workorder.asset.code }} </h5>
+                        <h5 class="truncate">{{ data.workorder.asset.name }}</h5>
                     </div>
                     <!-- green dot if status is online -->
                     {% if data.last_record.status == 'done' %}
@@ -88,12 +92,13 @@
                         </svg>
                     {% else %}
                     
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-primary" viewBox="0 0 10 10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
                             <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                         </svg>
                     {% endif %}
                     
                 </div>
+            </div>
                 
             {% endfor %}
             
@@ -158,12 +163,17 @@
                             <div class="col-md-7">
                                 <div class="flex-container">
                                     <h6 class="mr-3 btn btn-sm btn-outline-primary">${data.recurrence}</h6>
-                                    <h6> <span class=" ${data.time_until_due < 0 ? 'text-danger' : 'font-weight-bold'}">${data.status === 'done'? '' : data.time_until_due < 0 ? 'Overdue' : 'Next due in ' + data.time_until_due + ' days'} </span></h6>
+                                    ${data.last_record_status === 'done' || data.last_record_status === 'cancelled' ? '':
+                                    
+                                        `<h6> <span class=" ${data.time_until_due < 0 ? 'text-danger' : 'font-weight-bold'}">${data.status === 'done'? '' : data.time_until_due < 0 ? 'Overdue' : 'Next due in ' + data.time_until_due + ' days'} </span></h6>`
+                                    }
                                 </div>
                                 
                                 
                                 <h5>${data.title}</h5>
                                 <p>${data.description}</p>
+                                ${data.attachments ? `<p>Attachment:<a target="_blank" href="${data.attachments}"> link</a></p>` : ''}
+                                
                                 
                             </div>
                             <div class="col-md-3">
@@ -183,6 +193,7 @@
                                 <tr>
                                     <th>Record ID</th>
                                     <th>Due Date</th>
+                                    <th>Completed By</th>
                                     <th>Completed Date</th>
                                     <th>Status</th>
                                 </tr>
@@ -191,14 +202,15 @@
                                 ${data.records.map(record => 
                                 `<tr>
                                     <td>
-                                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#ID${record.id}">
                                             #${record.id}
-                                        </button>
+                                       
                                     </td>
                                     
                                     <td>${record.due_date}</td>
-                                    <td>${record.completed_on ? record.completed_on + ' by '+ record.completed_by : ' Not completed yet'}</td>
-                                    <td><span class="badge badge-${record.status === 'done' ? 'success' : record.status === 'on_hold' ? 'warning' : record.status === 'cancelled' ? 'secondary' : 'primary'}">${record.status}</span></td>
+                                    <td>${record.completed_by}</td>
+                                    <td>${record.completed_on ? record.completed_on : 'missing'}</td>
+                                    
+                                    <td><span class="badge badge-${record.status === 'done' ? 'success' : record.status === 'on_hold' ? 'warning' : record.status === 'cancelled' ? 'secondary' : 'info'}">${record.status}</span></td>
                                 </tr>
                                 
                                 `).join('')}
@@ -235,6 +247,25 @@
     }
 });
 
+</script>
+<script>
+    function filterassets() {
+        var input = document.getElementById("searchBox");
+        var filter = input.value.toUpperCase().trim();
+        var assets = document.getElementsByClassName("asset");
+
+        for (var i = 0; i < assets.length; i++) {
+            var asset = assets[i];
+            var assetText = asset.innerText.toUpperCase().trim();
+
+            if (assetText.indexOf(filter) > -1) {
+                console.log("Match Found: " + assetText); // Debugging log
+                asset.style.display = "";
+            } else {
+                asset.style.display = "none";
+            }
+        }
+    }
 </script>
 
 
