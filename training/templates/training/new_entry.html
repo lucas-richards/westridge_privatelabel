@@ -7,9 +7,10 @@
 <!-- create two columns -->
 <div class="row">
     <div class="col-md-6">
-        <div class="mt-5 p-3 card ">
+        <div class="mt-5 p-3 card " style="height: 513px;">
             <h4>New Entry</h4>
-            <form id="entry_form" method="POST" class="post-form">
+            <p>Enter all the employees that have been trained, the training module and the training date.</p>
+            <form id="entry_form" method="POST" class="post-form mt-3">
                 {% csrf_token %}
                 <!-- drop down to select user 1 -->
                 <div class="users">
@@ -62,8 +63,9 @@
             </form>
             
         </div>
-        <div class="mt-1 p-3 card ">
+        <div class="mt-3 p-3 card ">
             <h4>Upload Training File</h4>
+            <p>Only one file can be uploaded per day. If a file is already present, it will be replaced by the new upload.</p>
             <form id="upload-form" method="post" action="{% url 'training-upload_file2' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ upload_form2|crispy }}
