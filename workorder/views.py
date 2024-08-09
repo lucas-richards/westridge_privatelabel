@@ -215,7 +215,7 @@ def workorders(request):
 
     return render(request, 'workorder/workorders.html', context)
 
-@login_required
+
 @csrf_exempt
 @require_http_methods(["GET", "PUT"])
 def workorder(request, id):
@@ -292,7 +292,7 @@ def delete_workorder(request, id):
     workorder.delete()
     return redirect('workorder-workorders')
 
-@login_required
+
 def workorder_records(request):
     records = WorkOrderRecord.objects.all().order_by('-due_date')
     # add this to each record 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',

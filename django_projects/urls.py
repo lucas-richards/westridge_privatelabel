@@ -51,6 +51,7 @@ urlpatterns = [
     # path('api/users', user_views.UserList.as_view(), name='user-list'),
     # path('api/login/', user_views.api_login, name='api-login'),
     
+    
 ]
 
 if settings.DEBUG:

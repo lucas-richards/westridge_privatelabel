@@ -37,6 +37,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*','127.0.0.1','10.1.1.19',
                  'localhost',
                  'http://localhost:3000',
+                 'http://10.1.1.19:8000',
                  'westridgeapp.onrender.com']
 
 CORS_ALLOWED_ORIGINS = [

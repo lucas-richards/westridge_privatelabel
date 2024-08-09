@@ -13,6 +13,10 @@ class TrainingEventUpdateForm(forms.ModelForm):
 class UploadFileForm(forms.Form):
     file = forms.FileField()
 
+class UploadFileForm2(forms.Form):
+    file = forms.FileField()
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
 #  training module update form
 class TrainingModuleUpdateForm(forms.ModelForm):
 

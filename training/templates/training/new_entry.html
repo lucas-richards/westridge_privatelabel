@@ -62,6 +62,16 @@
             </form>
             
         </div>
+        <div class="mt-1 p-3 card ">
+            <h4>Upload Training File</h4>
+            <form id="upload-form" method="post" action="{% url 'training-upload_file2' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ upload_form2|crispy }}
+                <button id="update" class="btn btn-sm btn-secondary" type="submit">Upload</button>
+                
+            </form>
+            
+        </div>
         <div id="loading-indicator" style="display: none;">
             <!-- Your loading indicator here (e.g., spinner or progress bar) -->
             <div class="spinner-grow" role="status">

@@ -23,7 +23,10 @@ urlpatterns = [
     # delete
     path('training_event/<int:training_event_id>/delete/', views.training_delete, name='training-event-delete'),
     path('upload/', views.upload_file, name='training-upload_file'),
+    path('upload2/', views.upload_file2, name='training-upload_file2'),
     path('send_reminder_email/<int:training_module_id>/', views.send_reminder_email, name='training-send_reminder_email'),
+    path('training_files/<str:file_name>/', views.file_not_found, name='training-file-not-found'),
+
     # api urls
     # path('api/dashboard', views.api_dashboard, name='training-api-dashboard'),
     # path('api/TrainingModules', TrainingModules.as_view(), name='TrainingModules'),
