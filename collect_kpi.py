@@ -121,7 +121,7 @@ class Command(BaseCommand):
                 work_order_records = WorkOrderRecord.objects.filter(workorder=work_order)
                 if work_order_records:
                     last_record = work_order_records.latest('due_date')
-                    if last_record.due_date < timezone.now():
+                    if last_record.due_date < timezone.now() or last_record.status == 'done':
                         if work_order.recurrence == 'weekly':
                             due_date = last_record.due_date + dt.timedelta(weeks=1)
                         elif work_order.recurrence == 'monthly':
@@ -136,6 +136,7 @@ class Command(BaseCommand):
 
                         try:
                             WorkOrderRecord.objects.create(workorder=work_order, due_date=due_date, assigned_to=work_order.assigned_to)
+                            print('Created new work order record with due date:', work_order.due_date)
                         except:
                             print('Error creating work order record for:', work_order.title)
                     else:
@@ -143,6 +144,7 @@ class Command(BaseCommand):
                 else:
                     try:
                         WorkOrderRecord.objects.create(workorder=work_order, due_date=work_order.due_date, assigned_to=work_order.assigned_to)
+                        print('Created first work order record with due date:', work_order.due_date)
                     except:
                         print('Error creating first work order record for:', work_order.title)
                     
