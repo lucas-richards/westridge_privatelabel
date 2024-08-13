@@ -23,7 +23,7 @@
 </head>
 <body>
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+      <nav class="navbar navbar-expand-md navbar-dark bg-warning fixed-top">
         <div class="container">
           <!-- add user picture if logged in -->
             {% if user.is_authenticated %}
@@ -31,7 +31,7 @@
                 <img id="profImage" src="{{user.profile.image.url}}" class="rounded-circle border" style="width: 40px; height: 40px;">
               
             {% endif %}
-        <a class="navbar-brand mr-4 ml-2 text-warning" href="{% url 'training-dashboard' %}">Testing Environment</a>
+        <a class="navbar-brand mr-4 ml-2 " href="{% url 'training-dashboard' %}">Testing Environment</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
         </button>

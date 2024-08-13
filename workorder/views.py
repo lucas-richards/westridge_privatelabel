@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Asset, Vendor, WorkOrder, Location, WorkOrderRecord
+from .models import Asset, Vendor, WorkOrder, Location, WorkOrderRecord, KPI, KPIValue
 from users.models import Department
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -18,19 +18,50 @@ from users.models import User
 def dashboard(request):
     # get the work orders records status and count
     work_orders_records = WorkOrderRecord.objects.all()
+
     work_orders_records_status = {
         'done': work_orders_records.filter(status='done').count(),
         'in_progress': work_orders_records.filter(status='in_progress').count(),
         'on_hold': work_orders_records.filter(status='on_hold').count(),
         'scheduled': work_orders_records.filter(status='scheduled').count(),
         'cancelled': work_orders_records.filter(status='cancelled').count(),
+        'overdue': round(work_orders_records.filter(due_date__lt=timezone.now()).exclude(status__in=['done', 'cancelled']).count(), 0),
+        'on_time': round(work_orders_records.filter(due_date__gte=timezone.now()).exclude(status__in=['done', 'cancelled']).count(), 0),
+        'total': work_orders_records.count(),
+        'total_exclude_done_cancelled': work_orders_records.exclude(status__in=['done', 'cancelled']).count(),
     }
+
+    # calculate the percentages
+    work_orders_records_status['overdue_percentage'] = round((work_orders_records_status['overdue'] / work_orders_records_status['total_exclude_done_cancelled']) * 100)
+    work_orders_records_status['on_time_percentage'] = round((work_orders_records_status['on_time'] / work_orders_records_status['total_exclude_done_cancelled']) * 100)
+    work_orders_records_status['done_percentage'] = round((work_orders_records_status['done'] / work_orders_records_status['total']) * 100)
+    work_orders_records_status['in_progress_percentage'] = round((work_orders_records_status['in_progress'] / work_orders_records_status['total']) * 100)
+    work_orders_records_status['on_hold_percentage'] = round((work_orders_records_status['on_hold'] / work_orders_records_status['total']) * 100)
+    work_orders_records_status['scheduled_percentage'] = round((work_orders_records_status['scheduled'] / work_orders_records_status['total']) * 100)
+    work_orders_records_status['cancelled_percentage'] = round((work_orders_records_status['cancelled'] / work_orders_records_status['total']) * 100)
     print(work_orders_records_status)
+
+    # get the KPI values
+    status_kpi = KPIValue.objects.filter(kpi__name='Status Done').order_by('date')
+    status_kpi_values = [value.value for value in status_kpi]
+    status_kpi_dates = [value.date.strftime('%Y-%m-%d') for value in status_kpi]
+    timing_kpi = KPIValue.objects.filter(kpi__name='Timing On Time').order_by('date')
+    timing_kpi_values = [value.value for value in timing_kpi]
+    timing_kpi_dates = [value.date.strftime('%Y-%m-%d') for value in timing_kpi]
+    productivity_kpi = KPIValue.objects.filter(kpi__name='Productivity').order_by('date')
+    productivity_kpi_values = [value.value for value in productivity_kpi]
+    productivity_kpi_dates = [value.date.strftime('%Y-%m-%d') for value in productivity_kpi]
 
 
     context = {
         'title': 'Dashboard',
         'work_orders_records_status': work_orders_records_status,
+        'status_kpi_values': status_kpi_values,
+        'status_kpi_dates': status_kpi_dates,
+        'timing_kpi_values': timing_kpi_values,
+        'timing_kpi_dates': timing_kpi_dates,
+        'productivity_kpi_values': productivity_kpi_values,
+        'productivity_kpi_dates': productivity_kpi_dates,
         
     }
     return render(request, 'workorder/dashboard.html', context)

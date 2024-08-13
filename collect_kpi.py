@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import date
 from training.models import KPI, KPIValue, Profile, TrainingEvent, TrainingModule, ProfileTrainingEvents
-from workorder.models import WorkOrder, WorkOrderRecord
+from workorder.models import WorkOrder, WorkOrderRecord, KPI, KPIValue
 import datetime as dt
 
 class Command(BaseCommand):
@@ -148,6 +148,37 @@ class Command(BaseCommand):
                         self.stdout.write(self.style.SUCCESS('Created work order record with due date: ' + str(due_date)))
                     except:
                         self.stdout.write(self.style.ERROR('Error creating work order record for: ' + work_order.title))
+
+        # Collect KPIs
+
+        today = timezone.now().date()
+        if today.weekday() == 0:  # Monday
+            yesterday = today - dt.timedelta(days=3)
+        else:
+            yesterday = today - dt.timedelta(days=1)
+
+        work_orders_records = WorkOrderRecord.objects.all()
+
+        work_orders_records_status = {
+            'done': work_orders_records.filter(status='done').count(),
+            'overdue': work_orders_records.filter(due_date__lt=timezone.now()).exclude(status__in=['done', 'cancelled']).count(),
+            'on_time': work_orders_records.filter(due_date__gte=timezone.now()).exclude(status__in=['done', 'cancelled']).count(),
+            'total': work_orders_records.count(),
+            'total_exclude_done_cancelled': work_orders_records.exclude(status__in=['done', 'cancelled']).count(),
+            'total_yesterday_completed_on': work_orders_records.filter(completed_on__date=yesterday).count()
+        }
+
+        # calculate the percentages
+        work_orders_records_status['overdue_percentage'] = round((work_orders_records_status['overdue'] / work_orders_records_status['total_exclude_done_cancelled']) * 100, 0)
+        work_orders_records_status['on_time_percentage'] = round((work_orders_records_status['on_time'] / work_orders_records_status['total_exclude_done_cancelled']) * 100, 0)
+        work_orders_records_status['done_qty'] = work_orders_records_status['done'] 
+
+        # save the KPIs
+        self.save_kpi('Status Done', work_orders_records_status['done_qty'])
+        self.save_kpi('Timing On Time', work_orders_records_status['on_time_percentage'])
+        self.save_kpi('Productivity', work_orders_records_status['total_yesterday_completed_on'])
+
+        self.stdout.write(self.style.SUCCESS('Successfully saved daily Work Order KPI values'))
                     
 
 # Call the function to calculate and save daily KPI values
