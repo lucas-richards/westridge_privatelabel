@@ -117,7 +117,8 @@ class Command(BaseCommand):
         # Check if any work order records are in the past, the work order recurrence is not 'once' and create a new work order record acording to the recurrence if it does not exist
         work_orders = WorkOrder.objects.all()
         for work_order in work_orders:
-            if work_order.recurrence != 'once' and work_order.asset.status == 'active':
+            
+            if work_order.recurrence != 'once' and work_order.asset.status == 'online':
                 work_order_records = WorkOrderRecord.objects.filter(workorder=work_order)
                 if work_order_records:
                     last_record = work_order_records.latest('due_date')
@@ -136,17 +137,17 @@ class Command(BaseCommand):
 
                         try:
                             WorkOrderRecord.objects.create(workorder=work_order, due_date=due_date, assigned_to=work_order.assigned_to)
-                            print('Created new work order record with due date:', work_order.due_date)
+                            self.stdout.write(self.style.SUCCESS('Created work order record with due date: ' + str(due_date)))
                         except:
-                            print('Error creating work order record for:', work_order.title)
+                            self.stdout.write(self.style.ERROR('Error creating work order record for: ' + work_order.title))
                     else:
                         continue
                 else:
                     try:
                         WorkOrderRecord.objects.create(workorder=work_order, due_date=work_order.due_date, assigned_to=work_order.assigned_to)
-                        print('Created first work order record with due date:', work_order.due_date)
+                        self.stdout.write(self.style.SUCCESS('Created work order record with due date: ' + str(due_date)))
                     except:
-                        print('Error creating first work order record for:', work_order.title)
+                        self.stdout.write(self.style.ERROR('Error creating work order record for: ' + work_order.title))
                     
 
 # Call the function to calculate and save daily KPI values
