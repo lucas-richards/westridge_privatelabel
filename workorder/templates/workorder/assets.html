@@ -135,65 +135,96 @@
     });
 
     function loadAssetDetails(assetId) {
-        fetch(`/maintenance/asset/${assetId}/`)
-            .then(response => response.json())
-            .then(data => {
-                assetDetailsDiv.innerHTML = `
-                    <div class="asset-details">
-                        <div class="mb-4 row">
-                                <div class="col-md-7">
-                                    <h5><strong>${data.code}</strong> - ${data.name}</h5>
-                                    <p><strong>Description:</strong> ${data.description}</p>
-                                    <p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>
-                                    <p><strong>Serial Number:</strong> ${data.serial_number}</p>
-                                    <p><strong>Model:</strong> ${data.model}</p>
-                                    <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
-                                    <p><strong>Year:</strong> ${data.year}</p>
-                                    <p><strong>Location:</strong> ${data.location}</p>
-                                    <p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>
-                                    <p><strong>Vendors:</strong> ${data.vendors}</p>
-                                    <p><strong>Criticality:</strong> ${data.criticality}</p>
-                                    <p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>
-                                    
-                                </div>
-                                <div class="col-md-3">
-                                    ${data.image_url ? `<img src="${data.image_url}" alt="${data.name}">` : `<img src="/media/asset_images/default.png" alt="${data.name}">`}
-                                </div>
-                                
-                                <div class="col-md-2">
-                                    {% if user.is_authenticated %}
-                                        <button id="edit-button" class="btn btn-primary text-center">Edit</button>
-                                    {% endif %}
-                                </div>
-                                
-                        </div>
-                                <div class="d-flex justify-content-center">
-                                    <button id="wo-button" class="btn btn-outline-primary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
-                                            <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
-                                            <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
-                                        </svg>
-                                        <span style="font-size:12px">Use In New Work Order</span>
-                                    </button>
-                                </div>
-                    </div>
-                `;
+    fetch(`/maintenance/asset/${assetId}/`)
+        .then(response => response.json())
+        .then(data => {
+            let imageUrl = data.image_url;
 
-                const editButton = document.getElementById('edit-button');
-                editButton.addEventListener('click', function () {
-                    // Redirect to the edit page
-                    window.location.href = `/maintenance/asset/edit/${assetId}/`;
-                });
-                const woButton = document.getElementById('wo-button');
-                woButton.addEventListener('click', function () {
-                    // Redirect to the edit page
-                    window.location.href = `/maintenance/asset/${assetId}/workorders/new/`;
-                });
-            })
-            .catch(error => {
-                console.error('Error loading asset details:', error);
+            if (!imageUrl) {
+                const imageFolderPath = `/media/downloads/images/${data.code}/`;
+                // Fetch the directory contents to find the image
+                fetch(imageFolderPath)
+                    .then(response => response.text())
+                    .then(html => {
+                        // Create a temporary DOM element to parse the directory listing
+                        const tempDiv = document.createElement('div');
+                        console.log(html);
+                        tempDiv.innerHTML = html;
+
+                        // Find the first image in the folder
+                        const images = Array.from(tempDiv.querySelectorAll('a'))
+                            .map(link => link.href)
+                            .filter(href => /\.(png|jpg|jpeg)$/.test(href));
+
+                        imageUrl = images.length > 0 ? images[0] : '/media/asset_images/default.png';
+                        updateAssetDetails(data, imageUrl);  // Render with found image
+                    })
+                    .catch(() => {
+                        // Use default image if there's an error fetching the directory or no images found
+                        updateAssetDetails(data, '/media/asset_images/default.png');
+                    });
+            } else {
+                updateAssetDetails(data, imageUrl);
+            }
+        })
+        .catch(error => {
+            console.error('Error loading asset details:', error);
+        });
+
+    function updateAssetDetails(data, imageUrl) {
+        assetDetailsDiv.innerHTML = `
+            <div class="asset-details">
+                <div class="mb-4 row">
+                    <div class="col-md-7">
+                        <h5><strong>${data.code}</strong> - ${data.name}</h5>
+                        <p><strong>Description:</strong> ${data.description}</p>
+                        <p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>
+                        <p><strong>Serial Number:</strong> ${data.serial_number}</p>
+                        <p><strong>Model:</strong> ${data.model}</p>
+                        <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
+                        <p><strong>Year:</strong> ${data.year}</p>
+                        <p><strong>Location:</strong> ${data.location}</p>
+                        <p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>
+                        <p><strong>Vendors:</strong> ${data.vendors}</p>
+                        <p><strong>Criticality:</strong> ${data.criticality}</p>
+                        <p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="${imageUrl}" alt="${data.name}">
+                    </div>
+                    <div class="col-md-2">
+                        {% if user.is_authenticated %}
+                            <button id="edit-button" class="btn btn-primary text-center">Edit</button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="wo-button" class="btn btn-outline-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                            <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                            <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                        </svg>
+                        <span style="font-size:12px">Use In New Work Order</span>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        const editButton = document.getElementById('edit-button');
+        if (editButton) {
+            editButton.addEventListener('click', function () {
+                window.location.href = `/maintenance/asset/edit/${data.id}/`;
             });
+        }
+
+        const woButton = document.getElementById('wo-button');
+        if (woButton) {
+            woButton.addEventListener('click', function () {
+                window.location.href = `/maintenance/asset/${data.id}/workorders/new/`;
+            });
+        }
     }
+}
 
     // Trigger a click event on the first asset item to load its details by default
     if (assetItems.length > 0) {

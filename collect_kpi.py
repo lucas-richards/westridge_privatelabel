@@ -118,7 +118,7 @@ class Command(BaseCommand):
         work_orders = WorkOrder.objects.all()
         for work_order in work_orders:
             
-            if work_order.recurrence != 'once' and work_order.asset.status == 'online':
+            if work_order.recurrence != 'once' and work_order.asset and work_order.asset.status == 'online':
                 work_order_records = WorkOrderRecord.objects.filter(workorder=work_order)
                 if work_order_records:
                     last_record = work_order_records.latest('due_date')
