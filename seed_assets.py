@@ -53,7 +53,6 @@ def load_assets(data):
                 created_by=created_by,
                 created_on=parse_datetime(item['created_on']),
                 last_updated=parse_datetime(item['last_updated']),
-                image=item.get('image', ''),
             )
             print(f"Asset {item['name']} created successfully")
         except Exception as e:

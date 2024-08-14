@@ -1,7 +1,7 @@
 [
     {
         "name": "Tube filling Machine",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Tube filling Machine",
         "serial_number": "55614",
@@ -20,7 +20,7 @@
     },
     {
         "name": "Video Jet Printer and controller",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Video Jet",
         "serial_number": "PHP1305006",
@@ -39,7 +39,7 @@
     },
     {
         "name": "Heat Tunnel",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Heat Tunnel",
         "serial_number": "10560UI-4",
@@ -58,7 +58,7 @@
     },
     {
         "name": "Universal P-Bar Sealer",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Universal P-Bar Sealer, P-1B",
         "serial_number": null,
@@ -77,7 +77,7 @@
     },
     {
         "name": "Oval Bottle Labeler",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Oval Bottle Labeler",
         "serial_number": "L60D-914LTXWPLCA",
@@ -96,7 +96,7 @@
     },
     {
         "name": "Quick Pouch Mini",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Quick Pouch Mini\n\n1. Check filter for water (at air regulator) \u2013 excess water build up may indicate a supply problem. \n2. Clean any debris from machine. \n3. Wipe down product contact surfaces with approved cleaner per requirements.  4. Check Safety Security.\n\nOn the first working day of each week:\n1. Check the Teflon tape for discoloration. If the tape is beginning to appear lighter, replace.\n2. Check drive wheels for glazing. Lightly scuff with fine Scotchbrite to remove glaze.\n\nOn the first working day of each month:\n1. Check all electrical connections. \n2. Tighten bolts on moving parts. \n3. Check the timing belt and all other belts on the machine for tension and wear. If the belts show wear, replace them.\"\n\n======================================\nAnnually - 1. Clean/Replace the filter/regulator cartridge.\n\nEvery 2 yrs - 1. Replace PLC lithium battery.",
         "serial_number": "13077-1096",
@@ -115,7 +115,7 @@
     },
     {
         "name": "Quick Pouch Mini",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Quick Pouch Mini\n\n1. Check filter for water (at air regulator) \u2013 excess water build up may indicate a supply problem. \n2. Clean any debris from machine. \n3. Wipe down product contact surfaces with approved cleaner per requirements.  4. Check Safety Security.\n\nOn the first working day of each week:\n1. Check the Teflon tape for discoloration. If the tape is beginning to appear lighter, replace.\n2. Check drive wheels for glazing. Lightly scuff with fine Scotchbrite to remove glaze.\n\nOn the first working day of each month:\n1. Check all electrical connections. \n2. Tighten bolts on moving parts. \n3. Check the timing belt and all other belts on the machine for tension and wear. If the belts show wear, replace them.\"",
         "serial_number": "14050-1132",
@@ -134,7 +134,7 @@
     },
     {
         "name": "Quick Pouch Mini",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Quick Pouch Mini\n\n1. Check filter for water (at air regulator) \u2013 excess water build up may indicate a supply problem. \n2. Clean any debris from machine. \n3. Wipe down product contact surfaces with approved cleaner per requirements.  4. Check Safety Security.\n\nOn the first working day of each week:\n1. Check the Teflon tape for discoloration. If the tape is beginning to appear lighter, replace.\n2. Check drive wheels for glazing. Lightly scuff with fine Scotchbrite to remove glaze.\n\nOn the first working day of each month:\n1. Check all electrical connections. \n2. Tighten bolts on moving parts. \n3. Check the timing belt and all other belts on the machine for tension and wear. If the belts show wear, replace them.\"",
         "serial_number": "14047-1131",
@@ -153,7 +153,7 @@
     },
     {
         "name": "Quick Pouch Mini",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Quick Pouch Mini\n\n1. Check filter for water (at air regulator) \u2013 excess water build up may indicate a supply problem. \n2. Clean any debris from machine. \n3. Wipe down product contact surfaces with approved cleaner per requirements.  4. Check Safety Security.\n\nOn the first working day of each week:\n1. Check the Teflon tape for discoloration. If the tape is beginning to appear lighter, replace.\n2. Check drive wheels for glazing. Lightly scuff with fine Scotchbrite to remove glaze.\n\nOn the first working day of each month:\n1. Check all electrical connections. \n2. Tighten bolts on moving parts. \n3. Check the timing belt and all other belts on the machine for tension and wear. If the belts show wear, replace them.\"",
         "serial_number": "15075-1201",
@@ -172,9 +172,9 @@
     },
     {
         "name": "Accutek Turntable",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
-        "description": "Accutek Turntable, P-68",
+        "description": "Accutek Turntable",
         "serial_number": "A-17L07-0770",
         "model": "28-042-ACA",
         "manufacturer": null,
@@ -191,7 +191,7 @@
     },
     {
         "name": "Dorner Veriable Speed VFD Controller",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Dorner Veriable Speed VFD Controller, P-69",
         "serial_number": "661780-004-001-001",
@@ -210,7 +210,7 @@
     },
     {
         "name": "Parker Boiler",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Parker Boiler, P-78",
         "serial_number": "62253",
@@ -229,7 +229,7 @@
     },
     {
         "name": "Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Scale - Digital Balance\n\nVendor ID: W16-001\nAccuracy: 10000g / 0.1g\nCalibration: 12months (Due date: 2/13/2021)\nLast Calibration: 2/13/2020",
         "serial_number": "8027131177",
@@ -248,7 +248,7 @@
     },
     {
         "name": "Bagging Machine",
-        "status": "Online",
+        "status": "online",
         "location": "Warehouse",
         "description": "Bagging Machine",
         "serial_number": null,
@@ -267,7 +267,7 @@
     },
     {
         "name": "Floor Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Compounding Area",
         "description": "Scale with remote - 150Lbs max\n\nVendor ID: W16-016\nAccuracy: 13000g / 0.5g\nCalibration: 12months - Due date: 2/13/2021\nLast Calibration: 2/13/2020",
         "serial_number": "B407285114",
@@ -286,7 +286,7 @@
     },
     {
         "name": "Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Vendor ID: W16-006\nAccuracy: 13000g / 0.5g\nCalibration: 12months - Due date: 10/1/2020\nLast Calibration: 10/1/2019",
         "serial_number": "9123111T3673",
@@ -304,8 +304,9 @@
         "code": "SC-006"
     },
     {
-        "name": "P-88 Sullair compressor 1500 E",
-        "status": "Online",
+        "name": "Sullair compressor 1500 E",
+        "code": "P-88",
+        "status": "online",
         "location": "Warehouse",
         "description": "Vendor name is Maqpower and Sullair.",
         "serial_number": null,
@@ -322,8 +323,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/34dc732e-c1e7-4fcf-9b0f-67b7cde643e2_P-88.JPG"
     },
     {
-        "name": "P-84 Beko Dry Point RA",
-        "status": "Online",
+        "name": "Beko Dry Point RA",
+        "code": "P-84",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "140023470/14",
@@ -340,27 +342,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e49deac4-34d9-4801-86d4-6b28902e6c6a_P-84.JPG"
     },
     {
-        "name": "Squid Ink Printer",
-        "status": "Online",
-        "location": "Production",
-        "description": null,
-        "serial_number": "PCP1112005",
-        "model": "PCP PILOT",
-        "manufacturer": null,
-        "year": null,
-        "department_in_charge": "Maintenance",
-        "vendors": null,
-        "created_by": "Jerry Araiza",
-        "created_on": "8/18/2020 9:54",
-        "last_updated": "8/18/2020 10:39",
-        "image": "https://app.getmaintainx.com/api/s3/uploads/db7d8602-841e-49e5-a461-9b38ddc19660_P-23.JPG",
-        "criticality": null,
-        "attachments": "https://app.getmaintainx.com/api/s3/uploads/db7d8602-841e-49e5-a461-9b38ddc19660_P-23.JPG",
-        "code": "P-23"
-    },
-    {
         "name": "P-73 PureTec RO/DI Water System",
-        "status": "Online",
+        "code": "P-73",
+        "status": "online",
         "location": "Compounding Area",
         "description": "Maintenance\n========================================================\n(a1) 14\" MIXED Bed - change when QC light turns red or below 1M(ohm) on M3300 control panel.\n(a2) 14\" MIXED Bed - same as (a1), CHECK all gauges on flow (compounding) RO/DI sheet check for unusual reading\n(b1) SODIUM Tank, water test weekly; replace tank once a month or less than 3ppm so it doesn\u2019t damage membrane.\n(b2) Carbon Tank - replace once every 6 months.\n(c1) UV light must be changed after 8000 hours or when light turns RED.\n(d1) R.O. Filter replace monthly.\n(e1) Water flow pressure gauge , needs to be a 50/50 ratio (currently 1:8 each)\n(f1) membranes recommended year to be replaced, (if not water flow/pressure isn't balanced and will drop in flow)\n(g1) Reserve Tank \u2013 Needs to be sanitized once a year and inspected for leaks/cracks once a month.\n(h1) Water pump \u2013 Needs to be serviced once a year and inspected for leaks/cracks once a month.\n(i1) micron filters , replace yearly (2 micron, 1 micron.)\n(Control Panel) Wipe down and remove dust once a month. Notes: Drop under 1 ohm, need to replace (a1) and (a2), After sanitizing, the control panel needs to be re calibrated (need to for older PureTec models will need a 14\u201d mixed to sanitize system.\n========================================================\nAs Required\n*Change mixed bed tank (end of batch when conductivity light goes out)\n*Check for leaks.\n\nMonthly\n*Check the UV lamp counter. Record the lamp time in the maintenance log. Replace the\nUV lamp every 8000 hours or 24 months, whichever comes first.\n\nTwo Months\nLab test water purity per this procedure.\n\nYearly\n1. Sanitize the system using \u201cMinncare\u201d or an equivalent cold sterilizer.*\n2. Clean or replace the quartz sleeve in the UV filter.*\n3. Replace all water filter elements (3).\n========================================================",
         "serial_number": null,
@@ -378,7 +362,7 @@
     },
     {
         "name": "Case sealer Line #3",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Tapes boxes",
         "serial_number": "4021672sbg/60",
@@ -397,7 +381,8 @@
     },
     {
         "name": "Stainless steel conveyor",
-        "status": "Online",
+        "code": "P-124",
+        "status": "online",
         "location": "General",
         "description": null,
         "serial_number": null,
@@ -414,8 +399,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/6802fc31-5cdb-4af2-84fe-542e386eb5f0_image-50095dc9-57ed-4824-a357-38521b84b563.jpg"
     },
     {
-        "name": "P-5 Universal Round Bottle Labeler",
-        "status": "Online",
+        "name": "Universal Round Bottle Labeler",
+        "code": "P-5",
+        "status": "online",
         "location": "Production",
         "description": "Bottle labeler",
         "serial_number": "R310-C-1054WL",
@@ -432,8 +418,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/c87bd6fd-e0db-4816-a6cd-ce9ccbef2c12_image-90c46be8-eefb-4cb9-b910-72b4de476b07.jpg"
     },
     {
-        "name": "P-6A Simplex Filler line 2",
-        "status": "Online",
+        "name": "Simplex Filler line 2",
+        "code": "P-6A",
+        "status": "online",
         "location": "Production",
         "description": "Bottle Filler",
         "serial_number": "7835",
@@ -450,8 +437,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/237ee04e-15d4-41ca-aeef-3565eb523e78_image-cbe9c81f-7236-477a-b6c7-46821dc7c84a.jpg"
     },
     {
-        "name": "P-6B Simplex Filler line 3",
-        "status": "Online",
+        "name": "Simplex Filler line 3",
+        "code": "P-6B",
+        "status": "online",
         "location": "Production",
         "description": "Bottle filler",
         "serial_number": "6401",
@@ -468,8 +456,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e38bb812-010c-4039-9c8d-6a054079b77a_image-fd8bf2d6-4497-401f-9c15-367b00c17816.jpg"
     },
     {
-        "name": "P-6C Simplex Filler line 1",
-        "status": "Online",
+        "name": "Simplex Filler line 1",
+        "code": "P-6C",
+        "status": "online",
         "location": "Production",
         "description": "Bottle filler",
         "serial_number": null,
@@ -486,8 +475,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/4ba3c5f1-9566-485a-a411-218bd988cad1_image-fc5a2ab7-8f93-4073-b2d0-9a4bfb805220.jpg"
     },
     {
-        "name": "P-94 Band sealer #1",
-        "status": "Online",
+        "name": "Band sealer #1",
+        "code": "P-94",
+        "status": "online",
         "location": "Assembly Area",
         "description": null,
         "serial_number": "1.11122E+12",
@@ -504,8 +494,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/2647d784-e07b-4fb4-bfa6-40b6edafeacb_image-e3023e89-5d51-421e-a5f2-9498f8db34af.jpg"
     },
     {
-        "name": "P-95 Band sealer #2",
-        "status": "Online",
+        "name": "Band sealer #2",
+        "code": "P-95",
+        "status": "online",
         "location": "Assembly Area",
         "description": null,
         "serial_number": "1.11122E+12",
@@ -522,8 +513,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/94b426ae-9859-48f1-b5b8-7228aa5a3c39_image-7805b55a-f361-4956-b82d-9b1ebb9cabd5.jpg"
     },
     {
-        "name": "P-96 Induction Sealer - Enercon",
-        "status": "Online",
+        "name": "Induction Sealer - Enercon",
+        "code": "P-96",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "159538-1-1",
@@ -540,8 +532,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/9a153fe8-e6bd-41da-bdac-de155599752b_image-64572dd6-be22-47ef-9819-b05f8a20c67d.jpg"
     },
     {
-        "name": "P-97 Conveyor Line 3",
-        "status": "Online",
+        "name": "Conveyor Line 3",
+        "code": "P-97",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": null,
@@ -558,8 +551,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/0814e6c9-2935-492e-b35b-148672dde2f6_image-795ad74c-1733-4072-90b7-99e556923a76.jpg"
     },
     {
-        "name": "P-98 Bottomless Conveyor",
-        "status": "Online",
+        "name": "Bottomless Conveyor",
+        "code": "P-98",
+        "status": "online",
         "location": "General",
         "description": null,
         "serial_number": null,
@@ -576,8 +570,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/f15b10b4-6834-49e9-b6d6-ca0c2bfe399c_image-5fca30d2-1623-41b6-8bdc-215a1cdae182.jpg"
     },
     {
-        "name": "P-102 Inkjet Printer LINX",
-        "status": "Online",
+        "name": "Inkjet Printer LINX",
+        "code": "P-102",
+        "status": "online",
         "location": "Production",
         "description": ">>Note - Printer will display a \"3.45 Service Module Replacement...\" Faults & Warning Notification every 18 months. This will require a new Module(Filter Kit, item# FA1211, cost $648) to be replaced soon. According to the display it states to do this within one month - although a service tech at LINX stated that it will not damage printer if we continue to use and printer stops operating.  Further more the Ink will also have to be refiled (item# FACL101/50, cost $105).\n\n>>> YOU MUST ALWAYS REFERENCE MANUAL \"LOADED IN MAINTAIN X\" <<<",
         "serial_number": "KN803",
@@ -594,8 +589,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/a1daa397-f631-4856-8a2c-5a4587da807d_image-f2a5812c-6346-4b30-a4c6-aa9055254993.jpg,https://app.getmaintainx.com/api/s3/uploads/e17626a4-9b5d-49bb-b663-df96d1298f13_Linx10_OM_EN_TP1A072-61.pdf"
     },
     {
-        "name": "P-101 Squid ink",
-        "status": "Online",
+        "name": "Squid ink",
+        "code": "P-101",
+        "status": "online",
         "location": "Mezzanine One",
         "description": null,
         "serial_number": "CPT256P2003001",
@@ -612,8 +608,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/f5c79252-2ed0-47bd-97b7-5e0173641682_image-09717fbd-ac5b-40fb-857c-09ab35924b9f.jpg"
     },
     {
-        "name": "P-10E Waukesha pump #5",
-        "status": "Online",
+        "name": "Waukesha pump #5",
+        "code": "P-10E",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "1E+13",
@@ -630,8 +627,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/4dad171c-84cf-4e98-ba4c-28862222e057_image-9857e4d3-e87c-40ef-a091-ec6ef6a73f64.jpg,https://app.getmaintainx.com/api/s3/uploads/b7e0409e-e736-45c0-be76-4ffc23ab1369_WaukeshaCB130-U1Brochure.pdf"
     },
     {
-        "name": "P-7 Induction sealer Enercon",
-        "status": "Online",
+        "name": "Induction sealer Enercon",
+        "code": "P-7",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "C1771501",
@@ -648,8 +646,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/bac94274-32d8-4e01-af35-e9d3b7c4ca75_image-1737249b-d1e4-43a7-8411-dfe8aad4b216.jpg"
     },
     {
-        "name": "P-10C Waukesha pump #3",
-        "status": "Online",
+        "name": "Waukesha pump #3",
+        "code": "P-10C",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "94-9346",
@@ -666,8 +665,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/db8ed39e-f9ed-4f83-84f5-3835608a3cd2_image-66c861a4-04cc-49e3-9afb-b972f62be6c4.jpg,https://app.getmaintainx.com/api/s3/uploads/fdf7a720-a4cb-4a58-b8b9-1141fe30701c_WaukeshaCB130-U1Brochure.pdf"
     },
     {
-        "name": "P-7B Induction sealer Enercon",
-        "status": "Online",
+        "name": "Induction sealer Enercon",
+        "code": "P-7B",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": null,
@@ -684,8 +684,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e8cd69d7-2737-4083-8820-7f8beca39d6c_image-f19fc4da-3a3c-4302-a482-ba0bff3628ee.jpg"
     },
     {
-        "name": "P-10B Waukesha pump #2",
-        "status": "Online",
+        "name": "Waukesha pump #2",
+        "code": "P-10B",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "1E+12",
@@ -702,8 +703,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8e36a714-ed39-4bcf-bfa2-73e862b4310f_image-4288e139-9385-4630-ba3c-d767184e94e1.jpg,https://app.getmaintainx.com/api/s3/uploads/476b3eb0-dd7f-4232-8d0d-374722b35690_WaukeshaCB130-U1Brochure.pdf"
     },
     {
-        "name": "P-10D Waukesha pump #4",
-        "status": "Online",
+        "name": "Waukesha pump #4",
+        "code": "P-10D",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "147277",
@@ -720,8 +722,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ffc21fa6-3d89-4836-a0d6-012414dd50d0_image-97f5e77c-668e-46d9-b68f-446325e7b8a2.jpg,https://app.getmaintainx.com/api/s3/uploads/34d01447-73a4-4431-8e36-ac36ebc724bf_WaukeshaCB130-U1Brochure.pdf"
     },
     {
-        "name": "P-10F Waukesha pump #6",
-        "status": "Online",
+        "name": "Waukesha pump #6",
+        "code": "P-10F",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": null,
@@ -738,8 +741,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/03e18555-f944-4702-9b0c-9bdc42c82806_image-c6b11a98-9df2-4d4d-832a-97621f2f6fc8.jpg"
     },
     {
-        "name": "P-12 SureKap",
-        "status": "Online",
+        "name": "SureKap",
+        "code": "P-12",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "CA13933",
@@ -756,8 +760,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/70fee9f9-3732-4200-9523-46567e2ee0ae_image-b155f95d-7058-43f4-b753-472d9f83ec88.jpg"
     },
     {
-        "name": "P-14 Axon Heat Tunnel",
-        "status": "Online",
+        "name": "Axon Heat Tunnel",
+        "code": "P-14",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "C-061204",
@@ -774,8 +779,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/a99a7fb6-4fa2-4037-9e4a-0b0d41303cdc_image-4ac5c475-9248-42ed-8f16-15a4a976e71a.jpg"
     },
     {
-        "name": "P-19 Air Compressor Speedaire",
-        "status": "Online",
+        "name": "Air Compressor Speedaire",
+        "code": "P-19",
+        "status": "online",
         "location": "Warehouse",
         "description": null,
         "serial_number": "R0031174",
@@ -792,8 +798,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/33495311-8959-4a04-9d07-360d193ff969_image-d689b7a6-dd28-44c2-a482-927afd5d31b8.jpg"
     },
     {
-        "name": "P-76 Squid ink",
-        "status": "Online",
+        "name": "Squid ink",
+        "code": "P-76",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "PCP1304014",
@@ -810,8 +817,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/7322e0ff-ac38-4b8e-9fa6-a9f63fc65a64_image-b07aaf25-2b3b-4405-81e6-18eb29152b5e.jpg"
     },
     {
-        "name": "P-87 Squid ink",
-        "status": "Online",
+        "name": "Squid ink",
+        "code": "P-87",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "PCP1609001",
@@ -828,8 +836,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/847fc8c2-beff-48d5-828a-b531e393e6cd_image-830a7f8f-5826-466e-9a9f-fd72d9b2e67a.jpg"
     },
     {
-        "name": "P-23 Squid ink",
-        "status": "Online",
+        "name": "Squid ink",
+        "code": "P-23",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "PCP 1112005",
@@ -846,8 +855,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/b964c62d-5248-4d2f-88e4-7e3e6a0cbd70_image-9c3179bc-e095-4191-9cf1-4aa80ff48f57.jpg"
     },
     {
-        "name": "P-24 Excalibur hydro left",
-        "status": "Online",
+        "name": "Excalibur hydro left",
+        "code": "P-24",
+        "status": "online",
         "location": "Compounding Area",
         "description": null,
         "serial_number": "4203",
@@ -864,8 +874,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/89fef70d-f7b4-42e9-b908-1a2601d196c6_image-8ac12385-126a-4108-95a3-53210a83f2a1.jpg"
     },
     {
-        "name": "P-25 Team Mechanix hydro left",
-        "status": "Online",
+        "name": "Team Mechanix hydro left",
+        "code": "P-25",
+        "status": "online",
         "location": "Compounding Area",
         "description": null,
         "serial_number": "YJ410715",
@@ -882,8 +893,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/d5a3919e-c672-4f97-893c-f1fcd33b37d5_camera.jpg"
     },
     {
-        "name": "P-27 Aim/Joraco Press",
-        "status": "Online",
+        "name": "Aim/Joraco Press",
+        "code": "P-27",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "HP 060802",
@@ -900,8 +912,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/5cc0a8e2-893d-429f-883a-39cb81e6e81f_image-235380ed-753d-48e3-9af1-7a08c4484c2c.jpg"
     },
     {
-        "name": "P-48 Bottomless Conveyor line 1",
-        "status": "Online",
+        "name": "Bottomless Conveyor line 1",
+        "code": "P-48",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "A-17202271",
@@ -918,8 +931,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/95092c94-d05d-4313-acda-50b078916350_image-ce6265c3-df24-4449-9ea5-866ab11e6f54.jpg"
     },
     {
-        "name": "P-29 Labelaire Labeler Line 2",
-        "status": "Online",
+        "name": "Labelaire Labeler Line 2",
+        "code": "P-29",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "276720607",
@@ -936,8 +950,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/4cc71cdb-e140-4ad3-bb7d-f633082a68d2_image-f2bdb268-46d0-43b0-bd3c-738cfe594196.jpg"
     },
     {
-        "name": "P-77 Mini mover conveyor",
-        "status": "Online",
+        "name": "Mini mover conveyor",
+        "code": "P-77",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "205011",
@@ -954,8 +969,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/bcfbb9c7-75d4-4fbe-92da-9bd8939f45a3_image-a8ba2e59-8c1f-4bef-8fbb-18c268a0cb40.jpg"
     },
     {
-        "name": "P-35 Conveyor Doner 2200 Series",
-        "status": "Online",
+        "name": "Conveyor Doner 2200 Series",
+        "code": "P-35",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "569771-001-001-001",
@@ -972,8 +988,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/6fce2323-0a7b-408f-b0f1-22f2eef8774a_image-fd74d06d-e09e-4c9a-98c4-91ab33434a35.jpg"
     },
     {
-        "name": "P-34 Conveyor Doner 2200 Series",
-        "status": "Online",
+        "name": "Conveyor Doner 2200 Series",
+        "code": "P-34",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "335235-02",
@@ -990,8 +1007,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/102dc7e1-f26b-4dc7-8537-c9707182d55b_image-dc25f3ce-1f1e-4186-9408-e1154dcf6cce.jpg"
     },
     {
-        "name": "P-39 Turn table",
-        "status": "Online",
+        "name": "Turn table",
+        "code": "P-39",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": null,
@@ -1008,8 +1026,9 @@
         "attachments": null
     },
     {
-        "name": "P-40 Turn table line 2",
-        "status": "Online",
+        "name": "Turn table line 2",
+        "code": "P-40",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": null,
@@ -1026,8 +1045,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/573c214a-717f-469d-b1bf-26677ee63f79_image-bb97761f-7487-49e9-a5f6-208d595aaa25.jpg"
     },
     {
-        "name": "P-43A PDC Steam Tunnel",
-        "status": "Online",
+        "name": "PDC Steam Tunnel",
+        "code": "P-43A",
+        "status": "online",
         "location": "Mezzanine One",
         "description": null,
         "serial_number": "102",
@@ -1044,8 +1064,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/a1a62e5e-b3ef-447e-978e-9fd093b3b9e8_image-7ba2f40c-728a-4200-aab5-15e6a37ab8e6.jpg"
     },
     {
-        "name": "P-43B Steam Tunnel conveyor",
-        "status": "Online",
+        "name": "Steam Tunnel conveyor",
+        "code": "P-43B",
+        "status": "online",
         "location": "Mezzanine One",
         "description": null,
         "serial_number": "908",
@@ -1062,8 +1083,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/3b2eb527-0caa-47a1-9883-7f82daf0d84f_image-95698630-8f92-4ce3-b7be-4ca6d0b7e4f5.jpg"
     },
     {
-        "name": "P-51 Accutec Big Conveyor",
-        "status": "Online",
+        "name": "Accutec Big Conveyor",
+        "code": "P-51",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "DOT-01063",
@@ -1080,8 +1102,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/a620ed10-6f11-43b5-93fc-45595e2de253_image-d3454b6e-b026-4baf-babd-4b5d592edb96.jpg"
     },
     {
-        "name": "P-52 Accutec small conveyor",
-        "status": "Online",
+        "name": "Accutec small conveyor",
+        "code": "P-52",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "46522.034.0101",
@@ -1098,10 +1121,10 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/7db98fcb-fe1b-4f0a-9d56-12c2af0b4c89_image-94937580-11fc-45cc-b9ed-9d944edea094.jpg"
     },
     {
-        "name": "50 gallon",
-        "status": "Online",
+        "name": "Tank 1 ",
+        "status": "online",
         "location": "Compounding Area",
-        "description": null,
+        "description": "50 gallon",
         "serial_number": null,
         "model": null,
         "manufacturer": null,
@@ -1114,13 +1137,13 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/8e1e5ddf-33f2-4262-9e08-954ee6cd18b7_image-2aebff51-5242-4a7f-8100-2bb0b31ddfef.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8e1e5ddf-33f2-4262-9e08-954ee6cd18b7_image-2aebff51-5242-4a7f-8100-2bb0b31ddfef.jpg",
-        "code": "P-56 Tank 1"
+        "code": "P-56"
     },
     {
-        "name": "200 gallon",
-        "status": "Online",
+        "name": "Tank 2",
+        "status": "online",
         "location": "Compounding Area",
-        "description": null,
+        "description": "200 gallon",
         "serial_number": null,
         "model": null,
         "manufacturer": null,
@@ -1133,13 +1156,13 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/c80a80e3-6c93-410d-8777-45baf53b3489_image-4966cb0a-d616-4bf4-873d-8868a0e7a775.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/c80a80e3-6c93-410d-8777-45baf53b3489_image-4966cb0a-d616-4bf4-873d-8868a0e7a775.jpg",
-        "code": "P-57 Tank 2"
+        "code": "P-57"
     },
     {
-        "name": "175 gallon",
-        "status": "Online",
+        "name": "Tank 3",
+        "status": "online",
         "location": "Compounding Area",
-        "description": null,
+        "description": "175 gallon",
         "serial_number": null,
         "model": null,
         "manufacturer": null,
@@ -1152,13 +1175,13 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/8d44fbab-ad05-4de2-99cd-4076e8c0c8ba_image-514c87db-360e-4c51-b3d8-04e9d2721638.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8d44fbab-ad05-4de2-99cd-4076e8c0c8ba_image-514c87db-360e-4c51-b3d8-04e9d2721638.jpg",
-        "code": "P-58 Tank 3"
+        "code": "P-58"
     },
     {
-        "name": "200 gallon",
-        "status": "Online",
+        "name": "Tank 4",
+        "status": "online",
         "location": "Compounding Area",
-        "description": null,
+        "description": "200 gallon",
         "serial_number": null,
         "model": null,
         "manufacturer": null,
@@ -1171,13 +1194,13 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/f41868e2-bc13-4b47-846a-b0c99b8392aa_image-e2895d18-a633-4c4b-b858-d6cc2ee7d0d3.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/f41868e2-bc13-4b47-846a-b0c99b8392aa_image-e2895d18-a633-4c4b-b858-d6cc2ee7d0d3.jpg",
-        "code": "P-59 Tank 4"
+        "code": "P-59"
     },
     {
-        "name": "175 gallon",
-        "status": "Online",
+        "name": "Tank 5",
+        "status": "online",
         "location": "Compounding Area",
-        "description": null,
+        "description": "175 gallon",
         "serial_number": null,
         "model": null,
         "manufacturer": null,
@@ -1190,13 +1213,13 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/4e3c74e2-e32e-4f36-a2b7-6e621727cc9d_image-cae9de77-dfca-423a-be14-46646e7b4659.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/4e3c74e2-e32e-4f36-a2b7-6e621727cc9d_image-cae9de77-dfca-423a-be14-46646e7b4659.jpg",
-        "code": "P-60 Tank 5"
+        "code": "P-60"
     },
     {
-        "name": "350 gallon",
-        "status": "Online",
+        "name": "Tank 6",
+        "status": "online",
         "location": "Compounding Area",
-        "description": null,
+        "description": "350 gallon",
         "serial_number": null,
         "model": null,
         "manufacturer": null,
@@ -1209,11 +1232,12 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/ce40d5b1-f00b-4e21-9d50-8a6005615c0e_image-056b54b3-8108-47b9-ab66-cb5e0ee43b11.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ce40d5b1-f00b-4e21-9d50-8a6005615c0e_image-056b54b3-8108-47b9-ab66-cb5e0ee43b11.jpg",
-        "code": "P-61 Tank 6"
+        "code": "P-61"
     },
     {
-        "name": "P-65 Bottomless Conveyor- Accutek",
-        "status": "Online",
+        "name": "Bottomless Conveyor- Accutek",
+        "code":"P-65",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "A-17L07-0579",
@@ -1231,9 +1255,10 @@
     },
     {
         "name": "P-66 LabeLaire",
-        "status": "Online",
+        "code": "P-66",
+        "status": "online",
         "location": "Production",
-        "description": null,
+        "description": "Vacuum out interior of Machine housing, Wipe down, Perform 60 day Procedures.",
         "serial_number": "1224052C192H",
         "model": "1710",
         "manufacturer": null,
@@ -1248,8 +1273,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/da003629-63a9-499c-a713-ae79a63cc7e8_image-81e11ffa-19fe-4d0d-b67c-7a69effc352c.jpg"
     },
     {
-        "name": "P-67 Video Jet",
-        "status": "Online",
+        "name": "Video Jet",
+        "code": "P-67",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "1224052C19ZH",
@@ -1265,45 +1291,11 @@
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/aec3448f-d75e-4a1a-9615-8db4c47a1595_image-450a5420-6a54-49da-b4d6-b0bbb3484e20.jpg"
     },
+    
     {
-        "name": "P-68 Accutek Turn table",
-        "status": "Online",
-        "location": "Production",
-        "description": null,
-        "serial_number": "A-17L07-0770",
-        "model": "28-042-ACA",
-        "manufacturer": null,
-        "year": null,
-        "department_in_charge": "Maintenance",
-        "vendors": null,
-        "created_by": "Thy",
-        "created_on": "2/25/2021 13:13",
-        "last_updated": "2/25/2021 13:13",
-        "image": "https://app.getmaintainx.com/api/s3/uploads/1e0292c4-0175-4f48-a194-6183660e8ded_image-ef47dbbb-4529-434d-bcf6-1d730a3ba33d.jpg",
-        "criticality": null,
-        "attachments": "https://app.getmaintainx.com/api/s3/uploads/1e0292c4-0175-4f48-a194-6183660e8ded_image-ef47dbbb-4529-434d-bcf6-1d730a3ba33d.jpg"
-    },
-    {
-        "name": "P-71 Video Jet",
-        "status": "Online",
-        "location": "Production",
-        "description": null,
-        "serial_number": "PHP1305006",
-        "model": "PCP1304014",
-        "manufacturer": null,
-        "year": null,
-        "department_in_charge": "Maintenance",
-        "vendors": null,
-        "created_by": "Thy",
-        "created_on": "2/25/2021 13:21",
-        "last_updated": "2/25/2021 13:21",
-        "image": "https://app.getmaintainx.com/api/s3/uploads/70c726e7-9d74-42aa-9653-443213c3ec1e_image-680e926a-c34b-471d-aafa-e91c87d427d6.jpg",
-        "criticality": null,
-        "attachments": "https://app.getmaintainx.com/api/s3/uploads/70c726e7-9d74-42aa-9653-443213c3ec1e_image-680e926a-c34b-471d-aafa-e91c87d427d6.jpg"
-    },
-    {
-        "name": "P-72 Little David",
-        "status": "Online",
+        "name": "Little David",
+        "code": "P-72",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": null,
@@ -1320,8 +1312,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/40fcb746-e42c-43b1-adf2-be5a4025f544_image-0e3a3ea2-9253-4e48-b3bc-34f6fcfcb891.jpg"
     },
     {
-        "name": "P-74 Little David",
-        "status": "Online",
+        "name": "Little David",
+        "code": "P-74",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "3317485BP/50",
@@ -1338,10 +1331,10 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/c4331b5d-4196-4780-8378-fe2cb94970f1_image-178376de-146e-406f-a8bf-f86c4b1f82ea.jpg"
     },
     {
-        "name": "75 gallon",
-        "status": "Online",
+        "name": "Tank 7",
+        "status": "online",
         "location": "Production",
-        "description": null,
+        "description": "75 gallon",
         "serial_number": null,
         "model": null,
         "manufacturer": null,
@@ -1354,11 +1347,12 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/ba5eb050-078a-4c2f-b540-a6fbfd0a9112_image-08a5b493-07e1-47dc-8050-386614f19176.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ba5eb050-078a-4c2f-b540-a6fbfd0a9112_image-08a5b493-07e1-47dc-8050-386614f19176.jpg",
-        "code": "P-83 Tank 7"
+        "code": "P-83 "
     },
     {
-        "name": "P-85 Big Joe Fork Lift (Electric)",
-        "status": "Online",
+        "name": "Big Joe Fork Lift (Electric)",
+        "code": "P-85",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "424161198",
@@ -1375,8 +1369,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/3a9483f6-b2c1-4b62-b9ce-fd57281ba202_image-ac3650ac-acde-4464-8dd2-e768f8e0d664.jpg"
     },
     {
-        "name": "P-86 B cast 350 Gal Jacketed Tank",
-        "status": "Online",
+        "name": "B cast 350 Gal Jacketed Tank",
+        "code": "P-86",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "HD-2015-02A",
@@ -1393,8 +1388,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/886e54eb-6fb0-4f55-888d-aeb07d171ebf_image-967183f2-a4e9-4d0b-a082-75229656b25b.jpg"
     },
     {
-        "name": "P-90 B cast 350 Gal Jacketed Tank",
-        "status": "Online",
+        "name": "B cast 350 Gal Jacketed Tank",
+        "code": "P-90",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "HD-2015-02B",
@@ -1411,8 +1407,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/7e098d74-4861-4b24-a288-323f9c3f7ad6_image-81868035-bec0-472e-a14f-485bb113cdb8.jpg"
     },
     {
-        "name": "P-91 B Cast 600 Gal Tank",
-        "status": "Online",
+        "name": "B Cast 600 Gal Tank",
+        "code": "P-91",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "20191-17750-15-01",
@@ -1429,8 +1426,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8ed1353d-ee21-410b-bc2e-01cdf2e77b97_image-9bd0f4e7-9010-4b10-baec-4bf5f01c4e57.jpg"
     },
     {
-        "name": "P-105 Big Waukesha pump",
-        "status": "Online",
+        "name": "Big Waukesha pump",
+        "code": "P-105",
+        "status": "online",
         "location": "Compounding Area",
         "description": null,
         "serial_number": null,
@@ -1447,8 +1445,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/b7ab784a-ed70-47b6-beb6-e4296a703071_image-50e560cd-3ba6-4b74-b20e-e261957045b9.jpg"
     },
     {
-        "name": "W-5 Shrink Wrap machine (Q series)",
-        "status": "Online",
+        "name": "Shrink Wrap machine (Q series)",
+        "code": "W-5",
+        "status": "online",
         "location": "Warehouse",
         "description": null,
         "serial_number": null,
@@ -1465,8 +1464,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/b6c76543-9564-4a2a-bae0-7cd479408509_image-251c88b1-8695-4979-bca2-c6de3916151b.jpg"
     },
     {
-        "name": "W-54 Hyster 35 Stand up Forklift",
-        "status": "Online",
+        "name": "Hyster 35 Stand up Forklift",
+        "code": "W-54",
+        "status": "online",
         "location": "Warehouse",
         "description": null,
         "serial_number": "E470N01943N",
@@ -1483,8 +1483,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e6b479f4-94e7-4fd6-9736-353af1ea32ea_image-d90844b6-9f34-4449-988f-63cdcd5a867b.jpg"
     },
     {
-        "name": "W-14 Raymond Sit-down",
-        "status": "Online",
+        "name": "Raymond Sit-down",
+        "code": "W-14",
+        "status": "online",
         "location": "Warehouse",
         "description": null,
         "serial_number": "470-06-HM10336",
@@ -1501,8 +1502,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8b46ab5f-66ee-4ac6-86c7-319fc6932a12_image-b7463aa9-ee44-40ee-9889-7ecc782eaf7a.jpg"
     },
     {
-        "name": "W-7 Hyster Stand up Forklift",
-        "status": "Online",
+        "name": "Hyster Stand up Forklift",
+        "code": "W-7",
+        "status": "online",
         "location": "Warehouse",
         "description": null,
         "serial_number": "E138H02793U",
@@ -1519,8 +1521,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/83145abd-6af0-4a99-af34-00de5c028b4f_image-508284c1-dd76-4640-891b-5c4333fd79cd.jpg"
     },
     {
-        "name": "W-11 Stand up Prime mover RXT35",
-        "status": "Online",
+        "name": "Stand up Prime mover RXT35",
+        "code": "W-11",
+        "status": "online",
         "location": "Warehouse",
         "description": null,
         "serial_number": "RXT3535073001",
@@ -1537,8 +1540,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/bb6ad38a-59e2-4398-9553-5cf6c8609b10_image-90024c5f-ee86-4ce2-90e7-762e3aafd565.jpg"
     },
     {
-        "name": "W-34 Pallet jack (yellow)",
-        "status": "Online",
+        "name": "Pallet jack (yellow)",
+        "code": "W-34",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "1950",
@@ -1555,8 +1559,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e575d88f-bc7a-4e63-ba2c-f983bce9754d_image-28d18c26-d84e-4eb5-b4d1-ea1e6cd9954f.jpg"
     },
     {
-        "name": "P-104 Sure Kap Automatic Capper",
-        "status": "Online",
+        "name": "Sure Kap Automatic Capper",
+        "code": "P-104",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "GN1903",
@@ -1573,8 +1578,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/2e996833-6fec-4ade-ae85-64e3c1ce7a19_image-2737b113-a255-45e8-9678-8b327be4435f.jpg"
     },
     {
-        "name": "P-17 Matic Case Sealer",
-        "status": "Online",
+        "name": "Matic Case Sealer",
+        "code": "P-17",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "16828",
@@ -1591,8 +1597,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/493c9bf3-c6f5-45ec-ba7a-5e16fc9fa308_image-8a4d90a7-9405-4366-bdff-3f5ba844d4bd.jpg"
     },
     {
-        "name": "P-8 Enercon Cap sealer",
-        "status": "Online",
+        "name": "Enercon Cap sealer",
+        "code": "P-8",
+        "status": "online",
         "location": "Assembly Area",
         "description": null,
         "serial_number": "10560U1-30",
@@ -1609,8 +1616,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/b9ea9808-fd10-4578-8c07-c045af0f8dec_image-7bcabc96-9e65-426c-9549-08e824ed3d4f.jpg"
     },
     {
-        "name": "P-8B Enercon Cap Sealer",
-        "status": "Online",
+        "name": "Enercon Cap Sealer",
+        "code": "P-8B",
+        "status": "online",
         "location": "Assembly Area",
         "description": null,
         "serial_number": "10560-2",
@@ -1627,8 +1635,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/c849956d-4e0a-49b7-9bb0-02c5804c46e3_image-7aba11c7-6f40-4fc2-b09a-3a5319635bbe.jpg"
     },
     {
-        "name": "P-9A Mixmor laser Mixer",
-        "status": "Online",
+        "name": "Mixmor laser Mixer",
+        "code": "P-9A",
+        "status": "online",
         "location": "General",
         "description": null,
         "serial_number": "68833-1",
@@ -1644,63 +1653,11 @@
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/f35140a1-b46d-4d42-98e8-2e9418a0ca28_image-a12aec6e-7c9b-45ff-a176-aacecf20bc3a.jpg"
     },
+    
     {
-        "name": "P-10C Waukesha Fluid Pump #3",
-        "status": "Online",
-        "location": "Production",
-        "description": "Perform Complete Maintenence on gear box: Open up back panel, Check for wear & Tear on he gears and cams.",
-        "serial_number": null,
-        "model": null,
-        "manufacturer": null,
-        "year": null,
-        "department_in_charge": "Maintenance",
-        "vendors": null,
-        "created_by": "Thy",
-        "created_on": "7/16/2021 7:48",
-        "last_updated": "7/16/2021 8:00",
-        "image": "https://app.getmaintainx.com/api/s3/uploads/832e017f-fb34-440a-b073-6a3463a2e598_camera.jpg",
-        "criticality": null,
-        "attachments": "https://app.getmaintainx.com/api/s3/uploads/832e017f-fb34-440a-b073-6a3463a2e598_camera.jpg"
-    },
-    {
-        "name": "P-12 Super Cap Capper (Spindle Capper)",
-        "status": "Online",
-        "location": "Production",
-        "description": "Injet 1/10 Oz. Of Ep 500 Hi Temp wheel Bearing grease.",
-        "serial_number": null,
-        "model": null,
-        "manufacturer": null,
-        "year": null,
-        "department_in_charge": "Maintenance",
-        "vendors": null,
-        "created_by": "Thy",
-        "created_on": "7/16/2021 7:52",
-        "last_updated": "7/16/2021 7:57",
-        "image": "https://app.getmaintainx.com/api/s3/uploads/063d9a96-aaa8-4a00-b861-93eaaf6e0551_camera.jpg",
-        "criticality": null,
-        "attachments": "https://app.getmaintainx.com/api/s3/uploads/063d9a96-aaa8-4a00-b861-93eaaf6e0551_camera.jpg"
-    },
-    {
-        "name": "P-66 Label Aire Labeler (Line 1)",
-        "status": "Online",
-        "location": "Production",
-        "description": "Vacuum out interior of Machine housing, Wipe down, Perform 60 day Procedures.",
-        "serial_number": "343991210",
-        "model": null,
-        "manufacturer": "Label Aire Inc. ",
-        "year": null,
-        "department_in_charge": "Maintenance",
-        "vendors": "Pacific Labeling & Integration (PLI)",
-        "created_by": "Thy",
-        "created_on": "8/3/2021 12:19",
-        "last_updated": "8/3/2021 12:19",
-        "image": "https://app.getmaintainx.com/api/s3/uploads/38bd5bcf-63d7-42d8-b95c-bbede6c2a801_camera.jpg",
-        "criticality": null,
-        "attachments": "https://app.getmaintainx.com/api/s3/uploads/38bd5bcf-63d7-42d8-b95c-bbede6c2a801_camera.jpg"
-    },
-    {
-        "name": "P-120 Label Aire",
-        "status": "Online",
+        "name": "Label Aire",
+        "code": "P-120",
+        "status": "online",
         "location": "Production",
         "description": null,
         "serial_number": "407262103",
@@ -1717,8 +1674,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e481cbde-46f9-4c1c-9c89-4b8005a4ba53_camera.jpg"
     },
     {
-        "name": "F-1 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-1",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -1736,7 +1694,7 @@
     },
     {
         "name": "Office First Aid Kit",
-        "status": "Online",
+        "status": "online",
         "location": "Office",
         "description": "Office First Aid Kit",
         "serial_number": "1001",
@@ -1755,7 +1713,7 @@
     },
     {
         "name": "production first aid kit",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Production first aid kit",
         "serial_number": "1002",
@@ -1774,7 +1732,7 @@
     },
     {
         "name": "Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Warehouse",
         "description": "Packing station scale",
         "serial_number": "43060200004",
@@ -1793,7 +1751,7 @@
     },
     {
         "name": "Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Warehouse",
         "description": "Packing station scale",
         "serial_number": "43060200003",
@@ -1812,7 +1770,7 @@
     },
     {
         "name": "Floor Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Warehouse",
         "description": "Floor Pallet scale",
         "serial_number": "None",
@@ -1831,7 +1789,7 @@
     },
     {
         "name": "Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Assembly scale",
         "serial_number": "F912028347",
@@ -1846,11 +1804,11 @@
         "image": null,
         "criticality": null,
         "attachments": null,
-        "code": "SC-###"
+        "code": "SC-#001"
     },
     {
         "name": "Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Production",
         "description": "Lab/Office digital scale",
         "serial_number": "AE76405079",
@@ -1869,7 +1827,7 @@
     },
     {
         "name": "Floor Scale",
-        "status": "Online",
+        "status": "online",
         "location": "Compounding Area",
         "description": "Vendor ID: W16-016",
         "serial_number": "D02015w19P",
@@ -1884,11 +1842,12 @@
         "image": null,
         "criticality": null,
         "attachments": null,
-        "code": "SC-###"
+        "code": "SC-#002"
     },
     {
-        "name": "P-103 FPD-4-8 SERVO PD FILLER",
-        "status": "Online",
+        "name": "FPD-4-8 SERVO PD FILLER",
+        "code": "P-103",
+        "status": "online",
         "location": "Production",
         "description": "Automatic volumetric Filling machine. 4-8 SERVO.",
         "serial_number": "49733",
@@ -1905,8 +1864,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/cfad5c05-289a-4475-adb6-4da768c1b9b5_MANUAL-FPD4.pdf,https://app.getmaintainx.com/api/s3/uploads/bc896958-4d1e-4027-b356-9da67ba3b1c2_f.PNG"
     },
     {
-        "name": "F-2 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-2",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -1923,8 +1883,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-3 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-3",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -1941,8 +1902,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-5 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-5",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -1959,8 +1921,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-6 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-6",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -1977,8 +1940,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-7 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-7",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -1995,8 +1959,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-8 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-8",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -2013,8 +1978,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-9 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-9",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -2031,8 +1997,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-4 A/C Heat Units",
-        "status": "Online",
+        "name": "A/C Heat Units",
+        "code": "F-4",
+        "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
         "serial_number": null,
@@ -2049,8 +2016,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/29f23f25-bc10-4c69-94cc-5a05980d102c_06ecf4f1-578c-460a-aa78-947a7d6f8dec_AAON_RN_Series.jpg"
     },
     {
-        "name": "F-105 Air dryer Nano - CIASONS",
-        "status": "Online",
+        "name": "Air dryer Nano - CIASONS",
+        "code": "F-105",
+        "status": "online",
         "location": "General",
         "description": "Air dryer: This equipment will dry the air coming out of the compressor.",
         "serial_number": null,
@@ -2067,8 +2035,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/5e8a07f3-a745-4ed3-b946-caa46d7552a6_IMG-9191.jpg,https://app.getmaintainx.com/api/s3/uploads/9c9b80e1-e10b-490e-8976-2055372306d5_Airdryer-NanoCiasons.pdf"
     },
     {
-        "name": "P-106 Powder Mixer",
-        "status": "Online",
+        "name": "Powder Mixer",
+        "code": "P-106",
+        "status": "online",
         "location": "General",
         "description": "The Fristam Powder Mixer provides quick, high-performance blending of wet and dry ingredients into a fluid stream.",
         "serial_number": null,
@@ -2085,8 +2054,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ad8d82ba-a517-4d93-b5fe-eb340b17a076_Manual.pdf,https://app.getmaintainx.com/api/s3/uploads/23bbe78c-de85-4c91-8dff-34369ec92117_Capture.PNG"
     },
     {
-        "name": "F-14 AC Heat Units (Warehouse Office)",
-        "status": "Online",
+        "name": "AC Heat Units (Warehouse Office)",
+        "code": "F-14",
+        "status": "online",
         "location": "General",
         "description": null,
         "serial_number": "0317V16369",
@@ -2103,8 +2073,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/09e5e217-c0c6-4139-b805-d14e996229cf_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/ede3bb72-0907-4ff0-b37d-44e202036d79_camera.jpg"
     },
     {
-        "name": "F-15 AC Heat Units (Server Room)",
-        "status": "Online",
+        "name": "AC Heat Units (Server Room)",
+        "code": "F-15",
+        "status": "online",
         "location": "General",
         "description": null,
         "serial_number": null,
@@ -2121,8 +2092,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8ae1acde-7355-4d93-9d93-8d31ff457b30_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/1e8284d2-db6d-4f8a-a6dd-973e1aa672e6_camera.jpg"
     },
     {
-        "name": "P-121 Warehouse Garage Door",
-        "status": "Online",
+        "name": "Warehouse Garage Door",
+        "code": "P-121",
+        "status": "online",
         "location": "General",
         "description": "Inspect for loose bolts, check belt conditions, any unusual noises",
         "serial_number": null,
@@ -2139,8 +2111,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/5f2533cc-7316-425e-90d0-296d7637e347_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/12906659-4b9e-457d-ad25-d20af3e9371b_camera.jpg"
     },
     {
-        "name": "F- 16 Sprinkler Riser Inspection",
-        "status": "Online",
+        "name": "Sprinkler Riser Inspection",
+        "code": "F- 16",
+        "status": "online",
         "location": "Warehouse",
         "description": "Purchasing department must schedule inspection every year and five years.",
         "serial_number": null,
@@ -2157,8 +2130,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/3d937e0e-d982-4415-ba90-107c358c6754_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/7995ec06-e0c2-4baa-8a3f-34f573b291ca_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/917dcc34-8221-4bfb-9b7c-e0ad06c848df_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/d74d1dbf-9629-4a11-8c11-00efcd7841b7_camera.jpg"
     },
     {
-        "name": "O-1 Image Scanner",
-        "status": "Online",
+        "name": "Image Scanner",
+        "code": "O-1",
+        "status": "online",
         "location": "Office",
         "description": "Scanner\n\nTo ensure the proper functioning of a N7100E document scanner, it is recommended to perform the following maintenance tasks regularly:\n1.\tCleaning: Regularly clean the exterior and interior of the scanner, including the scanning glass, rollers, and feeder. Use a soft, lint-free cloth to prevent scratches on the glass surface.\n2.\tCalibration: Periodically calibrate the scanner to maintain accurate scans. Calibration helps align the optical sensors, ensuring that images are captured correctly and without distortion.\n3.\tSoftware updates: Check for software updates regularly to keep the scanner running smoothly and to take advantage of any performance enhancements or bug fixes.\n4.\tRoller replacement: The rollers in the feeder can wear out over time and may need to be replaced. Check the rollers periodically for signs of wear, such as cracks or flat spots, and replace them as needed.\n5.\tDust and debris removal: Dust and debris can accumulate inside the scanner, causing misfeeds and jams. Open the scanner periodically to remove any debris that has accumulated inside.\n6.\tPreventive maintenance: Regular preventive maintenance, such as oiling the rollers, can extend the lifespan of the scanner and prevent issues down the line. Consult the manufacturer's instructions for recommended preventive maintenance procedures.\nBy following these maintenance steps, you can ensure that your N7100E document scanner continues to perform reliably for many years to come.",
         "serial_number": null,
@@ -2176,7 +2150,8 @@
     },
     {
         "name": "Building 1671/ 1661  - Dock Doors",
-        "status": "Online",
+        "code": "B-001",
+        "status": "online",
         "location": "General",
         "description": "1. Lubricate Moving Parts - use \"Silicone Grease Lubrication\"\n\nHinges, Rollers, allowing it to travel up and down along the tracks, making sure doors move smoothly. Apply lubricant to Hinges and pivot points. \n\n2. Clear Debris From tracks \n\nCleaning tracks to reduce potential damage. Wipe down with soft clothes while doors are closed. \n\n3. Tighten any loose Bolts\n\nInspect brackets and Hinges, for wear and tear or loose components making sure everything is moving safely. \n\n4. Check All Pulleys and Cables for Wear and Tear  \"Replace worn out cables\"\n\n5. Look for Damaged parts \n\nCheck out Rollers,  Hardware,  Bolts, Hinges, and other metal parts for rust. Replace Damaged panels that affects opening and closing sections. Inspect weather seals on bottom section for damages, replace I'd needed.  \n\nReport or for any serious replacement parts or damages.",
         "serial_number": null,
@@ -2194,7 +2169,8 @@
     },
     {
         "name": "Building 1671/1661  -  Exterior Man Doors",
-        "status": "Online",
+        "code": "B-002",
+        "status": "online",
         "location": "General",
         "description": "1. Lubricate hinges with W-40, allowing the door to travel freely making sure it moves smoothly. \n\n2. Add Graphite lubricant to door latch and keyhole\n\n3. Tighten any loose Bolts - Inspect brackets and Hinges, for wear and tear or loose components making sure everything is moving safely. \n\n4. Check door close for ware and tear - inspect that the door close slowly and all the way. \n\n5. Look for Damaged parts \n\nCheck hardware, bolts, hinges, and other metal parts for rust. Inspect weather seals on bottom section for damages, replace if needed.  \n\nReport or for any serious replacement parts or damages.",
         "serial_number": null,
@@ -2212,7 +2188,8 @@
     },
     {
         "name": "Fire Extinguishers",
-        "status": "Online",
+        "code":"B-003",
+        "status": "online",
         "location": "Warehouse",
         "description": "We currently have 15 fire extinguishers available, their locations are indicated on the facility map provided. Please note that the last inspection was conducted on 2/22/2024, with three extinguishers (#12, #13, #14) having undergone a 5-year inspection. The remaining extinguishers will require a 12-year inspection in February 2028.\n=========================================================\nMonthly Checks:\n\n    Visual Inspection: Look for any signs of physical damage, corrosion, or blockage in the nozzle.\n    Pressure: Check that the pressure gauge is in the operable range or the indicator is in the green zone.\n    Seals & Tamper Indicators: Ensure the safety seals and tamper indicators are not broken or missing.\n    Accessibility: Verify the extinguisher is in its designated place, visible, and accessible.\n\nAnnual Maintenance (By a Professional):\n\n    Thorough Examination: Conduct a more detailed check for damage or corrosion.\n    Operational Testing: Test or inspect the extinguisher's mechanical parts and operating mechanisms to ensure proper function.\n    Discharge Test (if applicable): Some types of extinguishers may require a discharge test at certain intervals (e.g., every 5 to 12 years, depending on the extinguisher type) to ensure they properly expel the extinguishing agent.\n    Refilling: After any use or as needed following the manufacturer's instructions.\n    Record Keeping: Document the maintenance, including any services performed or parts replaced.\n\n5-Year Maintenance:\n\n    Internal Examination: For certain types of extinguishers, such as dry chemical extinguishers, an internal examination is required every 5 to 6 years.\n\n12-Year Hydrostatic Testing:\n\n    Hydrostatic Testing: Required for most types of extinguishers at 12-year intervals. This test involves pressurizing the extinguisher to a higher pressure than normal to ensure the integrity of the cylinder.\n\n===================================\nFire Extinguishers Training Video - https://gotsafety.vhx.tv/manufacturing-fire-extinguisher-safety/season:1/videos/fire-extinguishers-1",
         "serial_number": null,
@@ -2230,7 +2207,8 @@
     },
     {
         "name": "1671 / 1661 EXIT Lite Signs",
-        "status": "Online",
+        "code": "B-004",
+        "status": "online",
         "location": "General",
         "description": "Annual test of back up battery on all EXIT lite signs. Please see attached floor plan for the 1st and 2nd floor lite exit signs in both buildings.",
         "serial_number": null,
@@ -2247,8 +2225,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/f7e13d41-4adc-49cd-8a85-48aa18e76f81_EXITsigns-FloorPlan.docx,https://app.getmaintainx.com/api/s3/uploads/768715f8-a116-43f9-9b55-0a821f987f92_EXIT.png"
     },
     {
-        "name": "O-01 HP Format Printer",
-        "status": "Online",
+        "name": "HP Format Printer",
+        "code": "O-01",
+        "status": "online",
         "location": "Office printers",
         "description": null,
         "serial_number": null,
@@ -2265,8 +2244,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/f9a860a4-5752-442a-84f7-30b0a2461865_camera2.jpg,https://app.getmaintainx.com/api/s3/uploads/1d3a4676-dff8-4281-b958-ea5bd700e310_camera.jpg"
     },
     {
-        "name": "O-02 QL-120X",
-        "status": "Online",
+        "name": "QL-120X",
+        "code": "O-02",
+        "status": "online",
         "location": "Office printers",
         "description": "Quick label printer",
         "serial_number": null,
@@ -2283,8 +2263,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/99be1267-593f-48f4-b148-678501a6f59a_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/0127b1a2-98a4-4314-acea-6a0c575136b6_camera2.jpg,https://app.getmaintainx.com/api/s3/uploads/0d280a8d-de93-40b5-935d-2d8068adc94d_camera3.jpg"
     },
     {
-        "name": "O-03 Kiaro Lable Printer",
-        "status": "Online",
+        "name": "Kiaro Lable Printer",
+        "code": "O-03",
+        "status": "online",
         "location": "Office printers",
         "description": "KIARO",
         "serial_number": null,
@@ -2301,8 +2282,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ba9e2d3a-a785-49b6-8bf3-ba90017bfc8d_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/38454085-0233-4c38-9960-22aeab9f330b_camera2.jpg,https://app.getmaintainx.com/api/s3/uploads/63b3f04c-1e13-4607-85ab-7b577d03b2f6_camera3.jpg"
     },
     {
-        "name": "O-04 QLS 4100 Lable Printer",
-        "status": "Online",
+        "name": "QLS 4100 Lable Printer",
+        "code": "O-04",
+        "status": "online",
         "location": "Office printers",
         "description": "Over label printer",
         "serial_number": null,
@@ -2319,8 +2301,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/84295c51-b523-4b7b-a5e0-df1de0cc416d_camera2.jpg,https://app.getmaintainx.com/api/s3/uploads/892ad54d-932a-4d0e-811e-3dc4d8445749_camera.jpg"
     },
     {
-        "name": "O-05 Ender-3 3d Printer",
-        "status": "Online",
+        "name": "Ender-3 3d Printer",
+        "code": "O-05",
+        "status": "online",
         "location": "Office printers",
         "description": "Three d printer",
         "serial_number": null,
@@ -2337,8 +2320,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/02e097a0-585e-4857-8726-b84d2bcd634f_camera.jpg,https://app.getmaintainx.com/api/s3/uploads/738f2259-d85e-4cb6-aff6-7bd738fa3dd3_camera2.jpg"
     },
     {
-        "name": "O-06 Zebra ZT410",
-        "status": "Online",
+        "name": "Zebra ZT410",
+        "code": "O-06",
+        "status": "online",
         "location": "Office printers",
         "description": "Film printer",
         "serial_number": null,
@@ -2355,8 +2339,9 @@
         "attachments": null
     },
     {
-        "name": "O-07 Zebra ZT410",
-        "status": "Online",
+        "name": "Zebra ZT410",
+        "code": "O-07",
+        "status": "online",
         "location": "Office printers",
         "description": "Is amazon printer",
         "serial_number": null,
@@ -2373,8 +2358,9 @@
         "attachments": null
     },
     {
-        "name": "O-08 Epson SC-P7000",
-        "status": "Online",
+        "name": "Epson SC-P7000",
+        "code": "O-08",
+        "status": "online",
         "location": "General",
         "description": null,
         "serial_number": null,
@@ -2391,8 +2377,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/68afe26f-29e8-4aeb-9987-559b3faff850_camera2.jpg,https://app.getmaintainx.com/api/s3/uploads/182fb7aa-c69e-4d72-97d8-30b3f5b281a4_camera.jpg"
     },
     {
-        "name": "M-1 MaintainX",
-        "status": "Online",
+        "name": "MaintainX",
+        "code": "M-1",
+        "status": "online",
         "location": "Office",
         "description": "Perform monthly backup",
         "serial_number": null,
@@ -2410,7 +2397,8 @@
     },
     {
         "name": "Roof/Roofing Maintenence",
-        "status": "Online",
+        "code": "B-005",
+        "status": "online",
         "location": "Roof",
         "description": "Anual Roofing Maintenance \n\nClean out sumps \nRemove trash and debris \nFlush roof Drain Lines \nPatch visible cracks ( TAR, fiberglass mesh, mastic)",
         "serial_number": null,
@@ -2427,8 +2415,9 @@
         "attachments": null
     },
     {
-        "name": "P-110 Dwyer Mark 2 Manometer",
-        "status": "Online",
+        "name": "Dwyer Mark 2 Manometer",
+        "code": "P-110",
+        "status": "online",
         "location": "Production",
         "description": "Measures pressure between Gray Room and Warehouse",
         "serial_number": null,
@@ -2445,8 +2434,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/2af97dbc-91db-478c-bc4f-99115c11aa76_camera.jpg"
     },
     {
-        "name": "P-107 Dwyer Mark 2 Manometer",
-        "status": "Online",
+        "name": "Dwyer Mark 2 Manometer",
+        "code": "P-107",
+        "status": "online",
         "location": "Compounding Area",
         "description": "Determines pressures between Compounding and Gray Room",
         "serial_number": null,
@@ -2463,8 +2453,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/625593fe-1d4d-4247-a724-e421b2db46b8_camera.jpg"
     },
     {
-        "name": "P-108 Dwyer Mark 2 Manometer",
-        "status": "Online",
+        "name": "Dwyer Mark 2 Manometer",
+        "code": "P-108",
+        "status": "online",
         "location": "General",
         "description": "Determines pressures in Production and Gray room",
         "serial_number": null,
@@ -2481,8 +2472,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/45f1e148-9dc5-4ebd-bce5-f9f8db1e628c_camera.jpg"
     },
     {
-        "name": "P-109 Dwyer Mark 2 ManoMeter",
-        "status": "Online",
+        "name": "Dwyer Mark 2 ManoMeter",
+        "code": "P-109",
+        "status": "online",
         "location": "General",
         "description": "Determines pressure in Gray room",
         "serial_number": null,
@@ -2499,8 +2491,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/216c0088-7f12-4971-a386-f691bb0abb5b_camera.jpg"
     },
     {
-        "name": "P-122 Air Flow Capture Hood",
-        "status": "Online",
+        "name": "Air Flow Capture Hood",
+        "code": "P-122",
+        "status": "online",
         "location": "Production",
         "description": "A devise used to measure the volume of air passing through ventilation systems, such as HVAC registers and diffuses. It features a fabric hood that capture the air flow, funneling it through to a connected measuring instrument. Devised to be use with P-123 -Digital Anemometer.",
         "serial_number": null,
@@ -2517,8 +2510,9 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/b006cfda-1c5f-4883-a7e4-3a45e270a3c9_IMG_1131.jpg"
     },
     {
-        "name": "P-123 Digital Anemometer",
-        "status": "Online",
+        "name": "Digital Anemometer",
+        "code": "P-123",
+        "status": "online",
         "location": "Production",
         "description": "A device that measures wind speed and direction.",
         "serial_number": "2.023E+11",
