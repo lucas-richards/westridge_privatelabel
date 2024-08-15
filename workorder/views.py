@@ -32,25 +32,25 @@ def dashboard(request):
     }
 
     # calculate the percentages
-    work_orders_records_status['overdue_percentage'] = round((work_orders_records_status['overdue'] / work_orders_records_status['total_exclude_done_cancelled']) * 100)
-    work_orders_records_status['on_time_percentage'] = round((work_orders_records_status['on_time'] / work_orders_records_status['total_exclude_done_cancelled']) * 100)
-    work_orders_records_status['done_percentage'] = round((work_orders_records_status['done'] / work_orders_records_status['total']) * 100)
-    work_orders_records_status['in_progress_percentage'] = round((work_orders_records_status['in_progress'] / work_orders_records_status['total']) * 100)
-    work_orders_records_status['on_hold_percentage'] = round((work_orders_records_status['on_hold'] / work_orders_records_status['total']) * 100)
-    work_orders_records_status['scheduled_percentage'] = round((work_orders_records_status['scheduled'] / work_orders_records_status['total']) * 100)
-    work_orders_records_status['cancelled_percentage'] = round((work_orders_records_status['cancelled'] / work_orders_records_status['total']) * 100)
+    work_orders_records_status['overdue_percentage'] = round((work_orders_records_status['overdue'] / work_orders_records_status['total_exclude_done_cancelled']) * 100) if work_orders_records_status['total_exclude_done_cancelled'] != 0 else 0
+    work_orders_records_status['on_time_percentage'] = round((work_orders_records_status['on_time'] / work_orders_records_status['total_exclude_done_cancelled']) * 100) if work_orders_records_status['total_exclude_done_cancelled'] != 0 else 0
+    work_orders_records_status['done_percentage'] = round((work_orders_records_status['done'] / work_orders_records_status['total']) * 100) if work_orders_records_status['total'] != 0 else 0
+    work_orders_records_status['in_progress_percentage'] = round((work_orders_records_status['in_progress'] / work_orders_records_status['total']) * 100) if work_orders_records_status['total'] != 0 else 0
+    work_orders_records_status['on_hold_percentage'] = round((work_orders_records_status['on_hold'] / work_orders_records_status['total']) * 100) if work_orders_records_status['total'] != 0 else 0
+    work_orders_records_status['scheduled_percentage'] = round((work_orders_records_status['scheduled'] / work_orders_records_status['total']) * 100) if work_orders_records_status['total'] != 0 else 0
+    work_orders_records_status['cancelled_percentage'] = round((work_orders_records_status['cancelled'] / work_orders_records_status['total']) * 100) if work_orders_records_status['total'] != 0 else 0
     print(work_orders_records_status)
 
     # get the KPI values
     status_kpi = KPIValue.objects.filter(kpi__name='Status Done').order_by('date')
     status_kpi_values = [value.value for value in status_kpi]
-    status_kpi_dates = [value.date.strftime('%Y-%m-%d') for value in status_kpi]
+    status_kpi_dates = [value.date.strftime('%m-%d-%Y') for value in status_kpi]
     timing_kpi = KPIValue.objects.filter(kpi__name='Timing On Time').order_by('date')
     timing_kpi_values = [value.value for value in timing_kpi]
-    timing_kpi_dates = [value.date.strftime('%Y-%m-%d') for value in timing_kpi]
+    timing_kpi_dates = [value.date.strftime('%m-%d-%Y') for value in timing_kpi]
     productivity_kpi = KPIValue.objects.filter(kpi__name='Productivity').order_by('date')
     productivity_kpi_values = [value.value for value in productivity_kpi]
-    productivity_kpi_dates = [value.date.strftime('%Y-%m-%d') for value in productivity_kpi]
+    productivity_kpi_dates = [value.date.strftime('%m-%d-%Y') for value in productivity_kpi]
 
 
     context = {
@@ -87,8 +87,8 @@ def asset(request, id):
                 'department_in_charge': asset.department_in_charge.name if asset.department_in_charge else '',
                 'vendors': asset.vendors.name if asset.vendors else '',
                 'created_by': asset.created_by.username if asset.created_by else '',
-                'created_on': asset.created_on.strftime('%Y-%m-%d %H:%M:%S'),
-                'last_updated': asset.last_updated.strftime('%Y-%m-%d %H:%M:%S'),
+                'created_on': asset.created_on.strftime('%m-%d-%Y %H:%M:%S'),
+                'last_updated': asset.last_updated.strftime('%m-%d-%Y %H:%M:%S'),
                 'criticality': asset.criticality,
                 'attachments': asset.attachments.url if asset.attachments else '',
             }
@@ -264,15 +264,15 @@ def workorder(request, id):
                 'assigned_to': workorder.assigned_to.username if workorder.assigned_to else '',
                 'department_assigned_to': workorder.department_assigned_to.name if workorder.department_assigned_to else '',
                 'created_by': workorder.created_by.username if workorder.created_by else '',
-                'created_on': workorder.created_on.strftime('%Y-%m-%d %H:%M:%S'),
+                'created_on': workorder.created_on.strftime('%m-%d-%Y %H:%M:%S'),
                 # time until the due date in days
-                'last_updated': workorder.last_updated.strftime('%Y-%m-%d %H:%M:%S'),
+                'last_updated': workorder.last_updated.strftime('%m-%d-%Y %H:%M:%S'),
                 'recurrence': workorder.get_recurrence_display(),
                 'asset': workorder.asset.name if workorder.asset else '',
                 'image_url': workorder.image.url if workorder.image else '',
                 'attachments': workorder.attachments.url if workorder.attachments else '',
                 'time_until_due': (last_record.due_date - last_record.created_on).days if last_record.due_date else '',
-                'records': [{'id': record.id, 'created_on': record.created_on.strftime('%Y-%m-%d'), 'status': record.status, 'due_date': record.due_date.strftime('%Y-%m-%d'), 'completed_on': record.completed_on.strftime('%Y-%m-%d') if record.completed_on else '', 'completed_by': record.completed_by.username if record.completed_by else '', 'time_to_complete': record.time_to_complete.total_seconds() if record.time_to_complete else '', 'attachments': record.attachments.url if record.attachments else '', 'comments': record.comments} for record in records],
+                'records': [{'id': record.id, 'created_on': record.created_on.strftime('%m-%d-%Y'), 'status': record.status, 'due_date': record.due_date.strftime('%m-%d-%Y'), 'completed_on': record.completed_on.strftime('%m-%d-%Y') if record.completed_on else '', 'completed_by': record.completed_by.username if record.completed_by else '', 'time_to_complete': record.time_to_complete.total_seconds() if record.time_to_complete else '', 'attachments': record.attachments.url if record.attachments else '', 'comments': record.comments} for record in records],
                 'last_record_status': last_record.status if last_record else '',
             }
             return JsonResponse(data)
@@ -346,9 +346,11 @@ def workorder_record(request, id):
         
         data = {
                 'id': record.id,
+                'workorder_title': record.workorder.title if record.workorder else '',
+                'workorder_asset': record.workorder.asset.code if record.workorder.asset else '',
                 'status': record.status,
-                'due_date': record.due_date.strftime('%Y-%m-%d') if record.due_date else '',
-                'completed_on': record.completed_on.strftime('%Y-%m-%d') if record.completed_on else '',
+                'due_date': record.due_date.strftime('%m-%d-%Y') if record.due_date else '',
+                'completed_on': record.completed_on.strftime('%m-%d-%Y') if record.completed_on else '',
                 'attachments': record.attachments.url if record.attachments else '',
                 'comments': record.comments if record.comments else '',
                 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
@@ -364,7 +366,7 @@ def workorder_record(request, id):
             if completed_on:
                 # Convert string to a timezone-aware datetime
                 record.completed_on = timezone.make_aware(
-                    timezone.datetime.strptime(completed_on, '%Y-%m-%d')
+                    timezone.datetime.strptime(completed_on, '%m-%d-%Y')
                 )
             record.attachments = request.GET.get('attachments')
             record.comments = request.GET.get('comments')

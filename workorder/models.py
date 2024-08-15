@@ -142,7 +142,7 @@ class WorkOrder(models.Model):
     def save(self, *args, **kwargs):
         super(WorkOrder, self).save(*args, **kwargs)
         if not self.workorderrecord_set.exists():
-            WorkOrderRecord.objects.create(workorder=self, due_date=self.due_date, assigned_to=self.assigned_to)
+            WorkOrderRecord.objects.create(workorder=self, due_date=self.first_due_date, assigned_to=self.assigned_to)
 
     
 

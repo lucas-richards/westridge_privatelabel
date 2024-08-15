@@ -16,7 +16,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/b6c1dcb7-bf62-4010-a45e-aaa2a53cc8a6_P-92.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/b6c1dcb7-bf62-4010-a45e-aaa2a53cc8a6_P-92.JPG,https://app.getmaintainx.com/api/s3/uploads/d172c8f0-83f0-48ad-a44b-640fafc1bc13_P-92.pdf,https://app.getmaintainx.com/api/s3/uploads/d59917b4-f9a1-40b8-a815-3fb28e6fae2b_IMG_0211.jpg",
-        "code": "P-92"
+        "code": "P-092"
     },
     {
         "name": "Video Jet Printer and controller",
@@ -35,7 +35,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/13f1b648-05e7-4604-8511-fccc18b82699_P-71.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/13f1b648-05e7-4604-8511-fccc18b82699_P-71.JPG",
-        "code": "P-71"
+        "code": "P-071"
     },
     {
         "name": "Heat Tunnel",
@@ -54,7 +54,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/a200f225-622f-4225-ae8f-793c1df5daef_image-8687a470-8b39-4dd5-bd43-a95b842140b5.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/a200f225-622f-4225-ae8f-793c1df5daef_image-8687a470-8b39-4dd5-bd43-a95b842140b5.jpg",
-        "code": "P-1A"
+        "code": "P-001A"
     },
     {
         "name": "Universal P-Bar Sealer",
@@ -73,7 +73,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/aebbe8ab-972a-4702-8184-c90bec01509d_image-24aa90aa-4e0b-4ab8-a086-361434f8fe87.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/aebbe8ab-972a-4702-8184-c90bec01509d_image-24aa90aa-4e0b-4ab8-a086-361434f8fe87.jpg",
-        "code": "P-1B"
+        "code": "P-001B"
     },
     {
         "name": "Oval Bottle Labeler",
@@ -92,7 +92,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/a25462f3-e7d1-4ec9-926e-9bd61104c88a_image-b579c206-be92-44c8-8b98-87f742ed6156.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/a25462f3-e7d1-4ec9-926e-9bd61104c88a_image-b579c206-be92-44c8-8b98-87f742ed6156.jpg",
-        "code": "P-2"
+        "code": "P-002"
     },
     {
         "name": "Quick Pouch Mini",
@@ -111,7 +111,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/8a1594d1-bd35-4c17-bc0e-2235f3048bd9_P-79.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8a1594d1-bd35-4c17-bc0e-2235f3048bd9_P-79.JPG",
-        "code": "P-79"
+        "code": "P-079"
     },
     {
         "name": "Quick Pouch Mini",
@@ -130,7 +130,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/68dc91f7-fc65-456a-bf7c-e1354c227a45_P-80.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/68dc91f7-fc65-456a-bf7c-e1354c227a45_P-80.JPG",
-        "code": "P-80"
+        "code": "P-080"
     },
     {
         "name": "Quick Pouch Mini",
@@ -149,7 +149,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/7ae4617a-88ea-4c42-a57a-2dde4809c65d_P-81.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/7ae4617a-88ea-4c42-a57a-2dde4809c65d_P-81.JPG",
-        "code": "P-81"
+        "code": "P-081"
     },
     {
         "name": "Quick Pouch Mini",
@@ -168,7 +168,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/a885412f-9e45-4715-b252-9741e0f46de1_P-82.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/a885412f-9e45-4715-b252-9741e0f46de1_P-82.JPG",
-        "code": "P-82"
+        "code": "P-082"
     },
     {
         "name": "Accutek Turntable",
@@ -187,7 +187,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/c1d57f9c-d3ed-4cea-bb7a-b220a7e20027_P-68.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/c1d57f9c-d3ed-4cea-bb7a-b220a7e20027_P-68.JPG",
-        "code": "P-68"
+        "code": "P-068"
     },
     {
         "name": "Dorner Veriable Speed VFD Controller",
@@ -206,7 +206,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/e3a9ffce-82fc-4125-9fa1-7711df1ec35b_P-69.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e3a9ffce-82fc-4125-9fa1-7711df1ec35b_P-69.JPG",
-        "code": "P-69"
+        "code": "P-069"
     },
     {
         "name": "Parker Boiler",
@@ -225,7 +225,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/ee556f53-db00-4c67-bae9-aa63c6046960_P-78.JPG",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ee556f53-db00-4c67-bae9-aa63c6046960_P-78.JPG,https://app.getmaintainx.com/api/s3/uploads/4f9186dd-400c-4d6a-90c3-90eda4051bb1_Boilerparkermanual.pdf",
-        "code": "P-78"
+        "code": "P-078"
     },
     {
         "name": "Scale",
@@ -263,7 +263,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/6ed5541c-df0f-4b8a-945f-ff3d7036db58_P-93.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/6ed5541c-df0f-4b8a-945f-ff3d7036db58_P-93.jpg",
-        "code": "P-93"
+        "code": "P-093"
     },
     {
         "name": "Floor Scale",
@@ -305,7 +305,7 @@
     },
     {
         "name": "Sullair compressor 1500 E",
-        "code": "P-88",
+        "code": "P-088",
         "status": "online",
         "location": "Warehouse",
         "description": "Vendor name is Maqpower and Sullair.",
@@ -324,7 +324,7 @@
     },
     {
         "name": "Beko Dry Point RA",
-        "code": "P-84",
+        "code": "P-084",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -342,8 +342,8 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/e49deac4-34d9-4801-86d4-6b28902e6c6a_P-84.JPG"
     },
     {
-        "name": "P-73 PureTec RO/DI Water System",
-        "code": "P-73",
+        "name": "PureTec RO/DI Water System",
+        "code": "P-073",
         "status": "online",
         "location": "Compounding Area",
         "description": "Maintenance\n========================================================\n(a1) 14\" MIXED Bed - change when QC light turns red or below 1M(ohm) on M3300 control panel.\n(a2) 14\" MIXED Bed - same as (a1), CHECK all gauges on flow (compounding) RO/DI sheet check for unusual reading\n(b1) SODIUM Tank, water test weekly; replace tank once a month or less than 3ppm so it doesn\u2019t damage membrane.\n(b2) Carbon Tank - replace once every 6 months.\n(c1) UV light must be changed after 8000 hours or when light turns RED.\n(d1) R.O. Filter replace monthly.\n(e1) Water flow pressure gauge , needs to be a 50/50 ratio (currently 1:8 each)\n(f1) membranes recommended year to be replaced, (if not water flow/pressure isn't balanced and will drop in flow)\n(g1) Reserve Tank \u2013 Needs to be sanitized once a year and inspected for leaks/cracks once a month.\n(h1) Water pump \u2013 Needs to be serviced once a year and inspected for leaks/cracks once a month.\n(i1) micron filters , replace yearly (2 micron, 1 micron.)\n(Control Panel) Wipe down and remove dust once a month. Notes: Drop under 1 ohm, need to replace (a1) and (a2), After sanitizing, the control panel needs to be re calibrated (need to for older PureTec models will need a 14\u201d mixed to sanitize system.\n========================================================\nAs Required\n*Change mixed bed tank (end of batch when conductivity light goes out)\n*Check for leaks.\n\nMonthly\n*Check the UV lamp counter. Record the lamp time in the maintenance log. Replace the\nUV lamp every 8000 hours or 24 months, whichever comes first.\n\nTwo Months\nLab test water purity per this procedure.\n\nYearly\n1. Sanitize the system using \u201cMinncare\u201d or an equivalent cold sterilizer.*\n2. Clean or replace the quartz sleeve in the UV filter.*\n3. Replace all water filter elements (3).\n========================================================",
@@ -400,7 +400,7 @@
     },
     {
         "name": "Universal Round Bottle Labeler",
-        "code": "P-5",
+        "code": "P-005",
         "status": "online",
         "location": "Production",
         "description": "Bottle labeler",
@@ -419,7 +419,7 @@
     },
     {
         "name": "Simplex Filler line 2",
-        "code": "P-6A",
+        "code": "P-006A",
         "status": "online",
         "location": "Production",
         "description": "Bottle Filler",
@@ -438,7 +438,7 @@
     },
     {
         "name": "Simplex Filler line 3",
-        "code": "P-6B",
+        "code": "P-006B",
         "status": "online",
         "location": "Production",
         "description": "Bottle filler",
@@ -457,7 +457,7 @@
     },
     {
         "name": "Simplex Filler line 1",
-        "code": "P-6C",
+        "code": "P-006C",
         "status": "online",
         "location": "Production",
         "description": "Bottle filler",
@@ -476,7 +476,7 @@
     },
     {
         "name": "Band sealer #1",
-        "code": "P-94",
+        "code": "P-094",
         "status": "online",
         "location": "Assembly Area",
         "description": null,
@@ -495,7 +495,7 @@
     },
     {
         "name": "Band sealer #2",
-        "code": "P-95",
+        "code": "P-095",
         "status": "online",
         "location": "Assembly Area",
         "description": null,
@@ -514,7 +514,7 @@
     },
     {
         "name": "Induction Sealer - Enercon",
-        "code": "P-96",
+        "code": "P-096",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -533,7 +533,7 @@
     },
     {
         "name": "Conveyor Line 3",
-        "code": "P-97",
+        "code": "P-097",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -552,7 +552,7 @@
     },
     {
         "name": "Bottomless Conveyor",
-        "code": "P-98",
+        "code": "P-098",
         "status": "online",
         "location": "General",
         "description": null,
@@ -609,7 +609,7 @@
     },
     {
         "name": "Waukesha pump #5",
-        "code": "P-10E",
+        "code": "P-010E",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -628,7 +628,7 @@
     },
     {
         "name": "Induction sealer Enercon",
-        "code": "P-7",
+        "code": "P-007",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -647,7 +647,7 @@
     },
     {
         "name": "Waukesha pump #3",
-        "code": "P-10C",
+        "code": "P-010C",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -666,7 +666,7 @@
     },
     {
         "name": "Induction sealer Enercon",
-        "code": "P-7B",
+        "code": "P-007B",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -685,7 +685,7 @@
     },
     {
         "name": "Waukesha pump #2",
-        "code": "P-10B",
+        "code": "P-0010B",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -704,7 +704,7 @@
     },
     {
         "name": "Waukesha pump #4",
-        "code": "P-10D",
+        "code": "P-010D",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -723,7 +723,7 @@
     },
     {
         "name": "Waukesha pump #6",
-        "code": "P-10F",
+        "code": "P-010F",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -742,7 +742,7 @@
     },
     {
         "name": "SureKap",
-        "code": "P-12",
+        "code": "P-012",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -761,7 +761,7 @@
     },
     {
         "name": "Axon Heat Tunnel",
-        "code": "P-14",
+        "code": "P-014",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -780,7 +780,7 @@
     },
     {
         "name": "Air Compressor Speedaire",
-        "code": "P-19",
+        "code": "P-019",
         "status": "online",
         "location": "Warehouse",
         "description": null,
@@ -799,7 +799,7 @@
     },
     {
         "name": "Squid ink",
-        "code": "P-76",
+        "code": "P-076",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -818,7 +818,7 @@
     },
     {
         "name": "Squid ink",
-        "code": "P-87",
+        "code": "P-087",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -837,7 +837,7 @@
     },
     {
         "name": "Squid ink",
-        "code": "P-23",
+        "code": "P-023",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -856,7 +856,7 @@
     },
     {
         "name": "Excalibur hydro left",
-        "code": "P-24",
+        "code": "P-024",
         "status": "online",
         "location": "Compounding Area",
         "description": null,
@@ -875,7 +875,7 @@
     },
     {
         "name": "Team Mechanix hydro left",
-        "code": "P-25",
+        "code": "P-025",
         "status": "online",
         "location": "Compounding Area",
         "description": null,
@@ -894,7 +894,7 @@
     },
     {
         "name": "Aim/Joraco Press",
-        "code": "P-27",
+        "code": "P-027",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -913,7 +913,7 @@
     },
     {
         "name": "Bottomless Conveyor line 1",
-        "code": "P-48",
+        "code": "P-048",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -932,7 +932,7 @@
     },
     {
         "name": "Labelaire Labeler Line 2",
-        "code": "P-29",
+        "code": "P-029",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -951,7 +951,7 @@
     },
     {
         "name": "Mini mover conveyor",
-        "code": "P-77",
+        "code": "P-077",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -970,7 +970,7 @@
     },
     {
         "name": "Conveyor Doner 2200 Series",
-        "code": "P-35",
+        "code": "P-035",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -989,7 +989,7 @@
     },
     {
         "name": "Conveyor Doner 2200 Series",
-        "code": "P-34",
+        "code": "P-034",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1008,7 +1008,7 @@
     },
     {
         "name": "Turn table",
-        "code": "P-39",
+        "code": "P-039",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1027,7 +1027,7 @@
     },
     {
         "name": "Turn table line 2",
-        "code": "P-40",
+        "code": "P-040",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1046,7 +1046,7 @@
     },
     {
         "name": "PDC Steam Tunnel",
-        "code": "P-43A",
+        "code": "P-043A",
         "status": "online",
         "location": "Mezzanine One",
         "description": null,
@@ -1065,7 +1065,7 @@
     },
     {
         "name": "Steam Tunnel conveyor",
-        "code": "P-43B",
+        "code": "P-043B",
         "status": "online",
         "location": "Mezzanine One",
         "description": null,
@@ -1084,7 +1084,7 @@
     },
     {
         "name": "Accutec Big Conveyor",
-        "code": "P-51",
+        "code": "P-051",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1103,7 +1103,7 @@
     },
     {
         "name": "Accutec small conveyor",
-        "code": "P-52",
+        "code": "P-052",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1137,7 +1137,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/8e1e5ddf-33f2-4262-9e08-954ee6cd18b7_image-2aebff51-5242-4a7f-8100-2bb0b31ddfef.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8e1e5ddf-33f2-4262-9e08-954ee6cd18b7_image-2aebff51-5242-4a7f-8100-2bb0b31ddfef.jpg",
-        "code": "P-56"
+        "code": "P-056"
     },
     {
         "name": "Tank 2",
@@ -1156,7 +1156,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/c80a80e3-6c93-410d-8777-45baf53b3489_image-4966cb0a-d616-4bf4-873d-8868a0e7a775.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/c80a80e3-6c93-410d-8777-45baf53b3489_image-4966cb0a-d616-4bf4-873d-8868a0e7a775.jpg",
-        "code": "P-57"
+        "code": "P-057"
     },
     {
         "name": "Tank 3",
@@ -1175,7 +1175,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/8d44fbab-ad05-4de2-99cd-4076e8c0c8ba_image-514c87db-360e-4c51-b3d8-04e9d2721638.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/8d44fbab-ad05-4de2-99cd-4076e8c0c8ba_image-514c87db-360e-4c51-b3d8-04e9d2721638.jpg",
-        "code": "P-58"
+        "code": "P-058"
     },
     {
         "name": "Tank 4",
@@ -1194,7 +1194,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/f41868e2-bc13-4b47-846a-b0c99b8392aa_image-e2895d18-a633-4c4b-b858-d6cc2ee7d0d3.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/f41868e2-bc13-4b47-846a-b0c99b8392aa_image-e2895d18-a633-4c4b-b858-d6cc2ee7d0d3.jpg",
-        "code": "P-59"
+        "code": "P-059"
     },
     {
         "name": "Tank 5",
@@ -1213,7 +1213,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/4e3c74e2-e32e-4f36-a2b7-6e621727cc9d_image-cae9de77-dfca-423a-be14-46646e7b4659.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/4e3c74e2-e32e-4f36-a2b7-6e621727cc9d_image-cae9de77-dfca-423a-be14-46646e7b4659.jpg",
-        "code": "P-60"
+        "code": "P-060"
     },
     {
         "name": "Tank 6",
@@ -1232,11 +1232,11 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/ce40d5b1-f00b-4e21-9d50-8a6005615c0e_image-056b54b3-8108-47b9-ab66-cb5e0ee43b11.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ce40d5b1-f00b-4e21-9d50-8a6005615c0e_image-056b54b3-8108-47b9-ab66-cb5e0ee43b11.jpg",
-        "code": "P-61"
+        "code": "P-061"
     },
     {
         "name": "Bottomless Conveyor- Accutek",
-        "code":"P-65",
+        "code":"P-065",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1254,8 +1254,8 @@
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/038dbf7b-747a-4a5b-91ac-aa38c81f8cce_image-c5a036af-069c-4181-9e3e-91c398804a83.jpg"
     },
     {
-        "name": "P-66 LabeLaire",
-        "code": "P-66",
+        "name": "LabeLaire",
+        "code": "P-066",
         "status": "online",
         "location": "Production",
         "description": "Vacuum out interior of Machine housing, Wipe down, Perform 60 day Procedures.",
@@ -1274,7 +1274,7 @@
     },
     {
         "name": "Video Jet",
-        "code": "P-67",
+        "code": "P-067",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1294,7 +1294,7 @@
     
     {
         "name": "Little David",
-        "code": "P-72",
+        "code": "P-072",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1313,7 +1313,7 @@
     },
     {
         "name": "Little David",
-        "code": "P-74",
+        "code": "P-074",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1347,11 +1347,11 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/ba5eb050-078a-4c2f-b540-a6fbfd0a9112_image-08a5b493-07e1-47dc-8050-386614f19176.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/ba5eb050-078a-4c2f-b540-a6fbfd0a9112_image-08a5b493-07e1-47dc-8050-386614f19176.jpg",
-        "code": "P-83 "
+        "code": "P-083 "
     },
     {
         "name": "Big Joe Fork Lift (Electric)",
-        "code": "P-85",
+        "code": "P-085",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1370,7 +1370,7 @@
     },
     {
         "name": "B cast 350 Gal Jacketed Tank",
-        "code": "P-86",
+        "code": "P-086",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1389,7 +1389,7 @@
     },
     {
         "name": "B cast 350 Gal Jacketed Tank",
-        "code": "P-90",
+        "code": "P-090",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1408,7 +1408,7 @@
     },
     {
         "name": "B Cast 600 Gal Tank",
-        "code": "P-91",
+        "code": "P-091",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1446,7 +1446,7 @@
     },
     {
         "name": "Shrink Wrap machine (Q series)",
-        "code": "W-5",
+        "code": "W-005",
         "status": "online",
         "location": "Warehouse",
         "description": null,
@@ -1465,7 +1465,7 @@
     },
     {
         "name": "Hyster 35 Stand up Forklift",
-        "code": "W-54",
+        "code": "W-054",
         "status": "online",
         "location": "Warehouse",
         "description": null,
@@ -1484,7 +1484,7 @@
     },
     {
         "name": "Raymond Sit-down",
-        "code": "W-14",
+        "code": "W-014",
         "status": "online",
         "location": "Warehouse",
         "description": null,
@@ -1503,7 +1503,7 @@
     },
     {
         "name": "Hyster Stand up Forklift",
-        "code": "W-7",
+        "code": "W-007",
         "status": "online",
         "location": "Warehouse",
         "description": null,
@@ -1522,7 +1522,7 @@
     },
     {
         "name": "Stand up Prime mover RXT35",
-        "code": "W-11",
+        "code": "W-011",
         "status": "online",
         "location": "Warehouse",
         "description": null,
@@ -1541,7 +1541,7 @@
     },
     {
         "name": "Pallet jack (yellow)",
-        "code": "W-34",
+        "code": "W-034",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1579,7 +1579,7 @@
     },
     {
         "name": "Matic Case Sealer",
-        "code": "P-17",
+        "code": "P-017",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -1598,7 +1598,7 @@
     },
     {
         "name": "Enercon Cap sealer",
-        "code": "P-8",
+        "code": "P-008",
         "status": "online",
         "location": "Assembly Area",
         "description": null,
@@ -1617,7 +1617,7 @@
     },
     {
         "name": "Enercon Cap Sealer",
-        "code": "P-8B",
+        "code": "P-008B",
         "status": "online",
         "location": "Assembly Area",
         "description": null,
@@ -1636,7 +1636,7 @@
     },
     {
         "name": "Mixmor laser Mixer",
-        "code": "P-9A",
+        "code": "P-009A",
         "status": "online",
         "location": "General",
         "description": null,
@@ -1675,7 +1675,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-1",
+        "code": "F-001",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1709,7 +1709,7 @@
         "image": "https://app.getmaintainx.com/api/s3/uploads/28d12b11-9c62-495d-a293-d5f54e3b4abb_OfficeFirstAidKit.jpg",
         "criticality": null,
         "attachments": "https://app.getmaintainx.com/api/s3/uploads/28d12b11-9c62-495d-a293-d5f54e3b4abb_OfficeFirstAidKit.jpg",
-        "code": "F-10"
+        "code": "F-010"
     },
     {
         "name": "production first aid kit",
@@ -1728,7 +1728,7 @@
         "image": null,
         "criticality": null,
         "attachments": null,
-        "code": "F-11"
+        "code": "F-011"
     },
     {
         "name": "Scale",
@@ -1865,7 +1865,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-2",
+        "code": "F-002",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1884,7 +1884,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-3",
+        "code": "F-003",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1903,7 +1903,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-5",
+        "code": "F-005",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1922,7 +1922,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-6",
+        "code": "F-006",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1941,7 +1941,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-7",
+        "code": "F-007",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1960,7 +1960,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-8",
+        "code": "F-008",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1979,7 +1979,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-9",
+        "code": "F-009",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -1998,7 +1998,7 @@
     },
     {
         "name": "A/C Heat Units",
-        "code": "F-4",
+        "code": "F-004",
         "status": "online",
         "location": "Roof",
         "description": "1. Clean AC unit surface\n2. Position number stencils \n3. Apply black paint for first layer onto AC unit (wait 15 minutes till dry)\n4. Once dry apply clear coat over first layer ( wait 15 minutes till dry)\n5. Follow up In 6 months if needed for validation",
@@ -2055,7 +2055,7 @@
     },
     {
         "name": "AC Heat Units (Warehouse Office)",
-        "code": "F-14",
+        "code": "F-014",
         "status": "online",
         "location": "General",
         "description": null,
@@ -2074,7 +2074,7 @@
     },
     {
         "name": "AC Heat Units (Server Room)",
-        "code": "F-15",
+        "code": "F-015",
         "status": "online",
         "location": "General",
         "description": null,
@@ -2112,7 +2112,7 @@
     },
     {
         "name": "Sprinkler Riser Inspection",
-        "code": "F- 16",
+        "code": "F-016",
         "status": "online",
         "location": "Warehouse",
         "description": "Purchasing department must schedule inspection every year and five years.",
@@ -2131,7 +2131,7 @@
     },
     {
         "name": "Image Scanner",
-        "code": "O-1",
+        "code": "O-001",
         "status": "online",
         "location": "Office",
         "description": "Scanner\n\nTo ensure the proper functioning of a N7100E document scanner, it is recommended to perform the following maintenance tasks regularly:\n1.\tCleaning: Regularly clean the exterior and interior of the scanner, including the scanning glass, rollers, and feeder. Use a soft, lint-free cloth to prevent scratches on the glass surface.\n2.\tCalibration: Periodically calibrate the scanner to maintain accurate scans. Calibration helps align the optical sensors, ensuring that images are captured correctly and without distortion.\n3.\tSoftware updates: Check for software updates regularly to keep the scanner running smoothly and to take advantage of any performance enhancements or bug fixes.\n4.\tRoller replacement: The rollers in the feeder can wear out over time and may need to be replaced. Check the rollers periodically for signs of wear, such as cracks or flat spots, and replace them as needed.\n5.\tDust and debris removal: Dust and debris can accumulate inside the scanner, causing misfeeds and jams. Open the scanner periodically to remove any debris that has accumulated inside.\n6.\tPreventive maintenance: Regular preventive maintenance, such as oiling the rollers, can extend the lifespan of the scanner and prevent issues down the line. Consult the manufacturer's instructions for recommended preventive maintenance procedures.\nBy following these maintenance steps, you can ensure that your N7100E document scanner continues to perform reliably for many years to come.",
@@ -2226,7 +2226,7 @@
     },
     {
         "name": "HP Format Printer",
-        "code": "O-01",
+        "code": "O-001",
         "status": "online",
         "location": "Office printers",
         "description": null,
@@ -2245,7 +2245,7 @@
     },
     {
         "name": "QL-120X",
-        "code": "O-02",
+        "code": "O-002",
         "status": "online",
         "location": "Office printers",
         "description": "Quick label printer",
@@ -2264,7 +2264,7 @@
     },
     {
         "name": "Kiaro Lable Printer",
-        "code": "O-03",
+        "code": "O-003",
         "status": "online",
         "location": "Office printers",
         "description": "KIARO",
@@ -2283,7 +2283,7 @@
     },
     {
         "name": "QLS 4100 Lable Printer",
-        "code": "O-04",
+        "code": "O-004",
         "status": "online",
         "location": "Office printers",
         "description": "Over label printer",
@@ -2302,7 +2302,7 @@
     },
     {
         "name": "Ender-3 3d Printer",
-        "code": "O-05",
+        "code": "O-005",
         "status": "online",
         "location": "Office printers",
         "description": "Three d printer",
@@ -2321,7 +2321,7 @@
     },
     {
         "name": "Zebra ZT410",
-        "code": "O-06",
+        "code": "O-006",
         "status": "online",
         "location": "Office printers",
         "description": "Film printer",
@@ -2340,7 +2340,7 @@
     },
     {
         "name": "Zebra ZT410",
-        "code": "O-07",
+        "code": "O-007",
         "status": "online",
         "location": "Office printers",
         "description": "Is amazon printer",
@@ -2359,7 +2359,7 @@
     },
     {
         "name": "Epson SC-P7000",
-        "code": "O-08",
+        "code": "O-008",
         "status": "online",
         "location": "General",
         "description": null,
@@ -2378,7 +2378,7 @@
     },
     {
         "name": "MaintainX",
-        "code": "M-1",
+        "code": "M-001",
         "status": "online",
         "location": "Office",
         "description": "Perform monthly backup",

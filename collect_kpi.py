@@ -123,7 +123,9 @@ class Command(BaseCommand):
                 if work_order_records:
                     last_record = work_order_records.latest('due_date')
                     if last_record.due_date < timezone.now() or last_record.status == 'done':
-                        if work_order.recurrence == 'weekly':
+                        if work_order.recurrence == 'daily':
+                            due_date = last_record.due_date + dt.timedelta(days=1)
+                        elif work_order.recurrence == 'weekly':
                             due_date = last_record.due_date + dt.timedelta(weeks=1)
                         elif work_order.recurrence == 'monthly':
                             due_date = last_record.due_date + dt.timedelta(days=30)
@@ -133,7 +135,7 @@ class Command(BaseCommand):
                             due_date = last_record.due_date + dt.timedelta(days=365)
                         # Add more conditions for other recurrence options if needed
                         else:
-                            due_date = last_record.due_date
+                            continue
 
                         try:
                             WorkOrderRecord.objects.create(workorder=work_order, due_date=due_date, assigned_to=work_order.assigned_to)

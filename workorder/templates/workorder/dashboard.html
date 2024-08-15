@@ -206,7 +206,7 @@
 </script>
 
 
-<!-- Fully trained chart -->
+<!-- Work order status chart -->
 <script>
     
     // Creating the second pie chart
@@ -218,7 +218,7 @@
     var values = Object.values(data);
   
     new Chart(ctx2, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: ['Done', 'In Progress', 'On Hold', 'Scheduled', 'Cancelled'],
             datasets: [{
@@ -266,13 +266,13 @@
             id: 'overrideLegendPosition2',
             beforeInit: function(chart, args, options) {
                 if (chart.config.type === 'pie') {
-                    chart.options.plugins.legend.position = 'left';
+                    chart.options.plugins.legend.position = 'top';
                 }
             }
         });
     
 </script>
-<!-- train chart -->
+<!-- Open work orders chart -->
 <script>
   const ctx3 = document.getElementById('myChart3');
 
@@ -282,7 +282,7 @@
     var values = Object.values(data);
   
     new Chart(ctx3, {
-        type: 'pie',
+        type: 'doughnut',
         data: {
             labels: ['On Time', 'Overdue'],
             datasets: [{
@@ -330,61 +330,13 @@
             id: 'overrideLegendPosition3',
             beforeInit: function(chart, args, options) {
                 if (chart.config.type === 'pie') {
-                    chart.options.plugins.legend.position = 'right';
+                    chart.options.plugins.legend.position = 'top';
                 }
             }
         });
     
 </script>
-<!-- retrain chart -->
-<script>
-  const ctx4 = document.getElementById('myChart4');
 
-  new Chart(ctx4, {
-      type: 'bar',
-      data: {
-          labels: ['Performed', 'Not Performed', 'Overdue'],
-          datasets: [{
-              label: 'Records Status',
-              data: [{{retraining.performed}}, {{retraining.not_performed}}, {{retraining.overdue}}],
-              borderWidth: 1,
-              backgroundColor: ['rgba(54, 162, 235, 0.8)', 'rgba(54, 162, 235, 0.1)', 'rgba(54, 162, 235, 0.3)']
-          }]
-      },
-      
-      options: {
-        indexAxis: 'y',
-        scales: {
-            x: {
-                min: 0,
-                max: 100,
-                ticks: {
-                    stepSize: 20,
-                    callback: function(value) {
-                        return value + '%';
-                    }
-                }
-            }
-        },
-        responsive: true,
-        plugins: {
-            
-            legend: {
-                position: 'top'
-            },
-            datalabels: {
-                display: true,
-                color: 'black',
-                // add percentage sign to the va
-                formatter: function(value, context) {
-                    return value + '%';
-                }
-            }
-                
-        }
-    }
-  });
-</script>
 
 
 {% endblock content %}

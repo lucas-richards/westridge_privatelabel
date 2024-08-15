@@ -175,37 +175,45 @@
             .then(response => response.json())
             .then(data => {
                 workorderDetailsDiv.innerHTML = `
-                    <div class="workorder-details">
-                        <h4>Due: ${ data.due_date }</h4>
-                        <form method='PUT' action="/maintenance/workorder_record/${ data.id }/">
-                            <div class="form-group">
-                                <label for="status">Status:</label>
-                                <select class="form-control" id="status" name="status">
-                                    <option value="done" ${ data.status === 'done' ? 'selected': ''}>Done</option>
-                                    <option value="on_hold" ${ data.status === 'on_hold' ? 'selected': ''}>On Hold</option>
-                                    <option value="in_progress" ${ data.status === 'in_progress' ? 'selected': ''}>In Progress</option>
-                                    <option value="scheduled" ${ data.status === 'scheduled' ? 'selected': ''}>Scheduled</option>
-                                    <option value="cancelled" ${ data.status === 'cancelled' ? 'selected': ''}>Cancelled</option>
-                                </select>
+                        <div class="">
+                            <div class="card-header border rounded" style="height:50px">
+                                <div class=" d-flex justify-content-between align-items-center">
+                                    <p><strong>${data.workorder_asset}</strong></p>
+                                    <p>Due: ${ data.due_date }</p>
+                                    <p><strong>#${data.id}</strong></p>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="completed_on">Completed On:</label>
-                                <input type="date" class="form-control" id="completed_on" name="completed_on" value="${ data.completed_on }">
-                            </div>
-                            <div class="form-group">
-                                <label for="attachment">Attachment:</label>
-                                <input type="file" class="form-control-file" id="attachment" name="attachment">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="comments">Comments:</label>
-                                <textarea class="form-control" id="comments" name="comments" rows="3">${ data.comments }</textarea>
-                            </div>
-                            
-                            <button type="submit" class="btn btn-primary">Update Status</button>
-                        </form>
+                            <div class="card-body">
+                                <form method='PUT' action="/maintenance/workorder_record/${ data.id }/">
+                                    <div class="form-group">
+                                        <label for="status">Status:</label>
+                                        <select class="form-control" id="status" name="status">
+                                            <option value="done" ${ data.status === 'done' ? 'selected': ''}>Done</option>
+                                            <option value="on_hold" ${ data.status === 'on_hold' ? 'selected': ''}>On Hold</option>
+                                            <option value="in_progress" ${ data.status === 'in_progress' ? 'selected': ''}>In Progress</option>
+                                            <option value="scheduled" ${ data.status === 'scheduled' ? 'selected': ''}>Scheduled</option>
+                                            <option value="cancelled" ${ data.status === 'cancelled' ? 'selected': ''}>Cancelled</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="completed_on">Completed On:</label>
+                                        <input type="date" class="form-control" id="completed_on" name="completed_on" value="${ data.completed_on }">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="attachment">Attachment:</label>
+                                        <input type="file" class="form-control-file" id="attachment" name="attachment">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="comments">Comments:</label>
+                                        <textarea class="form-control" id="comments" name="comments" rows="3">${ data.comments }</textarea>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">Update Status</button>
+                                </form>
                     
-                    </div>
+                            </div>
+                        </div>
 
                     
                 `;

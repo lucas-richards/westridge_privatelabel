@@ -318,12 +318,12 @@ def dashboard(request):
     training_not_performed_values = [value.value for value in training_not_performed]
     retraining_not_performed_values = [value.value for value in retraining_not_performed]
     retraining_overdue_values = [value.value for value in retraining_overdue]
-    fully_trained_dates = [value.date.strftime('%Y-%m-%d') for value in fully_trained] 
-    training_not_performed_dates = [value.date.strftime('%Y-%m-%d') for value in training_not_performed]
-    training_performed_dates = [value.date.strftime('%Y-%m-%d') for value in training_performed]
+    fully_trained_dates = [value.date.strftime('%m-%d-%Y') for value in fully_trained] 
+    training_not_performed_dates = [value.date.strftime('%m-%d-%Y') for value in training_not_performed]
+    training_performed_dates = [value.date.strftime('%m-%d-%Y') for value in training_performed]
     
-    retraining_not_performed_dates = [value.date.strftime('%Y-%m-%d') for value in retraining_not_performed]
-    retraining_overdue_dates = [value.date.strftime('%Y-%m-%d') for value in retraining_overdue]
+    retraining_not_performed_dates = [value.date.strftime('%m-%d-%Y') for value in retraining_not_performed]
+    retraining_overdue_dates = [value.date.strftime('%m-%d-%Y') for value in retraining_overdue]
     # how many training events have been completed this year, last year, etc
     profiles = Profile.objects.all()
     active_profiles = profiles.filter(active=True)
@@ -948,7 +948,7 @@ def upload_file2(request):
             # Get the date from the POST data
             date = request.POST['date']
             # transform date in MM-DD-YY format
-            date = dt.datetime.strptime(date, '%Y-%m-%d').strftime('%m-%d-%y')
+            date = dt.datetime.strptime(date, '%m-%d-%Y').strftime('%m-%d-%y')
             
             # Create a folder with the date under media/training_files/
             folder = 'training_files'

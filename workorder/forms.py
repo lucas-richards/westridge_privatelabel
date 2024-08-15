@@ -20,9 +20,11 @@ class AssetEditForm(forms.ModelForm):
 class WorkOrderEditForm(forms.ModelForm):
     class Meta:
         model = WorkOrder
-        fields = ['recurrence','title','assigned_to', 'department_assigned_to','image','description','asset', 'priority', 'attachments', ]
+        fields = ['recurrence','first_due_date','title','assigned_to', 'department_assigned_to','image','description','asset', 'priority', 'attachments', ]
         widgets = {
             'priority': forms.Select(choices=CRITICALITY_CHOICES),
+            'first_due_date': forms.DateInput(attrs={'type': 'date'}),
+            'assigned_to': forms.Select(choices=User.objects.values_list('username', 'username').order_by('username')),
         }
 # form to create a work order record
 class WorkOrderRecordForm(forms.ModelForm):
