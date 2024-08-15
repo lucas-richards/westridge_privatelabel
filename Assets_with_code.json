@@ -685,7 +685,7 @@
     },
     {
         "name": "Waukesha pump #2",
-        "code": "P-0010B",
+        "code": "P-010B",
         "status": "online",
         "location": "Production",
         "description": null,
@@ -2131,7 +2131,7 @@
     },
     {
         "name": "Image Scanner",
-        "code": "O-001",
+        "code": "O-009",
         "status": "online",
         "location": "Office",
         "description": "Scanner\n\nTo ensure the proper functioning of a N7100E document scanner, it is recommended to perform the following maintenance tasks regularly:\n1.\tCleaning: Regularly clean the exterior and interior of the scanner, including the scanning glass, rollers, and feeder. Use a soft, lint-free cloth to prevent scratches on the glass surface.\n2.\tCalibration: Periodically calibrate the scanner to maintain accurate scans. Calibration helps align the optical sensors, ensuring that images are captured correctly and without distortion.\n3.\tSoftware updates: Check for software updates regularly to keep the scanner running smoothly and to take advantage of any performance enhancements or bug fixes.\n4.\tRoller replacement: The rollers in the feeder can wear out over time and may need to be replaced. Check the rollers periodically for signs of wear, such as cracks or flat spots, and replace them as needed.\n5.\tDust and debris removal: Dust and debris can accumulate inside the scanner, causing misfeeds and jams. Open the scanner periodically to remove any debris that has accumulated inside.\n6.\tPreventive maintenance: Regular preventive maintenance, such as oiling the rollers, can extend the lifespan of the scanner and prevent issues down the line. Consult the manufacturer's instructions for recommended preventive maintenance procedures.\nBy following these maintenance steps, you can ensure that your N7100E document scanner continues to perform reliably for many years to come.",

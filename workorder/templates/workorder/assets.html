@@ -160,17 +160,17 @@
                                 <div class="col-md-8">
                                     <h5><strong>${data.code}</strong>  ${data.name}</h5>
                                     <strong>Description:</strong>
-                                    <p  style="height: 100px; overflow-y: scroll;"> ${data.description}</p>
-                                    <p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>
-                                    <p><strong>Serial Number:</strong> ${data.serial_number}</p>
-                                    <p><strong>Model:</strong> ${data.model}</p>
-                                    <p><strong>Manufacturer:</strong> ${data.manufacturer}</p>
-                                    <p><strong>Year:</strong> ${data.year}</p>
-                                    <p><strong>Location:</strong> ${data.location}</p>
-                                    <p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>
-                                    <p><strong>Vendors:</strong> ${data.vendors}</p>
-                                    <p><strong>Criticality:</strong> ${data.criticality}</p>
-                                    <p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>
+                                    <p  style="height: 100px; overflow-y: scroll;">${data.description}</p>
+                                    ${data.status ? `<p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>` : ''}
+                                    ${data.serial_number ? `<p><strong>Serial Number:</strong> ${data.serial_number}</p>` : ''}
+                                    ${data.model ? `<p><strong>Model:</strong> ${data.model}</p>` : ''}
+                                    ${data.manufacturer ? `<p><strong>Manufacturer:</strong> ${data.manufacturer}</p>` : ''}
+                                    ${data.year ? `<p><strong>Year:</strong> ${data.year}</p>` : ''}
+                                    ${data.location ? `<p><strong>Location:</strong> ${data.location}</p>` : ''}
+                                    ${data.department_in_charge ? `<p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>` : ''}
+                                    ${data.vendors ? `<p><strong>Vendors:</strong> ${data.vendors}</p>` : ''}
+                                    ${data.criticality ? `<p><strong>Criticality:</strong> ${data.criticality}</p>` : ''}
+                                    ${data.attachments ? `<p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>` : ''}
                                     
                                 </div>
                                 <div class="col-md-3">

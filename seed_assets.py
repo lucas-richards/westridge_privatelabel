@@ -52,11 +52,13 @@ def load_assets(data):
                 attachment_files = os.listdir(attachments_path)
                 if attachment_files:  # Check if any files exist in the directory
                     first_attachment_file = attachment_files[0]  # Take the first file found
+                    attachmentUrl = os.path.join('downloads', 'attachments', item['code'], first_attachment_file)
+                    print(attachmentUrl)
                     with open(os.path.join(attachments_path, first_attachment_file), 'rb') as f:
                         attachments = f.read()
             
             # Create the Asset object
-            Asset.objects.create(
+            asset, created = Asset.objects.get_or_create(
                 code=item.get('code', ''),
                 name=item['name'],
                 status=item['status'],
@@ -71,12 +73,22 @@ def load_assets(data):
                 created_by=created_by,
                 created_on=parse_datetime(item['created_on']),
                 last_updated=parse_datetime(item['last_updated']),
-                image=imageUrl,
-                # attachments=attachments,
+                image=imageUrl if 'imageUrl' in locals() else '',
+                attachments=attachmentUrl if 'attachments' in locals() else '',
             )
-            print(f"Asset {item['name']} created successfully")
+            
+            if created:
+                print(f"Asset {item['name']} created successfully")
+            else:
+                # update attachment
+                if attachmentUrl:
+                    asset.attachments = attachmentUrl
+                    asset.save()
+
+                print(f"Asset {item['name']} updated successfully")
+            
         except Exception as e:
-            print(f"Asset with code {item['name']} encountered a problem")
+            print(f"Asset with code {item['code']} encountered a problem")
             print(f"Error while creating asset: {e}")
 
 if __name__ == "__main__":
