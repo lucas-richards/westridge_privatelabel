@@ -366,7 +366,7 @@ def workorder_record(request, id):
             if completed_on:
                 # Convert string to a timezone-aware datetime
                 record.completed_on = timezone.make_aware(
-                    timezone.datetime.strptime(completed_on, '%m-%d-%Y')
+                    timezone.datetime.strptime(completed_on, '%Y-%m-%d')
                 )
             record.attachments = request.GET.get('attachments')
             record.comments = request.GET.get('comments')
