@@ -49,16 +49,6 @@ class KPIValue(models.Model):
     def __str__(self):
         return f"{self.kpi.name} - {self.date}: {self.value}"
 
-class Location(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-    description = models.CharField(max_length=255, null=True, blank=True)
-    image = models.ImageField(upload_to='loc_images/', null=True, blank=True)
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
-    controlled_env = models.BooleanField(default=False)
-    created_on = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
 
 # vendor model
 class Vendor(models.Model):
@@ -85,7 +75,23 @@ class Asset(models.Model):
         default='online',
     )
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    location = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True)
+    location = models.CharField(
+        max_length=20,
+        choices=[
+            ('warehouse', 'Warehouse'),
+            ('office', 'Office'),
+            ('quality', 'Quality'),
+            ('compounding', 'Compounding'),
+            ('bulding', 'Building'),
+            ('production Line #1', 'Production Line #1'),
+            ('production Line #2', 'Production Line #2'),
+            ('production Line #3', 'Production Line #3'),
+            ('assembly', 'Assembly'),
+            # Add more choices here
+        ],
+        null=True,
+        blank=True
+    )
     description = models.TextField(null=True, blank=True)
     serial_number = models.CharField(max_length=255, null=True, blank=True)
     model = models.CharField(max_length=255, null=True, blank=True)

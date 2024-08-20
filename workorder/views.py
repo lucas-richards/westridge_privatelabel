@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Asset, Vendor, WorkOrder, Location, WorkOrderRecord, KPI, KPIValue
+from .models import Asset, Vendor, WorkOrder, WorkOrderRecord, KPI, KPIValue
 from users.models import Department
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -82,7 +82,7 @@ def asset(request, id):
                 'model': asset.model,
                 'manufacturer': asset.manufacturer,
                 'year': asset.year,
-                'location': asset.location.name if asset.location else '',
+                'location': asset.location if asset.location else '',
                 'parent': asset.parent.name if asset.parent else '',
                 'department_in_charge': asset.department_in_charge.name if asset.department_in_charge else '',
                 'vendors': asset.vendors.name if asset.vendors else '',
@@ -95,7 +95,7 @@ def asset(request, id):
             return JsonResponse(data)
     except Asset.DoesNotExist:
         return JsonResponse({'error': 'Asset not found'}, status=404)
-    except (Location.DoesNotExist, Asset.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
+    except ( Asset.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
         return JsonResponse({'error': 'Related entity not found'}, status=404)
 
 def assets(request):
@@ -278,7 +278,7 @@ def workorder(request, id):
             return JsonResponse(data)
     except WorkOrder.DoesNotExist:
         return JsonResponse({'error': 'workorder not found'}, status=404)
-    except (Location.DoesNotExist, WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
+    except ( WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
         return JsonResponse({'error': 'Related entity not found'}, status=404)
 
 @login_required
@@ -380,7 +380,7 @@ def workorder_record(request, id):
 
     except WorkOrder.DoesNotExist:
         return JsonResponse({'error': 'workorder not found'}, status=404)
-    except (Location.DoesNotExist, WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
+    except ( WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
         return JsonResponse({'error': 'Related entity not found'}, status=404)
 
 def add_workorder_record(request):

@@ -1,5 +1,5 @@
 from django import forms
-from workorder.models import Asset, Location, Vendor, WorkOrder, WorkOrderRecord, STATUS, STATUS2, CRITICALITY_CHOICES
+from workorder.models import Asset, Vendor, WorkOrder, WorkOrderRecord, STATUS, STATUS2, CRITICALITY_CHOICES
 from users.models import Department, User
 
 
@@ -10,7 +10,7 @@ class AssetEditForm(forms.ModelForm):
         fields = ['code', 'name', 'description', 'status', 'image','location', 'serial_number', 'model', 'manufacturer', 'year', 'parent', 'department_in_charge', 'vendors', 'criticality', 'attachments']
         widgets = {
             'status': forms.Select(choices=STATUS2),
-            'location': forms.Select(choices=Location.objects.values_list('name', 'name')),
+            'location': forms.Select(choices=Asset.objects.values_list('location', 'location')),
             'parent': forms.Select(choices=Asset.objects.values_list('name', 'name')),
             'department_in_charge': forms.Select(choices=Department.objects.values_list('name', 'name')),
             'vendors': forms.Select(choices=Vendor.objects.values_list('name', 'name')),
