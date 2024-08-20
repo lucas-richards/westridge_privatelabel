@@ -3,6 +3,8 @@ import os
 import django
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
+from datetime import datetime
+
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_projects.settings')
@@ -21,7 +23,7 @@ django.setup()
 
 # Assume the JSON data is stored in a variable called `data`
 
-with open('./work_orders_filtered_open_and_cleaned_up_final.json') as f:
+with open('./work_orders_mmddyyyy.json') as f:
     data = json.load(f)
 
 def load_workorders(data):
@@ -54,17 +56,22 @@ def load_workorders(data):
                     with open(os.path.join(attachments_path, first_attachment_file), 'rb') as f:
                         attachments = f.read()
             
+            created_on= timezone.make_aware(datetime.strptime(item['Created on'], "%m-%d-%Y")) if item['Created on'] else None
+            first_due_date=  timezone.make_aware(datetime.strptime(item['Due date'], "%m-%d-%Y")) if item['Due date'] else None
+
+            print(f"created_on: {created_on}")
+            print(f"first_due_date: {first_due_date}")
             # Create the workorder object
             workorder, created = WorkOrder.objects.get_or_create(
                 title=item['Title'],
                 description=item.get('Description', ''),
-                priority=item.get('Priority', 'medium').lower(),
-                assigned_to=assigned_to,
-                department_assigned_to=department_in_charge,
-                created_by=created_by,
-                # created_on=parse_datetime(item['created_on'], timezone.now()),
-                # first_due_date=parse_datetime(item['Due Date']),
-                recurrence=item.get('recurrence', 'once').lower(),
+                priority=item.get('Priority') if item.get('Priority') else 'medium',
+                assigned_to=assigned_to if assigned_to else None,
+                department_assigned_to=department_in_charge if department_in_charge else None,
+                created_by=created_by if created_by else None,
+                created_on= created_on,
+                first_due_date=first_due_date,
+                recurrence=item.get('recurrence') if item.get('recurrence') else 'once',
                 asset=asset if asset else None,
                 # image=image,
                 # attachments=attachments,
