@@ -10,7 +10,7 @@ from datetime import datetime
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_projects.settings')
 django.setup()
 
-from workorder.models import WorkOrder, Location, Vendor, Asset
+from workorder.models import WorkOrder, Vendor, Asset
 from users.models import Department
 from django.contrib.auth.models import User
 

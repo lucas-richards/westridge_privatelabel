@@ -80,13 +80,14 @@ class Asset(models.Model):
         choices=[
             ('warehouse', 'Warehouse'),
             ('office', 'Office'),
-            ('quality', 'Quality'),
+            ('quality lab', 'Quality Lab'),
             ('compounding', 'Compounding'),
             ('bulding', 'Building'),
             ('production Line #1', 'Production Line #1'),
             ('production Line #2', 'Production Line #2'),
             ('production Line #3', 'Production Line #3'),
             ('assembly', 'Assembly'),
+            ('roof', 'Roof'),
             # Add more choices here
         ],
         null=True,
