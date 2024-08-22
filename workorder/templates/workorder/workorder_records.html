@@ -82,19 +82,19 @@
                         <p style="min-width: 50px;" class="mr-2 font-weight-bold ">#{{ data.id }} </p>
                         <p style="min-width: 300px;" class="mr-2 truncate ">{{ data.workorder.asset.code }} - {{ data.workorder.title }}</p>
                         <!-- green dot if status is online -->
-                        {% if data.status == 'done' %}
+                        {% if data.status == 'Done' %}
                         <span style="min-width: 70px;" class="badge badge-success">{{ data.status }}</span>
                             
-                        {% elif data.status == 'on_hold' %}
+                        {% elif data.status == 'On Hold' %}
                         <span style="min-width: 70px;" class="badge badge-warning">{{ data.status }}</span>
                             
-                        {% elif data.status == 'in_progress' %}
+                        {% elif data.status == 'In Progress' %}
                         <span style="min-width: 70px;" class="badge badge-primary">{{ data.status }}</span>
                             
-                        {% elif data.status == 'scheduled' %}
+                        {% elif data.status == 'Scheduled' %}
                         <span style="min-width: 70px;" class="badge badge-info">{{ data.status }}</span>
                             
-                        {% elif data.status == 'cancelled' %}
+                        {% elif data.status == 'Cancelled' %}
                         <span style="min-width: 70px;" class="badge badge-secondary">{{ data.status }}</span>
 
                         {% endif %}
@@ -184,7 +184,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form method='PUT' action="/maintenance/workorder_record/${ data.id }/">
+                                <form method='PUT' action="/maintenance/workorder_record/${ data.id }/json/">
                                     <div class="form-group">
                                         <label for="status">Status:</label>
                                         <select class="form-control" id="status" name="status">
@@ -201,7 +201,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="attachment">Attachment:</label>
-                                        <input type="file" class="form-control-file" id="attachment" name="attachment">
+                                        <input type="file" class="form-control-file" id="attachments" name="attachments">
+                                        <a href="${ data.attachments }" target="_blank">${ data.attachments }</a>
                                     </div>
                                     
                                     <div class="form-group">

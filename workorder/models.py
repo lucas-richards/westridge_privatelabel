@@ -166,8 +166,8 @@ class WorkOrderRecord(models.Model):
     completed_on = models.DateTimeField(null=True, blank=True)
     completed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     time_to_complete = models.DurationField(null=True, blank=True)
-    attachments = models.FileField(upload_to=workorder_attachment_path, null=True, blank=True)
+    attachments = models.FileField(upload_to=f'records', null=True, blank=True)
     comments = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.workorder.asset} - {self.workorder.title} - {self.due_date}"
+        return f"#{self.id} - {self.workorder.asset} - {self.workorder.title} - {self.due_date}"

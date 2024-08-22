@@ -41,9 +41,8 @@ class WorkOrderRecordForm(forms.ModelForm):
 class WorkOrderRecordEditForm(forms.ModelForm):
     class Meta:
         model = WorkOrderRecord
-        fields = ['status', 'completed_on', 'completed_by', 'comments']
+        fields = ['status', 'completed_on', 'attachments','comments']
         widgets = {
             'status': forms.Select(choices=STATUS),
             'completed_on': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-            'completed_by': forms.Select(choices=User.objects.values_list('username', 'username')),
         }

@@ -338,9 +338,12 @@ def delete_workorder(request, id):
 
 def workorder_records(request):
     records = WorkOrderRecord.objects.all().order_by('due_date')
+    # rearrange the records list so records with status cancelled or done are at the end
+    records = sorted(records, key=lambda x: x.status in ['cancelled', 'done'])
     # add this to each record 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
     for record in records:
         record.time_until_due = (record.due_date - timezone.now() ).days if record.due_date else ''
+        record.status = record.get_status_display()
 
     context = {
         'title': 'Work Order Records',
@@ -362,19 +365,22 @@ def workorder_record(request, id):
                 'workorder_asset': record.workorder.asset.code if record.workorder.asset else '',
                 'status': record.status,
                 'due_date': record.due_date.strftime('%m-%d-%Y') if record.due_date else '',
-                'completed_on': record.completed_on.strftime('%m-%d-%Y') if record.completed_on else '',
+                'completed_on': record.completed_on.strftime('%Y-%m-%d') if record.completed_on else '',
                 'attachments': record.attachments.url if record.attachments else '',
                 'comments': record.comments if record.comments else '',
                 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
         }        
         status = request.GET.get('status')
+        print(data)
 
         if status:
+            print(request)
             # get user
             user = User.objects.get(username=request.user)
             record.completed_by = user
             record.status = status
             completed_on = request.GET.get('completed_on')
+            print(completed_on)
             if completed_on:
                 # Convert string to a timezone-aware datetime
                 record.completed_on = timezone.make_aware(
