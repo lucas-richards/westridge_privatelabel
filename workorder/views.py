@@ -256,7 +256,6 @@ def workorders(request):
 def workorder(request, id):
     try:
         workorder = WorkOrder.objects.get(id=id)
-        # workorder records
         records = WorkOrderRecord.objects.filter(workorder=workorder).order_by('-due_date')
         last_record = records.first()
 
@@ -271,7 +270,6 @@ def workorder(request, id):
                 'department_assigned_to': workorder.department_assigned_to.name if workorder.department_assigned_to else '',
                 'created_by': workorder.created_by.username if workorder.created_by else '',
                 'created_on': workorder.created_on.strftime('%m-%d-%Y %H:%M:%S'),
-                # time until the due date in days
                 'last_updated': workorder.last_updated.strftime('%m-%d-%Y %H:%M:%S'),
                 'recurrence': workorder.get_recurrence_display(),
                 'asset': workorder.asset.name if workorder.asset else '',
@@ -284,8 +282,16 @@ def workorder(request, id):
             return JsonResponse(data)
     except WorkOrder.DoesNotExist:
         return JsonResponse({'error': 'workorder not found'}, status=404)
-    except ( WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
+    except (WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
         return JsonResponse({'error': 'Related entity not found'}, status=404)
+
+def workorder_page(request, id):
+    # This is the view that renders the full page
+    try:
+        workorder = WorkOrder.objects.get(id=id)
+        return redirect('workorder-workorders')
+    except WorkOrder.DoesNotExist:
+        return render(request, '404.html', status=404)
 
 @login_required
 def add_workorder(request):
@@ -388,6 +394,14 @@ def workorder_record(request, id):
         return JsonResponse({'error': 'workorder not found'}, status=404)
     except ( WorkOrder.DoesNotExist, Department.DoesNotExist, Vendor.DoesNotExist):
         return JsonResponse({'error': 'Related entity not found'}, status=404)
+
+def workorder_record_page(request, id):
+    # This is the view that renders the full page
+    try:
+        record = WorkOrderRecord.objects.get(id=id)
+        return redirect('workorder-workorder-records')
+    except WorkOrderRecord.DoesNotExist:
+        return render(request, '404.html', status=404)
 
 def add_workorder_record(request):
     if request.method == 'POST':

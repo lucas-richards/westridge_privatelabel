@@ -155,7 +155,7 @@
     });
 
     function loadworkorderDetails(workorderId) {
-        fetch(`/maintenance/workorder/${workorderId}/`)
+        fetch(`/maintenance/workorder/${workorderId}/json/`)
             .then(response => response.json())
             .then(data => {
                 workorderDetailsDiv.innerHTML = `
