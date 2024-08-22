@@ -79,23 +79,23 @@
             <div class="asset">
                 <div class="d-flex justify-content-between align-items-center workorder-item" data-workorder-id="{{ data.id }}">
                     <div class="d-flex justify-content-center align-items-baseline">
-                        <p class="mr-2 font-weight-bold ">#{{ data.id }} </p>
-                        <p class="mr-2 ">{{ data.workorder.asset.code }} - {{ data.workorder.title }}</p>
+                        <p style="min-width: 50px;" class="mr-2 font-weight-bold ">#{{ data.id }} </p>
+                        <p style="min-width: 300px;" class="mr-2 truncate ">{{ data.workorder.asset.code }} - {{ data.workorder.title }}</p>
                         <!-- green dot if status is online -->
                         {% if data.status == 'done' %}
-                        <span class="badge badge-success">{{ data.status }}</span>
+                        <span style="min-width: 70px;" class="badge badge-success">{{ data.status }}</span>
                             
                         {% elif data.status == 'on_hold' %}
-                        <span class="badge badge-warning">{{ data.status }}</span>
+                        <span style="min-width: 70px;" class="badge badge-warning">{{ data.status }}</span>
                             
                         {% elif data.status == 'in_progress' %}
-                        <span class="badge badge-primary">{{ data.status }}</span>
+                        <span style="min-width: 70px;" class="badge badge-primary">{{ data.status }}</span>
                             
                         {% elif data.status == 'scheduled' %}
-                        <span class="badge badge-info">{{ data.status }}</span>
+                        <span style="min-width: 70px;" class="badge badge-info">{{ data.status }}</span>
                             
                         {% elif data.status == 'cancelled' %}
-                        <span class="badge badge-secondary">{{ data.status }}</span>
+                        <span style="min-width: 70px;" class="badge badge-secondary">{{ data.status }}</span>
 
                         {% endif %}
                     </div>

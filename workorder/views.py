@@ -235,8 +235,12 @@ def workorders(request):
         last_record = workorder.workorderrecord_set.order_by('-created_on').first()
         workorders_with_last_record.append({
             'workorder': workorder,
-            'last_record': last_record
+            'last_record': last_record,
+            'recurrence': workorder.get_recurrence_display(),
         })
+
+    # order workorders_by_last_record based on the last_record.due_date
+    workorders_with_last_record = sorted(workorders_with_last_record, key=lambda x: x['last_record'].due_date if x['last_record'] else None)
     
     context = {
         'title': 'Work Orders',
@@ -258,6 +262,8 @@ def workorder(request, id):
 
         if request.method == "GET":
             data = {
+                'id': workorder.id,
+                'code': workorder.asset.code if workorder.asset else '',
                 'title': workorder.title,
                 'priority': workorder.priority,
                 'description': workorder.description,
@@ -325,7 +331,7 @@ def delete_workorder(request, id):
 
 
 def workorder_records(request):
-    records = WorkOrderRecord.objects.all().order_by('-due_date')
+    records = WorkOrderRecord.objects.all().order_by('due_date')
     # add this to each record 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
     for record in records:
         record.time_until_due = (record.due_date - timezone.now() ).days if record.due_date else ''

@@ -4,7 +4,7 @@
 <style>
     .flex-container {
         display: flex;
-        align-items:end;
+        align-items:center;
         justify-content: space-between;
     }
     .truncate {
@@ -78,9 +78,9 @@
             <div class="asset">
                 <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="{{ data.workorder.id }}">
                     <div class="d-flex justify-content-center align-items-bottom">
-                        <h5 class="mr-2 btn btn-sm btn-outline-primary">{{ data.workorder.recurrence }}</h5>
-                        <h5 class="mr-2 font-weight-bold">{{ data.workorder.asset.code }} </h5>
-                        <h5 class="truncate">{{ data.workorder.asset.name }}</h5>
+                        <h5 style="min-width: 90px;" class="mr-2 btn btn-sm btn-outline-primary">{{ data.recurrence }}</h5>
+                        <h5 class="mr-2 font-weight-bold">WO{{ data.workorder.id }} </h5>
+                        <h5 class="truncate">{{ data.workorder.asset.code }}</h5>
                     </div>
                     <!-- green dot if status is online -->
                     {% if data.last_record.status == 'done' %}
@@ -160,45 +160,44 @@
             .then(data => {
                 workorderDetailsDiv.innerHTML = `
                     <div class="workorder-details">
-                        <div class="mb-4 row">
-                            
-                            <div class="col-md-7">
-                                <div class="flex-container">
-                                    <h6 class="mr-3 btn btn-sm btn-outline-primary">${data.recurrence}</h6>
-                                    ${data.last_record_status === 'done' || data.last_record_status === 'cancelled' ? '':
-                                    
-                                        `<h6> <span class=" ${data.time_until_due < 0 ? 'text-danger' : 'font-weight-bold'}">${data.status === 'done'? '' : data.time_until_due < 0 ? 'Overdue' : 'Next due in ' + data.time_until_due + ' days'} </span></h6>`
-                                    }
-                                </div>
+                        
+                        
+                            <div class="flex-container">
+                                <h6 class="mr-3 btn btn-sm btn-outline-primary">${data.recurrence}</h6>
+                                ${data.last_record_status === 'done' || data.last_record_status === 'cancelled' ? '':
                                 
-                                
-                                <h5>${data.title}</h5>
-                                <p>${data.description}</p>
-                                ${data.attachments ? `<p>Attachment:<a target="_blank" href="${data.attachments}"> link</a></p>` : ''}
-                                
-                                
-                            </div>
-                            <div class="col-md-3">
-                                ${data.image_url ? `<img src="${data.image_url}" alt="image missing">` : ''}
-                            </div>
-                            <div class="col-md-2">
+                                    `<h6> <span class=" ${data.time_until_due < 0 ? 'text-danger' : 'font-weight-bold'}">${data.status === 'done'? '' : data.time_until_due < 0 ? 'Overdue' : 'Next due in ' + data.time_until_due + ' days'} </span></h6>`
+                                }
                                 {% if user.is_authenticated %}
                                     <button id="edit-button" class="btn btn-primary">Edit WO</button>
                                 {% endif %}
                             </div>
+                            <div class="mb-4 row">
+                                <div class="col-md-7">
+                                    <h2><strong>WO${data.id}</strong> ${data.code}</h2>
+                                    
+                                    <h5>${data.title}</h5>
+                                    <p>${data.description}</p>
+                                    ${data.attachments ? `<p>Attachment:<a target="_blank" href="${data.attachments}"> link</a></p>` : ''}
+                                
+                                
+                                </div>
+                                <div class="col-md-3">
+                                    ${data.image_url ? `<img src="${data.image_url}" alt="image missing">` : ''}
+                                </div>
                             
-                        </div>
+                            </div>
 
                         
-                        <div class="d-flex align-items-center">
-                            <h4 class="mt-2">Records History</h4>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
+                        <div id='showTable' style="cursor:pointer" class="d-flex align-items-center">
+                            <h4 class="mt-2 mr-2">Records History</h4>
+                            <svg id="up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
                             <path d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"/>
                             </svg>
-                            
+                            <svg id="down" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></svg>
                         </div>
                         
-                        <table class="table">
+                        <table class="table" id="records-table" style="display: none;">
                             <thead>
                                 <tr>
                                     <th>Record ID</th>
@@ -231,6 +230,24 @@
 
                     
                 `;
+
+                const recordsTable = document.getElementById('records-table');
+                const up = document.getElementById('up');
+                const down = document.getElementById('down');
+                const showTable = document.getElementById('showTable');
+                showTable.addEventListener('click', function (event) {
+                    if (recordsTable.style.display === 'none') {
+                        recordsTable.style.display = 'table';
+                        up.style.display = 'none';
+                        down.style.display = 'block';
+
+                    } else {
+                        recordsTable.style.display = 'none';
+                        up.style.display = 'block';
+                        down.style.display = 'none';
+                    }
+                });
+                
                 
 
                 const editButton = document.getElementById('edit-button');
