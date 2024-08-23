@@ -15,7 +15,10 @@ class AssetEditForm(forms.ModelForm):
             'department_in_charge': forms.Select(choices=Department.objects.values_list('name', 'name')),
             'vendors': forms.Select(choices=Vendor.objects.values_list('name', 'name')),
             'criticality': forms.Select(choices=CRITICALITY_CHOICES),
+            
         }
+
+        
 
 class WorkOrderEditForm(forms.ModelForm):
     class Meta:

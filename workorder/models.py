@@ -31,6 +31,7 @@ RECURRENCE = [
     ('weekly', 'Weekly'),
     ('monthly', 'Monthly'),
     ('quarterly', 'Quarterly'),
+    ('6 months', '6 Months'),
     ('yearly', 'Yearly'),
 ]
 
@@ -171,3 +172,15 @@ class WorkOrderRecord(models.Model):
 
     def __str__(self):
         return f"#{self.id} - {self.workorder.asset} - {self.workorder.title} - {self.due_date}"
+
+    # when saved check how many records are with status done today and update the kpi
+    def save(self, *args, **kwargs):
+        super(WorkOrderRecord, self).save(*args, **kwargs)
+        if self.status == 'done':
+            kpi = KPI.objects.get(name='Productivity')
+            value = WorkOrderRecord.objects.filter(status='done', completed_on__date=timezone.now().date()).count()
+            kpi_value, created = KPIValue.objects.get_or_create(kpi=kpi, date=timezone.now().date())
+            kpi_value.value = value
+            kpi_value.save()
+            
+            

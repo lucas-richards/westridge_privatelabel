@@ -85,6 +85,7 @@ def asset(request, id):
 
         if request.method == "GET":
             data = {
+                'id': asset.id,
                 'code': asset.code,
                 'name': asset.name,
                 'status': asset.status,

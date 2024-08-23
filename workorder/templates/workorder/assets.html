@@ -163,11 +163,10 @@
                                 ${data.model ? `<p><strong>Model:</strong> ${data.model}</p>` : ''}
                                 ${data.manufacturer ? `<p><strong>Manufacturer:</strong> ${data.manufacturer}</p>` : ''}
                                 ${data.year ? `<p><strong>Year:</strong> ${data.year}</p>` : ''}
-                                ${data.location ? `<p><strong>Location:</strong> ${data.location}</p>` : ''}
                                 ${data.department_in_charge ? `<p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>` : ''}
                                 ${data.vendors ? `<p><strong>Vendors:</strong> ${data.vendors}</p>` : ''}
                                 ${data.criticality ? `<p><strong>Criticality:</strong> ${data.criticality}</p>` : ''}
-                                ${data.attachments ? `<p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>` : ''}
+                                ${data.attachments ? `<p  class="truncate"><strong >Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>` : ''}
                                 
                             </div>
                             <div class="col-md-3">
@@ -193,7 +192,7 @@
                                         <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="${ wo.id }">
                                             <div class="d-flex justify-content-center align-items-bottom">
                                                 <h5 style="min-width: 90px;" class="mr-2 btn btn-sm btn-outline-primary">${ wo.recurrence }</h5>
-                                                <h5 class="mr-2 font-weight-bold">WO${ wo.id} </h5>
+                                                <h5 class="mr-2 font-weight-bold"><a href="/maintenance">WO${ wo.id}</a> </h5>
                                                 <p class="truncate">${ wo.title }</p>
                                             </div>
                                             ${ wo.last_record_status === 'done'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
