@@ -80,7 +80,7 @@
                 <div class="d-flex justify-content-between align-items-center workorder-item" data-workorder-id="{{ data.id }}">
                     <div class="d-flex justify-content-center align-items-baseline">
                         <p style="min-width: 50px;" class="mr-2 font-weight-bold ">#{{ data.id }} </p>
-                        <p style="min-width: 300px;" class="mr-2 truncate ">{{ data.workorder.asset.code }} - {{ data.workorder.title }}</p>
+                        <p style="min-width: 280px;" class="mr-2 truncate ">{{ data.workorder.asset.code }} - {{ data.workorder.title }}</p>
                         <!-- green dot if status is online -->
                         {% if data.status == 'Done' %}
                         <span style="min-width: 70px;" class="badge badge-success">{{ data.status }}</span>
@@ -100,7 +100,7 @@
                         {% endif %}
                     </div>
                     <div>
-                        {% if data.status == 'done' or data.status == 'cancelled' %}
+                        {% if data.status == 'Done' or data.status == 'Cancelled' %}
                     
                         {% else %}
                             {% if data.time_until_due > 7 %}
@@ -176,6 +176,9 @@
             .then(data => {
                 workorderDetailsDiv.innerHTML = `
                         <div class="">
+                            ${
+                                data.workorder_id ? `<h2 class="text-center"><strong data-toggle="modal" data-target="#exampleModal"><a href="#""> WO${data.workorder_id}</a></strong></h2>` : ''
+                            }
                             <div class="card-header border rounded" style="height:50px">
                                 <div class=" d-flex justify-content-between align-items-center">
                                     <p><strong>${data.workorder_asset}</strong></p>
@@ -184,30 +187,33 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form method='PUT' action="/maintenance/workorder_record/${ data.id }/json/">
+                                <form method='POST' action="/maintenance/workorder_record/${data.id}/json/" enctype="multipart/form-data" onsubmit="return validateForm()">
+                                  
                                     <div class="form-group">
                                         <label for="status">Status:</label>
                                         <select class="form-control" id="status" name="status">
-                                            <option value="done" ${ data.status === 'done' ? 'selected': ''}>Done</option>
-                                            <option value="on_hold" ${ data.status === 'on_hold' ? 'selected': ''}>On Hold</option>
-                                            <option value="in_progress" ${ data.status === 'in_progress' ? 'selected': ''}>In Progress</option>
-                                            <option value="scheduled" ${ data.status === 'scheduled' ? 'selected': ''}>Scheduled</option>
-                                            <option value="cancelled" ${ data.status === 'cancelled' ? 'selected': ''}>Cancelled</option>
+                                            <option value="done" ${data.status === 'done' ? 'selected': ''}>Done</option>
+                                            <option value="on_hold" ${data.status === 'on_hold' ? 'selected': ''}>On Hold</option>
+                                            <option value="in_progress" ${data.status === 'in_progress' ? 'selected': ''}>In Progress</option>
+                                            <option value="scheduled" ${data.status === 'scheduled' ? 'selected': ''}>Scheduled</option>
+                                            <option value="cancelled" ${data.status === 'cancelled' ? 'selected': ''}>Cancelled</option>
                                         </select>
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label for="completed_on">Completed On:</label>
-                                        <input type="date" class="form-control" id="completed_on" name="completed_on" value="${ data.completed_on }">
+                                        <input type="date" class="form-control" id="completed_on" name="completed_on" value="${data.completed_on}">
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label for="attachment">Attachment:</label>
                                         <input type="file" class="form-control-file" id="attachments" name="attachments">
-                                        <a href="${ data.attachments }" target="_blank">${ data.attachments }</a>
+                                        <a href="${data.attachments}" target="_blank">${data.attachments}</a>
                                     </div>
                                     
                                     <div class="form-group">
                                         <label for="comments">Comments:</label>
-                                        <textarea class="form-control" id="comments" name="comments" rows="3">${ data.comments }</textarea>
+                                        <textarea class="form-control" id="comments" name="comments" rows="3">${data.comments}</textarea>
                                     </div>
                                     
                                     <button type="submit" class="btn btn-primary">Update Status</button>
@@ -215,6 +221,24 @@
                     
                             </div>
                         </div>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center" id="exampleModalLabel"><strong>WO${data.workorder_id}</strong></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Asset:</strong> ${data.workorder_asset}</p>
+                                    <p><strong>Title:</strong> ${data.workorder_title}</p>
+                                    <p><strong>Description:</strong> ${data.workorder_description}</p>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
 
                     
                 `;
@@ -239,6 +263,19 @@
 });
 
 </script>
+<script>
+    function validateForm() {
+        const status = document.getElementById('status').value;
+        const completedOn = document.getElementById('completed_on').value;
+    
+        if (status === 'done' && !completedOn) {
+            alert('Please provide a completed on date when the status is set to "Done".');
+            return false; // Prevent form submission
+        }
+    
+        return true; // Allow form submission
+    }
+    </script>
 <script>
     function filterassets() {
         var input = document.getElementById("searchBox");

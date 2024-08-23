@@ -46,3 +46,4 @@ class WorkOrderRecordEditForm(forms.ModelForm):
             'status': forms.Select(choices=STATUS),
             'completed_on': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+

@@ -25,9 +25,6 @@
         background-color: #e9ecef; /* Optional: Add a hover effect */
     }
 
-    .asset-details {
-        max-height: 600px;
-    }
 
     .asset-details img {
         width: 150px; /* Set the width of the image */
@@ -69,7 +66,7 @@
                 <div class="d-flex justify-content-between align-items-bottom asset-item" data-asset-id="{{ asset.id }}">
                     <div class="d-flex justify-content-center align-items-bottom">
                         <h5 class="mr-2 font-weight-bold">{{ asset.code }}</h5>
-                        <p class="truncate">{{ asset.name }}</p>
+                        <p class="truncate" style="width:200px">{{ asset.name }}</p>
                     </div>
                     <!-- green dot if status is online -->
                     {% if asset.status == 'online' %}
@@ -157,29 +154,68 @@
                             </div>
                         </div>
                         <div class="mb-4 row">
-                                <div class="col-md-8">
-                                    <h5><strong>${data.code}</strong>  ${data.name}</h5>
-                                    <strong>Description:</strong>
-                                    <p  style="height: 100px; overflow-y: scroll;">${data.description}</p>
-                                    ${data.status ? `<p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>` : ''}
-                                    ${data.serial_number ? `<p><strong>Serial Number:</strong> ${data.serial_number}</p>` : ''}
-                                    ${data.model ? `<p><strong>Model:</strong> ${data.model}</p>` : ''}
-                                    ${data.manufacturer ? `<p><strong>Manufacturer:</strong> ${data.manufacturer}</p>` : ''}
-                                    ${data.year ? `<p><strong>Year:</strong> ${data.year}</p>` : ''}
-                                    ${data.location ? `<p><strong>Location:</strong> ${data.location}</p>` : ''}
-                                    ${data.department_in_charge ? `<p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>` : ''}
-                                    ${data.vendors ? `<p><strong>Vendors:</strong> ${data.vendors}</p>` : ''}
-                                    ${data.criticality ? `<p><strong>Criticality:</strong> ${data.criticality}</p>` : ''}
-                                    ${data.attachments ? `<p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>` : ''}
-                                    
-                                </div>
-                                <div class="col-md-3">
-                                    ${data.image_url ? `<img src="${data.image_url}" alt="${data.name}">` : `<img src="/media/asset_images/default.png" alt="${data.name}">`}
-                                </div>
+                            <div class="col-md-8">
+                                <h5><strong>${data.code}</strong>  ${data.name}</h5>
+                                <strong>Description:</strong>
+                                <p  style="height: 100px; overflow-y: scroll;">${data.description}</p>
+                                ${data.status ? `<p><strong>Status:</strong> <span class="badge ${data.status === 'online' ? 'badge-success' : 'badge-danger'}">${data.status}</span></p>` : ''}
+                                ${data.serial_number ? `<p><strong>Serial Number:</strong> ${data.serial_number}</p>` : ''}
+                                ${data.model ? `<p><strong>Model:</strong> ${data.model}</p>` : ''}
+                                ${data.manufacturer ? `<p><strong>Manufacturer:</strong> ${data.manufacturer}</p>` : ''}
+                                ${data.year ? `<p><strong>Year:</strong> ${data.year}</p>` : ''}
+                                ${data.location ? `<p><strong>Location:</strong> ${data.location}</p>` : ''}
+                                ${data.department_in_charge ? `<p><strong>Department in Charge:</strong> ${data.department_in_charge}</p>` : ''}
+                                ${data.vendors ? `<p><strong>Vendors:</strong> ${data.vendors}</p>` : ''}
+                                ${data.criticality ? `<p><strong>Criticality:</strong> ${data.criticality}</p>` : ''}
+                                ${data.attachments ? `<p><strong>Attachments:</strong><a href="${data.attachments}">${data.attachments}</a></p>` : ''}
                                 
-                                
+                            </div>
+                            <div class="col-md-3">
+                                ${data.image_url ? `<img src="${data.image_url}" alt="${data.name}">` : `<img src="/media/asset_images/default.png" alt="${data.name}">`}
+                            </div>
                                 
                         </div>
+                        <hr>
+                        
+                        
+                        ${data.workorders.length === 0 ? 
+                        
+                            '<p>No work orders found</p>' 
+                            : 
+                            `
+                            
+                            <h5>Work Orders - <strong> ${data.workorders.length}</strong></h5>
+                                
+                            
+                            <ul>
+                                ${data.workorders.map(wo => 
+                                    `<div class="asset" style="max-width:400px">
+                                        <div class="d-flex justify-content-between align-items-bottom workorder-item" data-workorder-id="${ wo.id }">
+                                            <div class="d-flex justify-content-center align-items-bottom">
+                                                <h5 style="min-width: 90px;" class="mr-2 btn btn-sm btn-outline-primary">${ wo.recurrence }</h5>
+                                                <h5 class="mr-2 font-weight-bold">WO${ wo.id} </h5>
+                                                <p class="truncate">${ wo.title }</p>
+                                            </div>
+                                            ${ wo.last_record_status === 'done'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>`:`${ wo.last_record_status === 'on_hold'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-warning" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>`:`${ wo.last_record_status === 'in_progress'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>`:`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>` }` }` }
+                                            
+                                            
+                                            
+                                        </div>
+                                    </div>`
+                                
+                                ).join('')}
+                            </ul>`
+                        }
+                        
+                           
                                 
                     </div>
                 `;

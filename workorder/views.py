@@ -71,6 +71,18 @@ def dashboard(request):
 def asset(request, id):
     try:
         asset = Asset.objects.get(id=id)
+        workorders_all = WorkOrder.objects.filter(asset=asset)
+        workorders = []
+        for wo in workorders_all:
+            workorder = {
+            'id': wo.id,
+            'title': wo.title,
+            'priority': wo.get_priority_display(),
+            'recurrence': wo.get_recurrence_display(),
+            'last_record_status': wo.workorderrecord_set.order_by('-created_on').first().status if wo.workorderrecord_set.order_by('-created_on').first() else '',
+            }
+            workorders.append(workorder)
+
         if request.method == "GET":
             data = {
                 'code': asset.code,
@@ -91,6 +103,7 @@ def asset(request, id):
                 'last_updated': asset.last_updated.strftime('%m-%d-%Y %H:%M:%S'),
                 'criticality': asset.criticality,
                 'attachments': asset.attachments.url if asset.attachments else '',
+                'workorders': workorders,
             }
             return JsonResponse(data)
     except Asset.DoesNotExist:
@@ -100,6 +113,10 @@ def asset(request, id):
 
 def assets(request):
     assets = Asset.objects.all().order_by('code')
+    # add an extra property to each asset 'workorders_count'
+    for asset in assets:
+        asset.workorders_count = WorkOrder.objects.filter(asset=asset).count()
+
     context = {
         'title': 'Assets',
         'assets': assets,
@@ -354,14 +371,16 @@ def workorder_records(request):
 
 @login_required
 @csrf_exempt
-@require_http_methods(["GET", "PUT"])
+@require_http_methods(["GET", "POST", "PUT"])
 def workorder_record(request, id):
     try:
         record = WorkOrderRecord.objects.get(id=id)
         
         data = {
                 'id': record.id,
+                'workorder_id': record.workorder.id if record.workorder else '',
                 'workorder_title': record.workorder.title if record.workorder else '',
+                'workorder_description': record.workorder.description if record.workorder else '',
                 'workorder_asset': record.workorder.asset.code if record.workorder.asset else '',
                 'status': record.status,
                 'due_date': record.due_date.strftime('%m-%d-%Y') if record.due_date else '',
@@ -370,27 +389,30 @@ def workorder_record(request, id):
                 'comments': record.comments if record.comments else '',
                 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
         }        
-        status = request.GET.get('status')
-        print(data)
-
-        if status:
-            print(request)
-            # get user
-            user = User.objects.get(username=request.user)
-            record.completed_by = user
-            record.status = status
-            completed_on = request.GET.get('completed_on')
-            print(completed_on)
-            if completed_on:
-                # Convert string to a timezone-aware datetime
-                record.completed_on = timezone.make_aware(
-                    timezone.datetime.strptime(completed_on, '%Y-%m-%d')
-                )
-            record.attachments = request.GET.get('attachments')
-            record.comments = request.GET.get('comments')
-            record.save()
-            messages.success(request, 'Record updated successfully')
-            return redirect('workorder-workorder-records')
+        status = request.POST.get('status')
+        print('request.FILES',request.FILES)
+        if request.method == "POST":
+            if status:
+                print(request)
+                # get user
+                user = User.objects.get(username=request.user)
+                record.completed_by = user
+                record.status = status
+                completed_on = request.POST.get('completed_on')
+                print(completed_on)
+                if completed_on:
+                    # Convert string to a timezone-aware datetime
+                    record.completed_on = timezone.make_aware(
+                        timezone.datetime.strptime(completed_on, '%Y-%m-%d')
+                    )
+                # Handle file upload
+                if 'attachments' in request.FILES:
+                    record.attachments = request.FILES['attachments']
+                    print('attachments', record.attachments)
+                record.comments = request.POST.get('comments')
+                record.save()
+                messages.success(request, 'Record updated successfully')
+                return redirect('workorder-workorder-records')
 
             
         if request.method == "GET":
