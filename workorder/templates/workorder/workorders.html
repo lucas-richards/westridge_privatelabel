@@ -92,6 +92,11 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-warning" viewBox="0 0 10 10">
                             <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
                         </svg>
+                    {% elif data.last_record.status == 'cancelled' %}
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-secondary" viewBox="0 0 10 10">
+                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                        </svg>
                     {% else %}
                     
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
@@ -181,15 +186,11 @@
                                     </div>
                                 </div>
 
-                                <div id='showTable' style="cursor:pointer" class="d-flex align-items-center">
-                                    <h4 class="mt-2 mr-2">Records History</h4>
-                                    <svg id="up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16">
-                                    <path d="M201.4 137.4c12.5-12.5 32.8-12.5 45.3 0l160 160c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 205.3 86.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l160-160z"/>
-                                    </svg>
-                                    <svg id="down" style="display:none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" width="16" height="16"><!--!Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8 12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z"/></svg>
-                                </div>
+                               
+                                <h4 class="mt-2 mr-2">Records History</h4>
+                                    
                                 
-                                <table class="table" id="records-table" style="display: none;">
+                                <table class="table" id="records-table">
                                     <thead>
                                         <tr>
                                             <th>Record ID</th>
@@ -210,7 +211,7 @@
                                         </tr>`).join('')}
                                     </tbody>
                                 </table>
-                                <button id="load-more" class="btn btn-outline-primary btn-sm" style="display:none">Show More</button>
+                                <button id="load-more" class="btn btn-link">Show More</button>
                             </div>
                         `;
 
@@ -220,22 +221,7 @@
                         const down = document.getElementById('down');
                         const showTable = document.getElementById('showTable');
 
-                        showTable.addEventListener('click', function (event) {
-                            if (recordsTable.style.display === 'none') {
-                                recordsTable.style.display = 'table';
-                                up.style.display = 'none';
-                                down.style.display = 'block';
-
-                                if (data.records.length > 1) {
-                                    loadMoreBtn.style.display = 'block';
-                                }
-                            } else {
-                                recordsTable.style.display = 'none';
-                                up.style.display = 'block';
-                                down.style.display = 'none';
-                                loadMoreBtn.style.display = 'none';
-                            }
-                        });
+                        
 
                         loadMoreBtn.addEventListener('click', function () {
                             const tbody = recordsTable.querySelector('tbody');
@@ -280,22 +266,33 @@
 </script>
 <script>
     function filterassets() {
-        var input = document.getElementById("searchBox");
-        var filter = input.value.toUpperCase().trim();
-        var assets = document.getElementsByClassName("asset");
+    var input = document.getElementById("searchBox");
+    var filter = input.value.toUpperCase().trim();
+    var assets = document.getElementsByClassName("asset");
+    var firstVisibleAsset = null;
 
-        for (var i = 0; i < assets.length; i++) {
-            var asset = assets[i];
-            var assetText = asset.innerText.toUpperCase().trim();
+    for (var i = 0; i < assets.length; i++) {
+        var asset = assets[i];
+        var assetText = asset.innerText.toUpperCase().trim();
 
-            if (assetText.indexOf(filter) > -1) {
-                console.log("Match Found: " + assetText); // Debugging log
-                asset.style.display = "";
-            } else {
-                asset.style.display = "none";
+        if (assetText.indexOf(filter) > -1) {
+            asset.style.display = "";
+            if (!firstVisibleAsset) {
+                firstVisibleAsset = asset;
             }
+        } else {
+            asset.style.display = "none";
         }
     }
+
+    // Automatically click the first visible asset if it exists
+    if (firstVisibleAsset) {
+        const workorderItem = firstVisibleAsset.querySelector('.workorder-item');
+        if (workorderItem) {
+            workorderItem.click();
+        }
+    }
+}
 </script>
 
 

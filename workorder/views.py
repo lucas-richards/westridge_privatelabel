@@ -355,7 +355,13 @@ def delete_workorder(request, id):
 
 
 def workorder_records(request):
-    records = WorkOrderRecord.objects.all().order_by('due_date')
+    workorders = WorkOrder.objects.all()
+    records = []
+    for workorder in workorders:
+        last_record = WorkOrderRecord.objects.filter(workorder=workorder).order_by('-due_date').first()
+        if last_record:
+            records.append(last_record)
+    records = sorted(records, key=lambda x: x.due_date)
     # rearrange the records list so records with status cancelled or done are at the end
     records = sorted(records, key=lambda x: x.status in ['cancelled', 'done'])
     # add this to each record 'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',

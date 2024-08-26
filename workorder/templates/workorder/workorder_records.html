@@ -79,8 +79,8 @@
             <div class="asset">
                 <div class="d-flex justify-content-between align-items-center workorder-item" data-workorder-id="{{ data.id }}">
                     <div class="d-flex justify-content-center align-items-baseline">
-                        <p style="min-width: 50px;" class="mr-2 font-weight-bold ">#{{ data.id }} </p>
-                        <p style="min-width: 280px;" class="mr-2 truncate ">{{ data.workorder.asset.code }} - {{ data.workorder.title }}</p>
+                        <p style="min-width: 80px;" class="mr-2"><strong>WO{{ data.workorder.id }}</strong> </p>
+                        <p style="min-width: 250px;" class="mr-2 truncate ">{{ data.workorder.title }}</p>
                         <!-- green dot if status is online -->
                         {% if data.status == 'Done' %}
                         <span style="min-width: 70px;" class="badge badge-success">{{ data.status }}</span>
@@ -278,22 +278,30 @@
     </script>
 <script>
     function filterassets() {
-        var input = document.getElementById("searchBox");
-        var filter = input.value.toUpperCase().trim();
-        var assets = document.getElementsByClassName("asset");
+    var input = document.getElementById("searchBox");
+    var filter = input.value.toUpperCase().trim();
+    var assets = document.getElementsByClassName("asset");
+    let firstVisibleAsset = null;
 
-        for (var i = 0; i < assets.length; i++) {
-            var asset = assets[i];
-            var assetText = asset.innerText.toUpperCase().trim();
+    for (var i = 0; i < assets.length; i++) {
+        var asset = assets[i];
+        var assetText = asset.innerText.toUpperCase().trim();
 
-            if (assetText.indexOf(filter) > -1) {
-                console.log("Match Found: " + assetText); // Debugging log
-                asset.style.display = "";
-            } else {
-                asset.style.display = "none";
+        if (assetText.indexOf(filter) > -1) {
+            asset.style.display = "";
+            if (!firstVisibleAsset) {
+                firstVisibleAsset = asset;
             }
+        } else {
+            asset.style.display = "none";
         }
     }
+
+    // Trigger click on the first visible asset after filtering
+    if (firstVisibleAsset) {
+        firstVisibleAsset.querySelector('.workorder-item').click();
+    }
+}
 </script>
 
 

@@ -178,9 +178,14 @@ class WorkOrderRecord(models.Model):
         super(WorkOrderRecord, self).save(*args, **kwargs)
         if self.status == 'done':
             kpi = KPI.objects.get(name='Productivity')
-            value = WorkOrderRecord.objects.filter(status='done', completed_on__date=timezone.now().date()).count()
-            kpi_value, created = KPIValue.objects.get_or_create(kpi=kpi, date=timezone.now().date())
-            kpi_value.value = value
+            today = timezone.now().date()
+            value = WorkOrderRecord.objects.filter(status='done', completed_on__date=today).count()
+            print('value:', value)
+            kpi_value = KPIValue.objects.filter(kpi=kpi, date=today).first()
+            if not kpi_value:
+                kpi_value = KPIValue.objects.create(kpi=kpi, date=today, value=value)
+            else:
+                kpi_value.value = value
             kpi_value.save()
             
             
