@@ -15,9 +15,9 @@ import datetime as dt
 
 class Command(BaseCommand):
     help = 'Calculate and save daily KPI values'
+    today = date.today()
     
     def save_kpi(self, kpi_name, value):
-        today = date.today()
         kpi, created = KPI.objects.get_or_create(name=kpi_name)
         KPIValue.objects.update_or_create(
             kpi=kpi,
@@ -112,7 +112,30 @@ class Command(BaseCommand):
         self.save_kpi('Retraining Not Performed', retraining['not_performed'])
         self.save_kpi('Percentage Fully Trained', perc_fully_trained)
         
-        self.stdout.write(self.style.SUCCESS('Successfully saved daily KPI values'))
+        self.stdout.write(self.style.SUCCESS('Successfully saved daily training KPI values'))
+
+        # if there are no work orders records for today, then set the productivity kpi value to 0
+        
+        work_order_records = WorkOrderRecord.objects.filter(completed_on=today).count()
+        self.save_kpi('Productivity', work_order_records)
+
+        # count how many work order records have status done and create a kpivalue with that number
+        value = WorkOrderRecord.objects.filter(status='done').count()
+        self.save_kpi('Status Done', value)
+
+        #  count how many work orders have the last work order record are on time and create a kpivalue with that number in timing kpi
+        work_orders = WorkOrder.objects.all()
+        on_time = 0
+        for work_order in work_orders:
+            if work_order.workorderrecord_set.last().status == 'done' and work_order.workorderrecord_set.last().due_date >= work_order.workorderrecord_set.last().completed_on:
+                on_time += 1
+
+        #  get percentage rounded to 0 decimals
+        percentage = round(on_time / work_orders.count() * 100) if work_orders.count() else 0
+        self.save_kpi('Timing On Time', percentage)
+
+        self.stdout.write(self.style.SUCCESS('Successfully saved daily maintenance KPI values'))
+
                     
 
 # Call the function to calculate and save daily KPI values
