@@ -307,6 +307,7 @@ def new_module(request):
 def dashboard(request):
     # get kpi values for fully trained
     fully_trained = KPIValue.objects.filter(kpi__name='Percentage Fully Trained').order_by('date')
+    print('Fully trained:', fully_trained)
     training_performed = KPIValue.objects.filter(kpi__name='Training Performed').order_by('date')
     training_not_performed = KPIValue.objects.filter(kpi__name='Training Not Performed').order_by('date')
     retraining_not_performed = KPIValue.objects.filter(kpi__name='Retraining Not Performed').order_by('date')
@@ -319,6 +320,7 @@ def dashboard(request):
     retraining_not_performed_values = [value.value for value in retraining_not_performed]
     retraining_overdue_values = [value.value for value in retraining_overdue]
     fully_trained_dates = [value.date.strftime('%m-%d-%Y') for value in fully_trained] 
+    print('Fully trained dates:', fully_trained_dates)
     training_not_performed_dates = [value.date.strftime('%m-%d-%Y') for value in training_not_performed]
     training_performed_dates = [value.date.strftime('%m-%d-%Y') for value in training_performed]
     
@@ -463,7 +465,7 @@ def dashboard(request):
     # reverse by_year1
     by_year1 = by_year1[::-1]
     # prepare this data for a chart
-    print('By year1:', by_year1)
+    print('By year1:', by_year1[-15:])
 
     by_year2 = {'x': [x[0] for x in by_year1], 'y': [x[1] for x in by_year1]}
 

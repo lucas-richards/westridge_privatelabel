@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import date
 from training.models import KPI, KPIValue, Profile, TrainingEvent, TrainingModule, ProfileTrainingEvents
-from workorder.models import WorkOrder, WorkOrderRecord, KPI, KPIValue
+from workorder.models import WorkOrder, WorkOrderRecord, KPI2, KPIValue2
 import datetime as dt
 
 class Command(BaseCommand):
@@ -20,6 +20,15 @@ class Command(BaseCommand):
         kpi, created = KPI.objects.get_or_create(name=kpi_name)
         today = date.today()
         KPIValue.objects.update_or_create(
+            kpi=kpi,
+            date=today,
+            defaults={'value': value}
+        )
+
+        def save_kpi2(self, kpi_name, value):
+        kpi, created = KPI2.objects.get_or_create(name=kpi_name)
+        today = date.today()
+        KPIValue2.objects.update_or_create(
             kpi=kpi,
             date=today,
             defaults={'value': value}
@@ -118,11 +127,11 @@ class Command(BaseCommand):
         # if there are no work orders records for today, then set the productivity kpi value to 0
         
         work_order_records = WorkOrderRecord.objects.filter(completed_on=today).count()
-        self.save_kpi('Productivity', work_order_records)
+        self.save_kpi2('Productivity', work_order_records)
 
         # count how many work order records have status done and create a kpivalue with that number
         value = WorkOrderRecord.objects.filter(status='done').count()
-        self.save_kpi('Status Done', value)
+        self.save_kpi2('Status Done', value)
 
         #  count how many work orders have the last work order record are on time and create a kpivalue with that number in timing kpi
         work_orders = WorkOrder.objects.all()
@@ -133,7 +142,7 @@ class Command(BaseCommand):
 
         #  get percentage rounded to 0 decimals
         percentage = round(on_time / work_orders.count() * 100) if work_orders.count() else 0
-        self.save_kpi('Timing On Time', percentage)
+        self.save_kpi2('Timing On Time', percentage)
 
         self.stdout.write(self.style.SUCCESS('Successfully saved daily maintenance KPI values'))
 
