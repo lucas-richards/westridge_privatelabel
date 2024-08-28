@@ -15,10 +15,10 @@ import datetime as dt
 
 class Command(BaseCommand):
     help = 'Calculate and save daily KPI values'
-    today = date.today()
     
     def save_kpi(self, kpi_name, value):
         kpi, created = KPI.objects.get_or_create(name=kpi_name)
+        today = date.today()
         KPIValue.objects.update_or_create(
             kpi=kpi,
             date=today,
@@ -26,6 +26,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **kwargs):
+        today = date.today()
         profiles = Profile.objects.all()
         active_profiles = profiles.filter(active=True)
         training_modules = TrainingModule.objects.filter(other=False).order_by('name')
@@ -127,7 +128,7 @@ class Command(BaseCommand):
         work_orders = WorkOrder.objects.all()
         on_time = 0
         for work_order in work_orders:
-            if work_order.workorderrecord_set.last().status == 'done' and work_order.workorderrecord_set.last().due_date >= work_order.workorderrecord_set.last().completed_on:
+            if work_order.workorderrecord_set.last().status == 'done' and work_order.workorderrecord_set.last().completed_on and timezone.now() < work_order.workorderrecord_set.last().due_date:
                 on_time += 1
 
         #  get percentage rounded to 0 decimals
