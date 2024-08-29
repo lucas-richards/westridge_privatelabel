@@ -124,6 +124,32 @@ class Command(BaseCommand):
         
         self.stdout.write(self.style.SUCCESS('Successfully saved daily training KPI values'))
 
+        
+        
+        # Maintenance APP
+        # schedule a work order record according to the recurrence and if the last work order record is done or cancelled
+        work_orders = WorkOrder.objects.all()
+        for work_order in work_orders:
+            last_work_order_record = work_order.workorderrecord_set.last()
+            if last_work_order_record:
+                if last_work_order_record.status in ['done', 'cancelled']:
+                    if work_order.recurrence == 'Daily':
+                        new = WorkOrderRecord.objects.create(workorder=work_order, due_date=timezone.now())
+                    elif work_order.recurrence == 'Weekly':
+                        new = WorkOrderRecord.objects.create(workorder=work_order, due_date=timezone.now() + dt.timedelta(days=7))
+                    elif work_order.recurrence == 'Monthly':
+                        new = WorkOrderRecord.objects.create(workorder=work_order, due_date=timezone.now() + dt.timedelta(days=30))
+                    elif work_order.recurrence == 'Quarterly':
+                        new = WorkOrderRecord.objects.create(workorder=work_order, due_date=timezone.now() + dt.timedelta(days=90))
+                    elif work_order.recurrence == 'Biannually':
+                        new = WorkOrderRecord.objects.create(workorder=work_order, due_date=timezone.now() + dt.timedelta(days=180))
+                    elif work_order.recurrence == 'Yearly':
+                        new = WorkOrderRecord.objects.create(workorder=work_order, due_date=timezone.now() + dt.timedelta(days=365))
+
+            else:
+                WorkOrderRecord.objects.create(work_order=work_order, due_date=timezone.now())
+
+
         # if there are no work orders records for today, then set the productivity kpi value to 0
         
         work_order_records_today = WorkOrderRecord.objects.filter(completed_on=today).count()

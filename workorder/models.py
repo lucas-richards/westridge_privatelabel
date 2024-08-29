@@ -31,7 +31,7 @@ RECURRENCE = [
     ('weekly', 'Weekly'),
     ('monthly', 'Monthly'),
     ('quarterly', 'Quarterly'),
-    ('6 months', '6 Months'),
+    ('biannually', 'Biannually'),
     ('yearly', 'Yearly'),
 ]
 
