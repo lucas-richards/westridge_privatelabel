@@ -41,7 +41,7 @@ class Command(BaseCommand):
         # Build the message
         if records:
             message_parts = ["""
-            <div style="padding-left: 16px; height: 600px; border: 1px solid #ddd; border-radius: 4px;">
+            <div style="padding-left: 16px; border: 1px solid #ddd; border-radius: 4px;">
             """]
 
             for data in records:

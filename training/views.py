@@ -307,7 +307,6 @@ def new_module(request):
 def dashboard(request):
     # get kpi values for fully trained
     fully_trained = KPIValue.objects.filter(kpi__name='Percentage Fully Trained').order_by('date')
-    print('Fully trained:', fully_trained)
     training_performed = KPIValue.objects.filter(kpi__name='Training Performed').order_by('date')
     training_not_performed = KPIValue.objects.filter(kpi__name='Training Not Performed').order_by('date')
     retraining_not_performed = KPIValue.objects.filter(kpi__name='Retraining Not Performed').order_by('date')
@@ -320,7 +319,6 @@ def dashboard(request):
     retraining_not_performed_values = [value.value for value in retraining_not_performed]
     retraining_overdue_values = [value.value for value in retraining_overdue]
     fully_trained_dates = [value.date.strftime('%m-%d-%Y') for value in fully_trained] 
-    print('Fully trained dates:', fully_trained_dates)
     training_not_performed_dates = [value.date.strftime('%m-%d-%Y') for value in training_not_performed]
     training_performed_dates = [value.date.strftime('%m-%d-%Y') for value in training_performed]
     
@@ -451,7 +449,7 @@ def dashboard(request):
         else:
             print('No training event for:', profile.user.username)
     
-    print('History:', history)
+    
     history2 = {'x': ['1 year', '2 years', '3 years', '5 years'], 'y': [round(history['1year']/active_profiles.count()*100), round(history['2years']/active_profiles.count()*100), round(history['3years']/active_profiles.count()*100), round(history['5years']/active_profiles.count()*100)]}
     history1 = sorted(history.items(), key=lambda x: x[0])
     by_year = {}

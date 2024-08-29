@@ -10,7 +10,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from datetime import date
 from training.models import KPI, KPIValue, Profile, TrainingEvent, TrainingModule, ProfileTrainingEvents
-from workorder.models import WorkOrder, WorkOrderRecord, KPI2, KPIValue2
+from workorder.models import WorkOrder, WorkOrderRecord, KPI as KPI2, KPIValue as KPIValue2
 import datetime as dt
 
 class Command(BaseCommand):
@@ -25,7 +25,7 @@ class Command(BaseCommand):
             defaults={'value': value}
         )
 
-        def save_kpi2(self, kpi_name, value):
+    def save_kpi2(self, kpi_name, value):
         kpi, created = KPI2.objects.get_or_create(name=kpi_name)
         today = date.today()
         KPIValue2.objects.update_or_create(
@@ -126,22 +126,20 @@ class Command(BaseCommand):
 
         # if there are no work orders records for today, then set the productivity kpi value to 0
         
-        work_order_records = WorkOrderRecord.objects.filter(completed_on=today).count()
-        self.save_kpi2('Productivity', work_order_records)
+        work_order_records_today = WorkOrderRecord.objects.filter(completed_on=today).count()
+        self.save_kpi2('Productivity', work_order_records_today)
 
         # count how many work order records have status done and create a kpivalue with that number
         value = WorkOrderRecord.objects.filter(status='done').count()
         self.save_kpi2('Status Done', value)
 
         #  count how many work orders have the last work order record are on time and create a kpivalue with that number in timing kpi
-        work_orders = WorkOrder.objects.all()
-        on_time = 0
-        for work_order in work_orders:
-            if work_order.workorderrecord_set.last().status == 'done' and work_order.workorderrecord_set.last().completed_on and timezone.now() < work_order.workorderrecord_set.last().due_date:
-                on_time += 1
+        work_orders_records = WorkOrderRecord.objects.all()
+        on_time = round(work_orders_records.filter(due_date__gte=timezone.now()).exclude(status__in=['done', 'cancelled']).count(), 0)
+        work_orders_excluding = work_orders_records.exclude(status__in=['done', 'cancelled'])
 
         #  get percentage rounded to 0 decimals
-        percentage = round(on_time / work_orders.count() * 100) if work_orders.count() else 0
+        percentage = round(on_time / work_orders_excluding.count() * 100) if work_orders_excluding.count() else 0
         self.save_kpi2('Timing On Time', percentage)
 
         self.stdout.write(self.style.SUCCESS('Successfully saved daily maintenance KPI values'))
