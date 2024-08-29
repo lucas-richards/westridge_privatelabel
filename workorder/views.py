@@ -129,9 +129,38 @@ def assets(request):
 def add_asset(request):
     if request.method == 'POST':
         form = AssetEditForm(request.POST, request.FILES)
+        # print location from request
+        print('location', request.POST['location'])
         # add created by
         form.instance.created_by = request.user
+        # if the location is warehouse, then find the last code that starts with W and increment it by 1. If last code is O-003 then the new code will be O-004
         if form.is_valid():
+            location = request.POST['location']
+            prefix = ''
+            if location == 'warehouse':
+                prefix = 'W'
+            elif location == 'office':
+                prefix = 'O'
+            elif location in ['production Line #1', 'production Line #2', 'production Line #3']:
+                prefix = 'P'
+            elif location == 'assembly':
+                prefix = 'A'
+            elif location == 'building':
+                prefix = 'B'
+            elif location == 'roof':
+                prefix = 'F'
+            elif location == 'quality lab':
+                prefix = 'Q'
+            elif location == 'scale':
+                prefix = 'SC'
+            
+            last_code = Asset.objects.filter(code__startswith=prefix).order_by('-code').first()
+            if last_code:
+                last_code = last_code.code.split('-')[1]
+                form.instance.code = f'{prefix}-{str(int(last_code) + 1).zfill(3)}'
+            else:
+                form.instance.code = f'{prefix}-001'
+            
             form.save()
             return redirect('workorder-assets')
     else:
@@ -264,6 +293,7 @@ def workorders(request):
         'title': 'Work Orders',
         'workorders': workorders_with_last_record,
         'form': form,
+        'idwo':'7'
     }
 
     return render(request, 'workorder/workorders.html', context)

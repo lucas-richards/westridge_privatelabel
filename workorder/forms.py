@@ -7,7 +7,7 @@ from users.models import Department, User
 class AssetEditForm(forms.ModelForm):
     class Meta:
         model = Asset
-        fields = ['code', 'name', 'description', 'status', 'image','location', 'serial_number', 'model', 'manufacturer', 'year', 'parent', 'department_in_charge', 'vendors', 'criticality', 'attachments']
+        fields = ['name','location', 'description', 'status', 'image', 'serial_number', 'model', 'manufacturer', 'year', 'parent', 'department_in_charge', 'vendors', 'criticality', 'attachments']
         widgets = {
             'status': forms.Select(choices=STATUS2),
             'location': forms.Select(choices=Asset.objects.values_list('location', 'location')),

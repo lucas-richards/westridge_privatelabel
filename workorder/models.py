@@ -82,7 +82,6 @@ class Asset(models.Model):
             ('warehouse', 'Warehouse'),
             ('office', 'Office'),
             ('quality lab', 'Quality Lab'),
-            ('compounding', 'Compounding'),
             ('bulding', 'Building'),
             ('production Line #1', 'Production Line #1'),
             ('production Line #2', 'Production Line #2'),
@@ -91,8 +90,8 @@ class Asset(models.Model):
             ('roof', 'Roof'),
             # Add more choices here
         ],
-        null=True,
-        blank=True
+        null=False,
+        blank=False,
     )
     description = models.TextField(null=True, blank=True)
     serial_number = models.CharField(max_length=255, null=True, blank=True)

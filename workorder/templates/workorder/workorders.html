@@ -60,7 +60,7 @@
 </style>
 
 <!-- create two columns -->
- <div class="d-flex justify-content-between align-items-center">
+<div class="d-flex justify-content-between align-items-center">
     <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Record" style="width: 33%;" oninput="filterassets()">
     {% if user.is_authenticated %}
         <a href="{% url 'workorder-add-workorder' %}" class="btn btn-outline-primary">Create workorder</a>
@@ -178,7 +178,7 @@
                                     <div class="col-md-7">
                                         <h2><strong>WO${data.id}</strong> ${data.code}</h2>
                                         <h5>${data.title}</h5>
-                                        <p>${data.description}</p>
+                                        <p>${data.description.split('\n').map(line => `<span>${line}</span><br>`).join('')}</p>
                                         ${data.attachments ? `<p>Attachment:<a target="_blank" href="${data.attachments}"> link</a></p>` : ''}
                                     </div>
                                     <div class="col-md-3" data-toggle="modal" data-target="#exampleModal">
@@ -281,6 +281,7 @@
 });
 
 </script>
+
 <script>
     function filterassets() {
     var input = document.getElementById("searchBox");
@@ -306,11 +307,24 @@
     if (firstVisibleAsset) {
         const workorderItem = firstVisibleAsset.querySelector('.workorder-item');
         if (workorderItem) {
+            console.log('clicking', workorderItem);
             workorderItem.click();
+            console.log('clicked', workorderItem);
         }
     }
+    
 }
+    
 </script>
+<script>
+    // if idwo is coming from the views with a number then use it to search in the search box on top and activating filterasset otherwise do nothing
+    const idwo = {{ idwo|default:0 }};
+    if (idwo) {
+        document.getElementById('searchBox').value = idwo;
+        filterassets();
+    }
+</script>
+
 
 
 
