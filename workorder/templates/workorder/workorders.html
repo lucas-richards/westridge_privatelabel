@@ -251,7 +251,7 @@
                                         </tr>`).join('')}
                                     </tbody>
                                 </table>
-                                <button id="load-more" class="btn btn-link">Show More</button>
+                                ${data.records.length > 2 ? '<button id="load-more" class="btn btn-link">Show More</button>' : ''}
                             </div>
                             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -280,19 +280,21 @@
 
                         
 
-                        loadMoreBtn.addEventListener('click', function () {
-                            const tbody = recordsTable.querySelector('tbody');
-                            const remainingRecords = data.records.slice(1).map(record => 
-                                `<tr>
-                                    <td>#${record.id}</td>
-                                    <td>${record.due_date}</td>
-                                    <td>${record.completed_by}</td>
-                                    <td>${record.completed_on ? record.completed_on : 'missing'}</td>
-                                    <td><span class="badge badge-${record.status === 'done' ? 'success' : record.status === 'on_hold' ? 'warning' : record.status === 'cancelled' ? 'secondary' : 'info'}">${record.status}</span></td>
-                                </tr>`).join('');
-                            tbody.insertAdjacentHTML('beforeend', remainingRecords);
-                            loadMoreBtn.style.display = 'none';
-                        });
+                        if (loadMoreBtn) {
+                            loadMoreBtn.addEventListener('click', function () {
+                                const tbody = recordsTable.querySelector('tbody');
+                                const remainingRecords = data.records.slice(1).map(record => 
+                                    `<tr>
+                                        <td>#${record.id}</td>
+                                        <td>${record.due_date}</td>
+                                        <td>${record.completed_by}</td>
+                                        <td>${record.completed_on ? record.completed_on : 'missing'}</td>
+                                        <td><span class="badge badge-${record.status === 'done' ? 'success' : record.status === 'on_hold' ? 'warning' : record.status === 'cancelled' ? 'secondary' : 'info'}">${record.status}</span></td>
+                                    </tr>`).join('');
+                                tbody.insertAdjacentHTML('beforeend', remainingRecords);
+                                loadMoreBtn.style.display = 'none';
+                            });
+                        }
                 
                 
 
