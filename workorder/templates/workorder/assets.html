@@ -197,25 +197,24 @@
                                         
                         
                                 ${data.workorders.map(wo => 
-                                    `<tr style="cursor:pointer;">
-                                    
-                                                <td ><div class="btn btn-sm btn-outline-primary" style="width:100px;">${ wo.recurrence }</div></td>
-                                                <td>WO${ wo.id}</td>
-                                                <td class="truncate">${ wo.title }</td>
-                                                <td>
-                                                    ${ wo.last_record_status === 'done'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
-                                                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-                                                    </svg>`:`${ wo.last_record_status === 'on_hold'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-warning" viewBox="0 0 10 10">
-                                                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-                                                    </svg>`:`${ wo.last_record_status === 'in_progress'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
-                                                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-                                                    </svg>`:`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
-                                                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-                                                    </svg>` }` }` }
-                                                    
-                                                </td>
-                                            </tr>
-                                        `
+                                        `<tr style="cursor:pointer;" onclick="location.href='/maintenance/workorders/?idwo=${wo.id}'">
+                                
+                                            <td ><div class="btn btn-sm btn-outline-primary" style="width:100px;">${ wo.recurrence }</div></td>
+                                            <td>WO${ wo.id}</td>
+                                            <td class="truncate">${ wo.title }</td>
+                                            <td>
+                                                ${ wo.last_record_status === 'done'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>`:`${ wo.last_record_status === 'on_hold'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-warning" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>`:`${ wo.last_record_status === 'in_progress'? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>`:`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-info" viewBox="0 0 10 10">
+                                                    <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                                                </svg>` }` }` }
+                                                
+                                            </td>
+                                        </tr>`
                                 
                                             ).join('')}
                                 </tbody>   

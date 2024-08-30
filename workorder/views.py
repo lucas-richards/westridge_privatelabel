@@ -266,6 +266,8 @@ def delete_vendor(request, id):
     return redirect('workorder-vendors')
 
 def workorders(request):
+    # set idwo to whatever the request has
+    idwo = request.GET.get('idwo')
     workorders = WorkOrder.objects.all()
     workorders_with_last_record = []
     form = WorkOrderEditForm()
@@ -293,7 +295,7 @@ def workorders(request):
         'title': 'Work Orders',
         'workorders': workorders_with_last_record,
         'form': form,
-        'idwo':'7'
+        'idwo':idwo
     }
 
     return render(request, 'workorder/workorders.html', context)
@@ -385,6 +387,7 @@ def delete_workorder(request, id):
 
 
 def workorder_records(request):
+    idwor = request.GET.get('idwor')
     workorders = WorkOrder.objects.all()
     records = []
     for workorder in workorders:
@@ -402,6 +405,7 @@ def workorder_records(request):
     context = {
         'title': 'Work Order Records',
         'records': records,
+        'idwor':idwor
     }
 
     return render(request, 'workorder/workorder_records.html', context)

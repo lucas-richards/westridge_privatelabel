@@ -124,13 +124,53 @@
         </div>
     </div>
 </div>
+<script>
+    function filterassets() {
+        
+    var input = document.getElementById("searchBox");
+    var filter = input.value.toUpperCase().trim();
+    var assets = document.getElementsByClassName("asset");
+    var firstVisibleAsset = null;
+
+    for (var i = 0; i < assets.length; i++) {
+        var asset = assets[i];
+        var assetText = asset.innerText.toUpperCase().trim();
+
+        if (assetText.indexOf(filter) > -1) {
+            asset.style.display = "";
+            if (!firstVisibleAsset) {
+                firstVisibleAsset = asset;
+            }
+        } else {
+            asset.style.display = "none";
+        }
+    }
+
+    // Automatically click the first visible asset if it exists
+    if (firstVisibleAsset) {
+        const workorderItem = firstVisibleAsset.querySelector('.workorder-item');
+        if (workorderItem) {
+            workorderItem.click();
+        }
+    }
+    
+    
+}
+    
+</script>
 
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+    const idwo = {{ idwo|default:0 }};
     const workorderItems = document.querySelectorAll('.workorder-item');
     const workorderDetailsDiv = document.getElementById('workorder-details');
     let selectedworkorderItem = null;
+
+    if (idwo) {
+            document.getElementById('searchBox').value = idwo;
+            filterassets();
+        }
 
     workorderItems.forEach(item => {
         item.addEventListener('click', function () {
@@ -160,7 +200,7 @@
     });
 
     function loadworkorderDetails(workorderId) {
-        fetch(`/maintenance/workorder/${workorderId}/json/`)
+        fetch(`/maintenance/workorder/${idwo?idwo:workorderId}/json/`)
             .then(response => response.json())
             .then(data => {
                         workorderDetailsDiv.innerHTML = `
@@ -190,7 +230,7 @@
                                 <h4 class="mt-2 mr-2">Records History</h4>
                                     
                                 
-                                <table class="table" id="records-table">
+                                <table class="table table-hover" id="records-table">
                                     <thead>
                                         <tr>
                                             <th>Record ID</th>
@@ -202,7 +242,7 @@
                                     </thead>
                                     <tbody>
                                         ${data.records.slice(0, 1).map(record => 
-                                        `<tr>
+                                        `<tr style="cursor:pointer;" onclick="location.href='/maintenance/workorder_records/?idwor=${record.id}'">
                                             <td>#${record.id}</td>
                                             <td>${record.due_date}</td>
                                             <td>${record.completed_by}</td>
@@ -282,48 +322,8 @@
 
 </script>
 
-<script>
-    function filterassets() {
-    var input = document.getElementById("searchBox");
-    var filter = input.value.toUpperCase().trim();
-    var assets = document.getElementsByClassName("asset");
-    var firstVisibleAsset = null;
 
-    for (var i = 0; i < assets.length; i++) {
-        var asset = assets[i];
-        var assetText = asset.innerText.toUpperCase().trim();
 
-        if (assetText.indexOf(filter) > -1) {
-            asset.style.display = "";
-            if (!firstVisibleAsset) {
-                firstVisibleAsset = asset;
-            }
-        } else {
-            asset.style.display = "none";
-        }
-    }
-
-    // Automatically click the first visible asset if it exists
-    if (firstVisibleAsset) {
-        const workorderItem = firstVisibleAsset.querySelector('.workorder-item');
-        if (workorderItem) {
-            console.log('clicking', workorderItem);
-            workorderItem.click();
-            console.log('clicked', workorderItem);
-        }
-    }
-    
-}
-    
-</script>
-<script>
-    // if idwo is coming from the views with a number then use it to search in the search box on top and activating filterasset otherwise do nothing
-    const idwo = {{ idwo|default:0 }};
-    if (idwo) {
-        document.getElementById('searchBox').value = idwo;
-        filterassets();
-    }
-</script>
 
 
 
