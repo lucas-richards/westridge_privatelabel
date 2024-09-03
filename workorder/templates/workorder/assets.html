@@ -197,7 +197,7 @@
                                         
                         
                                 ${data.workorders.map(wo => 
-                                        `<tr style="cursor:pointer;" onclick="location.href='/maintenance/workorders/?idwo=${wo.id}'">
+                                        `<tr style="cursor:pointer;" onclick="window.open('/maintenance/workorders/?idwo=${wo.id}', '_blank')">
                                 
                                             <td ><div class="btn btn-sm btn-outline-primary" style="width:100px;">${ wo.recurrence }</div></td>
                                             <td>WO${ wo.id}</td>

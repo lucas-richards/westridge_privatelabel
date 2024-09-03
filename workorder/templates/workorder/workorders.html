@@ -242,7 +242,7 @@
                                     </thead>
                                     <tbody>
                                         ${data.records.slice(0, 1).map(record => 
-                                        `<tr style="cursor:pointer;" onclick="location.href='/maintenance/workorder_records/?idwor=${record.id}'">
+                                        `<tr style="cursor:pointer;" onclick="window.open('/maintenance/workorder_records/?idwor=${record.id}', '_blank')">
                                             <td>#${record.id}</td>
                                             <td>${record.due_date}</td>
                                             <td>${record.completed_by}</td>
