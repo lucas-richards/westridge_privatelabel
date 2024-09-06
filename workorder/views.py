@@ -25,8 +25,8 @@ def dashboard(request):
         'on_hold': work_orders_records.filter(status='on_hold').count(),
         'scheduled': work_orders_records.filter(status='scheduled').count(),
         'cancelled': work_orders_records.filter(status='cancelled').count(),
-        'overdue': round(work_orders_records.filter(due_date__lt=timezone.now()).exclude(status__in=['done', 'cancelled']).count(), 0),
-        'on_time': round(work_orders_records.filter(due_date__gte=timezone.now()).exclude(status__in=['done', 'cancelled']).count(), 0),
+        'overdue': round(work_orders_records.filter(due_date__lt=timezone.now()- datetime.timedelta(days=1)).exclude(status__in=['done', 'cancelled']).count(), 0),
+        'on_time': round(work_orders_records.filter(due_date__gte=timezone.now()- datetime.timedelta(days=1)).exclude(status__in=['done', 'cancelled']).count(), 0),
         'total': work_orders_records.count(),
         'total_exclude_done_cancelled': work_orders_records.exclude(status__in=['done', 'cancelled']).count(),
     }
@@ -428,7 +428,7 @@ def workorder_record(request, id):
                 'completed_on': record.completed_on.strftime('%Y-%m-%d') if record.completed_on else '',
                 'attachments': record.attachments.url if record.attachments else '',
                 'comments': record.comments if record.comments else '',
-                'time_until_due': (record.due_date - timezone.now() ).days if record.due_date else '',
+                'time_until_due': (record.due_date - timezone.now()- datetime.timedelta(days=1) ).days if record.due_date else '',
         }        
         status = request.POST.get('status')
         print('request.FILES',request.FILES)
