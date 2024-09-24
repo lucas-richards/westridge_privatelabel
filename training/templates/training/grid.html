@@ -81,7 +81,9 @@
                     <td class="sticky-column pl-1 pr-1">
                         <a style="color: black;" href="{% url 'training-role-detail' row.role.id %}">
                             {{ row.role.name }}
+                            <small>({{ row.role.description }})</small>
                         </a>
+
                         
                     </td>
                     {% for module in row.training_modules %}
