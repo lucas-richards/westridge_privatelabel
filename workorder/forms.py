@@ -27,7 +27,7 @@ class WorkOrderEditForm(forms.ModelForm):
         widgets = {
             'priority': forms.Select(choices=CRITICALITY_CHOICES),
             'first_due_date': forms.DateInput(attrs={'type': 'date'}),
-            'assigned_to': forms.Select(choices=User.objects.values_list('username', 'username').order_by('username')),
+            'assigned_to': forms.Select(choices=User.objects.order_by('username').values_list('username', 'username')),
         }
 # form to create a work order record
 class WorkOrderRecordForm(forms.ModelForm):

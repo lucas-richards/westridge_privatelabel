@@ -212,7 +212,9 @@ def asset_workorders_new(request, id):
             return redirect('workorder-workorders')
     else:
         form = WorkOrderEditForm()
-        form.fields['asset'].initial = asset
+        form.fields['asset'].initial = Asset
+        # order by assigned to
+        form.fields['assigned_to'].queryset = User.objects.order_by('username')
     context = {
         'title': 'Add Work Order',
         'form': form,
@@ -354,6 +356,8 @@ def add_workorder(request):
             return redirect('workorder-workorders')
     else:
         form = WorkOrderEditForm()
+        # order by assigned to
+        form.fields['assigned_to'].queryset = User.objects.order_by('username')
     context = {
         'title': 'Add Work Order',
         'form': form,
