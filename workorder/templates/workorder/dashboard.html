@@ -6,7 +6,7 @@
 <div class="mb-4 row">
     <!-- retrain graph -->
     <div class="p-3 mt-4 mr-3 ml-3 card " style="height: 300px;width: 100%;">
-        <h4 class="text-center">WO productivity KPI</h4>
+        <h4 class="text-center">Last 30 days WO productivity KPI</h4>
         <div class="d-flex align-items-center justify-content-center" style="height: 220px;">
             <canvas id="myChart6" width="1000" height="200" ></canvas>
         </div>
@@ -83,7 +83,8 @@
                 data:  {{ status_kpi_values|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0, 
             }]
         },
         options: {
@@ -133,7 +134,8 @@
                 data: {{ timing_kpi_values|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0, 
             }]
         },
         options: {
@@ -182,7 +184,8 @@
                 data:  {{ productivity_kpi_values|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0, 
             }]
         },
         options: {

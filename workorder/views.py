@@ -48,7 +48,7 @@ def dashboard(request):
     timing_kpi = KPIValue.objects.filter(kpi__name='Timing On Time').order_by('date')
     timing_kpi_values = [value.value for value in timing_kpi]
     timing_kpi_dates = [value.date.strftime('%m-%d-%Y') for value in timing_kpi]
-    productivity_kpi = KPIValue.objects.filter(kpi__name='Productivity').order_by('date')
+    productivity_kpi = KPIValue.objects.filter(kpi__name='Productivity', date__gte=timezone.now() - datetime.timedelta(days=30)).order_by('date')
     productivity_kpi_values = [value.value for value in productivity_kpi]
     productivity_kpi_dates = [value.date.strftime('%m-%d-%Y') for value in productivity_kpi]
 
