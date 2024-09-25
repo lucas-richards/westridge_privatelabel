@@ -224,7 +224,8 @@
                 data:  {{ fully_trained_values|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0,            // Remove the dots
             }]
         },
         options: {
@@ -274,7 +275,8 @@
                 data:  {{ training_performed_values|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0,            // Remove the dots
             }]
         },
         options: {
@@ -323,14 +325,16 @@
                 data:  {{ retraining_not_performed_values|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0,            // Remove the dots
             },
             {
                 label: 'Overdue %', // Label for the new line
                 data:  {{ retraining_overdue_values|safe }}, // Data for the new line
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
+                borderWidth: 1,
+                pointRadius: 0,            // Remove the dots
             }]
         },
         options: {
