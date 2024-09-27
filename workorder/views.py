@@ -18,6 +18,30 @@ from users.models import User
 def dashboard(request):
     # get the work orders records status and count
     work_orders_records = WorkOrderRecord.objects.all()
+    assets = Asset.objects.all()
+
+    # create a dictionary to store how many assets have 0 workorders, 1, 2, 3 or more
+    assets_workorders_count = {
+        'total': assets.count(),
+        'zero': 0,
+        'one': 0,
+        'two': 0,
+        'three': 0,
+        'more': 0,
+    }
+    for asset in assets:
+        workorders_count = WorkOrder.objects.filter(asset=asset).count()
+        if workorders_count == 0:
+            assets_workorders_count['zero'] += 1
+        elif workorders_count == 1:
+            assets_workorders_count['one'] += 1
+        elif workorders_count == 2:
+            assets_workorders_count['two'] += 1
+        elif workorders_count == 3:
+            assets_workorders_count['three'] += 1
+        else:
+            assets_workorders_count['more'] += 1
+    print(assets_workorders_count)
 
     work_orders_records_status = {
         'done': work_orders_records.filter(status='done').count(),
@@ -62,6 +86,7 @@ def dashboard(request):
         'timing_kpi_dates': timing_kpi_dates,
         'productivity_kpi_values': productivity_kpi_values,
         'productivity_kpi_dates': productivity_kpi_dates,
+        'assets_workorders_count': assets_workorders_count,
         
     }
     return render(request, 'workorder/dashboard.html', context)
@@ -427,6 +452,7 @@ def workorder_record(request, id):
                 'workorder_title': record.workorder.title if record.workorder else '',
                 'workorder_description': record.workorder.description if record.workorder else '',
                 'workorder_asset': record.workorder.asset.code if record.workorder.asset else '',
+                'workorder_asset_name': record.workorder.asset.name if record.workorder.asset else '',
                 'status': record.status,
                 'due_date': record.due_date.strftime('%m-%d-%Y') if record.due_date else '',
                 'completed_on': record.completed_on.strftime('%Y-%m-%d') if record.completed_on else '',

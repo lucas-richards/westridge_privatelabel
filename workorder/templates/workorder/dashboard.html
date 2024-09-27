@@ -13,7 +13,7 @@
     </div>
 
     <div class="col-md-6">
-        <!-- Fully trained graph -->
+        <!-- Work Orders Status -->
         <div class="p-3 mt-3 card " style="height: 300px;">
             <div class="d-flex align-items-center justify-content-between">
                 <h4 class="text-center">Work Orders Status</h4>
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <!-- train graph -->
+        <!-- Open Work Orders -->
         <div class="p-3 mt-3 card " style="height: 300px;">
             <div class="d-flex align-items-center justify-content-between">
                 <h4 class="text-center">Open Work Orders</h4>
@@ -33,6 +33,19 @@
             
             <div class="d-flex align-items-center justify-content-center" style="height: 250px;">
                 <canvas class="p-2" id="myChart3"></canvas>
+            </div>
+            
+        </div>
+
+        <!-- Assets Work Orders -->
+        <div class="p-3 mt-3 card " style="height: 300px;">
+            <div class="d-flex align-items-center justify-content-between">
+                <h4 class="text-center">Asset's Work Orders</h4>
+                <p class="btn btn-sm btn-outline-primary">{{ assets_workorders_count.total }}</p>
+            </div>
+            
+            <div class="d-flex align-items-center justify-content-center" style="height: 250px;">
+                <canvas class="p-2" id="myChart4"></canvas>
             </div>
             
         </div>
@@ -339,6 +352,68 @@
         });
     
 </script>
+
+<!-- Assets work orders chart -->
+<script>
+    const ctx4 = document.getElementById('myChart4');
+  
+    var data = [{{ assets_workorders_count.zero }},{{ assets_workorders_count.one }},{{ assets_workorders_count.two }},{{ assets_workorders_count.three }},{{ assets_workorders_count.more }}];
+  
+      var labels = Object.keys(data);
+      var values = Object.values(data);
+    
+      new Chart(ctx4, {
+          type: 'doughnut',
+          data: {
+              labels: ['0 Work Orders', '1 Work Order', '2 Work Orders', '3 Work Orders', '+4 Work Orders'],
+              datasets: [{
+                  label: 'Assets',
+                  data: values,
+                  borderWidth: 1,
+                  backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(13, 110, 253, 0.5)',  'rgba(255, 193, 7, 0.5)','rgba(108, 117, 125, 0.5)', 'rgba(25, 135, 84, 0.5)']
+              }]
+          },
+          options: {
+            plugins: {
+                legend: {
+                  position: 'right',
+                    display: true, // Display the legend
+                    labels: {
+                        fontColor: 'black', // Color of text in legend
+                        boxWidth: 20, // Width of colored box
+                        padding: 20 // Padding between legend elements
+                    },
+                  },
+                  datalabels: {
+                      display: true,
+                      color: 'black'
+                      
+                  },
+                
+            },
+            scales: {
+                x: {
+                    display: false
+                  
+                },
+                y: {
+                    display: false
+                }
+            }
+        }
+      });
+    
+          // Registering the legend position override for the second pie chart
+          Chart.register({
+              id: 'overrideLegendPosition3',
+              beforeInit: function(chart, args, options) {
+                  if (chart.config.type === 'pie') {
+                      chart.options.plugins.legend.position = 'top';
+                  }
+              }
+          });
+      
+  </script>
 
 
 
