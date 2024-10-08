@@ -49,7 +49,8 @@ CORS_ALLOWED_ORIGINS = [
 
 INSTALLED_APPS = [
     # 'rest_framework',
-    'workorder.apps.WorkorderConfig',
+    # 'workorder.apps.WorkorderConfig',
+    'privatelabel.apps.PrivatelabelConfig',
     'tasks.apps.TasksConfig',
     'training.apps.TrainingConfig',
     'users.apps.UsersConfig',
@@ -124,9 +125,9 @@ WSGI_APPLICATION = 'django_projects.wsgi.application'
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.postgresql',
-         'NAME': 'mydb',
-         'USER': 'lucas',
-         'PASSWORD': 'lucas',
+         'NAME': 'mydb2',
+         'USER': 'lucas2',
+         'PASSWORD': 'lucas2',
          'HOST': 'localhost',
          'PORT': '5432',
      }

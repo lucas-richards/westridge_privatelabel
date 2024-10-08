@@ -1,0 +1,111 @@
+{% extends "privatelabel/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    .flex-container {
+        display: flex;
+        align-items:center;
+        justify-content: space-between;
+    }
+    
+</style>
+
+
+<div class="flex-container">
+    <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Record" style="width: 33%;" oninput="filter()">
+    {% if user.is_authenticated %}
+        <a href="#" class="btn btn-outline-primary">Create Order</a>
+    {% endif %}
+ </div>
+
+ 
+
+<table class="table mt-5 table-hover">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Date Received</th>
+            <th>Due Date</th>
+            <th>Progress</th>
+            <th>Next Step</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+            <tr class="item cursor-pointer" data-toggle="modal"  data-target="#orderModal{{ order.id }}">
+                <td>{{ order.customer.name }}</td>
+                <td>{{ order.product.name }}</td>
+                <td>{{ order.date_received|timesince:"" }} ago</td>
+                <td>In {{ order.due_date|timeuntil:"" }}</td>
+                <td>
+                    <div class="progress" style="width: 100%;">
+                        <div class="progress-bar bg-success text-center" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:80%">
+                          80%
+                        </div>
+                    </div>
+                </td>
+                <td>Manufacture</td>
+            </tr>
+
+            <!-- Modal -->
+            <div class="modal fade" id="orderModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel{{ order.id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="orderModalLabel{{ order.id }}">Order Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Customer:</strong> {{ order.customer.name }}</p>
+                            <p><strong>Product:</strong> {{ order.product.name }}</p>
+                            <p><strong>Date Received:</strong> {{ order.date_received }}</p>
+                            <p><strong>Due Date:</strong> {{ order.due_date }}</p>
+                            <p><strong>Progress:</strong> 80%</p>
+                            <p><strong>Next Step:</strong> Manufacture</p>
+                            <!-- Add more details as needed -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </tbody>
+</table>
+ 
+    
+ <script>
+    function filter() {
+    var input = document.getElementById("searchBox");
+    var filter = input.value.toUpperCase().trim();
+    var items = document.getElementsByClassName("item");
+    let firstVisibleitem = null;
+
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        var itemText = item.innerText.toUpperCase().trim();
+
+        if (itemText.indexOf(filter) > -1) {
+            item.style.display = "";
+            if (!firstVisibleitem) {
+                firstVisibleitem = item;
+            }
+        } else {
+            item.style.display = "none";
+        }
+    }
+
+    // Trigger click on the first visible item after filtering
+    if (firstVisibleitem) {
+        firstVisibleitem.querySelector('.workorder-item').click();
+    }
+}
+</script>
+
+
+
+{% endblock content %}

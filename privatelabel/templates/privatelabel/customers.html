@@ -1,0 +1,35 @@
+{% extends "privatelabel/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    .flex-container {
+        display: flex;
+        align-items:center;
+        justify-content: space-between;
+    }
+</style>
+
+<div class="flex-container">
+    <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Record" style="width: 33%;" oninput="filter()">
+    {% if user.is_authenticated %}
+        <a href="#" class="btn btn-outline-primary">Create Customer</a>
+    {% endif %}
+ </div>
+
+<!-- list of customers -->
+ <div>
+    <ul>
+        {% for customer in customers %}
+            <li class="asset-item">
+                <div class="asset-details">
+                    <h5>{{ customer.name }}<small> - ({{ customer.email }})</small></h5>
+                    
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+ </div>
+
+
+
+{% endblock content %}

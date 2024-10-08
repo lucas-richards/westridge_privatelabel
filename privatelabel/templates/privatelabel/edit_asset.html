@@ -1,0 +1,99 @@
+{% extends "workorder/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    .truncate {
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px; /* Adjust the width as needed */
+    }
+
+    .highlight {
+        background-color: #f0f0f0; /* Adjust the color as needed */
+        border-left: 4px solid #007bff; /* Adjust the color as needed */
+    }
+
+    .asset-item {
+        padding: 10px;
+        cursor: pointer; /* Show hand cursor on hover */
+        border-bottom: 1px solid #e9ecef; /* Bottom border gray */
+    }
+
+    .asset-item:hover {
+        background-color: #e9ecef; /* Optional: Add a hover effect */
+    }
+
+    .asset-details img {
+        width: 70px; /* Set the width of the image */
+        height: 70px;
+        border-radius: 25px;
+        margin-bottom: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .asset-details h5 {
+        margin-bottom: 15px;
+    }
+</style>
+
+<!-- create two columns -->
+<div class="mb-4 row">
+    <div class="col-md-4">
+        <div class="mt-3 card" style=" overflow-y: scroll;">
+                <div class="d-flex justify-content-start align-items-center asset-item">
+                    <div class="mr-2 asset-details">
+                        {% if asset.image %}
+                            <img src="{{ asset.image.url }}" alt="{{ asset.name }}" class="asset-details img-thumbnail">
+                        {% else %}
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h5 class="mr-2 font-weight-bold">{{ asset.code }}</h5>
+                        <p class="truncate">{{ asset.name }}</p>
+                    </div>
+                    {% if asset.status == 'online' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-success" viewBox="0 0 10 10">
+                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                        </svg>
+                    {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-dot text-danger" viewBox="0 0 10 10">
+                            <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                        </svg>
+                    {% endif %}
+                </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <!-- Edit asset form -->
+        <div class="p-3 mt-3 card">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-4 row">
+                    <div class="col-md-9">
+                        {{ form|crispy }}
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="m-3 btn btn-primary">Save</button>
+                    </div>
+                
+                </div>
+            </form>
+        </div>
+        <!-- button to delete item -->
+        
+            <form method="post" action="{% url 'workorder-delete-asset' asset.id %}">
+                {% csrf_token %}
+                <button type="submit" class="m-3 btn btn-danger">Delete</button>
+            </form>
+
+    </div>
+</div>
+
+
+
+
+{% endblock content %}
