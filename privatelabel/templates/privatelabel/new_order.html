@@ -1,0 +1,33 @@
+{% extends "privatelabel/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+
+<div class="container">
+    <h5>New Order</h5>
+      
+
+    <div class="col-md-8">
+        <!-- Edit asset form -->
+        <div class="p-3 mt-3 card">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-4 row">
+                    <div class="col-md-9">
+                        {{ form|crispy }}
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="m-3 btn btn-primary">Save</button>
+                    </div>
+                
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

@@ -14,7 +14,7 @@
 <div class="flex-container">
     <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Record" style="width: 33%;" oninput="filter()">
     {% if user.is_authenticated %}
-        <a href="#" class="btn btn-outline-primary">Create Order</a>
+        <a href="{% url 'privatelabel-new_order' %}" class="btn btn-outline-primary">Create Order</a>
     {% endif %}
  </div>
 
@@ -33,43 +33,97 @@
     </thead>
     <tbody>
         {% for order in orders %}
-            <tr class="item cursor-pointer" data-toggle="modal"  data-target="#orderModal{{ order.id }}">
+            <tr class="item" style="cursor: pointer;" data-toggle="modal"  data-target="#orderModal{{ order.id }}">
                 <td>{{ order.customer.name }}</td>
                 <td>{{ order.product.name }}</td>
                 <td>{{ order.date_received|timesince:"" }} ago</td>
                 <td>In {{ order.due_date|timeuntil:"" }}</td>
                 <td>
                     <div class="progress" style="width: 100%;">
-                        <div class="progress-bar bg-success text-center" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:80%">
-                          80%
+                        <div class="progress-bar bg-success text-center" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress}}%">
+                          {{ order.progress }}%
                         </div>
                     </div>
                 </td>
-                <td>Manufacture</td>
+                <td>Schedule</td>
             </tr>
 
             <!-- Modal -->
-            <div class="modal fade" id="orderModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel{{ order.id }}" aria-hidden="true">
+            <div class="modal fade"  id="orderModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel{{ order.id }}" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+                    <div class="modal-content" >
                         <div class="modal-header">
-                            <h5 class="modal-title" id="orderModalLabel{{ order.id }}">Order Details</h5>
+                            <h5 class="modal-title" id="orderModalLabel{{ order.id }}">Order Details - {{ order.id }}</h5>
+                            
+                            
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <p><strong>Customer:</strong> {{ order.customer.name }}</p>
-                            <p><strong>Product:</strong> {{ order.product.name }}</p>
-                            <p><strong>Date Received:</strong> {{ order.date_received }}</p>
-                            <p><strong>Due Date:</strong> {{ order.due_date }}</p>
-                            <p><strong>Progress:</strong> 80%</p>
-                            <p><strong>Next Step:</strong> Manufacture</p>
+                        
+                        
+                        
+                            <!-- use orderForm -->
+                            <form method="POST" action="{% url 'privatelabel-order' order.id %}">
+                                <div class="modal-body">
+                                {% csrf_token %}
+                                <!-- add an input for the expected to ship date -->
+                                <div class="form-group">
+                                    <label for="order.expected_ship_date">Expected Ship Date</label>
+                                    <input type="date" class="form-control" id="order.expected_ship_date" name="order.expected_ship_date" value="{{ order.expected_ship_date }}">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="order.deposit_stat" name="order.deposit_stat" value="{{order.deposit_stat}}" {% if order.deposit_stat %}checked{% endif %}>
+                                            <label class="form-check-label" for="order.deposit_stat">Deposit</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="order.ingredients_stat" name="order.ingredients_stat" value={{order.ingredients_stat}} {% if order.ingredients_stat %}checked{% endif %}>
+                                            <label class="form-check-label" for="order.ingredients_stat">Ingredients</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="order.spec_stat" name="order.spec_stat" value={{order.spec_stat}} {% if order.spec_stat %}checked{% endif %}>
+                                            <label class="form-check-label" for="order.spec_stat">Spec</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="order.package_stat" name="order.package_stat" value={{order.package_stat}} {% if order.package_stat %}checked{% endif %}>
+                                            <label class="form-check-label" for="order.package_stat">Package</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="order.cap_stat" name="order.cap_stat" value={{order.cap_stat}} {% if order.cap_stat %}checked{% endif %}>
+                                            <label class="form-check-label" for="order.cap_stat">Cap</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="order.label_stat" name="order.label_stat" value={{order.label_stat}} {% if order.label_stat %}checked{% endif %}>
+                                            <label class="form-check-label" for="order.label_stat">Label</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="order.box_stat" name="order.box_stat" value={{order.box_stat}} {% if order.box_stat %}checked{% endif %}>
+                                            <label class="form-check-label" for="order.box_stat">Box</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- add two text fiels for coordinator notes and planning notes -->
+                                <div class="form-group">
+                                    <label for="order.coordinator_notes">Coordinator Notes</label>
+                                    <textarea class="form-control" id="order.coordinator_notes" name="order.coordinator_notes" rows="3">{{ order.coordinator_notes }}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="order.planning_notes">Planning Notes</label>
+                                    <textarea class="form-control" id="order.planning_notes" name="order.planning_notes" rows="3">{{ order.planning_notes }}</textarea>
+                                </div>
+                                
+                                
+                            
                             <!-- Add more details as needed -->
-                        </div>
+                            </div>
+                            <p class="mt-1 ml-1"><small>Last Updated: {{ order.last_updated }}</small></p>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
+                    </form>
                     </div>
                 </div>
             </div>

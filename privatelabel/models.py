@@ -111,6 +111,7 @@ class Order(models.Model):
     shipped = models.BooleanField(default=False)
     coordinator_notes = models.TextField(blank=True, null=True)
     planning_notes = models.TextField(blank=True, null=True)
+    last_updated = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.product.name
