@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Customer, Order, Product
-from .forms import OrderForm
+from .forms import OrderForm, CustomerForm, ProductForm
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 
@@ -24,6 +24,35 @@ def customers(request):
     }
 
     return render(request, 'privatelabel/customers.html', context)
+
+def customer(request, pk):
+    customer = get_object_or_404(Customer, id=pk)
+    productForm = ProductForm()
+
+    
+    context = {
+        'title':'Customer',
+        'customer':customer,
+        'form':productForm,
+    }
+
+    return render(request, 'privatelabel/customer.html', context)
+
+def new_customer(request):
+    customerForm = CustomerForm()
+    
+    if request.method == 'POST':
+        customerForm = CustomerForm(request.POST)
+        if customerForm.is_valid():
+            customerForm.save()
+            return redirect('privatelabel-customers')
+        
+    context = {
+        'title':'New Customer',
+        'form':customerForm,
+    }
+
+    return render(request, 'privatelabel/new_customer.html', context)
 
 def orders(request):
     
@@ -100,3 +129,19 @@ def new_order(request):
     }
 
     return render(request, 'privatelabel/new_order.html', context)
+
+def new_product(request, pk):
+    customer = get_object_or_404(Customer, id=pk)
+    productForm = ProductForm()
+
+    if request.method == 'POST':
+        productForm = ProductForm(request.POST)
+        if productForm.is_valid():
+            productForm.save()
+            return redirect('privatelabel-customer', pk=pk)
+        
+    context = {
+        'title':'New Product',
+        'form':productForm,
+        'customer':customer,
+    }

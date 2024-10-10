@@ -1,0 +1,42 @@
+{% extends "privatelabel/tabs_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h5>{{ customer.name }}</h5>
+            <p>Email: {{ customer.email }}</p>
+            <p>Phone: {{ customer.phone }}</p>
+            <p>Products</p>
+            <ul>
+                {% for product in customer.products.all %}
+                <li>{{ product.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <h5>Create New Product</h5>
+            <form method="post" action="{% url 'privatelabel-new_product' customer.id %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="hidden" id="id_customer" name="customer_id" value="{{ customer.id }}">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+<script>
+    // get the select value with id="id_customer and give th value {{ customer.id }}
+    // this is the customer id
+    var customer_id = document.getElementById("id_customer");
+    customer_id.value = "{{ customer.id }}";
+
+</script>
+
+
+{% endblock content %}

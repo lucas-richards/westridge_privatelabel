@@ -17,7 +17,7 @@ class Product(models.Model):
     sku = models.CharField(max_length=200, unique=True, null=True, blank=True)
     spec_version = models.CharField(max_length=200, null=True, blank=True)
     name = models.CharField(max_length=200)
-    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL, blank=True, related_name='products')
     package = models.CharField(
         max_length=20,
         choices=[

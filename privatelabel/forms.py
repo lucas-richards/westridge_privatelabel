@@ -6,12 +6,12 @@ from .models import Customer, Product, Order
 class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
-        fields = '__all__'
+        fields = ['name', 'email', 'phone']
 
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['sku', 'spec_version', 'name', 'customer', 'package', 'cap', 'label', 'lube']
 
 class OrderForm(forms.ModelForm):
     class Meta:
