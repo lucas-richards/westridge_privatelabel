@@ -25,10 +25,12 @@
         <tr>
             <th>Customer</th>
             <th>Product</th>
+            <th>Quantity</th>
             <th>Date Received</th>
             <th>Due Date</th>
             <th>Progress</th>
             <th>Next Step</th>
+            <th>Take Action</th>
         </tr>
     </thead>
     <tbody>
@@ -36,8 +38,15 @@
             <tr class="item" style="cursor: pointer;" data-toggle="modal"  data-target="#orderModal{{ order.id }}">
                 <td>{{ order.customer.name }}</td>
                 <td>{{ order.product.name }}</td>
+                <td>{{ order.qty }}</td>
                 <td>{{ order.date_received|timesince:"" }} ago</td>
-                <td>In {{ order.due_date|timeuntil:"" }}</td>
+                <td>
+                    {% if order.due_date > now %}
+                        In {{ order.due_date|timeuntil:"" }}
+                    {% else %}
+                        <span style="color: red;">{{ order.due_date|timesince:"" }} ago</span>
+                    {% endif %}
+                </td>
                 <td>
                     <div class="progress" style="width: 100%;">
                         <div class="progress-bar bg-success text-center" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress}}%">
@@ -45,17 +54,19 @@
                         </div>
                     </div>
                 </td>
-                <td>Schedule</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.take_action_user }}</td>
+                
             </tr>
 
             <!-- Modal -->
             <div class="modal fade"  id="orderModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel{{ order.id }}" aria-hidden="true">
-                <div class="modal-dialog" role="document">
+                <div class="modal-dialog" style="max-width: 800px;" role="document">
                     <div class="modal-content" >
                         <div class="modal-header">
                             <h5 class="modal-title" id="orderModalLabel{{ order.id }}">Order Details - {{ order.id }}</h5>
                             
-                            
+                            <p class="mt-1 ml-1"><small>Last Updated: {{ order.last_updated }}</small></p>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -67,11 +78,37 @@
                             <form method="POST" action="{% url 'privatelabel-order' order.id %}">
                                 <div class="modal-body">
                                 {% csrf_token %}
-                                <!-- add an input for the expected to ship date -->
-                                <div class="form-group">
-                                    <label for="order.expected_ship_date">Expected Ship Date</label>
-                                    <input type="date" class="form-control" id="order.expected_ship_date" name="order.expected_ship_date" value="{{ order.expected_ship_date }}">
+
+                                <div class="flex-container">
+                                    <div class="form-group">
+                                        <label for="order.product.name">Product</label>
+                                        <input type="text" style="width: 400px" class="form-control" id="order.product.name" name="order.product.name" value="{{ order.product.name }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="order.qty">Quantity</label>
+                                        <input type="number" class="form-control" id="order.qty" name="order.qty" value="{{ order.qty }}">
+                                    </div>
                                 </div>
+                                <!-- add an input for the expected to ship date -->
+                                <div class="flex-container">
+                                    <div class="form-group">
+                                        <label for="order.date_received">Date Received</label>
+                                        <input type="date" class="form-control" id="order.date_received" name="order.date_received" value="{{ order.date_received|date:'Y-m-d' }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="order.due_date">Due Date</label>
+                                        <input type="date" class="form-control" id="order.due_date" name="order.due_date" value="{{ order.due_date|date:'Y-m-d' }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="order.last_component_eta">Last Component Date</label>
+                                        <input type="date" class="form-control" id="order.last_component_eta" name="order.last_component_eta" value="{{ order.last_component_eta|date:'Y-m-d' }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="order.expected_ship_date">Expected Ship Date</label>
+                                        <input type="date" class="form-control" id="order.expected_ship_date" name="order.expected_ship_date" value="{{ order.expected_ship_date|date:'Y-m-d' }}">
+                                    </div>
+                                </div>
+                                
                                 
                                 <div class="form-group">
                                     <div class="d-flex justify-content-between">
@@ -105,24 +142,108 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- add two text fiels for coordinator notes and planning notes -->
-                                <div class="form-group">
-                                    <label for="order.coordinator_notes">Coordinator Notes</label>
-                                    <textarea class="form-control" id="order.coordinator_notes" name="order.coordinator_notes" rows="3">{{ order.coordinator_notes }}</textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="order.planning_notes">Planning Notes</label>
-                                    <textarea class="form-control" id="order.planning_notes" name="order.planning_notes" rows="3">{{ order.planning_notes }}</textarea>
+                                <div class="flex-container">
+                                    <label for="order.status">Next Step</label>
+                                    <!-- drop down -->
+                                    <select class="form-control" id="order.status" name="order.status">
+                                        <option value="Deposit">Deposit</option>
+                                        <option value="Ingredients">Ingredients</option>
+                                        <option value="Spec">Spec</option>
+                                        <option value="Package">Package</option>
+                                        <option value="Cap">Cap</option>
+                                        <option value="Label">Label</option>
+                                        <option value="Box">Box</option>
+                                        <option value="Complete">Complete</option>
+                                    </select>
+                                    <Label for="order.take_action_user">Take Action</Label>
+                                    <!-- drop down -->
+                                    <select class="form-control" id="order.take_action_user" name="order.take_action_user">
+                                        <option value="Gregg">Gregg</option>
+                                        <option value="Liz">Liz</option>
+                                        <option value="Rosa">Rosa</option>
+                                    </select>
+                                    
                                 </div>
                                 
                                 
-                            
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
                             <!-- Add more details as needed -->
                             </div>
-                            <p class="mt-1 ml-1"><small>Last Updated: {{ order.last_updated }}</small></p>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                        </div>
+                            
+                            <!-- add a gray line -->
+                            <hr>
+
+                            <!-- Notes Section -->
+                             
+                            <div class="mb-2 container">
+                                <div class="row">
+                                    <!-- Notes Section -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label style="text-decoration: underline;">Notes</label>
+                                                <ul id="notes-list-{{order.id}}" style="max-height: 200px; overflow-y: auto">
+                                                    {% for note in order.notes.all reversed %}
+                                                        <li><strong>{{ note.content }}</strong> </br> <small>{{ note.date }}</small></li>
+                                                    {% endfor %}
+                                          
+                                                </ul>
+                                        </div>
+                                    </div>
+                                    <!-- Add Note Section -->
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="new-note">Add Note</label>
+                                            <textarea class="form-control" id="new-note-{{order.id}}" style="width: 100%;" rows="2"></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-secondary btn-sm" id="add-note-button-{{order.id}}">Add Note</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <script>
+                                document.getElementById('add-note-button-{{order.id}}').addEventListener('click', function() {
+                                    
+                                    const noteContent = document.getElementById('new-note-{{order.id}}').value;
+                                    const csrfToken = '{{ csrf_token }}';  // Ensure CSRF token is included in the request
+                            
+                                    if (noteContent.trim()) {
+                                        fetch("{% url 'privatelabel-add-note' order.id %}", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                                "X-CSRFToken": csrfToken  // CSRF token for Django
+                                            },
+                                            body: JSON.stringify({
+                                                content: noteContent
+                                            })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                                const newNoteElement = document.createElement('li');
+                                                newNoteElement.innerHTML = `${data.note.content} </br> <small>Now</small>`;
+                                                const notesList = document.getElementById('notes-list-{{order.id}}');
+                                                notesList.insertBefore(newNoteElement, notesList.firstChild);
+                            
+                                                // Clear the note input field
+                                                document.getElementById('new-note-{{order.id}}').value = '';
+                                            } else {
+                                                alert('Failed to add note.');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error adding note:', error);
+                                            alert('An error occurred.');
+                                        });
+                                    } else {
+                                        alert('Note cannot be empty.');
+                                    }
+                                });
+                            
+                            </script>
+                            
+                        
                     </form>
                     </div>
                 </div>
@@ -159,6 +280,7 @@
     }
 }
 </script>
+
 
 
 

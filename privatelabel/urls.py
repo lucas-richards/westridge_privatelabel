@@ -10,6 +10,7 @@ urlpatterns = [
     path('customer/new/', views.new_customer, name='privatelabel-new_customer'),
     path('customer/<str:pk>/', views.customer, name='privatelabel-customer'),
     path('customer/<str:pk>/new_product/', views.new_product, name='privatelabel-new_product'),
+    path('order/<str:pk>/add_note/', views.add_note, name='privatelabel-add-note'),
     
 
     

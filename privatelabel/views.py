@@ -1,8 +1,13 @@
 from django.shortcuts import render
-from .models import Customer, Order, Product
+from .models import Customer, Order, Product, Note
 from .forms import OrderForm, CustomerForm, ProductForm
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+import json
+from django.db.models import Prefetch
+
 
 # Create your views here.
 
@@ -56,7 +61,11 @@ def new_customer(request):
 
 def orders(request):
     
-    orders = Order.objects.all().order_by('due_date')
+    orders = Order.objects.all().prefetch_related('notes').order_by('-due_date')
+    
+
+    
+
     # make the percentage progress of each order
     for order in orders:
         total_steps = 7
@@ -72,6 +81,7 @@ def orders(request):
         order.progress = round((completed_steps / total_steps) * 100)
         order.progress = order.progress
         order.save()
+    
         
     context = {
         'title':'Orders',
@@ -85,6 +95,14 @@ def order(request, pk):
     
     if request.method == 'POST':
         # Updating the order's status fields based on form data
+        print(request.POST)
+        order.number = request.POST.get('order.number') if request.POST.get('order.number') else order.number
+        order.qty = request.POST.get('order.qty') if request.POST.get('order.qty') else order.qty
+        order.product.name = request.POST.get('order.product.name') if request.POST.get('order.product.name') else order.product.name
+        order.due_date = request.POST.get('order.due_date') if request.POST.get('order.due_date') else order.due_date
+        order.last_component_eta = request.POST.get('order.last_component_eta') if request.POST.get('order.last_component_eta') else order.last_component_eta
+        order.date_received = request.POST.get('order.date_received') if request.POST.get('order.date_received') else order.date_received
+        order.expected_ship_date = request.POST.get('order.expected_ship_date') if request.POST.get('order.expected_ship_date') else order.expected_ship_date
         order.deposit_stat = 'order.deposit_stat' in request.POST
         order.ingredients_stat = 'order.ingredients_stat' in request.POST
         order.spec_stat = 'order.spec_stat' in request.POST
@@ -145,3 +163,31 @@ def new_product(request, pk):
         'form':productForm,
         'customer':customer,
     }
+
+@require_POST
+def add_note(request, pk):
+    try:
+        # Get the order
+        order = Order.objects.get(id=pk)
+        print('request.body:', request.body)
+
+        # Get the note content from the request
+        data = json.loads(request.body.decode("utf-8"))
+        content = data.get('content', '')
+
+        # Create the new note
+        new_note = Note.objects.create(order=order, content=content)
+
+        # Return success response with the new note details
+        return JsonResponse({
+            'success': True,
+            'note': {
+                'content': new_note.content
+            }
+        })
+
+    except Order.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Order not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+    return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)

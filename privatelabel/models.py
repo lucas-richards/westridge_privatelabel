@@ -83,15 +83,10 @@ class Product(models.Model):
 
 # order model
 class Order(models.Model):
-    STATUS = (
-        ('Pending', 'Pending'),
-        ('Out for delivery', 'Out for delivery'),
-        ('Delivered', 'Delivered'),
-    )
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
     product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
-    po_number = models.CharField(max_length=200)
-    po_qty = models.IntegerField(blank=True, null=True)
+    number = models.CharField(max_length=200)
+    qty = models.IntegerField(blank=True, null=True)
     date_received = models.DateField(blank=True, null=True)
     date_entered = models.DateTimeField(blank=True, null=True)
     due_date = models.DateField(blank=True, null=True)
@@ -106,12 +101,35 @@ class Order(models.Model):
     label_stat = models.BooleanField(default=False)
     box_stat = models.BooleanField(default=False)
     last_component_eta = models.DateField(blank=True, null=True)
-    status = models.CharField(max_length=200, null=True, choices=STATUS, blank=True)
     released_to_warehouse = models.BooleanField(default=False)
     shipped = models.BooleanField(default=False)
     coordinator_notes = models.TextField(blank=True, null=True)
     planning_notes = models.TextField(blank=True, null=True)
     last_updated = models.DateTimeField(default=timezone.now)
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('Deposit', 'Deposit'),
+            ('Ingredients', 'Ingredients'),
+            ('Spec', 'Spec'),
+            ('Package', 'Package'),
+            ('Cap', 'Cap'),
+            ('Label', 'Label'),
+            ('Box', 'Box'),
+            ('Schedule', 'Schedule'),
+            ('Ship', 'Ship'),
+        ],
+        default='Deposit'
+    )
 
     def __str__(self):
         return self.product.name
+
+# note model
+class Note(models.Model):
+    order = models.ForeignKey(Order, null=True, on_delete=models.SET_NULL, related_name='notes')
+    content = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.content
