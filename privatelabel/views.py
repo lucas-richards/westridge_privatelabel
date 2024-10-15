@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 import json
 from django.db.models import Prefetch
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -110,12 +111,16 @@ def order(request, pk):
         order.cap_stat = 'order.cap_stat' in request.POST
         order.label_stat = 'order.label_stat' in request.POST
         order.box_stat = 'order.box_stat' in request.POST
-        coordinator_notes = request.POST.get('order.coordinator_notes')
-        planning_notes = request.POST.get('order.planning_notes')
-        if coordinator_notes is not None:
-            order.coordinator_notes = coordinator_notes
-        if planning_notes is not None:
-            order.planning_notes = planning_notes
+        order.status  = request.POST.get('order.status') if request.POST.get('order.status') else order.status
+        first_name = request.POST.get('order.take_action_user')
+        if first_name:
+            try:
+                user = User.objects.get(first_name=first_name)
+                order.take_action_user = user
+            except User.DoesNotExist:
+                order.take_action_user = None
+
+        
         
         order.last_updated = timezone.now()  # Update the last_updated field
         

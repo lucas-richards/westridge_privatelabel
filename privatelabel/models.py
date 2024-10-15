@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 #  customer model
@@ -106,6 +107,7 @@ class Order(models.Model):
     coordinator_notes = models.TextField(blank=True, null=True)
     planning_notes = models.TextField(blank=True, null=True)
     last_updated = models.DateTimeField(default=timezone.now)
+    take_action_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     status = models.CharField(
         max_length=20,
         choices=[

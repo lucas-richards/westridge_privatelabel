@@ -55,14 +55,14 @@
                     </div>
                 </td>
                 <td>{{ order.status }}</td>
-                <td>{{ order.take_action_user }}</td>
+                <td>{{ order.take_action_user.first_name }}</td>
                 
             </tr>
 
             <!-- Modal -->
             <div class="modal fade"  id="orderModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel{{ order.id }}" aria-hidden="true">
                 <div class="modal-dialog" style="max-width: 800px;" role="document">
-                    <div class="modal-content" >
+                    <div class="modal-content"  >
                         <div class="modal-header">
                             <h5 class="modal-title" id="orderModalLabel{{ order.id }}">Order Details - {{ order.id }}</h5>
                             
@@ -76,10 +76,10 @@
                         
                             <!-- use orderForm -->
                             <form method="POST" action="{% url 'privatelabel-order' order.id %}">
-                                <div class="modal-body">
+                                <div class="modal-body rounded p-4 m-4" style="background-color: rgb(243, 241, 241);">
                                 {% csrf_token %}
 
-                                <div class="flex-container">
+                                <div class="m-2 flex-container">
                                     <div class="form-group">
                                         <label for="order.product.name">Product</label>
                                         <input type="text" style="width: 400px" class="form-control" id="order.product.name" name="order.product.name" value="{{ order.product.name }}">
@@ -89,8 +89,97 @@
                                         <input type="number" class="form-control" id="order.qty" name="order.qty" value="{{ order.qty }}">
                                     </div>
                                 </div>
+                                
+                                
+                                <div class="form-group">
+                                    <div class="m-2 d-flex justify-content-between">
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="checkbox" id="order.deposit_stat" name="order.deposit_stat" value="{{ order.deposit_stat }}" {% if order.deposit_stat %}checked{% endif %} onchange="toggleIcon(this, 'deposit-icon')" style="display: none;">
+                                            <label class="form-check-label" for="order.deposit_stat">
+                                                <svg id="deposit-icon" class="{% if order.deposit_stat %}text-success{% else %}text-muted{% endif %}" style="fill: currentColor; width: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M320 96L192 96 144.6 24.9C137.5 14.2 145.1 0 157.9 0L354.1 0c12.8 0 20.4 14.2 13.3 24.9L320 96zM192 128l128 0c3.8 2.5 8.1 5.3 13 8.4C389.7 172.7 512 250.9 512 416c0 53-43 96-96 96L96 512c-53 0-96-43-96-96C0 250.9 122.3 172.7 179 136.4c0 0 0 0 0 0s0 0 0 0c4.8-3.1 9.2-5.9 13-8.4zm84 88c0-11-9-20-20-20s-20 9-20 20l0 14c-7.6 1.7-15.2 4.4-22.2 8.5c-13.9 8.3-25.9 22.8-25.8 43.9c.1 20.3 12 33.1 24.7 40.7c11 6.6 24.7 10.8 35.6 14l1.7 .5c12.6 3.8 21.8 6.8 28 10.7c5.1 3.2 5.8 5.4 5.9 8.2c.1 5-1.8 8-5.9 10.5c-5 3.1-12.9 5-21.4 4.7c-11.1-.4-21.5-3.9-35.1-8.5c-2.3-.8-4.7-1.6-7.2-2.4c-10.5-3.5-21.8 2.2-25.3 12.6s2.2 21.8 12.6 25.3c1.9 .6 4 1.3 6.1 2.1c0 0 0 0 0 0s0 0 0 0c8.3 2.9 17.9 6.2 28.2 8.4l0 14.6c0 11 9 20 20 20s20-9 20-20l0-13.8c8-1.7 16-4.5 23.2-9c14.3-8.9 25.1-24.1 24.8-45c-.3-20.3-11.7-33.4-24.6-41.6c-11.5-7.2-25.9-11.6-37.1-15c0 0 0 0 0 0l-.7-.2c-12.8-3.9-21.9-6.7-28.3-10.5c-5.2-3.1-5.3-4.9-5.3-6.7c0-3.7 1.4-6.5 6.2-9.3c5.4-3.2 13.6-5.1 21.5-5c9.6 .1 20.2 2.2 31.2 5.2c10.7 2.8 21.6-3.5 24.5-14.2s-3.5-21.6-14.2-24.5c-6.5-1.7-13.7-3.4-21.1-4.7l0-13.9z"/>
+                                                </svg>
+                                                <div>Deposit</div>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="checkbox" id="order.ingredients_stat" name="order.ingredients_stat" value="{{ order.ingredients_stat }}" {% if order.ingredients_stat %}checked{% endif %} onchange="toggleIcon(this, 'ingredients-icon')" style="display: none;">
+                                            <label class="form-check-label" for="order.ingredients_stat">
+                                                <svg id="ingredients-icon" class="{% if order.ingredients_stat %}text-success{% else %}text-muted{% endif %}" style="fill: currentColor; width: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M288 0L160 0 128 0C110.3 0 96 14.3 96 32s14.3 32 32 32l0 132.8c0 11.8-3.3 23.5-9.5 33.5L10.3 406.2C3.6 417.2 0 429.7 0 442.6C0 480.9 31.1 512 69.4 512l309.2 0c38.3 0 69.4-31.1 69.4-69.4c0-12.8-3.6-25.4-10.3-36.4L329.5 230.4c-6.2-10.1-9.5-21.7-9.5-33.5L320 64c17.7 0 32-14.3 32-32s-14.3-32-32-32L288 0zM192 196.8L192 64l64 0 0 132.8c0 23.7 6.6 46.9 19 67.1L309.5 320l-171 0L173 263.9c12.4-20.2 19-43.4 19-67.1z"/>
+                                                </svg>
+                                                <div>Ingredients</div>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="checkbox" id="order.spec_stat" name="order.spec_stat" value="{{ order.spec_stat }}" {% if order.spec_stat %}checked{% endif %} onchange="toggleIcon(this, 'spec-icon')" style="display: none;">
+                                            <label class="form-check-label" for="order.spec_stat">
+                                                <svg id="spec-icon" class="{% if order.spec_stat %}text-success{% else %}text-muted{% endif %}" style="fill: currentColor; width: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-288-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM112 256l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64l160 0c8.8 0 16 7.2 16 16s-7.2 16-16 16l-160 0c-8.8 0-16-7.2-16-16s7.2-16 16-16z"/>
+                                                </svg>
+                                                <div>Spec</div>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="checkbox" id="order.package_stat" name="order.package_stat" value="{{ order.package_stat }}" {% if order.package_stat %}checked{% endif %} onchange="toggleIcon(this, 'package-icon')" style="display: none;">
+                                            <label class="form-check-label" for="order.package_stat">
+                                                <svg id="package-icon" class="{% if order.package_stat %}text-success{% else %}text-muted{% endif %}" style="fill: currentColor; width: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M120 0l80 0c13.3 0 24 10.7 24 24l0 40L96 64l0-40c0-13.3 10.7-24 24-24zM32 167.5c0-19.5 10-37.6 26.6-47.9l15.8-9.9C88.7 100.7 105.2 96 122.1 96l75.8 0c16.9 0 33.4 4.7 47.7 13.7l15.8 9.9C278 129.9 288 148 288 167.5c0 17-7.5 32.3-19.4 42.6C280.6 221.7 288 238 288 256c0 19.1-8.4 36.3-21.7 48c13.3 11.7 21.7 28.9 21.7 48s-8.4 36.3-21.7 48c13.3 11.7 21.7 28.9 21.7 48c0 35.3-28.7 64-64 64L96 512c-35.3 0-64-28.7-64-64c0-19.1 8.4-36.3 21.7-48C40.4 388.3 32 371.1 32 352s8.4-36.3 21.7-48C40.4 292.3 32 275.1 32 256c0-18 7.4-34.3 19.4-45.9C39.5 199.7 32 184.5 32 167.5zM96 240c0 8.8 7.2 16 16 16l96 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-96 0c-8.8 0-16 7.2-16 16zm16 112c-8.8 0-16 7.2-16 16s7.2 16 16 16l96 0c8.8 0 16-7.2 16-16s-7.2-16-16-16l-96 0z"/>
+                                                </svg>
+                                                <div>Package</div>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="checkbox" id="order.cap_stat" name="order.cap_stat" value="{{ order.cap_stat }}" {% if order.cap_stat %}checked{% endif %} onchange="toggleIcon(this, 'cap-icon')" style="display: none;">
+                                            <label class="form-check-label" for="order.cap_stat">
+                                                <svg id="cap-icon" class="{% if order.cap_stat %}text-success{% else %}text-muted{% endif %}" style="fill: currentColor; width: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M22.2 32A16 16 0 0 0 6 47.8a26.4 26.4 0 0 0 .2 2.8l67.9 412.1a21.8 21.8 0 0 0 21.3 18.2h325.7a16 16 0 0 0 16-13.4L505 50.7a16 16 0 0 0 -13.2-18.3 24.6 24.6 0 0 0 -2.8-.2L22.2 32zm285.9 297.8h-104l-28.1-147h157.3l-25.2 147z"/>
+                                                </svg>
+                                                <div>Cap</div>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="checkbox" id="order.label_stat" name="order.label_stat" value="{{ order.label_stat }}" {% if order.label_stat %}checked{% endif %} onchange="toggleIcon(this, 'label-icon')" style="display: none;">
+                                            <label class="form-check-label" for="order.label_stat">
+                                                <svg id="label-icon" class="{% if order.label_stat %}text-success{% else %}text-muted{% endif %}" style="fill: currentColor; width: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M448 80c8.8 0 16 7.2 16 16l0 319.8-5-6.5-136-176c-4.5-5.9-11.6-9.3-19-9.3s-14.4 3.4-19 9.3L202 340.7l-30.5-42.7C167 291.7 159.8 288 152 288s-15 3.7-19.5 10.1l-80 112L48 416.3l0-.3L48 96c0-8.8 7.2-16 16-16l384 0zM64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm80 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"/>
+                                                </svg>
+                                                <div>Label</div>
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input" type="checkbox" id="order.box_stat" name="order.box_stat" value="{{ order.box_stat }}" {% if order.box_stat %}checked{% endif %} onchange="toggleIcon(this, 'box-icon')" style="display: none;">
+                                            <label class="form-check-label" for="order.box_stat">
+                                                <svg id="box-icon" class="{% if order.box_stat %}text-success{% else %}text-muted{% endif %}" style="fill: currentColor; width: 40px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                    <path d="M50.7 58.5L0 160l208 0 0-128L93.7 32C75.5 32 58.9 42.3 50.7 58.5zM240 160l208 0L397.3 58.5C389.1 42.3 372.5 32 354.3 32L240 32l0 128zm208 32L0 192 0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-224z"/>
+                                                </svg>
+                                                <div>Box</div>
+                                            </label>
+                                        </div>
+                                        
+                                        <script>
+                                        function toggleIcon(checkbox, iconId) {
+                                            const icon = document.getElementById(iconId);
+                                            if (checkbox.checked) {
+                                                icon.classList.remove('text-muted');
+                                                icon.classList.add('text-success');
+                                            } else {
+                                                icon.classList.remove('text-success');
+                                                icon.classList.add('text-muted');
+                                            }
+                                        }
+                                        </script>
+                                    </div>
+                                </div>
+                                
                                 <!-- add an input for the expected to ship date -->
-                                <div class="flex-container">
+                                <div class="m-2 flex-container">
                                     <div class="form-group">
                                         <label for="order.date_received">Date Received</label>
                                         <input type="date" class="form-control" id="order.date_received" name="order.date_received" value="{{ order.date_received|date:'Y-m-d' }}">
@@ -108,66 +197,36 @@
                                         <input type="date" class="form-control" id="order.expected_ship_date" name="order.expected_ship_date" value="{{ order.expected_ship_date|date:'Y-m-d' }}">
                                     </div>
                                 </div>
-                                
-                                
-                                <div class="form-group">
-                                    <div class="d-flex justify-content-between">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="order.deposit_stat" name="order.deposit_stat" value="{{order.deposit_stat}}" {% if order.deposit_stat %}checked{% endif %}>
-                                            <label class="form-check-label" for="order.deposit_stat">Deposit</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="order.ingredients_stat" name="order.ingredients_stat" value={{order.ingredients_stat}} {% if order.ingredients_stat %}checked{% endif %}>
-                                            <label class="form-check-label" for="order.ingredients_stat">Ingredients</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="order.spec_stat" name="order.spec_stat" value={{order.spec_stat}} {% if order.spec_stat %}checked{% endif %}>
-                                            <label class="form-check-label" for="order.spec_stat">Spec</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="order.package_stat" name="order.package_stat" value={{order.package_stat}} {% if order.package_stat %}checked{% endif %}>
-                                            <label class="form-check-label" for="order.package_stat">Package</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="order.cap_stat" name="order.cap_stat" value={{order.cap_stat}} {% if order.cap_stat %}checked{% endif %}>
-                                            <label class="form-check-label" for="order.cap_stat">Cap</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="order.label_stat" name="order.label_stat" value={{order.label_stat}} {% if order.label_stat %}checked{% endif %}>
-                                            <label class="form-check-label" for="order.label_stat">Label</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="order.box_stat" name="order.box_stat" value={{order.box_stat}} {% if order.box_stat %}checked{% endif %}>
-                                            <label class="form-check-label" for="order.box_stat">Box</label>
-                                        </div>
+                                <div class="m-2 d-flex justify-content-around">
+                                    <div>
+                                        <label for="order.status">Next Step</label>
+                                        <!-- drop down -->
+                                        <select class="form-control" id="order.status" name="order.status">
+                                            <option value="Deposit" {% if order.status == "Deposit" %}selected{% endif %}>Deposit</option>
+                                            <option value="Ingredients" {% if order.status == "Ingredients" %}selected{% endif %}>Ingredients</option>
+                                            <option value="Spec" {% if order.status == "Spec" %}selected{% endif %}>Spec</option>
+                                            <option value="Package" {% if order.status == "Package" %}selected{% endif %}>Package</option>
+                                            <option value="Cap" {% if order.status == "Cap" %}selected{% endif %}>Cap</option>
+                                            <option value="Label" {% if order.status == "Label" %}selected{% endif %}>Label</option>
+                                            <option value="Box" {% if order.status == "Box" %}selected{% endif %}>Box</option>
+                                            <option value="Complete" {% if order.status == "Complete" %}selected{% endif %}>Complete</option>
+                                        </select>
                                     </div>
-                                </div>
-                                <div class="flex-container">
-                                    <label for="order.status">Next Step</label>
-                                    <!-- drop down -->
-                                    <select class="form-control" id="order.status" name="order.status">
-                                        <option value="Deposit">Deposit</option>
-                                        <option value="Ingredients">Ingredients</option>
-                                        <option value="Spec">Spec</option>
-                                        <option value="Package">Package</option>
-                                        <option value="Cap">Cap</option>
-                                        <option value="Label">Label</option>
-                                        <option value="Box">Box</option>
-                                        <option value="Complete">Complete</option>
-                                    </select>
-                                    <Label for="order.take_action_user">Take Action</Label>
-                                    <!-- drop down -->
-                                    <select class="form-control" id="order.take_action_user" name="order.take_action_user">
-                                        <option value="Gregg">Gregg</option>
-                                        <option value="Liz">Liz</option>
-                                        <option value="Rosa">Rosa</option>
-                                    </select>
+                                    <div>
+                                        <Label for="order.take_action_user">Take Action</Label>
+                                        <!-- drop down -->
+                                        <select class="form-control" id="order.take_action_user" name="order.take_action_user">
+                                            <option value="Gregg" {% if order.take_action_user.first_name == "Gregg" %}selected{% endif %}>Gregg</option>
+                                            <option value="Liz" {% if order.take_action_user.first_name == "Liz" %}selected{% endif %}>Liz</option>
+                                            <option value="Rosa" {% if order.take_action_user.first_name == "Rosa" %}selected{% endif %}>Rosa</option>
+                                        </select>
+                                    </div>
                                     
                                 </div>
                                 
                                 
                                 <div>
-                                    <button type="submit" class="btn btn-primary">Update</button>
+                                    <button type="submit" class="mt-2 btn btn-primary">Update</button>
                                 </div>
                             <!-- Add more details as needed -->
                             </div>
