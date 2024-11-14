@@ -108,6 +108,14 @@ class Order(models.Model):
     planning_notes = models.TextField(blank=True, null=True)
     last_updated = models.DateTimeField(default=timezone.now)
     take_action_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    # attachment for purchase order
+    customer_po = models.FileField(upload_to='attachments/', blank=True, null=True)
+    # attachment for official quote
+    official_quote = models.FileField(upload_to='attachments/', blank=True, null=True)
+    # attachment for quality agreement
+    quality_agreement = models.FileField(upload_to='attachments/', blank=True, null=True)
+    # attachment for terms and conditions
+    terms_and_conditions = models.FileField(upload_to='attachments/', blank=True, null=True)
     status = models.CharField(
         max_length=20,
         choices=[
