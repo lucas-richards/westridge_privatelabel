@@ -1,6 +1,5 @@
 # ignore media files
 media/
-settings.py
 
 # Mac
 .DS_store
