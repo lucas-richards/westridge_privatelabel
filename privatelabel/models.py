@@ -93,6 +93,7 @@ class Order(models.Model):
     due_date = models.DateField(blank=True, null=True)
     desired_date = models.DateField(blank=True, null=True)
     expected_ship_date = models.DateField(blank=True, null=True)
+    scheduled_date = models.DateField(blank=True, null=True)
     # week_scheduled = models.IntegerField(blank=True, null=True)
     deposit_stat = models.BooleanField(default=False)
     ingredients_stat = models.BooleanField(default=False)

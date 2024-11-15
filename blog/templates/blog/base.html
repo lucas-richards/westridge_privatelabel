@@ -31,7 +31,7 @@
     }
   </style>
     <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-warning fixed-top">
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: rgba(88, 123, 155, 1)">
         <div class="container">
           <!-- add user picture if logged in -->
             {% if user.is_authenticated %}
@@ -47,7 +47,7 @@
             <div class="navbar-nav mr-auto">
               
             <!-- <a class="nav-item nav-link" href="{% url 'training-dashboard' %}">Training</a> -->
-            <a class="nav-item nav-link" href="{% url 'privatelabel-dashboard' %}">Private Label</a>
+            <a class="nav-item nav-link" href="{% url 'privatelabel-orders' %}">Private Label</a>
             <!-- workorder link -->
             
             <!-- <a class="nav-item nav-link" href="{% url 'tasks-home' %}">Tasks</a> -->

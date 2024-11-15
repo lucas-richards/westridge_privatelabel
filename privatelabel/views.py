@@ -62,10 +62,8 @@ def new_customer(request):
 
 def orders(request):
     
-    orders = Order.objects.all().prefetch_related('notes').order_by('-due_date')
-    
+    orders = Order.objects.all().prefetch_related('notes').order_by('due_date')
 
-    
 
     # make the percentage progress of each order
     for order in orders:
@@ -96,7 +94,7 @@ def order(request, pk):
     
     if request.method == 'POST':
         # Updating the order's status fields based on form data
-        print('request.post',request.POST)
+        print('request.post',request.FILES)
         order.number = request.POST.get('order.number') if request.POST.get('order.number') else order.number
         order.qty = request.POST.get('order.qty') if request.POST.get('order.qty') else order.qty
         order.product.name = request.POST.get('order.product.name') if request.POST.get('order.product.name') else order.product.name
@@ -104,6 +102,7 @@ def order(request, pk):
         order.last_component_eta = request.POST.get('order.last_component_eta') if request.POST.get('order.last_component_eta') else None
         order.date_received = request.POST.get('order.date_received') if request.POST.get('order.date_received') else None
         order.expected_ship_date = request.POST.get('order.expected_ship_date') if request.POST.get('order.expected_ship_date') else None
+        order.scheduled_date = request.POST.get('order.scheduled_date') if request.POST.get('order.scheduled_date') else None
         order.deposit_stat = 'order.deposit_stat' in request.POST
         order.ingredients_stat = 'order.ingredients_stat' in request.POST
         order.spec_stat = 'order.spec_stat' in request.POST
