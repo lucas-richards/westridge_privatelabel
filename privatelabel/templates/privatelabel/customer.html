@@ -1,19 +1,61 @@
 {% extends "privatelabel/tabs_nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
+<style>
+    .customer-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 16px;
+        max-width: 400px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
+    }
+    .customer-name {
+        margin-bottom: 12px;
+        font-size: 18px;
+        color: #333;
+    }
+    .customer-info {
+        margin: 4px 0;
+        font-size: 14px;
+        color: #555;
+    }
+    .customer-products {
+        margin-top: 16px;
+    }
+    .customer-products h6 {
+        margin-bottom: 8px;
+        font-size: 16px;
+        color: #444;
+    }
+    .product-list {
+        list-style-type: disc;
+        margin: 0;
+        padding-left: 20px;
+    }
+    .product-item {
+        font-size: 14px;
+        color: #333;
+    }
+</style>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <h5>{{ customer.name }}</h5>
-            <p>Email: {{ customer.email }}</p>
-            <p>Phone: {{ customer.phone }}</p>
-            <p>Products</p>
-            <ul>
-                {% for product in customer.products.all %}
-                <li>{{ product.name }}</li>
-                {% endfor %}
-            </ul>
+            <div class="customer-card">
+                <h5 class="customer-name">{{ customer.name }}</h5>
+                <p class="customer-info"><strong>Email:</strong> {{ customer.email }}</p>
+                <p class="customer-info"><strong>Phone:</strong> {{ customer.phone }}</p>
+                <div class="customer-products">
+                    <h6>Products</h6>
+                    <ul class="product-list">
+                        {% for product in customer.products.all %}
+                        <li class="product-item">{{ product.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
             <h5>Create New Product</h5>
@@ -35,6 +77,7 @@
     // this is the customer id
     var customer_id = document.getElementById("id_customer");
     customer_id.value = "{{ customer.id }}";
+    
 
 </script>
 

@@ -6,8 +6,9 @@ from django.contrib.auth.models import User
 #  customer model
 class Customer(models.Model):
     name = models.CharField(max_length=200)
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
+    email = models.EmailField(null=True, blank=True)
+    phone = models.CharField(max_length=20,null=True, blank=True)
+    need_deposit = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

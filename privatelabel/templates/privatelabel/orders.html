@@ -31,31 +31,29 @@
             <th>Customer</th>
             <th>Product</th>
             <th>Quantity</th>
-            <th>Date Received</th>
             <th>Due Date</th>
+            <th>Desired Date</th>
             <th>Scheduled</th>
             <th>Progress</th>
             <th>Next Step</th>
             <th>Take Action</th>
+            <th>Days Till Due</th>
         </tr>
     </thead>
     <tbody>
         {% for order in orders %}
             <tr class="item" style="cursor: pointer;" data-toggle="modal"  data-target="#orderModal{{ order.id }}">
                 <td>{{ order.customer.name }}</td>
-                <td>{{ order.product.name }}</td>
+                <td>{{ order.product.name|truncatechars:30 }}</td>
                 <td>{{ order.qty }}</td>
                 <td>
-                    {{ order.date_received|date:"m/d/y"}}
-                    <br> <small style="color: rgb(207, 203, 203);">{{ order.date_received|timesince }} ago</small>
+                    {{ order.due_date|date:"m/d/y" }}
                 </td>
                 <td>
-                    {{ order.due_date|date:"m/d/y" }}
-                    <br> <small style="color: rgb(207, 203, 203);">{{ order.due_date|timesince }} ago</small>
+                    {{ order.desired_date|date:"m/d/y"}}
                 </td>
                 <td>
                     {{ order.scheduled_date|date:"m/d/y" }}
-                    <br> <small style="color: rgb(207, 203, 203);">{{ order.scheduled_date|timeuntil }}</small>
                 </td>
                 <td>
                     <div class="progress" style="width: 100%;">
@@ -66,6 +64,7 @@
                 </td>
                 <td>{{ order.status }}</td>
                 <td>{{ order.take_action_user.first_name }}</td>
+                <td class="">{{ order.days_left }}</td>
                 
             </tr>
 
@@ -92,55 +91,69 @@
                                 <div class="m-2 flex-container">
                                     <div class="form-group">
                                         <label for="order.product.name">Product</label>
-                                        <input type="text" style="width: 400px" class="form-control" id="order.product.name" name="order.product.name" value="{{ order.product.name }}">
+                                        <input type="text" style="width: 300px" class="form-control" id="order.product.name" name="order.product.name" value="{{ order.product.name }}">
                                     </div>
                                     <div class="form-group">
                                         <label for="order.qty">Quantity</label>
-                                        <input type="number" class="form-control" id="order.qty" name="order.qty" value="{{ order.qty }}">
+                                        <input type="number" style="width: 150px" class="form-control" id="order.qty" name="order.qty" value="{{ order.qty }}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="order.status">Next Step</label>
+                                        <!-- drop down -->
+                                        <select class="form-control" id="order.status" name="order.status">
+                                            <option value="Deposit" {% if order.status == "Deposit" %}selected{% endif %}>Deposit</option>
+                                            <option value="Ingredients" {% if order.status == "Ingredients" %}selected{% endif %}>Ingredients</option>
+                                            <option value="Spec" {% if order.status == "Spec" %}selected{% endif %}>Spec</option>
+                                            <option value="Package" {% if order.status == "Package" %}selected{% endif %}>Package</option>
+                                            <option value="Cap" {% if order.status == "Cap" %}selected{% endif %}>Cap</option>
+                                            <option value="Label" {% if order.status == "Label" %}selected{% endif %}>Label</option>
+                                            <option value="Box" {% if order.status == "Box" %}selected{% endif %}>Box</option>
+                                            <option value="Complete" {% if order.status == "Complete" %}selected{% endif %}>Complete</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <Label for="order.take_action_user">Take Action</Label>
+                                        <!-- drop down -->
+                                        <select class="form-control" id="order.take_action_user" name="order.take_action_user">
+                                            <option value="Gregg" {% if order.take_action_user.first_name == "Gregg" %}selected{% endif %}>Gregg</option>
+                                            <option value="Liz" {% if order.take_action_user.first_name == "Liz" %}selected{% endif %}>Liz</option>
+                                            <option value="Rosa" {% if order.take_action_user.first_name == "Rosa" %}selected{% endif %}>Rosa</option>
+                                        </select>
                                     </div>
                                 </div>
 
+                                <!-- add an input for the expected to ship date -->
                                 <div class="m-2 flex-container">
-                                    <div class="form-group border p-2 rounded d-flex flex-column">
-                                        <label class="text-center" for="order.customer_po"><i class="fa-solid fa-file-invoice"></i> CPO</label>
-                                        <input style="width: 120px;" type="file" class="form-control-file" id="order.customer_po" name="order.customer_po">
-                                        {% if order.customer_po %}
-                                            <br><a href="{{ order.customer_po.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                        {% else %}
-                                            <br><span class="text-muted">No file uploaded</span>
-                                        {% endif %}
+                                    <div class="form-group">
+                                        <label for="order.desired_date">Desired Date</label>
+                                        <input type="date" class="form-control" id="order.desired_date" name="order.desired_date" value="{{ order.desired_date|date:'Y-m-d' }}">
                                     </div>
-                                    <div class="form-group border p-2 rounded d-flex flex-column">
-                                        <label class="text-center" for="order.quality_agreement"><i class="fa-solid fa-file-contract"></i> QA</label>
-                                        <input style="width: 120px;" type="file" class="form-control-file" id="order.quality_agreement" name="order.quality_agreement">
-                                        {% if order.quality_agreement %}
-                                            <br><a href="{{ order.quality_agreement.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                            {% else %}
-                                            <br><span class="text-muted">No file uploaded</span>
-                                        {% endif %}
+                                    <div class="form-group">
+                                        <label for="order.due_date">Due Date</label>
+                                        <input type="date" class="form-control" id="order.due_date" name="order.due_date" value="{{ order.due_date|date:'Y-m-d' }}">
                                     </div>
-                                    <div class="form-group border p-2 rounded d-flex flex-column">
-                                        <label class="text-center" for="order.terms_and_conditions"><i class="fa-solid fa-file-signature"></i> T&C</label>
-                                        <input style="width: 120px;" type="file" class="form-control-file" id="order.terms_and_conditions" name="order.terms_and_conditions">
-                                        {% if order.terms_and_conditions %}
-                                            <br><a href="{{ order.terms_and_conditions.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                            {% else %}
-                                            <br><span class="text-muted">No file uploaded</span>
-                                        {% endif %}
+                                    <div class="form-group">
+                                        <label for="order.last_component_eta">Last Comp. Date</label>
+                                        <input type="date" class="form-control" id="order.last_component_eta" name="order.last_component_eta" value="{{ order.last_component_eta|date:'Y-m-d' }}">
                                     </div>
-                                    <div class="form-group border p-2 rounded d-flex flex-column">
-                                        <label class="text-center" for="order.official_quote"><i class="fa-solid fa-file-invoice-dollar"></i> OQ</label>
-                                        <input style="width: 120px;" type="file" class="form-control-file" id="order.official_quote" name="order.official_quote">
-                                        {% if order.official_quote %}
-                                            <a href="{{ order.official_quote.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                            {% else %}
-                                            <br><span class="text-muted">No file uploaded</span>
-                                        {% endif %}
+                                    <div class="form-group">
+                                        <label for="order.scheduled_date">Scheduled Date</label>
+                                        <input type="date" class="form-control" id="order.scheduled_date" name="order.scheduled_date" value="{{ order.scheduled_date|date:'Y-m-d' }}">
                                     </div>
+                                    <div class="form-group">
+                                        <label for="order.expected_ship_date">Exp. Ship Date</label>
+                                        <input type="date" class="form-control" id="order.expected_ship_date" name="order.expected_ship_date" value="{{ order.expected_ship_date|date:'Y-m-d' }}">
+                                    </div>
+                                </div>
+
+                                <div class="m-2 d-flex justify-content-around">
+                                    
+                                    
+                                    
                                 </div>
                                 
                                 
-                                <div class="form-group">
+                                <div class="mt-3 form-group">
                                     <div class="d-flex justify-content-around" style="background-color: #555657; border-radius: 10px; padding: 10px;">
                                         <!-- Deposit -->
                                         <div class="text-center">
@@ -208,62 +221,76 @@
                                         
                                     </div>
                                 </div>
-                                
-                                <!-- add an input for the expected to ship date -->
-                                <div class="m-2 flex-container">
-                                    <div class="form-group">
-                                        <label for="order.date_received">Date Received</label>
-                                        <input type="date" class="form-control" id="order.date_received" name="order.date_received" value="{{ order.date_received|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.due_date">Due Date</label>
-                                        <input type="date" class="form-control" id="order.due_date" name="order.due_date" value="{{ order.due_date|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.last_component_eta">Last Component Date</label>
-                                        <input type="date" class="form-control" id="order.last_component_eta" name="order.last_component_eta" value="{{ order.last_component_eta|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.scheduled_date">Scheduled Date</label>
-                                        <input type="date" class="form-control" id="order.scheduled_date" name="order.scheduled_date" value="{{ order.scheduled_date|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.expected_ship_date">Expected Ship Date</label>
-                                        <input type="date" class="form-control" id="order.expected_ship_date" name="order.expected_ship_date" value="{{ order.expected_ship_date|date:'Y-m-d' }}">
-                                    </div>
-                                </div>
-                                <div class="m-2 d-flex justify-content-around">
-                                    <div >
-                                        <label for="order.status">Next Step</label>
-                                        <!-- drop down -->
-                                        <select class="form-control" id="order.status" name="order.status">
-                                            <option value="Deposit" {% if order.status == "Deposit" %}selected{% endif %}>Deposit</option>
-                                            <option value="Ingredients" {% if order.status == "Ingredients" %}selected{% endif %}>Ingredients</option>
-                                            <option value="Spec" {% if order.status == "Spec" %}selected{% endif %}>Spec</option>
-                                            <option value="Package" {% if order.status == "Package" %}selected{% endif %}>Package</option>
-                                            <option value="Cap" {% if order.status == "Cap" %}selected{% endif %}>Cap</option>
-                                            <option value="Label" {% if order.status == "Label" %}selected{% endif %}>Label</option>
-                                            <option value="Box" {% if order.status == "Box" %}selected{% endif %}>Box</option>
-                                            <option value="Complete" {% if order.status == "Complete" %}selected{% endif %}>Complete</option>
-                                        </select>
-                                    </div>
-                                    <div >
-                                        <Label for="order.take_action_user">Take Action</Label>
-                                        <!-- drop down -->
-                                        <select class="form-control" id="order.take_action_user" name="order.take_action_user">
-                                            <option value="Gregg" {% if order.take_action_user.first_name == "Gregg" %}selected{% endif %}>Gregg</option>
-                                            <option value="Liz" {% if order.take_action_user.first_name == "Liz" %}selected{% endif %}>Liz</option>
-                                            <option value="Rosa" {% if order.take_action_user.first_name == "Rosa" %}selected{% endif %}>Rosa</option>
-                                        </select>
-                                    </div>
-                                    
-                                    
-                                </div>
-                                
 
+                                <div class="m-2">
+                                    <div class="ml-4 mt-4 form-group row">
+                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
+                                            <i class="fa-solid fa-file-invoice"></i>
+                                            <small class="ml-2 mr-2" for="order.customer_po"> CPO</small>
+                                        </div>
+                                        <div class="col-md-4" style="max-width: 250px;">
+                                            <input type="file" class="form-control-file btn btn-sm" id="order.customer_po" name="order.customer_po" style="width: auto;">
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% if order.customer_po %}
+                                                <a href="{{ order.customer_po.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
+                                            {% else %}
+                                            <small class="btn text-danger">No file uploaded</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 form-group row">
+                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
+                                            <i class="fa-solid fa-file-contract"></i>
+                                            <small class="ml-2 mr-2" for="order.quality_agreement"> QA</small>
+                                        </div>
+                                        <div class="col-md-4" style="max-width: 250px;">
+                                            <input type="file" class="form-control-file btn btn-sm" id="order.quality_agreement" name="order.quality_agreement">
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% if order.quality_agreement %}
+                                                <a href="{{ order.quality_agreement.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
+                                            {% else %}
+                                            <small class="btn text-danger">No file uploaded</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 form-group row">
+                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
+                                            <i class="fa-solid fa-file-signature"></i>
+                                            <small class="ml-2 mr-2" for="order.terms_and_conditions"> T&C</small>
+                                        </div>
+                                        <div class="col-md-4" style="max-width: 250px;">
+                                            <input type="file" class="form-control-file btn btn-sm" id="order.terms_and_conditions" name="order.terms_and_conditions">
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% if order.terms_and_conditions %}
+                                                <a href="{{ order.terms_and_conditions.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
+                                            {% else %}
+                                            <small class="btn text-danger">No file uploaded</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="ml-4 form-group row">
+                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
+                                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                                            <small class="ml-2 mr-2" for="order.official_quote"> OQ</small>
+                                        </div>
+                                        <div class="col-md-4" style="max-width: 250px;">
+                                            <input type="file" class="form-control-file btn btn-sm" id="order.official_quote" name="order.official_quote">
+                                        </div>
+                                        <div class="col-md-4">
+                                            {% if order.official_quote %}
+                                                <a href="{{ order.official_quote.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
+                                            {% else %}
+                                                <small class="btn text-danger">No file uploaded</small>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
                                 
                                 
-                                <div>
+                                <div class="d-flex align-items-center justify-content-end">
                                     <button type="submit" class="mt-2 btn btn-primary">Update</button>
                                 </div>
                             <!-- Add more details as needed -->

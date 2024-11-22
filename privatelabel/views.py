@@ -79,6 +79,12 @@ def orders(request):
         ])
         order.progress = round((completed_steps / total_steps) * 100)
         order.progress = order.progress
+        # add a order status of how many days left to due date and it can be negative is it's past due
+        if order.due_date:
+            order.days_left = (order.due_date - timezone.now().date()).days
+        else:
+            order.days_left = 'No due date'
+
         order.save()
     
         
@@ -100,6 +106,7 @@ def order(request, pk):
         order.product.name = request.POST.get('order.product.name') if request.POST.get('order.product.name') else order.product.name
         order.due_date = request.POST.get('order.due_date') if request.POST.get('order.due_date') else None
         order.last_component_eta = request.POST.get('order.last_component_eta') if request.POST.get('order.last_component_eta') else None
+        order.desired_date = request.POST.get('order.desired_date') if request.POST.get('order.desired_date') else None
         order.date_received = request.POST.get('order.date_received') if request.POST.get('order.date_received') else None
         order.expected_ship_date = request.POST.get('order.expected_ship_date') if request.POST.get('order.expected_ship_date') else None
         order.scheduled_date = request.POST.get('order.scheduled_date') if request.POST.get('order.scheduled_date') else None
