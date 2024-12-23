@@ -8,6 +8,8 @@ from django.http import JsonResponse
 import json
 from django.db.models import Prefetch
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.contrib import messages
 
 
 # Create your views here.
@@ -34,12 +36,14 @@ def customers(request):
 def customer(request, pk):
     customer = get_object_or_404(Customer, id=pk)
     productForm = ProductForm()
+    customerForm = CustomerForm(instance=customer)
 
     
     context = {
         'title':'Customer',
         'customer':customer,
-        'form':productForm,
+        'formp':productForm,
+        'formc':customerForm,
     }
 
     return render(request, 'privatelabel/customer.html', context)
@@ -171,20 +175,39 @@ def new_order(request):
     return render(request, 'privatelabel/new_order.html', context)
 
 def new_product(request, pk):
+        # Get the customer object or return a 404 if not found
     customer = get_object_or_404(Customer, id=pk)
-    productForm = ProductForm()
-
-    if request.method == 'POST':
-        productForm = ProductForm(request.POST)
-        if productForm.is_valid():
-            productForm.save()
-            return redirect('privatelabel-customer', pk=pk)
-        
+    formp = ProductForm()
+    formc = CustomerForm(instance=customer)
+    # Initialize the forms
+    if request.method == "POST":
+        print('request.post:', request.POST)
+        formc = CustomerForm(request.POST, instance=customer)
+        if formc.is_valid():
+            formc.save()
+            messages.success(request, 'Customer updated successfully')
+            return redirect('privatelabel-customer', pk=customer.id)
+        formp = ProductForm(request.POST)
+        if formp.is_valid():
+            # Save the new product and associate it with the customer
+            product = formp.save(commit=False)
+            product.customer = customer
+            product.save()
+            messages.success(request, 'Product added successfully')
+            return redirect('privatelabel-customer', pk=customer.id)
+    else:
+        # Initialize forms for GET requests
+        formc = CustomerForm(instance=customer)
+        formp = ProductForm()
+    
+    # Pass data to the template
     context = {
-        'title':'New Product',
-        'form':productForm,
-        'customer':customer,
+        'customer': customer,
+        'formc': formc,
+        'formp': formp,
     }
+    return redirect('privatelabel-customer', pk=customer.id)
+        
 
 @require_POST
 def add_note(request, pk):

@@ -44,16 +44,33 @@
     <div class="row">
         <div class="col-md-6">
             <div class="customer-card">
-                <h5 class="customer-name">{{ customer.name }}</h5>
-                <p class="customer-info"><strong>Email:</strong> {{ customer.email }}</p>
-                <p class="customer-info"><strong>Phone:</strong> {{ customer.phone }}</p>
+                <!-- customer form -->
+                <form method="post" action="{% url 'privatelabel-new_product' customer.id %}">
+                    {% csrf_token %}
+                    {{ formc|crispy }}
+                    <input type="hidden" id="id_customer" name="customer_id" value="{{ customer.id }}">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
                 <div class="customer-products">
                     <h6>Products</h6>
+                    {% if customer.products.all %}
                     <ul class="product-list">
                         {% for product in customer.products.all %}
-                        <li class="product-item">{{ product.name }}</li>
+                        <li class="product-item">{{ product.name }}
+                            {% if product.components.all %}
+                            <ul class="component-list">
+                                {% for component in product.components.all %}
+                                <li class="component-item">{{ component.sku }}: </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </li>
                         {% endfor %}
                     </ul>
+                    
+                    {% else %}
+                    <p>No products yet.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -61,7 +78,7 @@
             <h5>Create New Product</h5>
             <form method="post" action="{% url 'privatelabel-new_product' customer.id %}">
                 {% csrf_token %}
-                {{ form|crispy }}
+                {{ formp|crispy }}
                 <input type="hidden" id="id_customer" name="customer_id" value="{{ customer.id }}">
                 <button type="submit" class="btn btn-primary">Create</button>
             </form>

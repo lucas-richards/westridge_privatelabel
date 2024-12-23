@@ -83,6 +83,15 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+class Component(models.Model):
+    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL, related_name='components')
+    sku = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    qty = models.FloatField()
+
+    def __str__(self):
+        return self.product.name + ' - ' + (self.sku)
+
 # order model
 class Order(models.Model):
     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
