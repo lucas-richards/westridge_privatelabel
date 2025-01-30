@@ -9,417 +9,83 @@
     }
     @media (min-width: 1200px) {
         .container {
-            max-width: 1340px;
+            max-width: 1740px;
         }
     }
-    
 </style>
 
+<!-- Your Data Grid container -->
+<div id="myGrid" class="mt-3" style="height: 700px"></div>
 
-<div class="flex-container">
-    <input type="text" id="searchBox" class="form-control text-center" placeholder="Search Record" style="width: 33%;" oninput="filter()">
-    {% if user.is_authenticated %}
-        <a href="{% url 'privatelabel-new_order' %}" class="btn btn-outline-primary">Create Order</a>
-    {% endif %}
- </div>
 
- 
-
-<table class="table mt-5 table-hover">
-    <thead>
-        <tr>
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Due Date</th>
-            <th>Desired Date</th>
-            <th>Scheduled</th>
-            <th>Progress</th>
-            <th>Next Step</th>
-            <th>Take Action</th>
-            <th>Days Till Due</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for order in orders %}
-            <tr class="item" style="cursor: pointer;" data-toggle="modal"  data-target="#orderModal{{ order.id }}">
-                <td>{{ order.customer.name }}</td>
-                <td>{{ order.product.name|truncatechars:30 }}</td>
-                <td>{{ order.qty }}</td>
-                <td>
-                    {{ order.due_date|date:"m/d/y" }}
-                </td>
-                <td>
-                    {{ order.desired_date|date:"m/d/y"}}
-                </td>
-                <td>
-                    {{ order.scheduled_date|date:"m/d/y" }}
-                </td>
-                <td>
-                    <div class="progress" style="width: 100%;">
-                        <div class="progress-bar bg-success text-center" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ order.progress}}%">
-                          {{ order.progress }}%
-                        </div>
-                    </div>
-                </td>
-                <td>{{ order.status }}</td>
-                <td>{{ order.take_action_user.first_name }}</td>
-                <td class="">{{ order.days_left }}</td>
-                
-            </tr>
-
-            <!-- Modal -->
-            <div class="modal fade"  id="orderModal{{ order.id }}" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel{{ order.id }}" aria-hidden="true">
-                <div class="modal-dialog" style="max-width: 900px;" role="document">
-                    <div class="modal-content"  >
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="orderModalLabel{{ order.id }}">Order Details - {{ order.id }}</h5>
-                            
-                            <p class="mt-1 ml-1"><small>Last Updated: {{ order.last_updated }}</small></p>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        
-                        
-                        
-                            <!-- use orderForm -->
-                            <form method="POST" action="{% url 'privatelabel-order' order.id %}" enctype="multipart/form-data">
-                                <div class="modal-body rounded p-4 m-4" style="background-color: rgb(243, 241, 241);">
-                                {% csrf_token %}
-
-                                <div class="m-2 flex-container">
-                                    <div class="form-group">
-                                        <label for="order.product.name">Product</label>
-                                        <input type="text" style="width: 300px" class="form-control" id="order.product.name" name="order.product.name" value="{{ order.product.name }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.qty">Quantity</label>
-                                        <input type="number" style="width: 150px" class="form-control" id="order.qty" name="order.qty" value="{{ order.qty }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.status">Next Step</label>
-                                        <!-- drop down -->
-                                        <select class="form-control" id="order.status" name="order.status">
-                                            <option value="Deposit" {% if order.status == "Deposit" %}selected{% endif %}>Deposit</option>
-                                            <option value="Ingredients" {% if order.status == "Ingredients" %}selected{% endif %}>Ingredients</option>
-                                            <option value="Spec" {% if order.status == "Spec" %}selected{% endif %}>Spec</option>
-                                            <option value="Package" {% if order.status == "Package" %}selected{% endif %}>Package</option>
-                                            <option value="Cap" {% if order.status == "Cap" %}selected{% endif %}>Cap</option>
-                                            <option value="Label" {% if order.status == "Label" %}selected{% endif %}>Label</option>
-                                            <option value="Box" {% if order.status == "Box" %}selected{% endif %}>Box</option>
-                                            <option value="Schedule" {% if order.status == "Schedule" %}selected{% endif %}>Schedule</option>
-                                            <option value="Ship" {% if order.status == "Ship" %}selected{% endif %}>Ship</option>
-                                            <option value="Complete" {% if order.status == "Complete" %}selected{% endif %}>Complete</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <Label for="order.take_action_user">Take Action</Label>
-                                        <!-- drop down -->
-                                        <select class="form-control" id="order.take_action_user" name="order.take_action_user">
-                                            <option value="Gregg" {% if order.take_action_user.first_name == "Gregg" %}selected{% endif %}>Gregg</option>
-                                            <option value="Liz" {% if order.take_action_user.first_name == "Liz" %}selected{% endif %}>Liz</option>
-                                            <option value="Rosa" {% if order.take_action_user.first_name == "Rosa" %}selected{% endif %}>Rosa</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- add an input for the expected to ship date -->
-                                <div class="m-2 flex-container">
-                                    <div class="form-group">
-                                        <label for="order.desired_date">Desired Date</label>
-                                        <input type="date" class="form-control" id="order.desired_date" name="order.desired_date" value="{{ order.desired_date|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.due_date">Due Date</label>
-                                        <input type="date" class="form-control" id="order.due_date" name="order.due_date" value="{{ order.due_date|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.last_component_eta">Last Comp. Date</label>
-                                        <input type="date" class="form-control" id="order.last_component_eta" name="order.last_component_eta" value="{{ order.last_component_eta|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.scheduled_date">Scheduled Date</label>
-                                        <input type="date" class="form-control" id="order.scheduled_date" name="order.scheduled_date" value="{{ order.scheduled_date|date:'Y-m-d' }}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="order.expected_ship_date">Exp. Ship Date</label>
-                                        <input type="date" class="form-control" id="order.expected_ship_date" name="order.expected_ship_date" value="{{ order.expected_ship_date|date:'Y-m-d' }}">
-                                    </div>
-                                </div>
-
-                                <div class="m-2 d-flex justify-content-around">
-                                    
-                                    
-                                    
-                                </div>
-                                
-                                
-                                <div class="mt-3 form-group">
-                                    <div class="d-flex justify-content-around" style="background-color: #555657; border-radius: 10px; padding: 10px;">
-                                        <!-- Deposit -->
-                                        {% if order.customer.need_deposit %}
-                                        <div class="text-center">
-                                            <input class="form-check-input" type="checkbox" id="order.deposit_stat_{{ order.id }}" name="order.deposit_stat" value="{{ order.deposit_stat }}" {% if order.deposit_stat %}checked{% endif %} onchange="toggleIcon(this, 'deposit-icon-{{ order.id }}')" style="display: none;" data-icon-id="deposit-icon-{{ order.id }}">
-                                            <label class="form-check-label" for="order.deposit_stat_{{ order.id }}" style="cursor: pointer;">
-                                                <i id="deposit-icon-{{ order.id }}" class="fa-solid fa-sack-dollar fa-xl {% if order.deposit_stat %}text-success{% else %}text-muted{% endif %}"></i>
-                                                <div class="text-white">Deposit</div>
-                                            </label>
-                                        </div>
-                                        {% else %}
-                                        <input type="hidden" name="order.deposit_stat" value="true">
-                                        {% endif %}
-
-                                        <!-- Ingredients -->
-                                        <div class="text-center">
-                                            <input class="form-check-input" type="checkbox" id="order.ingredients_stat_{{ order.id }}" name="order.ingredients_stat" value="{{ order.ingredients_stat }}" {% if order.ingredients_stat %}checked{% endif %} onchange="toggleIcon(this, 'ingredients-icon-{{order.id}}')" style="display: none;" data-icon-id="ingredients-icon-{{ order.id }}">
-                                            <label class="form-check-label" for="order.ingredients_stat_{{ order.id }}" style="cursor: pointer;">
-                                                <i id="ingredients-icon-{{order.id}}" class="fa-solid fa-flask fa-xl {% if order.ingredients_stat %}text-success{% else %}text-muted{% endif %}"></i>
-                                                <div class="text-white">Ingredients</div>
-                                            </label>
-                                        </div>
-
-                                        <!-- Spec -->
-                                        <div class="text-center">
-                                            <input class="form-check-input" type="checkbox" id="order.spec_stat_{{ order.id }}" name="order.spec_stat" value="{{ order.spec_stat }}" {% if order.spec_stat %}checked{% endif %} onchange="toggleIcon(this, 'spec-icon-{{order.id}}')" style="display: none;" data-icon-id="spec-icon-{{order.id}}">
-                                            <label class="form-check-label" for="order.spec_stat_{{ order.id }}" style="cursor: pointer;">
-                                                <i id="spec-icon-{{order.id}}" class="fa-solid fa-file-lines fa-xl {% if order.spec_stat %}text-success{% else %}text-muted{% endif %}"></i>
-                                                <div class="text-white">Spec</div>
-                                            </label>
-                                        </div>
-
-                                        <!-- Package -->
-                                        <div class="text-center">
-                                            <input class="form-check-input" type="checkbox" id="order.package_stat_{{ order.id }}" name="order.package_stat" value="{{ order.package_stat }}" {% if order.package_stat %}checked{% endif %} onchange="toggleIcon(this, 'package-icon-{{order.id}}')" style="display: none;" data-icon-id="package-icon-{{order.id}}">
-                                            <label class="form-check-label" for="order.package_stat_{{ order.id }}" style="cursor: pointer;">
-                                                <i id="package-icon-{{order.id}}" class="fa-solid fa-bottle-water fa-xl {% if order.package_stat %}text-success{% else %}text-muted{% endif %}"></i>
-                                                <div class="text-white">Package</div>
-                                            </label>
-                                        </div>
-
-                                        <!-- Cap -->
-                                        <div class="text-center">
-                                            <input class="form-check-input" type="checkbox" id="order.cap_stat_{{ order.id }}" name="order.cap_stat" value="{{ order.cap_stat }}" {% if order.cap_stat %}checked{% endif %} onchange="toggleIcon(this, 'cap-icon-{{order.id}}')" style="display: none;" data-icon-id="cap-icon-{{order.id}}">
-                                            <label class="form-check-label" for="order.cap_stat_{{ order.id }}" style="cursor: pointer;">
-                                                <i id="cap-icon-{{order.id}}" class="fa-brands fa-bitbucket fa-rotate-180 fa-xl {% if order.cap_stat %}text-success{% else %}text-muted{% endif %}"></i>
-                                                <div class="text-white">Cap</div>
-                                            </label>
-                                        </div>
-
-                                        <!-- Label -->
-                                        <div class="text-center">
-                                            <input class="form-check-input" type="checkbox" id="order.label_stat_{{ order.id }}" name="order.label_stat" value="{{ order.label_stat }}" {% if order.label_stat %}checked{% endif %} onchange="toggleIcon(this, 'label-icon-{{order.id}}')" style="display: none;" data-icon-id="label-icon-{{order.id}}">
-                                            <label class="form-check-label" for="order.label_stat_{{ order.id }}" style="cursor: pointer;">
-                                                <i id="label-icon-{{order.id}}" class="fa-regular fa-image fa-xl {% if order.label_stat %}text-success{% else %}text-muted{% endif %}"></i>
-                                                <div class="text-white">Label</div>
-                                            </label>
-                                        </div>
-
-                                        <!-- Box -->
-                                        <div class="text-center">
-                                            <input class="form-check-input" type="checkbox" id="order.box_stat_{{ order.id }}" name="order.box_stat" value="{{ order.box_stat }}" {% if order.box_stat %}checked{% endif %} onchange="toggleIcon(this, 'box-icon-{{order.id}}')" style="display: none;" data-icon-id="box-icon-{{order.id}}">
-                                            <label class="form-check-label" for="order.box_stat_{{ order.id }}" style="cursor: pointer;">
-                                                <i id="box-icon-{{order.id}}" class="fa-solid fa-box fa-xl {% if order.box_stat %}text-success{% else %}text-muted{% endif %}"></i>
-                                                <div class="text-white">Box</div>
-                                            </label>
-                                        </div>
-                                        
-                                        
-                                    </div>
-                                </div>
-
-                                <div class="m-2">
-                                    <div class="ml-4 mt-4 form-group row">
-                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
-                                            <i class="fa-solid fa-file-invoice"></i>
-                                            <small class="ml-2 mr-2" for="order.customer_po"> CPO</small>
-                                        </div>
-                                        <div class="col-md-4" style="max-width: 250px;">
-                                            <input type="file" class="form-control-file btn btn-sm" id="order.customer_po" name="order.customer_po" style="width: auto;">
-                                        </div>
-                                        <div class="col-md-4">
-                                            {% if order.customer_po %}
-                                                <a href="{{ order.customer_po.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                            {% else %}
-                                            <small class="btn text-danger">No file uploaded</small>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="ml-4 form-group row">
-                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
-                                            <i class="fa-solid fa-file-contract"></i>
-                                            <small class="ml-2 mr-2" for="order.quality_agreement"> QA</small>
-                                        </div>
-                                        <div class="col-md-4" style="max-width: 250px;">
-                                            <input type="file" class="form-control-file btn btn-sm" id="order.quality_agreement" name="order.quality_agreement">
-                                        </div>
-                                        <div class="col-md-4">
-                                            {% if order.quality_agreement %}
-                                                <a href="{{ order.quality_agreement.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                            {% else %}
-                                            <small class="btn text-danger">No file uploaded</small>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="ml-4 form-group row">
-                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
-                                            <i class="fa-solid fa-file-signature"></i>
-                                            <small class="ml-2 mr-2" for="order.terms_and_conditions"> T&C</small>
-                                        </div>
-                                        <div class="col-md-4" style="max-width: 250px;">
-                                            <input type="file" class="form-control-file btn btn-sm" id="order.terms_and_conditions" name="order.terms_and_conditions">
-                                        </div>
-                                        <div class="col-md-4">
-                                            {% if order.terms_and_conditions %}
-                                                <a href="{{ order.terms_and_conditions.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                            {% else %}
-                                            <small class="btn text-danger">No file uploaded</small>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="ml-4 form-group row">
-                                        <div class="col-md-4 d-flex align-items-center" style="max-width: 60px;">
-                                            <i class="fa-solid fa-file-invoice-dollar"></i>
-                                            <small class="ml-2 mr-2" for="order.official_quote"> OQ</small>
-                                        </div>
-                                        <div class="col-md-4" style="max-width: 250px;">
-                                            <input type="file" class="form-control-file btn btn-sm" id="order.official_quote" name="order.official_quote">
-                                        </div>
-                                        <div class="col-md-4">
-                                            {% if order.official_quote %}
-                                                <a href="{{ order.official_quote.url }}" target="_blank" class="btn btn-link"><i class="fa-solid fa-eye"></i> View File</a>
-                                            {% else %}
-                                                <small class="btn text-danger">No file uploaded</small>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                
-                                <div class="d-flex align-items-center justify-content-end">
-                                    <button type="submit" class="mt-2 btn btn-primary">Update</button>
-                                </div>
-                            <!-- Add more details as needed -->
-                            </div>
-                            <!-- Notes Section -->
-                             
-                            <div class="mb-2 container">
-                                <div class="row">
-                                    <!-- Add Note Section -->
-                                    <div class="col-md-6">
-                                        <div class="ml-4 form-group">
-                                            <label for="new-note">Add Note</label>
-                                            <textarea class="form-control" id="new-note-{{order.id}}" style="width: 100%;" rows="2"></textarea>
-                                        </div>
-                                        <button type="button" class="ml-4 btn btn-secondary btn-sm" id="add-note-button-{{order.id}}">Post</button>
-                                    </div>
-                                    <!-- Notes Section -->
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label style="text-decoration: underline;">Notes</label>
-                                                <ul id="notes-list-{{order.id}}" style="max-height: 200px; overflow-y: auto">
-                                                    {% for note in order.notes.all reversed %}
-                                                        <li><strong>{{ note.content }}</strong> </br> <small>{{ note.date }}</small></li>
-                                                    {% endfor %}
-                                          
-                                                </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <script>
-                                document.getElementById('add-note-button-{{order.id}}').addEventListener('click', function() {
-                                    
-                                    const noteContent = document.getElementById('new-note-{{order.id}}').value;
-                                    const csrfToken = '{{ csrf_token }}';  // Ensure CSRF token is included in the request
-                            
-                                    if (noteContent.trim()) {
-                                        fetch("{% url 'privatelabel-add-note' order.id %}", {
-                                            method: "POST",
-                                            headers: {
-                                                "Content-Type": "application/json",
-                                                "X-CSRFToken": csrfToken  // CSRF token for Django
-                                            },
-                                            body: JSON.stringify({
-                                                content: noteContent
-                                            })
-                                        })
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            if (data.success) {
-                                                const newNoteElement = document.createElement('li');
-                                                newNoteElement.innerHTML = `${data.note.content} </br> <small>Now</small>`;
-                                                const notesList = document.getElementById('notes-list-{{order.id}}');
-                                                notesList.insertBefore(newNoteElement, notesList.firstChild);
-                            
-                                                // Clear the note input field
-                                                document.getElementById('new-note-{{order.id}}').value = '';
-                                            } else {
-                                                alert('Failed to add note.');
-                                            }
-                                        })
-                                        .catch(error => {
-                                            console.error('Error adding note:', error);
-                                            alert('An error occurred.');
-                                        });
-                                    } else {
-                                        alert('Note cannot be empty.');
-                                    }
-                                });
-                            
-                            </script>
-                            
-                        
-                    </form>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </tbody>
-</table>
- 
-<script src="https://kit.fontawesome.com/4c72223fdf.js" crossorigin="anonymous"></script>
- <script>
-    function filter() {
-    var input = document.getElementById("searchBox");
-    var filter = input.value.toUpperCase().trim();
-    var items = document.getElementsByClassName("item");
-    let firstVisibleitem = null;
-
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        var itemText = item.innerText.toUpperCase().trim();
-
-        if (itemText.indexOf(filter) > -1) {
-            item.style.display = "";
-            if (!firstVisibleitem) {
-                firstVisibleitem = item;
-            }
-        } else {
-            item.style.display = "none";
-        }
-    }
-
-}
-</script>
+<!-- table JS -->
 <script>
-    function toggleIcon(checkbox, iconId) {
-    console.log('Checkbox ID:', checkbox.id);
-    console.log('Icon ID:', iconId);
-    const icon = document.getElementById(iconId);
-    if (icon) { // Check if the icon exists
-        if (checkbox.checked) {
-            icon.classList.remove("text-muted");
-            icon.classList.add("text-success");
-        } else {
-            icon.classList.remove("text-success");
-            icon.classList.add("text-muted");
-        }
-    } else {
-        console.warn(`Icon with ID "${iconId}" not found.`);
-    }
-}
+    // Grid Options: Contains all of the Data Grid configurations
+    // const gridOptions = {
+    //     // Row Data: The data to be displayed.
+    //     rowData: [
+    //         { make: "Tesla", model: "Model Y", price: 64950, electric: true },
+    //         { make: "Ford", model: "F-Series", price: 33850, electric: false },
+    //         { make: "Toyota", model: "Corolla", price: 29600, electric: false },
+    //     ],
+    //     // Column Definitions: Defines the columns to be displayed.
+    //     columnDefs: [
+    //         { field: "make", editable: true },
+    //         { field: "model", editable: true },
+    //         { field: "price", editable: true },
+    //         { field: "electric", editable: true }
+    //     ]
+    // };
+    const row = {{ rowData|safe }};
+   
+    const gridOptions = {
+        defaultColDef: {
+            width: 200,
+            editable: true,
+        },
+        
+        columnDefs: [
+            { headerName: "Customer", field: "customer", width: 150, sortable: true, filter: true },
+            { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true },
+            { 
+                headerName: "Order Nbr.", 
+                field: "number", 
+                width: 120,
+                cellRenderer: function(params) {
+                    const product = params.data.product;
+                    return `<a href="/privatelabel/order/${params.value}/${product}" style="text-decoration: none; color: blue;">${params.value}</a>`;
+                }
+            },
+            { headerName: "Product", field: "product", width: 100},
+            { headerName: "Status", field: "status", width: 120 },
+            
+            { headerName: "Deposit Status", field: "deposit_stat", editable: true, width: 80 },
+            { headerName: "Ingredients Status", field: "ingredients_stat", editable: true, width: 80 },
+            { headerName: "Spec Status", field: "spec_stat", editable: true, width: 80 },
+            { headerName: "Package Status", field: "package_stat", editable: true, width: 80 },
+            { headerName: "Cap Status", field: "cap_stat", editable: true, width: 80 },
+            { headerName: "Label Status", field: "label_stat", editable: true, width: 80 },
+            { headerName: "Box Status", field: "box_stat", editable: true, width: 80 },
+
+            { headerName: "Received", field: "date_received", width: 120 },
+            { headerName: "Due Date", field: "due_date", width: 120 },
+            { headerName: "Desired Date", field: "desired_date", width: 120 },
+            { headerName: "Scheduled", field: "scheduled", width: 120 },
+
+            { headerName: "Progress", field: "progress" },
+            { headerName: "Next Step", field: "next_step" },
+            { headerName: "Take Action", field: "take_action" },
+            { headerName: "Days Till Due", field: "days_till_due" },
+        ],
+
+        rowData: row,
+    };
+
+    // Initialize AG Grid
+    const myGridElement = document.querySelector('#myGrid');
+    agGrid.createGrid(myGridElement, gridOptions);
 </script>
+
 
 
 

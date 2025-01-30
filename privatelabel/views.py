@@ -66,7 +66,7 @@ def new_customer(request):
 
 def orders(request):
     
-    orders = Order.objects.all().prefetch_related('notes').order_by('due_date')
+    orders = Order.objects.all().prefetch_related('notes').order_by('desired_date')
 
 
     # make the percentage progress of each order
@@ -90,24 +90,59 @@ def orders(request):
             order.days_left = 'No due date'
 
         order.save()
+    rowData = []
+
+    for order in orders:
+        rowData.append({
+            'id': order.id,
+            'customer': order.customer if order.customer else '',
+            'customerid': order.customerid,
+            'product': order.product if order.product else '',
+            'number': order.number,
+            'status': order.status,
+            'product': order.product if order.product else '',
+            'quantity': order.qty,
+            'date_received': order.date_received.strftime('%m-%d-%Y') if order.date_received else '',
+            'desired_date': order.desired_date.strftime('%m-%d-%Y') if order.desired_date else 'No desired date',
+            'due_date': order.due_date.strftime('%m-%d-%Y') if order.due_date else order.desired_date.strftime('%m-%d-%Y') if order.desired_date else '',
+            'scheduled': order.scheduled_date.strftime('%m-%d-%Y') if order.scheduled_date else '',
+            'progress': f"{order.progress}%",
+            'next_step': 'Ingredients' if not order.ingredients_stat else 'Package' if not order.package_stat else 'Cap' if not order.cap_stat else 'Label' if not order.label_stat else 'Box' if not order.box_stat else 'Completed',
+            'days_till_due': '',
+            'deposit_stat': order.deposit_stat,
+            'ingredients_stat': order.ingredients_stat,
+            'spec_stat':  order.spec_stat,
+            'package_stat': order.package_stat,
+            'cap_stat': order.cap_stat,
+            'label_stat': order.label_stat,
+            'box_stat': order.box_stat,
+        })
+
+    # CONVERT ROW DATA TO JSON
+    rowData = json.dumps(rowData)
+
+    print('rowData:', rowData)
     
         
     context = {
         'title':'Orders',
         'orders':orders,
+        'rowData':rowData,
     }
 
     return render(request, 'privatelabel/orders.html', context)
 
-def order(request, pk):
-    order = get_object_or_404(Order, id=pk)
+def order(request, pk1, pk2):
+    order = get_object_or_404(Order, number=pk1, product=pk2)
+
+    orderForm = OrderForm(instance=order)
     
     if request.method == 'POST':
         # Updating the order's status fields based on form data
         print('request.post',request.FILES)
         order.number = request.POST.get('order.number') if request.POST.get('order.number') else order.number
         order.qty = request.POST.get('order.qty') if request.POST.get('order.qty') else order.qty
-        order.product.name = request.POST.get('order.product.name') if request.POST.get('order.product.name') else order.product.name
+        order.product = request.POST.get('order.product') 
         order.due_date = request.POST.get('order.due_date') if request.POST.get('order.due_date') else None
         order.last_component_eta = request.POST.get('order.last_component_eta') if request.POST.get('order.last_component_eta') else None
         order.desired_date = request.POST.get('order.desired_date') if request.POST.get('order.desired_date') else None
@@ -152,11 +187,10 @@ def order(request, pk):
     context = {
         'title':'Order',
         'order':order,
-        'orderForm':orderForm,
-        'orderAttachmentsForm':orderAttachmentsForm,
+        'form':orderForm
     }
 
-    return redirect('privatelabel-orders')
+    return render(request, 'privatelabel/order.html', context)
             
 def new_order(request):   
     orderForm = OrderForm()

@@ -94,8 +94,9 @@ class Component(models.Model):
 
 # order model
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
-    product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
+    customer = models.CharField(max_length=300, null=True, blank=True)
+    customerid = models.CharField(max_length=200, null=True, blank=True)
+    product = models.CharField(max_length=300, null=True, blank=True)
     number = models.CharField(max_length=200)
     qty = models.IntegerField(blank=True, null=True)
     date_received = models.DateField(blank=True, null=True)
@@ -127,24 +128,12 @@ class Order(models.Model):
     quality_agreement = models.FileField(upload_to='attachments/', blank=True, null=True)
     # attachment for terms and conditions
     terms_and_conditions = models.FileField(upload_to='attachments/', blank=True, null=True)
-    status = models.CharField(
-        max_length=20,
-        choices=[
-            ('Deposit', 'Deposit'),
-            ('Ingredients', 'Ingredients'),
-            ('Spec', 'Spec'),
-            ('Package', 'Package'),
-            ('Cap', 'Cap'),
-            ('Label', 'Label'),
-            ('Box', 'Box'),
-            ('Schedule', 'Schedule'),
-            ('Ship', 'Ship'),
-        ],
-        default='Deposit'
-    )
+    status = models.CharField(max_length=20, default='Open')
+    salesperson = models.CharField(max_length=20, blank=True, null=True)
+
 
     def __str__(self):
-        return self.product.name
+        return self.number
 
 # note model
 class Note(models.Model):
