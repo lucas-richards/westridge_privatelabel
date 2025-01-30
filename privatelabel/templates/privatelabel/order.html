@@ -7,10 +7,21 @@
     <div class="row">
         <div class="col-md-12">
             <h2>Order Details</h2>
-            <form method="post" action="{% url 'privatelabel-order' order.id %}">
+            <form method="post" enctype="multipart/form-data" action="{% url 'privatelabel-order-attachments' order.id%}">
                 {% csrf_token %}
-                {{ form|crispy }}
+                <div class="row">
+                    {% for field in form %}
+                        <div class="col-md-6">
+                            {{ field|as_crispy_field }}
+                        </div>
+                    {% endfor %}
+                </div>
                 <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+            <!-- delete form -->
+            <form method="post" action="{% url 'privatelabel-order-delete' order.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
             </form>
         </div>
     </div>

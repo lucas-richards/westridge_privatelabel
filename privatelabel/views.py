@@ -65,13 +65,12 @@ def new_customer(request):
     return render(request, 'privatelabel/new_customer.html', context)
 
 def orders(request):
-    
     orders = Order.objects.all().prefetch_related('notes').order_by('desired_date', 'number', 'id')
 
+    rowData = []
+    total_steps = 7
 
-    # make the percentage progress of each order
     for order in orders:
-        total_steps = 7
         completed_steps = sum([
             order.deposit_stat,
             order.ingredients_stat,
@@ -81,64 +80,47 @@ def orders(request):
             order.label_stat,
             order.box_stat
         ])
-        order.progress = round((completed_steps / total_steps) * 100)
-        order.progress = order.progress
-        # add a order status of how many days left to due date and it can be negative is it's past due
-        if order.due_date:
-            order.days_left = (order.due_date - timezone.now().date()).days
-        else:
-            order.days_left = 'No due date'
+        progress = round((completed_steps / total_steps) * 100)
+        days_left = (order.due_date - timezone.now().date()).days if order.due_date else 'No due date'
+        next_step = 'Ingredients' if not order.ingredients_stat else 'Package' if not order.package_stat else 'Cap' if not order.cap_stat else 'Label' if not order.label_stat else 'Box' if not order.box_stat else 'Completed'
 
-        order.save()
-    rowData = []
-
-    for order in orders:
         rowData.append({
             'id': order.id,
             'customer': order.customer if order.customer else '',
             'customerid': order.customerid,
             'product': order.product if order.product else '',
+            'qty': order.qty,
             'number': order.number,
             'status': order.status,
-            'product': order.product if order.product else '',
             'quantity': order.qty,
             'date_received': order.date_received.strftime('%m-%d-%Y') if order.date_received else '',
             'desired_date': order.desired_date.strftime('%m-%d-%Y') if order.desired_date else 'No desired date',
             'due_date': order.due_date.strftime('%m-%d-%Y') if order.due_date else order.desired_date.strftime('%m-%d-%Y') if order.desired_date else '',
             'scheduled': order.scheduled_date.strftime('%m-%d-%Y') if order.scheduled_date else '',
-            'progress': f"{order.progress}%",
-            'next_step': 'Ingredients' if not order.ingredients_stat else 'Package' if not order.package_stat else 'Cap' if not order.cap_stat else 'Label' if not order.label_stat else 'Box' if not order.box_stat else 'Completed',
-            'days_till_due': '',
+            'progress': f"{progress}%",
+            'next_step': next_step,
+            'days_till_due': days_left,
             'deposit_stat': order.deposit_stat,
             'ingredients_stat': order.ingredients_stat,
-            'spec_stat':  order.spec_stat,
+            'spec_stat': order.spec_stat,
             'package_stat': order.package_stat,
             'cap_stat': order.cap_stat,
             'label_stat': order.label_stat,
             'box_stat': order.box_stat,
         })
 
-    # CONVERT ROW DATA TO JSON
-    rowData = json.dumps(rowData)
-
-    print('rowData:', rowData)
-    
-        
     context = {
-        'title':'Orders',
-        'orders':orders,
-        'rowData':rowData,
+        'title': 'Orders',
+        'orders': orders,
+        'rowData': json.dumps(rowData),
     }
 
     return render(request, 'privatelabel/orders.html', context)
 
-def order(request, pk1, pk2):
-    order = get_object_or_404(Order, number=pk1, product=pk2)
+def order(request, pk):
+    order = get_object_or_404(Order, id=pk)
 
     orderForm = OrderForm(instance=order)
-
-    print('order:', order)
-    print('request:', request.body)
     
     if request.method == 'POST':
         try:
@@ -162,6 +144,22 @@ def order(request, pk1, pk2):
     }
 
     return render(request, 'privatelabel/order.html', context)
+
+def order_attachments(request, pk):
+    print('order attachments:', pk)
+    order = get_object_or_404(Order, id=pk)
+    form = OrderForm()
+    print('order attahcment:', order)
+
+    if request.method == 'POST':
+        form = OrderForm(request.POST, request.FILES)
+        if form.is_valid():
+            attachment = form.save(commit=False)
+            attachment.order = order
+            attachment.save()
+            return redirect('privatelabel-orders')
+
+    return render(request, 'privatelabel/orders.html')
             
 def new_order(request):   
     orderForm = OrderForm()
@@ -241,3 +239,9 @@ def add_note(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=400)
+
+def delete_order(request, pk):
+    order = get_object_or_404(Order, id=pk)
+    order.delete()
+    messages.success(request, 'Order deleted successfully')
+    return redirect('privatelabel-orders')

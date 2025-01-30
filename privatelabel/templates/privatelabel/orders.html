@@ -55,12 +55,28 @@
                 width: 120,
                 cellRenderer: function(params) {
                     const product = params.data.product;
-                    return `<a href="/privatelabel/order/${params.value}/${product}" style="text-decoration: none; color: blue;">${params.value}</a>`;
+                    return `<a href="/privatelabel/order/${params.data.id}/" style="text-decoration: none; color: blue;">${params.value}</a>`;
                 }
             },
             
-            { headerName: "Product", field: "product", width: 100},
-            { headerName: "Status", field: "status", width: 120 },
+            { headerName: "Product", field: "product", width: 120},
+            { headerName: "Qty", field: "qty", width: 80},
+            { 
+                headerName: "Status", 
+                field: "status", 
+                width: 120, 
+                sortable: true, 
+                filter: true,
+                filterParams: {
+                    filterOptions: ['notEqual'],
+                    defaultOption: 'notEqual',
+                    suppressAndOrCondition: true,
+                    defaultFilter: 'canceled',
+                    comparator: function(value, filterText) {
+                        return value !== 'canceled' && value !== 'completed' ? 0 : -1;
+                    }
+                }
+            },
             
             { headerName: "Deposit Status", field: "deposit_stat", editable: true, width: 80 },
             { headerName: "Ingredients Status", field: "ingredients_stat", editable: true, width: 80 },
@@ -92,7 +108,7 @@
             };
             console.log(updatedData);
 
-            fetch(`/privatelabel/order/${params.data.number}/${params.data.product}/`, {
+            fetch(`/privatelabel/order/${params.data.id}/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
