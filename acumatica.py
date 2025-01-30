@@ -93,7 +93,7 @@ def getInventoryData():
     
     result = rs.query(
         table  ='SalesOrder',
-        filter ="(Status eq 'On Hold' or Status eq 'Open' or Status eq 'BackOrder') and startswith(OrderNbr, 'L')",
+        filter ="(Status ne 'Completed' and Status ne 'Canceled') and startswith(OrderNbr, 'L')",
         expand ='Details',
         fields ='OrderNbr,Date,RequestedOn,Status,CustomerID,Details/InventoryID,Details/OrderQty,Details/SalespersonID'
     )

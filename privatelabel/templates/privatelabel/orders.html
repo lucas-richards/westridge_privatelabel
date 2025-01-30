@@ -42,9 +42,11 @@
         defaultColDef: {
             width: 200,
             editable: true,
+            
         },
         
         columnDefs: [
+            { headerName: "Progress", field: "progress", width: 70 },
             { headerName: "Customer", field: "customer", width: 150, sortable: true, filter: true },
             { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true },
             { 
@@ -56,6 +58,7 @@
                     return `<a href="/privatelabel/order/${params.value}/${product}" style="text-decoration: none; color: blue;">${params.value}</a>`;
                 }
             },
+            
             { headerName: "Product", field: "product", width: 100},
             { headerName: "Status", field: "status", width: 120 },
             
@@ -67,23 +70,70 @@
             { headerName: "Label Status", field: "label_stat", editable: true, width: 80 },
             { headerName: "Box Status", field: "box_stat", editable: true, width: 80 },
 
-            { headerName: "Received", field: "date_received", width: 120 },
+            { headerName: "Received", field: "date_received", width: 120},
             { headerName: "Due Date", field: "due_date", width: 120 },
             { headerName: "Desired Date", field: "desired_date", width: 120 },
-            { headerName: "Scheduled", field: "scheduled", width: 120 },
+            { headerName: "Scheduled", field: "scheduled", width: 120},
 
-            { headerName: "Progress", field: "progress" },
+            
             { headerName: "Next Step", field: "next_step" },
             { headerName: "Take Action", field: "take_action" },
             { headerName: "Days Till Due", field: "days_till_due" },
         ],
 
         rowData: row,
+
+        onCellValueChanged: function(params) {
+            const updatedData = {
+                order_id: params.data.number,  // Identify which order was changed
+                product: params.data.product,  // Identify which product was changed
+                field: params.column.colId,    // The field that was updated
+                newValue: params.value         // The new value entered by the user
+            };
+            console.log(updatedData);
+
+            fetch(`/privatelabel/order/${params.data.number}/${params.data.product}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCSRFToken() // Ensure CSRF protection
+                    },
+                    body: JSON.stringify(updatedData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    
+                    console.log(data);
+                    
+                })
+                .catch(error => console.error('Error:', error));
+            
+                }
+            
+
+        
     };
 
     // Initialize AG Grid
     const myGridElement = document.querySelector('#myGrid');
     agGrid.createGrid(myGridElement, gridOptions);
+
+    function getCSRFToken() {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('csrftoken=')) {
+                cookieValue = cookie.substring('csrftoken='.length, cookie.length);
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
 </script>
 
 
