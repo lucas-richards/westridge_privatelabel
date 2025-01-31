@@ -114,12 +114,12 @@ class Order(models.Model):
     cap_stat = models.BooleanField(default=False)
     label_stat = models.BooleanField(default=False)
     box_stat = models.BooleanField(default=False)
-    released_to_warehouse = models.BooleanField(default=False)
-    shipped = models.BooleanField(default=False)
-    coordinator_notes = models.TextField(blank=True, null=True)
-    planning_notes = models.TextField(blank=True, null=True)
+    coordinator_notes = models.CharField(max_length=400, blank=True, null=True)
+    planning_notes = models.CharField(max_length=400, blank=True, null=True)
     last_updated = models.DateTimeField(default=timezone.now)
     take_action_user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    status = models.CharField(max_length=20, default='Open')
+    salesperson = models.CharField(max_length=20, blank=True, null=True)
     # attachment for purchase order
     customer_po = models.FileField(upload_to='attachments/', blank=True, null=True)
     # attachment for official quote
@@ -128,8 +128,7 @@ class Order(models.Model):
     quality_agreement = models.FileField(upload_to='attachments/', blank=True, null=True)
     # attachment for terms and conditions
     terms_and_conditions = models.FileField(upload_to='attachments/', blank=True, null=True)
-    status = models.CharField(max_length=20, default='Open')
-    salesperson = models.CharField(max_length=20, blank=True, null=True)
+    
 
 
     def __str__(self):

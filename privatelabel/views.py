@@ -65,7 +65,7 @@ def new_customer(request):
     return render(request, 'privatelabel/new_customer.html', context)
 
 def orders(request):
-    orders = Order.objects.all().prefetch_related('notes').order_by('desired_date', 'number', 'id')
+    orders = Order.objects.exclude(status__in=['Canceled', 'Completed']).prefetch_related('notes').order_by('desired_date', 'number', 'id')
 
     rowData = []
     total_steps = 7
@@ -146,20 +146,22 @@ def order(request, pk):
     return render(request, 'privatelabel/order.html', context)
 
 def order_attachments(request, pk):
-    print('order attachments:', pk)
     order = get_object_or_404(Order, id=pk)
-    form = OrderForm()
-    print('order attahcment:', order)
-
+    orderForm = OrderForm(instance=order)
+    
     if request.method == 'POST':
-        form = OrderForm(request.POST, request.FILES)
-        if form.is_valid():
-            attachment = form.save(commit=False)
-            attachment.order = order
-            attachment.save()
+        orderForm = OrderForm(request.POST, instance=order)
+        if orderForm.is_valid():
+            orderForm.save()
+            messages.success(request, 'Order updated successfully')
             return redirect('privatelabel-orders')
+        
+    context = {
+        'title':'Update Order',
+        'form':orderForm,
+    }
 
-    return render(request, 'privatelabel/orders.html')
+    return render(request, 'privatelabel/order.html', context)
             
 def new_order(request):   
     orderForm = OrderForm()

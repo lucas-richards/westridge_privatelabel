@@ -68,14 +68,15 @@
                 sortable: true, 
                 filter: true,
                 filterParams: {
-                    filterOptions: ['notEqual'],
-                    defaultOption: 'notEqual',
-                    suppressAndOrCondition: true,
-                    defaultFilter: 'canceled',
-                    comparator: function(value, filterText) {
-                        return value !== 'canceled' && value !== 'completed' ? 0 : -1;
-                    }
+                    defaultOption: "notEqual",
+                },
+                onFirstDataRendered: (params) => {
+                    params.api.getFilterInstance("status", (filterInstance) => {
+                        filterInstance.setModel({ type: "notEqual", filter: "Completed" });
+                        params.api.onFilterChanged();
+                    });
                 }
+                
             },
             
             { headerName: "Deposit Status", field: "deposit_stat", editable: true, width: 80 },

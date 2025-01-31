@@ -2,6 +2,19 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<style>
+    .flex-container {
+        display: flex;
+        align-items:center;
+        justify-content: space-between;
+    }
+    @media (min-width: 1200px) {
+        .container {
+            max-width: 1740px;
+        }
+    }
+</style>
+
 <!-- order form -->
 <div class="container mt-3">
     <div class="row">
@@ -9,19 +22,20 @@
             <h2>Order Details</h2>
             <form method="post" enctype="multipart/form-data" action="{% url 'privatelabel-order-attachments' order.id%}">
                 {% csrf_token %}
+                <button type="submit" class="btn btn-primary float-right">Save</button>
                 <div class="row">
                     {% for field in form %}
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             {{ field|as_crispy_field }}
                         </div>
                     {% endfor %}
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
+                
             </form>
             <!-- delete form -->
             <form method="post" action="{% url 'privatelabel-order-delete' order.id %}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger">Delete</button>
+                <button type="submit" class="btn btn-danger  float-right">Delete</button>
             </form>
         </div>
     </div>
