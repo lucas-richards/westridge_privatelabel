@@ -89,6 +89,7 @@ def orders(request):
             'customer': order.customer if order.customer else '',
             'customerid': order.customerid,
             'product': order.product if order.product else '',
+            'uom': order.uom,
             'qty': order.qty,
             'number': order.number,
             'status': order.status,
@@ -113,6 +114,7 @@ def orders(request):
         'title': 'Orders',
         'orders': orders,
         'rowData': json.dumps(rowData),
+        'orders_count': orders.count(),
     }
 
     return render(request, 'privatelabel/orders.html', context)
@@ -128,6 +130,13 @@ def order(request, pk):
             data = json.loads(request.body.decode("utf-8"))
             field = data.get('field')
             new_value = data.get('newValue')
+
+            # Convert date fields to date objects
+            if field in ['due_date', 'desired_date', 'scheduled_date', 'date_received']:
+                # identify the date format
+                print('new_value1:', new_value)
+                new_value = timezone.datetime.strptime(new_value, '%Y-%m-%dT%H:%M:%S.%fZ').date()
+                print('new_value:', new_value)
 
             if field and hasattr(order, field):
                 setattr(order, field, new_value)

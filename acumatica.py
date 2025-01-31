@@ -95,7 +95,7 @@ def getInventoryData():
         table  ='SalesOrder',
         filter ="startswith(OrderNbr, 'L')",
         expand ='Details',
-        fields ='OrderNbr,Date,RequestedOn,Status,CustomerID,Details/InventoryID,Details/OrderQty,Details/SalespersonID'
+        fields ='OrderNbr,Date,RequestedOn,Status,CustomerID,Details/InventoryID,Details/UOM,Details/OrderQty,Details/SalespersonID'
     )
     
     for row in result:
@@ -104,11 +104,13 @@ def getInventoryData():
         Status = row['Status']['value']
         Date = datetime.strptime(row['Date']['value'], '%Y-%m-%dT%H:%M:%S%z').date()
         RequestedOn = datetime.strptime(row['RequestedOn']['value'], '%Y-%m-%dT%H:%M:%S%z').date()
+        
         for detail in row['Details']:
             InventoryID = detail.get('InventoryID', {}).get('value')
             SalespersonID = detail.get('SalespersonID', {}).get('value')
+            Uom = detail.get('UOM', {}).get('value')
             if SalespersonID and SalespersonID in ['L006A', 'L020K', 'L020X']:
-                print(f'{OrderNbr}, {CustomerID}, {Status}, {InventoryID} SalespersonID: {SalespersonID}, {Date}, {RequestedOn}')
+                print(f'{OrderNbr}, {CustomerID}, {Status}, {InventoryID}, {Uom} SalespersonID: {SalespersonID}, {Date}, {RequestedOn}')
    
     # add this sales orders into the database
     for row in result:
@@ -119,28 +121,47 @@ def getInventoryData():
         RequestedOn = datetime.strptime(row['RequestedOn']['value'], '%Y-%m-%dT%H:%M:%S%z').date()
         for detail in row['Details']:
             InventoryID = detail.get('InventoryID', {}).get('value')
+            Uom = detail.get('UOM', {}).get('value')
             OrderQty = detail.get('OrderQty', {}).get('value')
             SalespersonID = detail.get('SalespersonID', {}).get('value')
 
             if SalespersonID and SalespersonID in ['L006A', 'L020K', 'L020X']:
-                order, created = Order.objects.update_or_create(
-                    number=OrderNbr,
-                    product=InventoryID,
-                    defaults={
-                        'customer': customername.get(CustomerID, ''),
-                        'customerid': CustomerID,
-                        'date_received': Date,
-                        'desired_date': RequestedOn,
-                        'qty': OrderQty,
-                        'date_entered': timezone.now(),
-                        'status': Status,
-                        'salesperson': SalespersonID
-                    }
-                )
-                if created:
-                    print(f'Order {OrderNbr} created successfully.')
+                if Status in ['Complete', 'Canceled']:
+                    order = Order.objects.filter(number=OrderNbr, product=InventoryID, uom=Uom).first()
+                    if order:
+                        order.customer = customername.get(CustomerID, '')
+                        order.customerid = CustomerID
+                        order.uom = Uom
+                        order.date_received = Date
+                        order.desired_date = RequestedOn
+                        order.qty = OrderQty
+                        order.date_entered = timezone.now()
+                        order.status = Status
+                        order.salesperson = SalespersonID
+                        order.save()
+                        print(f'Order {OrderNbr} updated successfully.')
+                    
                 else:
-                    print(f'Order {OrderNbr} updated successfully.')
+                    order, created = Order.objects.update_or_create(
+                        number=OrderNbr,
+                        product=InventoryID,
+                        uom=Uom,
+                        defaults={
+                            'customer': customername.get(CustomerID, ''),
+                            'customerid': CustomerID,
+                            'uom': Uom,
+                            'date_received': Date,
+                            'desired_date': RequestedOn,
+                            'qty': OrderQty,
+                            'date_entered': timezone.now(),
+                            'status': Status,
+                            'salesperson': SalespersonID
+                        }
+                    )
+                    if created:
+                        print(f'Order {OrderNbr} created successfully.')
+                    else:
+                        print(f'Order {OrderNbr} updated successfully.')
 
 
     # create list of inventory and back-in-stock dates

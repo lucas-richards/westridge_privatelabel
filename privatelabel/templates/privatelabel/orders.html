@@ -1,5 +1,6 @@
 {% extends "privatelabel/tabs_nav.html" %}
 {% load crispy_forms_tags %}
+
 {% block content %}
 <style>
     .flex-container {
@@ -14,143 +15,127 @@
     }
 </style>
 
+<!-- orders count -->
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <p>Orders: {{ orders.count }}</p>
+        </div>
+    </div>
+</div>
 <!-- Your Data Grid container -->
 <div id="myGrid" class="mt-3" style="height: 700px"></div>
 
 
 <!-- table JS -->
-<script>
-    // Grid Options: Contains all of the Data Grid configurations
-    // const gridOptions = {
-    //     // Row Data: The data to be displayed.
-    //     rowData: [
-    //         { make: "Tesla", model: "Model Y", price: 64950, electric: true },
-    //         { make: "Ford", model: "F-Series", price: 33850, electric: false },
-    //         { make: "Toyota", model: "Corolla", price: 29600, electric: false },
-    //     ],
-    //     // Column Definitions: Defines the columns to be displayed.
-    //     columnDefs: [
-    //         { field: "make", editable: true },
-    //         { field: "model", editable: true },
-    //         { field: "price", editable: true },
-    //         { field: "electric", editable: true }
-    //     ]
-    // };
+<script> 
     const row = {{ rowData|safe }};
+    row.forEach(item => {
+        item.date_received = new Date(item.date_received);
+        item.due_date = new Date(item.due_date);
+        item.desired_date = new Date(item.desired_date);
+        item.scheduled = new Date(item.scheduled);
+    });
+    console.log(row);
    
-    const gridOptions = {
-        defaultColDef: {
-            width: 200,
-            editable: true,
-            
-        },
-        
-        columnDefs: [
-            { headerName: "Progress", field: "progress", width: 70 },
-            { headerName: "Customer", field: "customer", width: 150, sortable: true, filter: true },
-            { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true },
-            { 
-                headerName: "Order Nbr.", 
-                field: "number", 
-                width: 120,
-                cellRenderer: function(params) {
-                    const product = params.data.product;
-                    return `<a href="/privatelabel/order/${params.data.id}/" style="text-decoration: none; color: blue;">${params.value}</a>`;
-                }
-            },
-            
-            { headerName: "Product", field: "product", width: 120},
-            { headerName: "Qty", field: "qty", width: 80},
-            { 
-                headerName: "Status", 
-                field: "status", 
-                width: 120, 
-                sortable: true, 
-                filter: true,
-                filterParams: {
-                    defaultOption: "notEqual",
-                },
-                onFirstDataRendered: (params) => {
-                    params.api.getFilterInstance("status", (filterInstance) => {
-                        filterInstance.setModel({ type: "notEqual", filter: "Completed" });
-                        params.api.onFilterChanged();
-                    });
-                }
-                
-            },
-            
-            { headerName: "Deposit Status", field: "deposit_stat", editable: true, width: 80 },
-            { headerName: "Ingredients Status", field: "ingredients_stat", editable: true, width: 80 },
-            { headerName: "Spec Status", field: "spec_stat", editable: true, width: 80 },
-            { headerName: "Package Status", field: "package_stat", editable: true, width: 80 },
-            { headerName: "Cap Status", field: "cap_stat", editable: true, width: 80 },
-            { headerName: "Label Status", field: "label_stat", editable: true, width: 80 },
-            { headerName: "Box Status", field: "box_stat", editable: true, width: 80 },
+   const gridOptions = {
+       defaultColDef: {
+           width: 200,
+           editable: true,
+           
+       },
+       
+       
+       columnDefs: [
+           { headerName: "Progress", field: "progress", width: 70 },
+           { headerName: "Customer", field: "customer", width: 150, sortable: true, filter: true },
+           { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true },
+           { 
+               headerName: "Order Nbr.", 
+               field: "number", 
+               width: 120,
+               cellRenderer: function(params) {
+                   const product = params.data.product;
+                   return `<a href="/privatelabel/order/${params.data.id}/" style="text-decoration: none; color: blue;">${params.value}</a>`;
+               }
+           },
+           
+           { headerName: "Product", field: "product", width: 120},
+           { headerName: "Qty", field: "qty", width: 80},
+           { headerName: "UOM", field: "uom", width: 80},
+           { headerName: "Status", field: "status", width: 120, sortable: true, filter: true },
 
-            { headerName: "Received", field: "date_received", width: 120},
-            { headerName: "Due Date", field: "due_date", width: 120 },
-            { headerName: "Desired Date", field: "desired_date", width: 120 },
-            { headerName: "Scheduled", field: "scheduled", width: 120},
+           { headerName: "Deposit", field: "deposit_stat", editable: true, width: 80 },
+           { headerName: "Ingredients", field: "ingredients_stat", editable: true, width: 80 },
+           { headerName: "Spec", field: "spec_stat", editable: true, width: 80 },
+           { headerName: "Package", field: "package_stat", editable: true, width: 80 },
+           { headerName: "Cap", field: "cap_stat", editable: true, width: 80 },
+           { headerName: "Label", field: "label_stat", editable: true, width: 80 },
+           { headerName: "Box", field: "box_stat", editable: true, width: 80 },
 
-            
-            { headerName: "Next Step", field: "next_step" },
-            { headerName: "Take Action", field: "take_action" },
-            { headerName: "Days Till Due", field: "days_till_due" },
-        ],
+           { headerName: "Received", field: "date_received", width: 120, dataType: 'date' },
+           { headerName: "Due Date", field: "due_date", width: 120 },
+           { headerName: "Desired Date", field: "desired_date", width: 120 },
+           { headerName: "Scheduled", field: "scheduled", width: 120},
 
-        rowData: row,
+           
+           { headerName: "Next Step", field: "next_step" },
+           { headerName: "Take Action", field: "take_action" },
+           { headerName: "Days Till Due", field: "days_till_due" },
+       ],
 
-        onCellValueChanged: function(params) {
-            const updatedData = {
-                order_id: params.data.number,  // Identify which order was changed
-                product: params.data.product,  // Identify which product was changed
-                field: params.column.colId,    // The field that was updated
-                newValue: params.value         // The new value entered by the user
-            };
-            console.log(updatedData);
+       rowData: row,
 
-            fetch(`/privatelabel/order/${params.data.id}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCSRFToken() // Ensure CSRF protection
-                    },
-                    body: JSON.stringify(updatedData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    
-                    console.log(data);
-                    
-                })
-                .catch(error => console.error('Error:', error));
-            
-                }
-            
+       onCellValueChanged: function(params) {
+           const updatedData = {
+               order_id: params.data.number,  // Identify which order was changed
+               product: params.data.product,  // Identify which product was changed
+               field: params.column.colId,    // The field that was updated
+               newValue: params.value         // The new value entered by the user
+           };
+           console.log(updatedData);
 
-        
-    };
+           fetch(`/privatelabel/order/${params.data.id}/`, {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json',
+                       'X-CSRFToken': getCSRFToken() // Ensure CSRF protection
+                   },
+                   body: JSON.stringify(updatedData)
+               })
+               .then(response => response.json())
+               .then(data => {
+                   
+                   console.log(data);
+                   
+               })
+               .catch(error => console.error('Error:', error));
+           
+               }
+           
 
-    // Initialize AG Grid
-    const myGridElement = document.querySelector('#myGrid');
-    agGrid.createGrid(myGridElement, gridOptions);
+       
+   };
 
-    function getCSRFToken() {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith('csrftoken=')) {
-                cookieValue = cookie.substring('csrftoken='.length, cookie.length);
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+   // Initialize AG Grid
+   const myGridElement = document.querySelector('#myGrid');
+   agGrid.createGrid(myGridElement, gridOptions);
 
-
+   function getCSRFToken() {
+   let cookieValue = null;
+   if (document.cookie && document.cookie !== '') {
+       const cookies = document.cookie.split(';');
+       for (let i = 0; i < cookies.length; i++) {
+           const cookie = cookies[i].trim();
+           if (cookie.startsWith('csrftoken=')) {
+               cookieValue = cookie.substring('csrftoken='.length, cookie.length);
+               break;
+           }
+       }
+   }
+   return cookieValue;
+   }
+   
 </script>
 
 

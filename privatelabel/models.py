@@ -99,6 +99,7 @@ class Order(models.Model):
     product = models.CharField(max_length=300, null=True, blank=True)
     number = models.CharField(max_length=200)
     qty = models.IntegerField(blank=True, null=True)
+    uom = models.CharField(max_length=20, blank=True, null=True)
     date_received = models.DateField(blank=True, null=True)
     date_entered = models.DateTimeField(blank=True, null=True)
     due_date = models.DateField(blank=True, null=True)
