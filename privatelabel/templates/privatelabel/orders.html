@@ -34,7 +34,8 @@
         item.date_received = new Date(item.date_received);
         item.due_date = new Date(item.due_date);
         item.desired_date = new Date(item.desired_date);
-        item.scheduled = new Date(item.scheduled);
+        item.scheduled_date = new Date(item.scheduled_date);
+        item.expected_ship_date = new Date(item.expected_ship_date);
     });
     console.log(row);
    
@@ -76,12 +77,12 @@
            { headerName: "Received", field: "date_received", width: 120, dataType: 'date' },
            { headerName: "Due Date", field: "due_date", width: 120 },
            { headerName: "Desired Date", field: "desired_date", width: 120 },
-           { headerName: "Scheduled", field: "scheduled", width: 120},
+           { headerName: "Scheduled", field: "scheduled_date", width: 120, dataType: 'date' },
 
            
            { headerName: "Next Step", field: "next_step" },
            { headerName: "Take Action", field: "take_action" },
-           { headerName: "Days Till Due", field: "days_till_due" },
+           { headerName: "Days Till Due", field: "days_left" },
        ],
 
        rowData: row,

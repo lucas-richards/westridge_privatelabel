@@ -89,6 +89,7 @@ def getInventoryData():
         'LC01984': 'Atlantic Innovations',
         'LC02177': 'Mayer Laboratories, Inc',
         'LC02043': 'NCO Ventures, Inc. Private Label',
+        'LC00047': 'Import Master',
     }
     
     result = rs.query(
