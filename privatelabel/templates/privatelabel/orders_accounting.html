@@ -36,6 +36,8 @@
         item.desired_date = new Date(item.desired_date);
         item.scheduled_date = new Date(item.scheduled_date);
         item.expected_ship_date = new Date(item.expected_ship_date);
+        item.shipped_date = new Date(item.shipped_date);
+        item.deposit_date = new Date(item.deposit_date);
     });
     console.log(row);
    
@@ -48,9 +50,8 @@
        
        
        columnDefs: [
-           { headerName: "Progress", field: "progress", width: 70 },
-           { headerName: "Customer", field: "customer", width: 150, sortable: true, filter: true },
-           { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true },
+           { headerName: "Customer", field: "customer", width: 300, sortable: true, filter: true, editable: false },
+           { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true, editable: false },
            { 
                headerName: "Order Nbr.", 
                field: "number", 
@@ -58,36 +59,14 @@
                cellRenderer: function(params) {
                    const product = params.data.product;
                    return `<a href="/privatelabel/order/${params.data.id}/" style="text-decoration: none; color: blue;">${params.value}</a>`;
-               }
+               },
+                editable: false
            },
            
-           { headerName: "Product", field: "product", width: 120},
-           { headerName: "Qty", field: "qty", width: 80},
-           { headerName: "UOM", field: "uom", width: 80},
-           { headerName: "Status", field: "status", width: 120, sortable: true, filter: true },
-
-           { headerName: "Deposit", field: "deposit_stat" , width: 80, editable:false },
-           { headerName: "Ingredients", field: "ingredients_stat", editable: true, width: 80 },
-           { headerName: "Spec", field: "spec_stat", editable: true, width: 80 },
-           { headerName: "Package", field: "package_stat", editable: true, width: 80 },
-           { headerName: "Cap", field: "cap_stat", editable: true, width: 80 },
-           { headerName: "Label", field: "label_stat", editable: true, width: 80 },
-           { headerName: "Box", field: "box_stat", editable: true, width: 80 },
-
-           { 
-               headerName: "Received", 
-               field: "date_received", 
-               width: 120, 
-               dataType: 'date',
-               valueFormatter: function(params) {
-                   if (!params.value) return '';
-                   const date = new Date(params.value);
-                   const day = String(date.getDate()).padStart(2, '0');
-                   const month = String(date.getMonth() + 1).padStart(2, '0');
-                   const year = date.getFullYear();
-                   return `${month}-${day}-${year}`;
-               }
-           },
+           { headerName: "Product", field: "product", width: 120, editable: false},
+           { headerName: "Qty", field: "qty", width: 80, editable: false},
+           { headerName: "UOM", field: "uom", width: 80, editable: false},
+           { headerName: "Status", field: "status", width: 120, sortable: true, filter: true , editable: false},
            { 
                headerName: "Due Date", 
                field: "due_date", 
@@ -95,58 +74,48 @@
                dataType: 'date',
                valueFormatter: function(params) {
                    if (!params.value) return '';
-                   const date = new Date(params.value);
-                   const day = String(date.getDate()).padStart(2, '0');
-                   const month = String(date.getMonth() + 1).padStart(2, '0');
-                   const year = date.getFullYear();
+                        const date = new Date(params.value);
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                
                    return `${month}-${day}-${year}`;
-               }
-           },
-           { 
-               headerName: "Desired Date", 
-               field: "desired_date", 
-               width: 120, 
-               dataType: 'date',
-               valueFormatter: function(params) {
-                   if (!params.value) return '';
-                   const date = new Date(params.value);
-                   const day = String(date.getDate()).padStart(2, '0');
-                   const month = String(date.getMonth() + 1).padStart(2, '0');
-                   const year = date.getFullYear();
-                   return `${month}-${day}-${year}`;
-               }
-           },
-           { 
-               headerName: "Scheduled", 
-               field: "scheduled_date", 
-               width: 120, 
-               dataType: 'date',
-               valueFormatter: function(params) {
-                   if (!params.value) return '';
-                   const date = new Date(params.value);
-                   const day = String(date.getDate()).padStart(2, '0');
-                   const month = String(date.getMonth() + 1).padStart(2, '0');
-                   const year = date.getFullYear();
-                   return `${month}-${day}-${year}`;
-               }
-           },
-           { 
-               headerName: "Expected Ship Date", 
-               field: "expected_ship_date", 
-               width: 120, 
-               dataType: 'date',
-               valueFormatter: function(params) {
-                   if (!params.value) return '';
-                   const date = new Date(params.value);
-                   const day = String(date.getDate()).padStart(2, '0');
-                   const month = String(date.getMonth() + 1).padStart(2, '0');
-                   const year = date.getFullYear();
-                   return `${month}-${day}-${year}`;
-               }
+               },
+               editable: false
            },
 
+           { headerName: "Deposit", field: "deposit_stat", editable: true, width: 80 },
+           { 
+               headerName: "Deposit Amount", 
+               field: "deposit_amount", 
+               editable: true, 
+               width: 150,
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                   return `$${params.value}`;
+               },
+               cellStyle: { 'text-align': 'right' }
+           },
+           { 
+               headerName: "Deposit Date", 
+               field: "deposit_date", 
+               width: 120, 
+               dataType: 'date',
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                        const date = new Date(params.value);
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                    if (day === 'NaN' ) return '';
+                        return `${month}-${day}-${year}`;
+               }
+           },
+           { headerName:"Deposit Notes", field:"deposit_notes",editable: true,  width: 320 },
            
-           { headerName: "Days Till Due", field: "days_left" },
+           
+
+           
        ],
 
        rowData: row,

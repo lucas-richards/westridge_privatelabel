@@ -66,7 +66,7 @@
            { headerName: "UOM", field: "uom", width: 80},
            { headerName: "Status", field: "status", width: 120, sortable: true, filter: true },
 
-           { headerName: "Deposit", field: "deposit_stat" , width: 80, editable:false },
+           { headerName: "Deposit", field: "deposit_stat" , width: 80, },
            { headerName: "Ingredients", field: "ingredients_stat", editable: true, width: 80 },
            { headerName: "Spec", field: "spec_stat", editable: true, width: 80 },
            { headerName: "Package", field: "package_stat", editable: true, width: 80 },
@@ -147,6 +147,33 @@
 
            
            { headerName: "Days Till Due", field: "days_left" },
+           { 
+               headerName: "Deposit Amount", 
+               field: "deposit_amount", 
+               editable: true, 
+               width: 150,
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                   return `$${params.value}`;
+               },
+               cellStyle: { 'text-align': 'right' }
+           },
+           { 
+               headerName: "Deposit Date", 
+               field: "deposit_date", 
+               width: 120, 
+               dataType: 'date',
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                        const date = new Date(params.value);
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const year = date.getFullYear();
+                    if (day === 'NaN' ) return '';
+                        return `${month}-${day}-${year}`;
+               }
+           },
+           { headerName:"Deposit Notes", field:"deposit_notes",editable: true,  width: 320 },
        ],
 
        rowData: row,

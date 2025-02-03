@@ -10,6 +10,13 @@ from django.db.models import Prefetch
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
+import os
+from django.core.mail import send_mail
+
+email_user = os.environ.get('EMAIL_USER')
+email_password = os.environ.get('EMAIL_PASS')
+author_email = 'lrichards@westridgelabs.com'
+recipients = ['lrichards@westridgelabs.com' ]
 
 
 # Create your views here.
@@ -120,6 +127,124 @@ def orders(request):
 
     return render(request, 'privatelabel/orders.html', context)
 
+def orders_accounting(request):
+    orders = Order.objects.exclude(status__in=['Canceled', 'Completed']).prefetch_related('notes').order_by('desired_date', 'number', 'id')
+
+    rowData = []
+    total_steps = 7
+
+    for order in orders:
+        completed_steps = sum([
+            order.deposit_stat,
+            order.ingredients_stat,
+            order.spec_stat,
+            order.package_stat,
+            order.cap_stat,
+            order.label_stat,
+            order.box_stat
+        ])
+        progress = round((completed_steps / total_steps) * 100)
+        days_left = (order.due_date - timezone.now().date()).days if order.due_date else 'No due date'
+        next_step = 'Ingredients' if not order.ingredients_stat else 'Package' if not order.package_stat else 'Cap' if not order.cap_stat else 'Label' if not order.label_stat else 'Box' if not order.box_stat else 'Completed'
+
+        rowData.append({
+            'id': order.id,
+            'customer': order.customer if order.customer else '',
+            'customerid': order.customerid,
+            'product': order.product if order.product else '',
+            'uom': order.uom,
+            'qty': order.qty,
+            'number': order.number,
+            'status': order.status,
+            'quantity': order.qty,
+            'date_received': order.date_received.strftime('%m-%d-%Y') if order.date_received else '',
+            'desired_date': order.desired_date.strftime('%m-%d-%Y') if order.desired_date else 'No desired date',
+            'due_date': order.due_date.strftime('%m-%d-%Y') if order.due_date else order.desired_date.strftime('%m-%d-%Y') if order.desired_date else '',
+            'expected_ship_date': order.expected_ship_date.strftime('%m-%d-%Y') if order.expected_ship_date else '',
+            'scheduled_date': order.scheduled_date.strftime('%m-%d-%Y') if order.scheduled_date else '',
+            'progress': f"{progress}%",
+            'next_step': next_step,
+            'days_left': days_left,
+            'deposit_stat': order.deposit_stat,
+            'ingredients_stat': order.ingredients_stat,
+            'spec_stat': order.spec_stat,
+            'package_stat': order.package_stat,
+            'cap_stat': order.cap_stat,
+            'label_stat': order.label_stat,
+            'box_stat': order.box_stat,
+            'deposit_amount': order.deposit_amount,
+            'deposit_date': order.deposit_date.strftime('%m-%d-%Y') if order.deposit_date else '',
+            'deposit_notes': order.deposit_notes,
+        })
+
+    context = {
+        'title': 'Accounting',
+        'orders': orders,
+        'rowData': json.dumps(rowData),
+        'orders_count': orders.count(),
+    }
+
+    return render(request, 'privatelabel/orders_accounting.html', context)
+
+def orders_gregg(request):
+    orders = Order.objects.exclude(status__in=['Canceled', 'Completed']).prefetch_related('notes').order_by('desired_date', 'number', 'id')
+
+    rowData = []
+    total_steps = 7
+
+    for order in orders:
+        completed_steps = sum([
+            order.deposit_stat,
+            order.ingredients_stat,
+            order.spec_stat,
+            order.package_stat,
+            order.cap_stat,
+            order.label_stat,
+            order.box_stat
+        ])
+        progress = round((completed_steps / total_steps) * 100)
+        days_left = (order.due_date - timezone.now().date()).days if order.due_date else 'No due date'
+        next_step = 'Ingredients' if not order.ingredients_stat else 'Package' if not order.package_stat else 'Cap' if not order.cap_stat else 'Label' if not order.label_stat else 'Box' if not order.box_stat else 'Completed'
+
+        rowData.append({
+            'id': order.id,
+            'customer': order.customer if order.customer else '',
+            'customerid': order.customerid,
+            'product': order.product if order.product else '',
+            'uom': order.uom,
+            'qty': order.qty,
+            'number': order.number,
+            'status': order.status,
+            'quantity': order.qty,
+            'date_received': order.date_received.strftime('%m-%d-%Y') if order.date_received else '',
+            'desired_date': order.desired_date.strftime('%m-%d-%Y') if order.desired_date else 'No desired date',
+            'due_date': order.due_date.strftime('%m-%d-%Y') if order.due_date else order.desired_date.strftime('%m-%d-%Y') if order.desired_date else '',
+            'expected_ship_date': order.expected_ship_date.strftime('%m-%d-%Y') if order.expected_ship_date else '',
+            'scheduled_date': order.scheduled_date.strftime('%m-%d-%Y') if order.scheduled_date else '',
+            'progress': f"{progress}%",
+            'next_step': next_step,
+            'days_left': days_left,
+            'deposit_stat': order.deposit_stat,
+            'ingredients_stat': order.ingredients_stat,
+            'spec_stat': order.spec_stat,
+            'package_stat': order.package_stat,
+            'cap_stat': order.cap_stat,
+            'label_stat': order.label_stat,
+            'box_stat': order.box_stat,
+            'deposit_amount': order.deposit_amount,
+            'deposit_date': order.deposit_date.strftime('%m-%d-%Y') if order.deposit_date else '',
+            'deposit_notes': order.deposit_notes,
+        })
+
+    context = {
+        'title': 'Gregg',
+        'orders': orders,
+        'rowData': json.dumps(rowData),
+        'orders_count': orders.count(),
+    }
+
+    return render(request, 'privatelabel/orders_gregg.html', context)
+
 def order(request, pk):
     order = get_object_or_404(Order, id=pk)
 
@@ -133,7 +258,7 @@ def order(request, pk):
             new_value = data.get('newValue')
 
             # Convert date fields to date objects
-            if field in ['due_date', 'desired_date', 'scheduled_date', 'date_received','expected_ship_date']:
+            if field in ['due_date', 'desired_date', 'scheduled_date', 'date_received','expected_ship_date','last_component_eta','deposit_date']:
                 # identify the date format
                 print('new_value1:', new_value)
                 new_value = timezone.datetime.strptime(new_value, '%Y-%m-%dT%H:%M:%S.%fZ').date()
@@ -142,7 +267,10 @@ def order(request, pk):
             if field and hasattr(order, field):
                 setattr(order, field, new_value)
                 order.save()
-            
+
+            # send email to admin
+            send_mail(f'Order {order.number} was updated', '', email_user, recipients, html_message=f'Field {field} was updated', auth_user=email_user, auth_password=email_password)
+
             return JsonResponse({"message": "Order updated successfully"}, status=200)
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)

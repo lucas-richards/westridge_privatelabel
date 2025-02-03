@@ -16,6 +16,12 @@
       <li class="nav-item">
         <a class="nav-link {% if title == 'Orders' %}active{% endif %}" href="{% url 'privatelabel-orders' %}">Orders</a>
       </li>  
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Accounting' %}active{% endif %}" href="{% url 'privatelabel-orders-accounting' %}">Accounting</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if title == 'Gregg' %}active{% endif %}" href="{% url 'privatelabel-orders-gregg' %}">Gregg</a>
+      </li>
   </ul>
 
   <div id="loading-indicator" style="display: none;text-align: center;">
