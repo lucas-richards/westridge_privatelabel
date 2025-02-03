@@ -74,14 +74,78 @@
            { headerName: "Label", field: "label_stat", editable: true, width: 80 },
            { headerName: "Box", field: "box_stat", editable: true, width: 80 },
 
-           { headerName: "Received", field: "date_received", width: 120, dataType: 'date' },
-           { headerName: "Due Date", field: "due_date", width: 120 },
-           { headerName: "Desired Date", field: "desired_date", width: 120 },
-           { headerName: "Scheduled", field: "scheduled_date", width: 120, dataType: 'date' },
+           { 
+               headerName: "Received", 
+               field: "date_received", 
+               width: 120, 
+               dataType: 'date',
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                   const date = new Date(params.value);
+                   const day = String(date.getDate()).padStart(2, '0');
+                   const month = String(date.getMonth() + 1).padStart(2, '0');
+                   const year = date.getFullYear();
+                   return `${month}-${day}-${year}`;
+               }
+           },
+           { 
+               headerName: "Due Date", 
+               field: "due_date", 
+               width: 120, 
+               dataType: 'date',
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                   const date = new Date(params.value);
+                   const day = String(date.getDate()).padStart(2, '0');
+                   const month = String(date.getMonth() + 1).padStart(2, '0');
+                   const year = date.getFullYear();
+                   return `${month}-${day}-${year}`;
+               }
+           },
+           { 
+               headerName: "Desired Date", 
+               field: "desired_date", 
+               width: 120, 
+               dataType: 'date',
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                   const date = new Date(params.value);
+                   const day = String(date.getDate()).padStart(2, '0');
+                   const month = String(date.getMonth() + 1).padStart(2, '0');
+                   const year = date.getFullYear();
+                   return `${month}-${day}-${year}`;
+               }
+           },
+           { 
+               headerName: "Scheduled", 
+               field: "scheduled_date", 
+               width: 120, 
+               dataType: 'date',
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                   const date = new Date(params.value);
+                   const day = String(date.getDate()).padStart(2, '0');
+                   const month = String(date.getMonth() + 1).padStart(2, '0');
+                   const year = date.getFullYear();
+                   return `${month}-${day}-${year}`;
+               }
+           },
+           { 
+               headerName: "Expected Ship Date", 
+               field: "expected_ship_date", 
+               width: 120, 
+               dataType: 'date',
+               valueFormatter: function(params) {
+                   if (!params.value) return '';
+                   const date = new Date(params.value);
+                   const day = String(date.getDate()).padStart(2, '0');
+                   const month = String(date.getMonth() + 1).padStart(2, '0');
+                   const year = date.getFullYear();
+                   return `${month}-${day}-${year}`;
+               }
+           },
 
            
-           { headerName: "Next Step", field: "next_step" },
-           { headerName: "Take Action", field: "take_action" },
            { headerName: "Days Till Due", field: "days_left" },
        ],
 

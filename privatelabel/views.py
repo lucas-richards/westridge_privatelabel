@@ -133,7 +133,7 @@ def order(request, pk):
             new_value = data.get('newValue')
 
             # Convert date fields to date objects
-            if field in ['due_date', 'desired_date', 'scheduled_date', 'date_received']:
+            if field in ['due_date', 'desired_date', 'scheduled_date', 'date_received','expected_ship_date']:
                 # identify the date format
                 print('new_value1:', new_value)
                 new_value = timezone.datetime.strptime(new_value, '%Y-%m-%dT%H:%M:%S.%fZ').date()
