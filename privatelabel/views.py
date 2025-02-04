@@ -116,6 +116,10 @@ def orders(request):
             'cap_stat': order.cap_stat,
             'label_stat': order.label_stat,
             'box_stat': order.box_stat,
+            'customer_po': 'In File' if order.customer_po else '',
+            'official_quote': 'In File' if order.official_quote else '',
+            'quality_agreement': 'In File' if order.quality_agreement else '',
+            'terms_and_conditions': 'In File' if order.terms_and_conditions else '',
         })
 
     context = {
@@ -288,10 +292,11 @@ def order_attachments(request, pk):
     orderForm = OrderForm(instance=order)
     
     if request.method == 'POST':
-        orderForm = OrderForm(request.POST, instance=order)
+        orderForm = OrderForm(request.POST, request.FILES, instance=order)
         if orderForm.is_valid():
             orderForm.save()
             messages.success(request, 'Order updated successfully')
+            send_mail(f'Order #{order.number} was updated', '', email_user, recipients, html_message=f'Order #{order.number} was updated', auth_user=email_user, auth_password=email_password)
             return redirect('privatelabel-orders')
         
     context = {
@@ -384,4 +389,6 @@ def delete_order(request, pk):
     order = get_object_or_404(Order, id=pk)
     order.delete()
     messages.success(request, 'Order deleted successfully')
+    send_mail(f'Order {order.number} was deleted', '', email_user, recipients, html_message=f'Order #{order.number} was updated', auth_user=email_user, auth_password=email_password)
+
     return redirect('privatelabel-orders')

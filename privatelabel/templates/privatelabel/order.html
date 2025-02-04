@@ -22,7 +22,7 @@
             <h2>Order Details</h2>
             <form method="post" enctype="multipart/form-data" action="{% url 'privatelabel-order-attachments' order.id%}">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-primary float-right">Save</button>
+                <button type="submit" class="btn btn-primary float-right" onclick="this.innerHTML='Saving...';">Save</button>
                 <div class="row">
                     {% for field in form %}
                         <div class="col-md-4">
@@ -33,9 +33,9 @@
                 
             </form>
             <!-- delete form -->
-            <form method="post" action="{% url 'privatelabel-order-delete' order.id %}">
+            <form method="post" action="{% url 'privatelabel-order-delete' order.id %}" onsubmit="return confirm('Are you sure you want to delete this order?');">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger  float-right">Delete</button>
+                <button type="submit" class="btn btn-danger float-right">Delete</button>
             </form>
         </div>
     </div>

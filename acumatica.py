@@ -135,7 +135,7 @@ def getInventoryData():
             SalespersonID = detail.get('SalespersonID', {}).get('value')
 
             if SalespersonID and SalespersonID in ['L006A', 'L020K', 'L020X']:
-                if Status in ['Complete', 'Canceled']:
+                if Status in ['Complete', 'Canceled','']:
                     order = Order.objects.filter(number=OrderNbr, product=InventoryID, uom=Uom).first()
                     if order:
                         order.customer = customername.get(CustomerID, '')
