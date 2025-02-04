@@ -1,5 +1,7 @@
 # ignore media files
 media/
+acumatica.py
+AliveDataTools_v105.py
 
 # Mac
 .DS_store

@@ -13,6 +13,13 @@ import AliveDataTools_v105 as AliveDataTools
 from django.utils import timezone
 from privatelabel.models import Order, Customer, Product
 from datetime import datetime
+import os
+from django.core.mail import send_mail
+
+email_user = os.environ.get('EMAIL_USER')
+email_password = os.environ.get('EMAIL_PASS')
+author_email = 'lrichards@westridgelabs.com'
+recipients = ['lrichards@westridgelabs.com' ]
 
 VERSION = '101'
 
@@ -114,6 +121,7 @@ def getInventoryData():
                 print(f'{OrderNbr}, {CustomerID}, {Status}, {InventoryID}, {Uom} SalespersonID: {SalespersonID}, {Date}, {RequestedOn}')
    
     # add this sales orders into the database
+    created_list = []
     for row in result:
         OrderNbr = row['OrderNbr']['value']
         CustomerID = row['CustomerID']['value']
@@ -152,7 +160,6 @@ def getInventoryData():
                             'customerid': CustomerID,
                             'uom': Uom,
                             'date_received': Date,
-                            'desired_date': RequestedOn,
                             'qty': OrderQty,
                             'date_entered': timezone.now(),
                             'status': Status,
@@ -160,9 +167,16 @@ def getInventoryData():
                         }
                     )
                     if created:
+                        created_list.append(OrderNbr)
                         print(f'Order {OrderNbr} created successfully.')
+
                     else:
                         print(f'Order {OrderNbr} updated successfully.')
+                    
+    if created_list.count > 0:
+        send_mail(f'Orders have been created', '', email_user, recipients, 
+                  html_message=f'Orders {created_list} have been created.',
+                  auth_user=email_user, auth_password=email_password)
 
 
     # create list of inventory and back-in-stock dates

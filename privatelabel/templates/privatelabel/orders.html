@@ -48,9 +48,9 @@
        
        
        columnDefs: [
-           { headerName: "Progress", field: "progress", width: 70 },
+           { headerName: "Progress", field: "progress", width: 70, editable: false },
            { headerName: "Customer", field: "customer", width: 150, sortable: true, filter: true },
-           { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true },
+           { headerName: "CustID", field: "customerid", width: 100, sortable: true, filter: true, editable: false },
            { 
                headerName: "Order Nbr.", 
                field: "number", 
@@ -58,12 +58,13 @@
                cellRenderer: function(params) {
                    const product = params.data.product;
                    return `<a href="/privatelabel/order/${params.data.id}/" style="text-decoration: none; color: blue;">${params.value}</a>`;
-               }
+               },
+               editable: false
            },
            
-           { headerName: "Product", field: "product", width: 120},
-           { headerName: "Qty", field: "qty", width: 80},
-           { headerName: "UOM", field: "uom", width: 80},
+           { headerName: "Product", field: "product", width: 120, editable: false},
+           { headerName: "Qty", field: "qty", width: 80, editable: false},
+           { headerName: "UOM", field: "uom", width: 80, editable: false},
            { headerName: "Status", field: "status", width: 120, sortable: true, filter: true },
 
            { headerName: "Deposit", field: "deposit_stat" , width: 80, editable:false },
