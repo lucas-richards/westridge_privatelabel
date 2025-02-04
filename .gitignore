@@ -1,11 +1,10 @@
 # ignore media files
 media/
-acumatica.py
-AliveDataTools_v105.py
+
+acumatica/
 
 # Mac
 .DS_store
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
