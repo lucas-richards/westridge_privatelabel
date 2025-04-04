@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'training/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'tasks/main.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="/media/favicon.png">
+
+    <!-- JS table library -->
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+
+    
+</head>
+<body>
+  <a href="{% url 'privatelabel-orders' %}" class="btn btn-primary">Back to Orders</a>
+    <div class="text-center my-4">
+        <h1>BACKORDERS</h1>
+    </div>
+
+    <div class="d-flex justify-content-center my-4">
+        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
+            <h5>KPI 1</h5>
+            <p>120</p>
+        </div>
+        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
+            <h5>KPI 2</h5>
+            <p>85%</p>
+        </div>
+        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
+            <h5>KPI 3 (YTD)</h5>
+            <p>92%</p>
+        </div>
+        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
+            <h5>KPI 4 (MTD)</h5>
+            <p>78%</p>
+        </div>
+        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
+            <h5>KPI 5</h5>
+            <p>45</p>
+        </div>
+    </div>
+    
+ 
+</body>
+</html>
+

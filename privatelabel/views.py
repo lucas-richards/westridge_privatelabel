@@ -392,3 +392,6 @@ def delete_order(request, pk):
     send_mail(f'Order {order.number} was deleted', '', email_user, recipients, html_message=f'Order #{order.number} was updated', auth_user=email_user, auth_password=email_password)
 
     return redirect('privatelabel-orders')
+
+def backorders(request):
+    return render(request, 'privatelabel/backorders.html')

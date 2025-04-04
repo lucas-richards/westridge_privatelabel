@@ -15,6 +15,8 @@ urlpatterns = [
     path('customer/<str:pk>/new_product/', views.new_product, name='privatelabel-new_product'),
     path('order/<str:pk>/add_note/', views.add_note, name='privatelabel-add-note'),
     path('order/<str:pk>/delete/', views.delete_order, name='privatelabel-order-delete'),
+
+    path('backorders/', views.backorders, name='backorders'),
     
 
     
