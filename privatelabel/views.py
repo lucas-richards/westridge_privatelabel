@@ -1,3 +1,5 @@
+import acumatica.AliveDataTools_v105 as AliveDataTools
+import xml.etree.ElementTree as ET
 from django.shortcuts import render
 from .models import Customer, Order, Product, Note
 from .forms import OrderForm, CustomerForm, ProductForm, OrderAttachments
@@ -394,4 +396,59 @@ def delete_order(request, pk):
     return redirect('privatelabel-orders')
 
 def backorders(request):
+    # Fetch all orders with status 'Back Order' using odataquery
+    
+    result = getAcumatica_data(
+                gi='Back order board V2', 
+                # filter qtySOBackOrdered > 0
+                top=10,
+                debug=True,
+                )
+    print('result:', result)
     return render(request, 'privatelabel/backorders.html')
+# A1006_Attributes,replenishmentSource,inventoryCD_description,A1011_Attributes,Back Ordered (POs-available),itemType,qtySOBackOrdered
+
+# Input Variables:
+    #   gi: The Acumatica generic inquiry where the data of interest exists. 
+    #   fields: list of fields to return, odata format i.e. 'TaxID,Description,TaxSchedule'. Uses the odata select parameter.
+    #   filter: return records filter parameter, odata format i.e. "startswith(Customer,'LC')"
+    #   top: limit the number of records to return. If 0, top is ignored. Default is 0.
+    #   html: raw html that bypasses all other variable to send in the request. 
+
+def getAcumatica_data(gi='', fields='', filter='', top=0, html='', debug='maybe',):
+    # Fetch all orders with status 'Back Order' using odataquery
+    xml_content = AliveDataTools.OdataQuery(
+        gi  = gi,
+        fields = fields,
+        filter = filter,
+        top    = top,
+        html   = html,
+    )
+    
+    # Define namespaces used in the XML
+    namespaces = {
+        'atom': 'http://www.w3.org/2005/Atom',
+        'd': 'http://schemas.microsoft.com/ado/2007/08/dataservices',
+        'm': 'http://schemas.microsoft.com/ado/2007/08/dataservices/metadata',
+    }
+
+    # Parse the XML
+    root = ET.fromstring(xml_content)
+
+    # Extract all entries
+    entries = root.findall('atom:entry', namespaces)
+
+    # Convert each entry's properties into a dictionary
+    results = []
+    for entry in entries:
+        props = entry.find('.//m:properties', namespaces)
+        entry_dict = {}
+        if props is not None:
+            for elem in props:
+                tag = elem.tag.split('}')[-1]  # strip namespace
+                entry_dict[tag] = elem.text
+        results.append(entry_dict)
+
+    # Now 'results' is a list of dictionaries
+    
+    return results
