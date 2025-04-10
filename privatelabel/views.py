@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.contrib import messages
 import os
 from django.core.mail import send_mail
+from datetime import date
 
 email_user = os.environ.get('EMAIL_USER')
 email_password = os.environ.get('EMAIL_PASS')
@@ -415,6 +416,11 @@ def backorders(request):
     source_kit_assembly_count = sum(1 for item in results if item.get('Source') == 'Kit Assembly')
     total_backordered_pos_available = sum(float(item.get('Back Ordered (POs-available)', 0)) for item in results)
 
+    # Calculate days since 10/14/2024
+    start_date = date(2024, 10, 14)
+    today = date.today()
+    days_without_incidents = (today - start_date).days
+
     # Sort by 'Back Ordered (POs-available)' in descending order and get the top 5
     top_five_backordered = sorted(
         results, 
@@ -432,6 +438,7 @@ def backorders(request):
         'source_kit_assembly_count': source_kit_assembly_count,
         'total_backordered_pos_available': total_backordered_pos_available,
         'top_five_backordered': top_five_backordered,
+        'days_without_incidents': days_without_incidents,
     }
     return render(request, 'privatelabel/backorders.html', context)
 # A1006_Attributes,replenishmentSource,inventoryCD_description,A1011_Attributes,Back Ordered (POs-available),itemType,qtySOBackOrdered
