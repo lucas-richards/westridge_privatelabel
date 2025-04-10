@@ -398,14 +398,42 @@ def delete_order(request, pk):
 def backorders(request):
     # Fetch all orders with status 'Back Order' using odataquery
     
-    result = getAcumatica_data(
+    results = getAcumatica_data(
                 gi='Back order board V2', 
                 # filter qtySOBackOrdered > 0
-                top=10,
+                top=0,
                 debug=True,
                 )
-    print('result:', result)
-    return render(request, 'privatelabel/backorders.html')
+    # Filter results where 'Back Ordered (POs-available)' is greater than zero
+    results = [item for item in results if float(item.get('BackOrderedPOsavailable', 0)) > 0]
+    # Round the 'BackOrderedPOsavailable' value for all items without decimals
+    for item in results:
+        if 'BackOrderedPOsavailable' in item:
+            item['BackOrderedPOsavailable'] = round(float(item['BackOrderedPOsavailable']))
+    total_items = len(results)
+    source_purchasing_count = sum(1 for item in results if item.get('Source') == 'Purchase')
+    source_kit_assembly_count = sum(1 for item in results if item.get('Source') == 'Kit Assembly')
+    total_backordered_pos_available = sum(float(item.get('Back Ordered (POs-available)', 0)) for item in results)
+
+    # Sort by 'Back Ordered (POs-available)' in descending order and get the top 5
+    top_five_backordered = sorted(
+        results, 
+        key=lambda x: float(x.get('BackOrderedPOsavailable', 0)), 
+        reverse=True
+    )[:10]
+    print('top_five_backordered:', top_five_backordered)
+    print('total_items:', total_items)
+    print('source_purchasing_count:', source_purchasing_count)
+    print('source_kit_assembly_count:', source_kit_assembly_count)
+
+    context = {
+        'total_items': total_items,
+        'source_purchasing_count': source_purchasing_count,
+        'source_kit_assembly_count': source_kit_assembly_count,
+        'total_backordered_pos_available': total_backordered_pos_available,
+        'top_five_backordered': top_five_backordered,
+    }
+    return render(request, 'privatelabel/backorders.html', context)
 # A1006_Attributes,replenishmentSource,inventoryCD_description,A1011_Attributes,Back Ordered (POs-available),itemType,qtySOBackOrdered
 
 # Input Variables:
@@ -433,7 +461,7 @@ def getAcumatica_data(gi='', fields='', filter='', top=0, html='', debug='maybe'
     }
 
     # Parse the XML
-    root = ET.fromstring(xml_content)
+    root = ET.fromstring(xml_content.text)
 
     # Extract all entries
     entries = root.findall('atom:entry', namespaces)
@@ -450,5 +478,5 @@ def getAcumatica_data(gi='', fields='', filter='', top=0, html='', debug='maybe'
         results.append(entry_dict)
 
     # Now 'results' is a list of dictionaries
-    
+   
     return results

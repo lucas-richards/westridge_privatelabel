@@ -17,38 +17,134 @@
 
     <!-- JS table library -->
     <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     
 </head>
 <body>
-  <a href="{% url 'privatelabel-orders' %}" class="btn btn-primary">Back to Orders</a>
-    <div class="text-center my-4">
-        <h1>BACKORDERS</h1>
-    </div>
+    <div id="backordersCarousel" class="carousel slide" data-ride="carousel" data-interval="10000">
+        <div class="carousel-inner">
+            <!-- First Slide: Backorders -->
+            <div class="carousel-item active">
+                <div class="text-center my-4">
+                    <h1>BACKORDERS</h1>
+                </div>
 
-    <div class="d-flex justify-content-center my-4">
-        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
-            <h5>KPI 1</h5>
-            <p>120</p>
+                <div class="d-flex justify-content-center flex-wrap my-4">
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <p class="display-4 text-dark">{{ total_items }}</p>
+                    </div>
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">Purchasing</h5>
+                        <p class="display-4 text-dark">{{ source_purchasing_count }}</p>
+                    </div>
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">Kit Assembly</h5>
+                        <p class="display-4 text-dark">{{ source_kit_assembly_count }}</p>
+                    </div>
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">MTD</h5>
+                        <p class="display-4 text-success">+2%</p>
+                    </div>
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">YTD</h5>
+                        <p class="display-4 text-danger">-8%</p>
+                    </div>
+                </div>
+
+                <div class="container my-4">
+                    <h3 class="text-center">Top 10 Backordered Items</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Inventory ID</th>
+                                <th>Description</th>
+                                <th>Total Backordered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in top_five_backordered %}
+                            <tr>
+                                <td>{{ item.InventoryID }}</td>
+                                <td>{{ item.Description }}</td>
+                                <td class="text-right">{{ item.BackOrderedPOsavailable }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Second Slide: Safety KPIs -->
+            <div class="carousel-item">
+                <div class="text-center my-4">
+                    <h1>SAFETY KPIs</h1>
+                </div>
+
+                <div class="d-flex justify-content-center flex-wrap my-4">
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">Incidents</h5>
+                        <p class="display-4 text-danger">{{ safety_incidents }}</p>
+                    </div>
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">Near Misses</h5>
+                        <p class="display-4 text-warning">{{ safety_near_misses }}</p>
+                    </div>
+                    <div class="p-4 mx-3 border bg-light text-center shadow-sm rounded" style="width: 200px;">
+                        <h5 class="font-weight-bold">Days Without Incident</h5>
+                        <p class="display-4 text-success">{{ days_without_incident }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
-            <h5>KPI 2</h5>
-            <p>85%</p>
-        </div>
-        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
-            <h5>KPI 3 (YTD)</h5>
-            <p>92%</p>
-        </div>
-        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
-            <h5>KPI 4 (MTD)</h5>
-            <p>78%</p>
-        </div>
-        <div class="p-3 mx-2 border bg-light text-center rounded" style="border-radius: 15px;">
-            <h5>KPI 5</h5>
-            <p>45</p>
-        </div>
+
+        <!-- Carousel Controls -->
+        <a class="carousel-control-prev" href="#backordersCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#backordersCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
     </div>
-    
+    <button id="fullscreenBtn" onclick="document.documentElement.requestFullscreen()">Go Fullscreen</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const el = document.documentElement;
+            if (el.requestFullscreen) {
+                el.requestFullscreen();
+            } else if (el.webkitRequestFullscreen) { /* Safari */
+                el.webkitRequestFullscreen();
+            } else if (el.msRequestFullscreen) { /* IE11 */
+                el.msRequestFullscreen();
+            }
+        });
+    </script>
+    <script>
+        function goFullscreen() {
+            const el = document.documentElement;
+        
+            if (el.requestFullscreen) {
+                el.requestFullscreen();
+            } else if (el.webkitRequestFullscreen) {
+                el.webkitRequestFullscreen();
+            } else if (el.msRequestFullscreen) {
+                el.msRequestFullscreen();
+            }
+        }
+        
+        // Listen for fullscreen change and hide the button
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                document.getElementById('fullscreenBtn').style.display = 'none';
+            }
+        });
+        </script>
+        
  
 </body>
 </html>
