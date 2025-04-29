@@ -193,7 +193,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
 
-LOGIN_REDIRECT_URL = 'privatelabel-dashboard'
+LOGIN_REDIRECT_URL = '/privatelabel/orders/'
 LOGIN_URL = 'get-code'
 
 #variables to send email and reset password
